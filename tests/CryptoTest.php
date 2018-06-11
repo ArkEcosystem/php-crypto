@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Crypto;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 
 /**
- * This is the blocks resource test class.
+ * This is the crypto test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

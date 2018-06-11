@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Transactions\DelegateRegistration;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**
- * This is the blocks resource test class.
+ * This is the delegate registration transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

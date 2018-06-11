@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Message;
 
 /**
- * This is the blocks resource test class.
+ * This is the message test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

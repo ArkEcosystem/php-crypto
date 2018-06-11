@@ -17,12 +17,12 @@ use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Transactions\SecondSignatureRegistration;
 
 /**
- * This is the blocks resource test class.
+ * This is the second signature registration transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class SecondSignatureTest extends TestCase
+class SecondSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()

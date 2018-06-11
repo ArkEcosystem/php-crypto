@@ -36,11 +36,11 @@ class MultiSignatureRegistration extends Transaction
     }
 
     /**
-     * [min description].
+     * Set the minimum required signatures.
      *
      * @param int $min
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\MultiSignatureRegistration
      */
     public function min(int $min): self
     {
@@ -50,11 +50,11 @@ class MultiSignatureRegistration extends Transaction
     }
 
     /**
-     * [lifetime description].
+     * Set the transaction lifetime.
      *
      * @param int $lifetime
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\MultiSignatureRegistration
      */
     public function lifetime(int $lifetime): self
     {
@@ -64,11 +64,11 @@ class MultiSignatureRegistration extends Transaction
     }
 
     /**
-     * [keysgroup description].
+     * Set the keysgroup of signatures.
      *
      * @param array $keysgroup
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\MultiSignatureRegistration
      */
     public function keysgroup(array $keysgroup): self
     {

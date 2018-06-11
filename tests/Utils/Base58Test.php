@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Utils\Base58;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the blocks resource test class.
+ * This is the base58 test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

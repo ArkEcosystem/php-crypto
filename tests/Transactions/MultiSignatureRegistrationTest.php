@@ -17,12 +17,12 @@ use ArkEcosystem\Crypto\Transactions\MultiSignatureRegistration;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**
- * This is the blocks resource test class.
+ * This is the multi signature registration transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class MultiSignatureTest extends TestCase
+class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()

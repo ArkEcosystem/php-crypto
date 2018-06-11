@@ -38,11 +38,11 @@ class DelegateRegistration extends Transaction
     }
 
     /**
-     * [withDelegate description].
+     * Set the username to assign.
      *
      * @param string $username
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\DelegateRegistration
      */
     public function username(string $username): self
     {
@@ -52,7 +52,7 @@ class DelegateRegistration extends Transaction
     }
 
     /**
-     * Sign transaction using passphrase.
+     * Sign the transaction using the given secret.
      *
      * @param string $secret
      *

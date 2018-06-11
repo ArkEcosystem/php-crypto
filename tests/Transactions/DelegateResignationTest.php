@@ -16,7 +16,7 @@ namespace ArkEcosystem\Tests\Crypto;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**
- * This is the blocks resource test class.
+ * This is the delegate resignation transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

@@ -37,11 +37,11 @@ class Vote extends Transaction
     }
 
     /**
-     * [withVotes description].
+     * Set the votes to cast.
      *
      * @param array $votes
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Vote
      */
     public function votes(array $votes): self
     {
@@ -51,7 +51,7 @@ class Vote extends Transaction
     }
 
     /**
-     * [sign description].
+     * Sign the transaction using the given secret.
      *
      * @param string $secret
      *

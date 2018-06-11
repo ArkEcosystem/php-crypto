@@ -20,6 +20,7 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PrivateKeyFactory;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
+use BitWasp\Bitcoin\Network\Network;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
@@ -57,7 +58,7 @@ class Crypto
      *
      * @return bool
      */
-    public static function validateAddress(string $address, string $networkVersion = '17')
+    public static function validateAddress(string $address, string $networkVersion = '17'): bool
     {
         $address    = new Buffer(Base58::decode($address));
         $prefixByte = $address->slice(0, 1)->getHex();
@@ -82,7 +83,7 @@ class Crypto
     }
 
     /**
-     * [getKeys description].
+     * Derive the public & private key from the given secret.
      *
      * @param string $secret
      *
@@ -96,35 +97,32 @@ class Crypto
     }
 
     /**
-     * [getAddress description].
+     * Derive an address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
      * @param NetworkInterface|null                                        $network
      *
-     * @return [type]
+     * @return string
      */
-    public static function getAddress(PrivateKey $privateKey, NetworkInterface $network = null)
+    public static function getAddress(PrivateKey $privateKey, NetworkInterface $network = null): string
     {
+        $network   = $network ?? static::getDefaultNetwork();
         $publicKey = $privateKey->getPublicKey();
         $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
-
-        if (!$network) {
-            $network = NetworkFactory::create('17', '00', '00');
-        }
 
         return (new PayToPubKeyHashAddress($digest))->getAddress($network);
     }
 
     /**
-     * [getBytes description].
+     * Convert the transaction to its byte representation.
      *
-     * @param [type] $transaction
+     * @param object $transaction
      * @param bool   $skipSignature
      * @param bool   $skipSecondSignature
      *
-     * @return [type]
+     * @return string
      */
-    public static function getBytes(object $transaction, $skipSignature = true, $skipSecondSignature = true)
+    public static function getBytes(object $transaction, bool $skipSignature = true, bool $skipSecondSignature = true): string
     {
         $out = '';
         $out .= pack('h', $transaction->type);
@@ -142,6 +140,7 @@ class Crypto
         if (isset($transaction->vendorField) && strlen($transaction->vendorField) < 64) {
             $out .= $transaction->vendorField;
             $vendorFieldLength = strlen($transaction->vendorField);
+
             if ($vendorFieldLength < 64) {
                 $out .= pack('x'.(64 - $vendorFieldLength));
             }
@@ -184,14 +183,14 @@ class Crypto
     }
 
     /**
-     * [sign description].
+     * Sign the transaction using the given secret.
      *
-     * @param [type] $transaction
-     * @param [type] $keys
+     * @param object                                                       $transaction
+     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return [type]
+     * @return \stdClass
      */
-    public static function sign($transaction, $keys): stdClass
+    public static function sign(object $transaction, PrivateKey $keys): stdClass
     {
         $txBytes                = static::getBytes($transaction);
         $transaction->signature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
@@ -200,14 +199,14 @@ class Crypto
     }
 
     /**
-     * [secondSign description].
+     * Sign the transaction using the given second secret.
      *
-     * @param [type] $transaction
-     * @param [type] $keys
+     * @param object                                                       $transaction
+     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return [type]
+     * @return \stdClass
      */
-    public static function secondSign($transaction, $keys): stdClass
+    public static function secondSign(object $transaction, PrivateKey $keys): stdClass
     {
         $txBytes                    = static::getBytes($transaction, false);
         $transaction->signSignature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
@@ -216,11 +215,11 @@ class Crypto
     }
 
     /**
-     * [verify description].
+     * Verify the transaction validity.
      *
      * @param object $transaction
      *
-     * @return [type]
+     * @return bool
      */
     public static function verify(object $transaction): bool
     {
@@ -234,7 +233,7 @@ class Crypto
     }
 
     /**
-     * [secondVerify description].
+     * Verify the transaction validity with a second signature.
      *
      * @param object $transaction
      * @param string $secondPublicKeyHex
@@ -269,5 +268,15 @@ class Crypto
         }
 
         return $dec;
+    }
+
+    /**
+     * Get the default network used.
+     *
+     * @return \BitWasp\Bitcoin\Network\Network
+     */
+    private static function getDefaultNetwork(): Network
+    {
+        return NetworkFactory::create('17', '00', '00');
     }
 }

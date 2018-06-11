@@ -35,13 +35,13 @@ class Transfer extends Transaction
     }
 
     /**
-     * [withRecipientId description].
+     * Set the recipient of the transfer.
      *
      * @param string $recipientId
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transfer
      */
-    public function recipientID(string $recipientId): self
+    public function recipient(string $recipientId): self
     {
         $this->data->recipientId = $recipientId;
 
@@ -49,11 +49,11 @@ class Transfer extends Transaction
     }
 
     /**
-     * [withAmount description].
+     * Set the amount to transfer.
      *
      * @param int $amount
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transfer
      */
     public function amount(int $amount): self
     {
@@ -63,11 +63,11 @@ class Transfer extends Transaction
     }
 
     /**
-     * [withVendorField description].
+     * Set the vendor field / smartbridge.
      *
      * @param string $vendorField
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transfer
      */
     public function vendorField(string $vendorField): self
     {

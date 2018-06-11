@@ -47,13 +47,28 @@ abstract class Transaction
         $this->data->asset = [];
     }
 
-    public static function create()
+    /**
+     * Convert the message to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJSON();
+    }
+
+    /**
+     * Create a new transaction instance.
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     */
+    public static function create(): self
     {
         return new static();
     }
 
     /**
-     * [withFee description].
+     * Set the transaction fee.
      *
      * @param int $fee
      *
@@ -67,7 +82,7 @@ abstract class Transaction
     }
 
     /**
-     * [sign description].
+     * Sign the transaction using the given secret.
      *
      * @param string $secret
      *
@@ -84,7 +99,7 @@ abstract class Transaction
     }
 
     /**
-     * Sign transaction using second passphrase.
+     * Sign the transaction using the given second secret.
      *
      * @param string $secondSecret
      *
@@ -123,22 +138,36 @@ abstract class Transaction
     /**
      * Convert the message to its plain object representation.
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \stdClass
      */
     public function getStruct(): stdClass
     {
-        $idBytes          = Crypto::getBytes($this->data, false, false);
-        $this->data->id   = Hash::sha256(new Buffer($idBytes))->getHex();
+        $idBytes        = Crypto::getBytes($this->data, false, false);
+        $this->data->id = Hash::sha256(new Buffer($idBytes))->getHex();
 
         if (empty($this->data->signSignature)) {
             unset($this->data->signSignature);
+        }
+
+        if (empty($this->data->asset)) {
+            unset($this->data->asset);
         }
 
         return $this->data;
     }
 
     /**
-     * [getTimeSinceEpoch description].
+     * Convert the message to its JSON representation.
+     *
+     * @return string
+     */
+    public function toJSON(): string
+    {
+        return json_encode($this->data);
+    }
+
+    /**
+     * Get the transaction timestamp.
      *
      * @return int
      */

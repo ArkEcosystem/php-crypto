@@ -37,11 +37,11 @@ class SecondSignatureRegistration extends Transaction
     }
 
     /**
-     * [signature description].
+     * Set the signature asset to register the second secret.
      *
      * @param string $secondSecret
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\SecondSignatureRegistration
      */
     public function signature(string $secondSecret): self
     {

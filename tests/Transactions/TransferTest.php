@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Transactions\Transfer;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**
- * This is the blocks resource test class.
+ * This is the transfer transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -28,7 +28,7 @@ class TransferTest extends TestCase
     public function it_should_create_a_valid_transaction()
     {
         $transaction = Transfer::create()
-            ->recipientId('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
+            ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')
             ->sign('This is a top secret passphrase');
