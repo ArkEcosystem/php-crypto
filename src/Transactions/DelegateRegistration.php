@@ -65,7 +65,7 @@ class DelegateRegistration extends Transaction
 
         $this->data->asset['delegate']['publicKey'] = $this->data->senderPublicKey;
 
-        Crypto::sign($this->getStruct(), $keys);
+        Crypto::sign($this->getSignedObject(), $keys);
 
         return $this;
     }

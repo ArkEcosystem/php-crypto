@@ -93,7 +93,7 @@ abstract class Transaction
         $keys                          = Crypto::getKeys($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
-        Crypto::sign($this->getStruct(), $keys);
+        Crypto::sign($this->getSignedObject(), $keys);
 
         return $this;
     }
@@ -107,7 +107,7 @@ abstract class Transaction
      */
     public function secondSign(string $secondSecret): Transaction
     {
-        Crypto::secondSign($this->getStruct(), Crypto::getKeys($secondSecret));
+        Crypto::secondSign($this->getSignedObject(), Crypto::getKeys($secondSecret));
 
         return $this;
     }
@@ -119,7 +119,7 @@ abstract class Transaction
      */
     public function verify(): bool
     {
-        return Crypto::verify($this->getStruct());
+        return Crypto::verify($this->getSignedObject());
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class Transaction
     public function secondVerify(string $secondSecret): bool
     {
         return Crypto::secondVerify(
-            $this->getStruct(),
+            $this->getSignedObject(),
             Crypto::getKeys($secondSecret)->getPublicKey()->getHex()
         );
     }
@@ -140,7 +140,7 @@ abstract class Transaction
      *
      * @return \stdClass
      */
-    public function getStruct(): stdClass
+    public function getSignedObject(): stdClass
     {
         $idBytes        = Crypto::getBytes($this->data, false, false);
         $this->data->id = Hash::sha256(new Buffer($idBytes))->getHex();
