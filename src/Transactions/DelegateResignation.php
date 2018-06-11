@@ -11,20 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
+/**
+ * This is the delegate resignation transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class DelegateResignation extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new delegate resignation transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type = TransactionTypes::DELEGATE_RESIGNATION;
-        $this->fee  = TransactionFees::DELEGATE_RESIGNATION;
+        $this->data->type = TransactionTypes::DELEGATE_RESIGNATION;
+        $this->data->fee  = TransactionFees::DELEGATE_RESIGNATION;
     }
 }

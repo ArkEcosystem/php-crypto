@@ -11,11 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Utils;
+namespace ArkEcosystem\Crypto\Utils;
 
 use Exception;
 use StephenHill\Base58 as B58;
 
+/**
+ * This is the base58 class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class Base58
 {
     /**

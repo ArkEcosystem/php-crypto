@@ -18,50 +18,36 @@ use ArkEcosystem\Crypto\Enums\TransactionFees;
 use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
 /**
- * This is the vote transaction class.
+ * This is the second signature registration transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Vote extends Transaction
+class SecondSignatureRegistration extends Transaction
 {
     /**
-     * Create a new vote transaction instance.
+     * Create a new second signature registration transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->data->type   = TransactionTypes::VOTE;
-        $this->data->fee    = TransactionFees::VOTE;
+        $this->data->type   = TransactionTypes::SECOND_SIGNATURE_REGISTRATION;
+        $this->data->fee    = TransactionFees::SECOND_SIGNATURE_REGISTRATION;
         $this->data->amount = 0;
     }
 
     /**
-     * [withVotes description].
+     * [signature description].
      *
-     * @param array $votes
-     *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
-     */
-    public function votes(array $votes): self
-    {
-        $this->data->asset = compact('votes');
-
-        return $this;
-    }
-
-    /**
-     * [sign description].
-     *
-     * @param string $secret
+     * @param string $secondSecret
      *
      * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function sign(string $secret): Transaction
+    public function signature(string $secondSecret): self
     {
-        $this->data->recipientId = Crypto::getAddress(Crypto::getKeys($secret));
-
-        parent::sign($secret);
+        $this->data->asset['signature'] = [
+            'publicKey' => Crypto::getKeys($secondSecret)->getPublicKey()->getHex(),
+        ];
 
         return $this;
     }

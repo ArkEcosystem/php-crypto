@@ -11,12 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\ArkCrypto\Utils;
+namespace ArkEcosystem\Tests\Crypto\Utils;
 
-use ArkEcosystem\ArkCrypto\Utils\Base58;
-use ArkEcosystem\Tests\ArkCrypto\TestCase;
+use ArkEcosystem\Crypto\Utils\Base58;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
+ * This is the blocks resource test class.
+ *
+ * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
 class Base58Test extends TestCase
@@ -24,64 +27,32 @@ class Base58Test extends TestCase
     /** @test */
     public function can_encode()
     {
-        // Arrange...
         $value = 'Hello World';
 
-        // Expect...
-        $expected = 'JxF12TrwUP45BMd';
-
-        // Act...
-        $actual = Base58::encode($value);
-
-        // Assert...
-        $this->assertSame($expected, $actual);
+        $this->assertSame('JxF12TrwUP45BMd', Base58::encode($value));
     }
 
     /** @test */
     public function can_decode()
     {
-        // Arrange...
         $value = 'JxF12TrwUP45BMd';
 
-        // Expect...
-        $expected = 'Hello World';
-
-        // Act...
-        $actual = Base58::decode($value);
-
-        // Assert...
-        $this->assertSame($expected, $actual);
+        $this->assertSame('Hello World', Base58::decode($value));
     }
 
     /** @test */
     public function can_encode_check()
     {
-        // Arrange...
         $value = 'Hello World';
 
-        // Expect...
-        $expected = '32UWxgjUJDXeRwy6c6Fxf';
-
-        // Act...
-        $actual = Base58::encodeCheck($value);
-
-        // Assert...
-        $this->assertSame($expected, $actual);
+        $this->assertSame('32UWxgjUJDXeRwy6c6Fxf', Base58::encodeCheck($value));
     }
 
     /** @test */
     public function can_decode_check()
     {
-        // Arrange...
         $value = '32UWxgjUJDXeRwy6c6Fxf';
 
-        // Expect...
-        $expected = 'Hello World';
-
-        // Act...
-        $actual = Base58::decodeCheck($value);
-
-        // Assert...
-        $this->assertSame($expected, $actual);
+        $this->assertSame('Hello World', Base58::decodeCheck($value));
     }
 }

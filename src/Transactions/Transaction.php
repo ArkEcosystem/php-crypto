@@ -11,24 +11,45 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\Crypto;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Buffertools\Buffer;
+use stdClass;
+
+/**
+ * This is the abstract transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 abstract class Transaction
 {
+    /**
+     * Create a new transaction instance.
+     */
     public function __construct()
     {
-        $this->id              = null;
-        $this->timestamp       = $this->getTimeSinceEpoch();
-        $this->type            = null;
-        $this->amount          = null;
-        $this->fee             = null;
+        $this->data              = new \stdClass();
+        $this->data->recipientId = null;
+        $this->data->type        = null;
+        $this->data->amount      = null;
+        $this->data->fee         = null;
+        $this->data->vendorField = null;
+        $this->data->timestamp   = $this->getTimeSinceEpoch();
 
-        $this->senderPublicKey = null;
-        $this->recipientId     = null;
-        $this->asset           = [];
+        $this->data->senderPublicKey = null;
 
-        $this->signature       = null;
-        $this->signSignature   = null;
+        $this->data->signature     = null;
+        $this->data->signSignature = null;
+
+        $this->data->id    = null;
+        $this->data->asset = [];
+    }
+
+    public static function create()
+    {
+        return new static();
     }
 
     /**
@@ -36,30 +57,11 @@ abstract class Transaction
      *
      * @param int $fee
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function withFee(int $fee): self
     {
-        $this->fee = $fee;
-
-        return $this;
-    }
-
-    /**
-     * [getStruct description].
-     *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
-     */
-    protected function getStruct(): self
-    {
-        $idBytes  = Crypto::getBytes($this, false, false);
-        $this->id = Hash::sha256(new Buffer($idBytes))->getHex();
-
-        if (!$this->signSignature) {
-            unset($this->signSignature);
-        }
-
-        unset($this->asset);
+        $this->data->fee = $fee;
 
         return $this;
     }
@@ -69,14 +71,14 @@ abstract class Transaction
      *
      * @param string $secret
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    protected function sign(string $secret): self
+    public function sign(string $secret): Transaction
     {
-        $keys                  = Crypto::getKeys($secret);
-        $this->senderPublicKey = $keys->getPublicKey()->getHex();
+        $keys                          = Crypto::getKeys($secret);
+        $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
-        Crypto::sign($this, $keys);
+        Crypto::sign($this->getStruct(), $keys);
 
         return $this;
     }
@@ -86,21 +88,61 @@ abstract class Transaction
      *
      * @param string $secondSecret
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    protected function secondSign(string $secondSecret): self
+    public function secondSign(string $secondSecret): Transaction
     {
-        Crypto::secondSign($this, Crypto::getKeys($secondSecret));
+        Crypto::secondSign($this->getStruct(), Crypto::getKeys($secondSecret));
 
         return $this;
     }
 
     /**
+     * Verify the transaction validity.
+     *
+     * @return bool
+     */
+    public function verify(): bool
+    {
+        return Crypto::verify($this->getStruct());
+    }
+
+    /**
+     * Verify the transaction validity with a second signature.
+     *
+     * @return bool
+     */
+    public function secondVerify(string $secondSecret): bool
+    {
+        return Crypto::secondVerify(
+            $this->getStruct(),
+            Crypto::getKeys($secondSecret)->getPublicKey()->getHex()
+        );
+    }
+
+    /**
+     * Convert the message to its plain object representation.
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     */
+    public function getStruct(): stdClass
+    {
+        $idBytes          = Crypto::getBytes($this->data, false, false);
+        $this->data->id   = Hash::sha256(new Buffer($idBytes))->getHex();
+
+        if (empty($this->data->signSignature)) {
+            unset($this->data->signSignature);
+        }
+
+        return $this->data;
+    }
+
+    /**
      * [getTimeSinceEpoch description].
      *
-     * @return string
+     * @return int
      */
-    protected function getTimeSinceEpoch(): string
+    protected function getTimeSinceEpoch(): int
     {
         return time() - strtotime('2017-03-21 13:00:00');
     }

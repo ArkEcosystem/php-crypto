@@ -11,20 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
+/**
+ * This is the timelock transfer transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class TimelockTransfer extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new timelock transfer transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type = TransactionTypes::TIMELOCK_TRANSFER;
-        $this->fee  = TransactionFees::TIMELOCK_TRANSFER;
+        $this->data->type = TransactionTypes::TIMELOCK_TRANSFER;
+        $this->data->fee  = TransactionFees::TIMELOCK_TRANSFER;
     }
 }

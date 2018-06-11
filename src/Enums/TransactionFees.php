@@ -11,17 +11,22 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Enums;
+namespace ArkEcosystem\Crypto\Enums;
 
+/**
+ * This is the transaction fees class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class TransactionFees
 {
-    const TRANSFER             = 10000000;
-    const SECOND_SIGNATURE     = 500000000;
-    const DELEGATE             = 2500000000;
-    const VOTE                 = 100000000;
-    const MULTI_SIGNATURE      = 500000000;
-    const IPFS                 = 0;
-    const TIMELOCK_TRANSFER    = 0;
-    const MULTI_PAYMENT        = 0;
-    const DELEGATE_RESIGNATION = 0;
+    const TRANSFER                      = 10000000;
+    const SECOND_SIGNATURE_REGISTRATION = 500000000;
+    const DELEGATE_REGISTRATION         = 2500000000;
+    const VOTE                          = 100000000;
+    const MULTI_SIGNATURE               = 500000000;
+    const IPFS                          = 0;
+    const TIMELOCK_TRANSFER             = 0;
+    const MULTI_PAYMENT                 = 0;
+    const DELEGATE_RESIGNATION          = 0;
 }

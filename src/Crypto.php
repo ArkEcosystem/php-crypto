@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto;
+namespace ArkEcosystem\Crypto;
 
-use ArkEcosystem\ArkCrypto\Transactions\Transaction;
-use ArkEcosystem\ArkCrypto\Utils\Base58;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Utils\Base58;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
@@ -24,7 +24,13 @@ use BitWasp\Bitcoin\Network\NetworkFactory;
 use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
+use stdClass;
 
+/**
+ * This is the crypto class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class Crypto
 {
     /**
@@ -35,7 +41,7 @@ class Crypto
      *
      * @return string
      */
-    public static function address(string $publicKey, int $version = 0x17): string
+    public static function addressFromPublicKey(string $publicKey, int $version = 0x17): string
     {
         $ripemd160 = hash('ripemd160', hex2bin($publicKey), true);
         $seed      = pack('C*', $version).$ripemd160;
@@ -80,9 +86,9 @@ class Crypto
      *
      * @param string $secret
      *
-     * @return [type]
+     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
      */
-    public static function getKeys(string $secret)
+    public static function getKeys(string $secret): PrivateKey
     {
         $seed = static::bchexdec(hash('sha256', $secret));
 
@@ -92,8 +98,8 @@ class Crypto
     /**
      * [getAddress description].
      *
-     * @param PrivateKey            $privateKey
-     * @param NetworkInterface|null $network
+     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
+     * @param NetworkInterface|null                                        $network
      *
      * @return [type]
      */
@@ -110,38 +116,103 @@ class Crypto
     }
 
     /**
-     * [signMessage description].
+     * [getBytes description].
      *
-     * @param string $message
-     * @param string $passphrase
+     * @param [type] $transaction
+     * @param bool   $skipSignature
+     * @param bool   $skipSecondSignature
      *
      * @return [type]
      */
-    public static function signMessage(string $message, string $passphrase): array
+    public static function getBytes(object $transaction, $skipSignature = true, $skipSecondSignature = true)
     {
-        $keys = static::getKeys($passphrase);
+        $out = '';
+        $out .= pack('h', $transaction->type);
+        $out .= pack('V', $transaction->timestamp);
+        $out .= pack('H'.strlen($transaction->senderPublicKey), $transaction->senderPublicKey);
 
-        return [
-            'publicKey' => $keys->getPublicKey()->getHex(),
-            'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
-        ] + compact('message');
+        // TODO: requester public key
+
+        if ($transaction->recipientId) {
+            $out .= \BitWasp\Bitcoin\Base58::decodeCheck($transaction->recipientId)->getBinary();
+        } else {
+            $out .= pack('x21');
+        }
+
+        if (isset($transaction->vendorField) && strlen($transaction->vendorField) < 64) {
+            $out .= $transaction->vendorField;
+            $vendorFieldLength = strlen($transaction->vendorField);
+            if ($vendorFieldLength < 64) {
+                $out .= pack('x'.(64 - $vendorFieldLength));
+            }
+        } else {
+            $out .= pack('x64');
+        }
+
+        $out .= pack('P', $transaction->amount);
+        $out .= pack('P', $transaction->fee);
+
+        if (TransactionTypes::SECOND_SIGNATURE_REGISTRATION === $transaction->type) { // second signature
+            $assetSigPubKey = $transaction->asset['signature']['publicKey'];
+
+            $out .= pack('H'.strlen($assetSigPubKey), $assetSigPubKey);
+        }
+
+        if (TransactionTypes::DELEGATE_REGISTRATION === $transaction->type) {
+            $out .= $transaction->asset['delegate']['username'];
+        }
+
+        if (TransactionTypes::VOTE === $transaction->type) {
+            $out .= implode('', $transaction->asset['votes']);
+        }
+
+        if (TransactionTypes::MULTI_SIGNATURE === $transaction->type) {
+            $out .= pack('C', $transaction->asset['multisignature']['min']);
+            $out .= pack('C', $transaction->asset['multisignature']['lifetime']);
+            $out .= implode('', $transaction->asset['multisignature']['keysgroup']);
+        }
+
+        if (!$skipSignature && $transaction->signature) {
+            $out .= pack('H'.strlen($transaction->signature), $transaction->signature);
+        }
+
+        if (!$skipSecondSignature && isset($transaction->signSignature)) {
+            $out .= pack('H'.strlen($transaction->signSignature), $transaction->signSignature);
+        }
+
+        return $out;
     }
 
     /**
-     * [verifyMessage description].
+     * [sign description].
      *
-     * @param string $message
-     * @param string $publicKey
-     * @param string $signature
+     * @param [type] $transaction
+     * @param [type] $keys
      *
      * @return [type]
      */
-    public static function verifyMessage(string $message, string $publicKey, string $signature): bool
+    public static function sign($transaction, $keys): stdClass
     {
-        return PublicKeyFactory::fromHex($publicKey)->verify(
-            new Buffer(hash('sha256', $message, true)),
-            SignatureFactory::fromHex($signature)
-        );
+        $txBytes                = static::getBytes($transaction);
+        $transaction->signature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
+
+        return $transaction;
+    }
+
+    /**
+     * [secondSign description].
+     *
+     * @param [type] $transaction
+     * @param [type] $keys
+     *
+     * @return [type]
+     */
+    public static function secondSign($transaction, $keys): stdClass
+    {
+        $txBytes                    = static::getBytes($transaction, false);
+        $transaction->signSignature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
+
+        return $transaction;
     }
 
     /**
@@ -151,7 +222,7 @@ class Crypto
      *
      * @return [type]
      */
-    public static function verify(object $transaction)
+    public static function verify(object $transaction): bool
     {
         $publicKey = PublicKeyFactory::fromHex($transaction->senderPublicKey);
         $bytes     = static::getBytes($transaction);
@@ -168,9 +239,9 @@ class Crypto
      * @param object $transaction
      * @param string $secondPublicKeyHex
      *
-     * @return [type]
+     * @return bool
      */
-    public static function secondVerify(object $transaction, string $secondPublicKeyHex)
+    public static function secondVerify(object $transaction, string $secondPublicKeyHex): bool
     {
         $secondPublicKeys = PublicKeyFactory::fromHex($secondPublicKeyHex);
         $bytes            = static::getBytes($transaction, false);
@@ -182,66 +253,6 @@ class Crypto
     }
 
     /**
-     * [getBytes description].
-     *
-     * @param [type] $transaction
-     * @param bool   $skipSignature
-     * @param bool   $skipSecondSignature
-     *
-     * @return [type]
-     */
-    public static function getBytes($transaction, $skipSignature = true, $skipSecondSignature = true)
-    {
-        $out = '';
-        $out .= pack('h', $transaction->type);
-        $out .= pack('V', $transaction->timestamp);
-        $out .= pack('H'.strlen($transaction->senderPublicKey), $transaction->senderPublicKey);
-
-        // TODO: requester public key
-
-        if ($transaction->recipientId) {
-            $out .= \BitWasp\Bitcoin\Base58::decodeCheck($transaction->recipientId)->getBinary();
-        } else {
-            $out .= pack('x21');
-        }
-
-        if ($transaction->vendorField && strlen($transaction->vendorField) < 64) {
-            $out .= $transaction->vendorField;
-            $vendorFieldLength = strlen($transaction->vendorField);
-            if ($vendorFieldLength < 64) {
-                $out .= pack('x'.(64 - $vendorFieldLength));
-            }
-        } else {
-            $out .= pack('x64');
-        }
-
-        $out .= pack('P', $transaction->amount);
-        $out .= pack('P', $transaction->fee);
-
-        if (TransactionTypes::SECOND_SIGNATURE === $transaction->type) { // second signature
-            $assetSigPubKey = $transaction->asset['signature']['publicKey'];
-            $out .= pack('H'.strlen($assetSigPubKey), $assetSigPubKey);
-        } elseif (TransactionTypes::DELEGATE === $transaction->type) {
-            $out .= $transaction->asset['delegate']['username'];
-        } elseif (TransactionTypes::VOTE === $transaction->type) {
-            $out .= implode('', $transaction->asset['votes']);
-        } elseif (TransactionTypes::MULTI_SIGNATURE === $transaction->type) {
-            $out .= pack('C', $transaction->asset['multisignature']['min']);
-            $out .= pack('C', $transaction->asset['multisignature']['lifetime']);
-            $out .= implode('', $transaction->asset['multisignature']['keysgroup']);
-        }
-
-        if (!$skipSignature && $transaction->signature) {
-            $out .= pack('H'.strlen($transaction->signature), $transaction->signature);
-        }
-        if (!$skipSecondSignature && $transaction->signSignature) {
-            $out .= pack('H'.strlen($transaction->signSignature), $transaction->signSignature);
-        }
-
-        return $out;
-    }
-
-    /**
      * hexdec but for integers that are bigger than the largest PHP integer
      * https://stackoverflow.com/questions/1273484/large-hex-values-with-php-hexdec.
      *
@@ -249,7 +260,7 @@ class Crypto
      *
      * @return int|string
      */
-    private static function bchexdec(string $hex)
+    private static function bchexdec(string $hex): string
     {
         $dec = '0';
         $len = strlen($hex);
@@ -258,37 +269,5 @@ class Crypto
         }
 
         return $dec;
-    }
-
-    /**
-     * [sign description].
-     *
-     * @param [type] $transaction
-     * @param [type] $keys
-     *
-     * @return [type]
-     */
-    private function sign($transaction, $keys): Transaction
-    {
-        $txBytes                = static::getBytes($transaction);
-        $transaction->signature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
-
-        return $transaction;
-    }
-
-    /**
-     * [secondSign description].
-     *
-     * @param [type] $transaction
-     * @param [type] $keys
-     *
-     * @return [type]
-     */
-    private function secondSign($transaction, $keys): Transaction
-    {
-        $txBytes                    = static::getBytes($transaction, false);
-        $transaction->signSignature = $keys->sign(Hash::sha256(new Buffer($txBytes)))->getBuffer()->getHex();
-
-        return $transaction;
     }
 }

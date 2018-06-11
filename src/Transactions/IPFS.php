@@ -11,20 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionFees;
+use ArkEcosystem\Crypto\Enums\TransactionFees;
 
+/**
+ * This is the ipfs transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class IPFS extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new ipfs transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type = TransactionTypes::IPFS;
-        $this->fee  = TransactionFees::IPFS;
+        $this->data->type = TransactionTypes::IPFS;
+        $this->data->fee  = TransactionFees::IPFS;
     }
 }

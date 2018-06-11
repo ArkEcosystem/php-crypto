@@ -11,17 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\ArkCrypto;
+namespace ArkEcosystem\Tests\Crypto;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionBuilder;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected $transactionBuilder;
-    public function __construct()
-    {
-        parent::__construct();
-        $this->transactionBuilder = new TransactionBuilder();
-    }
 }

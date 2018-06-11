@@ -11,23 +11,30 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Crypto;
-use ArkEcosystem\ArkCrypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Enums\TransactionFees;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
+/**
+ * This is the delegate registration transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class DelegateRegistration extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new delegate registration transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type   = TransactionTypes::DELEGATE;
-        $this->fee    = TransactionFees::DELEGATE;
-        $this->amount = 0;
+        $this->data->type              = TransactionTypes::DELEGATE_REGISTRATION;
+        $this->data->fee               = TransactionFees::DELEGATE_REGISTRATION;
+        $this->data->amount            = 0;
+        $this->data->asset['delegate'] = [];
     }
 
     /**
@@ -35,11 +42,11 @@ class DelegateRegistration extends Transaction
      *
      * @param string $username
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function withDelegate(string $username): self
+    public function username(string $username): self
     {
-        $this->asset['delegate'] = compact('username');
+        $this->data->asset['delegate']['username'] = $username;
 
         return $this;
     }
@@ -49,16 +56,16 @@ class DelegateRegistration extends Transaction
      *
      * @param string $secret
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    protected function sign(string $secret): self
+    public function sign(string $secret): Transaction
     {
-        $keys                  = Crypto::getKeys($secret);
-        $this->senderPublicKey = $keys->getPublicKey()->getHex();
+        $keys                          = Crypto::getKeys($secret);
+        $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
-        $this->asset['delegate']['publicKey'] = $this->senderPublicKey;
+        $this->data->asset['delegate']['publicKey'] = $this->data->senderPublicKey;
 
-        Crypto::sign($this, $keys);
+        Crypto::sign($this->getStruct(), $keys);
 
         return $this;
     }

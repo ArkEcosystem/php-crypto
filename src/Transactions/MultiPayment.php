@@ -11,20 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
+/**
+ * This is the multi payment transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class MultiPayment extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new multi payment transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type = TransactionTypes::MULTI_PAYMENT;
-        $this->fee  = TransactionFees::MULTI_PAYMENT;
+        $this->data->type = TransactionTypes::MULTI_PAYMENT;
+        $this->data->fee  = TransactionFees::MULTI_PAYMENT;
     }
 }

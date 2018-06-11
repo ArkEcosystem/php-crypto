@@ -11,22 +11,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\ArkCrypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\ArkCrypto\Enums\TransactionFees;
-use ArkEcosystem\ArkCrypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Enums\TransactionFees;
+use ArkEcosystem\Crypto\Enums\TransactionTypes;
 
+/**
+ * This is the transfer transaction class.
+ *
+ * @author Brian Faust <brian@ark.io>
+ */
 class Transfer extends Transaction
 {
     /**
-     * [__construct description].
+     * Create a new vote transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->type = TransactionTypes::TRANSFER;
-        $this->fee  = TransactionFees::TRANSFER;
+        $this->data->type = TransactionTypes::TRANSFER;
+        $this->data->fee  = TransactionFees::TRANSFER;
     }
 
     /**
@@ -34,11 +39,11 @@ class Transfer extends Transaction
      *
      * @param string $recipientId
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function withRecipientId(string $recipientId): void
+    public function recipientID(string $recipientId): self
     {
-        $this->recipientId = $recipientId;
+        $this->data->recipientId = $recipientId;
 
         return $this;
     }
@@ -48,11 +53,11 @@ class Transfer extends Transaction
      *
      * @param int $amount
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function withAmount(int $amount): void
+    public function amount(int $amount): self
     {
-        $this->amount = $amount;
+        $this->data->amount = $amount;
 
         return $this;
     }
@@ -62,11 +67,11 @@ class Transfer extends Transaction
      *
      * @param string $vendorField
      *
-     * @return \ArkEcosystem\ArkCrypto\Transactions\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function withVendorField(string $vendorField): void
+    public function vendorField(string $vendorField): self
     {
-        $this->vendorField = $vendorField;
+        $this->data->vendorField = $vendorField;
 
         return $this;
     }
