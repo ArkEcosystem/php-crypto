@@ -75,7 +75,7 @@ abstract class Transaction
      *
      * @param \BitWasp\Bitcoin\Network\NetworkInterface $network
      */
-    public function onNetwork(NetworkInterface $network): voi
+    public function network(NetworkInterface $network): voi
     {
         $this->network = $network;
     }
