@@ -15,6 +15,7 @@ namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\Crypto;
 use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
 
@@ -30,6 +31,8 @@ abstract class Transaction
      */
     public function __construct()
     {
+        $this->network = Crypto::getDefaultNetwork();
+
         $this->data              = new \stdClass();
         $this->data->recipientId = null;
         $this->data->type        = null;
@@ -65,6 +68,16 @@ abstract class Transaction
     public static function create(): self
     {
         return new static();
+    }
+
+    /**
+     * Derive an address from the given private key.
+     *
+     * @param \BitWasp\Bitcoin\Network\NetworkInterface $network
+     */
+    public function onNetwork(NetworkInterface $network): voi
+    {
+        $this->network = $network;
     }
 
     /**

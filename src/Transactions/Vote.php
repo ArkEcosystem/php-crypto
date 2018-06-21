@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\TransactionFees;
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Fees;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the vote transaction class.
@@ -31,8 +31,8 @@ class Vote extends Transaction
     {
         parent::__construct();
 
-        $this->data->type   = TransactionTypes::VOTE;
-        $this->data->fee    = TransactionFees::VOTE;
+        $this->data->type   = Types::VOTE;
+        $this->data->fee    = Fees::VOTE;
         $this->data->amount = 0;
     }
 
@@ -59,7 +59,7 @@ class Vote extends Transaction
      */
     public function sign(string $secret): Transaction
     {
-        $this->data->recipientId = Crypto::getAddress(Crypto::getKeys($secret));
+        $this->data->recipientId = Crypto::getAddress(Crypto::getKeys($secret), $this->network);
 
         parent::sign($secret);
 
