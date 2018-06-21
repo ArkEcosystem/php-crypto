@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Enums\TransactionFees;
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Fees;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the transfer transaction class.
@@ -30,8 +30,8 @@ class Transfer extends Transaction
     {
         parent::__construct();
 
-        $this->data->type = TransactionTypes::TRANSFER;
-        $this->data->fee  = TransactionFees::TRANSFER;
+        $this->data->type = Types::TRANSFER;
+        $this->data->fee  = Fees::TRANSFER;
     }
 
     /**

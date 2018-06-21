@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Enums\TransactionFees;
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Fees;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the multisignature registration transaction class.
@@ -30,7 +30,7 @@ class MultiSignatureRegistration extends Transaction
     {
         parent::__construct();
 
-        $this->data->type                    = TransactionTypes::MULTI_SIGNATURE;
+        $this->data->type                    = Types::MULTI_SIGNATURE_REGISTRATION;
         $this->data->amount                  = 0;
         $this->data->asset['multisignature'] = [];
     }
@@ -74,7 +74,7 @@ class MultiSignatureRegistration extends Transaction
     {
         $this->data->asset['multisignature']['keysgroup'] = $keysgroup;
 
-        $this->fee = (count($keysgroup) + 1) * TransactionFees::MULTI_SIGNATURE;
+        $this->fee = (count($keysgroup) + 1) * Fees::MULTI_SIGNATURE_REGISTRATION;
 
         return $this;
     }

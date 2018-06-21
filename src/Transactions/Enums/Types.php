@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto\Enums;
+namespace ArkEcosystem\Crypto\Transactions\Enums;
 
 /**
  * This is the transaction types class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class TransactionTypes
+class Types
 {
     const TRANSFER                      = 0;
     const SECOND_SIGNATURE_REGISTRATION = 1;
     const DELEGATE_REGISTRATION         = 2;
     const VOTE                          = 3;
-    const MULTI_SIGNATURE               = 4;
+    const MULTI_SIGNATURE_REGISTRATION  = 4;
     const IPFS                          = 5;
     const TIMELOCK_TRANSFER             = 6;
     const MULTI_PAYMENT                 = 7;

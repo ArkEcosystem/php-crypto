@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto;
 
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 use ArkEcosystem\Crypto\Utils\Base58;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
@@ -100,7 +100,7 @@ class Crypto
      * Derive an address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param NetworkInterface|null                                        $network
+     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null               $network
      *
      * @return string
      */
@@ -151,21 +151,21 @@ class Crypto
         $out .= pack('P', $transaction->amount);
         $out .= pack('P', $transaction->fee);
 
-        if (TransactionTypes::SECOND_SIGNATURE_REGISTRATION === $transaction->type) { // second signature
+        if (Types::SECOND_SIGNATURE_REGISTRATION === $transaction->type) { // second signature
             $assetSigPubKey = $transaction->asset['signature']['publicKey'];
 
             $out .= pack('H'.strlen($assetSigPubKey), $assetSigPubKey);
         }
 
-        if (TransactionTypes::DELEGATE_REGISTRATION === $transaction->type) {
+        if (Types::DELEGATE_REGISTRATION === $transaction->type) {
             $out .= $transaction->asset['delegate']['username'];
         }
 
-        if (TransactionTypes::VOTE === $transaction->type) {
+        if (Types::VOTE === $transaction->type) {
             $out .= implode('', $transaction->asset['votes']);
         }
 
-        if (TransactionTypes::MULTI_SIGNATURE === $transaction->type) {
+        if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
             $out .= pack('C', $transaction->asset['multisignature']['min']);
             $out .= pack('C', $transaction->asset['multisignature']['lifetime']);
             $out .= implode('', $transaction->asset['multisignature']['keysgroup']);
@@ -252,6 +252,16 @@ class Crypto
     }
 
     /**
+     * Get the default network used.
+     *
+     * @return \BitWasp\Bitcoin\Network\Network
+     */
+    public static function getDefaultNetwork(): Network
+    {
+        return NetworkFactory::create('17', '00', '00');
+    }
+
+    /**
      * hexdec but for integers that are bigger than the largest PHP integer
      * https://stackoverflow.com/questions/1273484/large-hex-values-with-php-hexdec.
      *
@@ -268,15 +278,5 @@ class Crypto
         }
 
         return $dec;
-    }
-
-    /**
-     * Get the default network used.
-     *
-     * @return \BitWasp\Bitcoin\Network\Network
-     */
-    private static function getDefaultNetwork(): Network
-    {
-        return NetworkFactory::create('17', '00', '00');
     }
 }

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\TransactionFees;
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Fees;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the delegate registration transaction class.
@@ -31,8 +31,8 @@ class DelegateRegistration extends Transaction
     {
         parent::__construct();
 
-        $this->data->type              = TransactionTypes::DELEGATE_REGISTRATION;
-        $this->data->fee               = TransactionFees::DELEGATE_REGISTRATION;
+        $this->data->type              = Types::DELEGATE_REGISTRATION;
+        $this->data->fee               = Fees::DELEGATE_REGISTRATION;
         $this->data->amount            = 0;
         $this->data->asset['delegate'] = [];
     }

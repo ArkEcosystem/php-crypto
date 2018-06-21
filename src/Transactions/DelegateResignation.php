@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the delegate resignation transaction class.
@@ -29,7 +29,7 @@ class DelegateResignation extends Transaction
     {
         parent::__construct();
 
-        $this->data->type = TransactionTypes::DELEGATE_RESIGNATION;
-        $this->data->fee  = TransactionFees::DELEGATE_RESIGNATION;
+        $this->data->type = Types::DELEGATE_RESIGNATION;
+        $this->data->fee  = Fees::DELEGATE_RESIGNATION;
     }
 }

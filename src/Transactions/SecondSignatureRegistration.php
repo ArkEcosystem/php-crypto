@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\TransactionFees;
-use ArkEcosystem\Crypto\Enums\TransactionTypes;
+use ArkEcosystem\Crypto\Transactions\Enums\Fees;
+use ArkEcosystem\Crypto\Transactions\Enums\Types;
 
 /**
  * This is the second signature registration transaction class.
@@ -31,8 +31,8 @@ class SecondSignatureRegistration extends Transaction
     {
         parent::__construct();
 
-        $this->data->type   = TransactionTypes::SECOND_SIGNATURE_REGISTRATION;
-        $this->data->fee    = TransactionFees::SECOND_SIGNATURE_REGISTRATION;
+        $this->data->type   = Types::SECOND_SIGNATURE_REGISTRATION;
+        $this->data->fee    = Fees::SECOND_SIGNATURE_REGISTRATION;
         $this->data->amount = 0;
     }
 
