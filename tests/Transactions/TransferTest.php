@@ -43,7 +43,7 @@ class TransferTest extends TestCase
         $secondSecret = 'this is a top secret second passphrase';
 
         $transaction = Transfer::create()
-            ->recipientId('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
+            ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')
             ->sign('This is a top secret passphrase')
