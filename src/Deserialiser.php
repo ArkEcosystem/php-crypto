@@ -201,30 +201,6 @@ class Deserialiser
     }
 
     /**
-     * Handle the deserialisation of "second signature registration" data.
-     *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
-     * @return object
-     */
-    private function handleVote(int $assetOffset, object $transaction): object
-    {
-        $voteLength = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
-
-        $transaction->asset = ['votes' => []];
-
-        $vote = null;
-        for ($i = 0; $i < $voteLength; ++$i) {
-            $vote                            = substr($this->hex, $assetOffset + 2 + $i * 2 * 34, 2 * 34);
-            $vote                            = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $transaction->asset['votes'][]   = $vote;
-        }
-
-        return $this->parseSignatures($transaction, $assetOffset + 2 + $voteLength * 34 * 2);
-    }
-
-    /**
      * Handle the deserialisation of "delegate registration" data.
      *
      * @param int    $assetOffset
@@ -232,7 +208,7 @@ class Deserialiser
      *
      * @return object
      */
-    private function handleSecondSignature(int $assetOffset, object $transaction): object
+    private function handleSecondSignatureRegistration(int $assetOffset, object $transaction): object
     {
         $transaction->asset = [
             'signature' => [
@@ -265,6 +241,30 @@ class Deserialiser
     }
 
     /**
+     * Handle the deserialisation of "second signature registration" data.
+     *
+     * @param int    $assetOffset
+     * @param object $transaction
+     *
+     * @return object
+     */
+    private function handleVote(int $assetOffset, object $transaction): object
+    {
+        $voteLength = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
+
+        $transaction->asset = ['votes' => []];
+
+        $vote = null;
+        for ($i = 0; $i < $voteLength; ++$i) {
+            $vote                            = substr($this->hex, $assetOffset + 2 + $i * 2 * 34, 2 * 34);
+            $vote                            = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
+            $transaction->asset['votes'][]   = $vote;
+        }
+
+        return $this->parseSignatures($transaction, $assetOffset + 2 + $voteLength * 34 * 2);
+    }
+
+    /**
      * Handle the deserialisation of "multi signature registration" data.
      *
      * @param int    $assetOffset
@@ -272,7 +272,7 @@ class Deserialiser
      *
      * @return object
      */
-    private function handleMultiSignature(int $assetOffset, object $transaction): object
+    private function handleMultiSignatureRegistration(int $assetOffset, object $transaction): object
     {
         $transaction->asset = [
             'multisignature' => [
@@ -285,9 +285,13 @@ class Deserialiser
         $transaction->asset['multisignature']['lifetime'] = unpack('C', $this->binary, $assetOffset / 2 + 2)[1] & 0xff;
 
         for ($i = 0; $i < $num; ++$i) {
-            // TODO: fix the end of substr
-            $key                                                 = substr($this->hex, $assetOffset + 6 + $index * 66, $assetOffset + 6 + ($index + 1) * 66);
-            $transaction->asset['multisignature']['keysgroup'][] = $key;
+            $indexStart = $assetOffset + 6;
+
+            if ($i > 0) {
+                $indexStart += $i * 66;
+            }
+
+            $transaction->asset['multisignature']['keysgroup'][] = substr($this->hex, $indexStart, 66);
         }
 
         return $this->parseSignatures($transaction, $assetOffset + 6 + $num * 66);
@@ -388,29 +392,29 @@ class Deserialiser
     {
         $transaction->signature = substr($this->hex, $startOffset);
 
-        $multioffset = 0;
+        $multiSignatureOffset = 0;
 
         if (0 === strlen($transaction->signature)) {
             unset($transaction->signature);
         } else {
-            $length1                  = intval(substr($transaction->signature, 2, 2), 16) + 2;
-            $transaction->signature   = substr($this->hex, $startOffset, $startOffset + $length1 * 2);
-            $multioffset += $length1 * 2;
+            $length1 = intval(substr($transaction->signature, 2, 2), 16) + 2;
+            $transaction->signature = substr($this->hex, $startOffset, $length1 * 2);
+            $multiSignatureOffset += $length1 * 2;
             $transaction->secondSignature = substr($this->hex, $startOffset + $length1 * 2);
 
             if (0 === strlen($transaction->secondSignature)) {
                 unset($transaction->secondSignature);
             } else {
-                if ('ff' === substr($transaction->secondSignature, 0, 2)) { // start of multisign
+                if ('ff' === substr($transaction->secondSignature, 0, 2)) { // start of multi-signature
                     unset($transaction->secondSignature);
                 } else {
-                    $length2                        = intval(substr($transaction->secondSignature, 2, 4), 16) + 2;
-                    $transaction->secondSignature   = substr($transaction->secondSignature, 0, $length2 * 2);
-                    $multioffset += $length2 * 2;
+                    $length2 = intval(substr($transaction->secondSignature, 2, 2), 16) + 2;
+                    $transaction->secondSignature = substr($transaction->secondSignature, 0, $length2 * 2);
+                    $multiSignatureOffset += $length2 * 2;
                 }
             }
 
-            $signatures = substr($this->hex, $startOffset + $multioffset);
+            $signatures = substr($this->hex, $startOffset + $multiSignatureOffset);
 
             if (0 === strlen($signatures)) {
                 return $transaction;
@@ -420,20 +424,20 @@ class Deserialiser
                 return $transaction;
             }
 
-            $signatures                = substr($signatures, 2);
-            $transaction->signatures   = [];
+            $signatures = substr($signatures, 2);
+            $transaction->signatures = [];
 
             $moreSignatures = true;
             while ($moreSignatures) {
-                $mlength = intval(substr($transaction->secondSignature, 2, 4), 16) + 2;
+                $mLength = intval(substr($signatures, 2, 2), 16);
 
-                if ($mlength > 0) {
-                    $transaction->signatures[] = substr($signatures, 0, $mlength * 2);
+                if ($mLength > 0) {
+                    $transaction->signatures[] = substr($signatures, 0, ($mLength + 2) * 2);
                 } else {
                     $moreSignatures = false;
                 }
 
-                $signatures = substr($signatures, $mlength * 2);
+                $signatures = substr($signatures, ($mLength + 2) * 2);
             }
         }
 

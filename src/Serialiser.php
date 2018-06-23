@@ -110,9 +110,9 @@ class Serialiser
             $bytes .= hex2bin($this->transaction->signSignature);
         }
 
-        if (isset($transaction->signatures)) {
-            $bytes .= hex2bin(0xff);
-            $bytes .= hex2bin(implode('', $transaction->signatures));
+        if (isset($this->transaction->signatures)) {
+            $bytes .= pack('C', 0xff);
+            $bytes .= hex2bin(implode('', $this->transaction->signatures));
         }
 
         return Buffer::hex(bin2hex($bytes));
@@ -183,36 +183,13 @@ class Serialiser
     }
 
     /**
-     * Handle the serialisation of "second signature registration" data.
-     *
-     * @param string $bytes
-     *
-     * @return string
-     */
-    private function handleVote(string $bytes): string
-    {
-        $voteBytes = [];
-
-        foreach ($this->transaction->asset['votes'] as $vote) {
-            $voteBytes[] = '+' === substr($vote, 0)
-                ? '01'.substr($vote, 1)
-                : '00'.substr($vote, 1);
-        }
-
-        $bytes .= pack('C', count($this->transaction->asset['votes']));
-        $bytes .= hex2bin(implode('', $voteBytes));
-
-        return $bytes;
-    }
-
-    /**
      * Handle the serialisation of "delegate registration" data.
      *
      * @param string $bytes
      *
      * @return string
      */
-    private function handleSecondSignature(string $bytes): string
+    private function handleSecondSignatureRegistration(string $bytes): string
     {
         $bytes .= hex2bin($this->transaction->asset['signature']['publicKey']);
 
@@ -228,10 +205,32 @@ class Serialiser
      */
     private function handleDelegateRegistration(string $bytes): string
     {
-        $delegateBytes = $this->transaction->asset['delegate']['username'];
-        dd($this->transaction->asset);
+        $delegateBytes = bin2hex($this->transaction->asset['delegate']['username']);
         $bytes .= pack('C', strlen($delegateBytes) / 2);
         $bytes .= hex2bin($delegateBytes);
+
+        return $bytes;
+    }
+
+    /**
+     * Handle the serialisation of "second signature registration" data.
+     *
+     * @param string $bytes
+     *
+     * @return string
+     */
+    private function handleVote(string $bytes): string
+    {
+        $voteBytes = [];
+
+        foreach ($this->transaction->asset['votes'] as $vote) {
+            $voteBytes[] = '+' === substr($vote, 0, 1)
+                ? '01'.substr($vote, 1)
+                : '00'.substr($vote, 1);
+        }
+
+        $bytes .= pack('C', count($this->transaction->asset['votes']));
+        $bytes .= hex2bin(implode('', $voteBytes));
 
         return $bytes;
     }
@@ -243,7 +242,7 @@ class Serialiser
      *
      * @return string
      */
-    private function handleMultiSignature(string $bytes): string
+    private function handleMultiSignatureRegistration(string $bytes): string
     {
         $keysgroup = [];
 
