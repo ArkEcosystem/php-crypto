@@ -16,6 +16,7 @@ namespace ArkEcosystem\Crypto;
 use ArkEcosystem\Crypto\Transactions\Enums\Types;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\Binary;
 use stdClass;
 
 /**
