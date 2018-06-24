@@ -363,7 +363,7 @@ class Deserialiser
             $offset += 22;
         }
 
-        $transaction->amount = $transaction->asset['payments']; // TODO: sum amount
+        $transaction->amount = array_sum(array_column($transaction->asset['payments'], 'amount'));
 
         return $this->parseSignatures($transaction, $offset * 2);
     }
