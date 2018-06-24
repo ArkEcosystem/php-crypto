@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.1",
         "bitwasp/bitcoin": "^0.0.34.3",
+        "faustbrian/binary": "^0.1.0",
         "illuminate/support": "^5.6",
         "stephenhill/base58": "^1.1"
     },

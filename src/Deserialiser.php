@@ -84,17 +84,17 @@ class Deserialiser
     {
         $transaction                  = new stdClass();
         $transaction->id              = $this->transaction->id;
-        $transaction->version         = (int) (unpack('h', $this->binary, 1)[1]);
-        $transaction->network         = unpack('C', $this->binary, 2)[1];
-        $transaction->type            = unpack('C', $this->binary, 3)[1];
-        $transaction->timestamp       = unpack('V', $this->binary, 4)[1];
-        $transaction->senderPublicKey = unpack('H66', $this->binary, 8)[1];
-        $transaction->fee             = unpack('V', $this->binary, 41)[1];
+        $transaction->version         = (int) Binary::readLowNibbleHex($this->binary, 1);
+        $transaction->network         = Binary::readUInt8($this->binary, 2);
+        $transaction->type            = Binary::readUInt8($this->binary, 3);
+        $transaction->timestamp       = Binary::readUInt32($this->binary, 4);
+        $transaction->senderPublicKey = Binary::readHighNibbleHex($this->binary, 8, 66);
+        $transaction->fee             = Binary::readUInt32($this->binary, 41);
 
-        $vendorFieldLength = unpack('C', $this->binary, 41 + 8)[1];
+        $vendorFieldLength = Binary::readUInt8($this->binary, 41 + 8);
         if ($vendorFieldLength > 0) {
             $vendorFieldOffset             = $vendorFieldLength * 2;
-            $transaction->vendorFieldHex   = unpack("H{$vendorFieldOffset}", $this->binary, 41 + 8 + 1)[1];
+            $transaction->vendorFieldHex   = Binary::readHighNibbleHex($this->binary, 41 + 8 + 1, $vendorFieldOffset);
         }
 
         $assetOffset = (41 + 8 + 1) * 2 + $vendorFieldLength * 2;
@@ -191,10 +191,9 @@ class Deserialiser
      */
     private function handleTransfer(int $assetOffset, object $transaction): object
     {
-        $transaction->amount     = unpack('V', $this->binary, $assetOffset / 2)[1];
-        $transaction->expiration = unpack('V', $this->binary, $assetOffset / 2 + 8)[1];
-
-        $transaction->recipientId = unpack('H42', $this->binary, $assetOffset / 2 + 12)[1];
+        $transaction->amount      = Binary::readUInt64($this->binary, $assetOffset / 2);
+        $transaction->expiration  = Binary::readUInt32($this->binary, $assetOffset / 2 + 8);
+        $transaction->recipientId = Binary::readHighNibbleHex($this->binary, $assetOffset / 2 + 12, 42);
         $transaction->recipientId = Base58::encodeCheck(new Buffer(hex2bin($transaction->recipientId)));
 
         return $this->parseSignatures($transaction, $assetOffset + (21 + 12) * 2);
@@ -229,7 +228,7 @@ class Deserialiser
      */
     private function handleDelegateRegistration(int $assetOffset, object $transaction): object
     {
-        $usernameLength = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
+        $usernameLength = Binary::readUInt8($this->binary, $assetOffset / 2) & 0xff;
 
         $transaction->asset = [
             'delegate' => [
@@ -250,7 +249,7 @@ class Deserialiser
      */
     private function handleVote(int $assetOffset, object $transaction): object
     {
-        $voteLength = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
+        $voteLength = Binary::readUInt8($this->binary, $assetOffset / 2) & 0xff;
 
         $transaction->asset = ['votes' => []];
 
@@ -280,9 +279,9 @@ class Deserialiser
             ],
         ];
 
-        $transaction->asset['multisignature']['min']      = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
-        $num                                              = unpack('C', $this->binary, $assetOffset / 2 + 1)[1] & 0xff;
-        $transaction->asset['multisignature']['lifetime'] = unpack('C', $this->binary, $assetOffset / 2 + 2)[1] & 0xff;
+        $transaction->asset['multisignature']['min']      = Binary::readUInt8($this->binary, $assetOffset / 2) & 0xff;
+        $num                                              = Binary::readUInt8($this->binary, $assetOffset / 2 + 1) & 0xff;
+        $transaction->asset['multisignature']['lifetime'] = Binary::readUInt8($this->binary, $assetOffset / 2 + 2) & 0xff;
 
         for ($i = 0; $i < $num; ++$i) {
             $indexStart = $assetOffset + 6;
@@ -309,10 +308,10 @@ class Deserialiser
     {
         $transaction->asset = [];
 
-        $l                         = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
-        $transaction->asset['dag'] = substr($this->hex, $assetOffset + 2, $l * 2);
+        $length                    = Binary::readUInt8($this->binary, $assetOffset / 2) & 0xff;
+        $transaction->asset['dag'] = substr($this->hex, $assetOffset + 2, $length * 2);
 
-        return $this->parseSignatures($transaction, $assetOffset + 2 + $l * 2);
+        return $this->parseSignatures($transaction, $assetOffset + 2 + $length * 2);
     }
 
     /**
@@ -325,10 +324,10 @@ class Deserialiser
      */
     private function handleTimelockTransfer(int $assetOffset, object $transaction): object
     {
-        $transaction->amount       = unpack('P', $this->binary, $assetOffset / 2)[1];
-        $transaction->timelocktype = unpack('C', $this->binary, $assetOffset / 2 + 8)[1] & 0xff;
-        $transaction->timelock     = unpack('V', $this->binary, $assetOffset / 2 + 9)[1];
-        $transaction->recipientId  = unpack('H42', $this->binary, $assetOffset / 2 + 13)[1];
+        $transaction->amount       = Binary::readUInt64($this->binary, $assetOffset / 2);
+        $transaction->timelocktype = Binary::readUInt8($this->binary, $assetOffset / 2 + 8) & 0xff;
+        $transaction->timelock     = Binary::readUInt32($this->binary, $assetOffset / 2 + 9);
+        $transaction->recipientId  = Binary::readHighNibbleHex($this->binary, $assetOffset / 2 + 13, 42);
         $transaction->recipientId  = Base58::encodeCheck(new Buffer(hex2bin($transaction->recipientId)));
 
         return $this->parseSignatures($transaction, $assetOffset + (21 + 13) * 2);
@@ -348,14 +347,14 @@ class Deserialiser
             'payments' => [],
         ];
 
-        $total  = unpack('C', $this->binary, $assetOffset / 2)[1] & 0xff;
+        $total  = Binary::readUInt8($this->binary, $assetOffset / 2)[1] & 0xff;
         $offset = $assetOffset / 2 + 1;
 
         for ($i = 0; $i < $total; ++$i) {
-            $payment                          = new stdClass();
-            $payment->amount                  = unpack('P', $this->binary, $offset)[1];
-            $payment->recipientId             = unpack('H21', $this->binary, $offset + 1)[1];
-            $payment->recipientId             = Base58::encodeCheck(new Buffer(hex2bin($payment['recipientId'])));
+            $payment              = new stdClass();
+            $payment->amount      = Binary::readUInt64($this->binary, $offset);
+            $payment->recipientId = Binary::readHighNibbleHex($this->binary, $offset + 1, 42);
+            $payment->recipientId = Base58::encodeCheck(new Buffer(hex2bin($payment['recipientId'])));
 
             $transaction->asset['payments'][] = $payment;
 

@@ -78,24 +78,24 @@ class Serialiser
     public function serialise(): Buffer
     {
         $bytes = '';
-        $bytes .= pack('C', 0xff);
-        $bytes .= pack('h', $this->transaction->version ?? 0x01);
-        $bytes .= pack('C', $this->transaction->network ?? 0x30);
-        $bytes .= pack('h', $this->transaction->type);
-        $bytes .= pack('V', $this->transaction->timestamp);
-        $bytes .= pack('H'.strlen($this->transaction->senderPublicKey), $this->transaction->senderPublicKey);
-        $bytes .= pack('P', $this->transaction->fee);
+        $bytes .= Binary::writeUInt8(0xff);
+        $bytes .= Binary::writeLowNibbleHex($this->transaction->version ?? 0x01);
+        $bytes .= Binary::writeUInt8($this->transaction->network ?? 0x23);
+        $bytes .= Binary::writeLowNibbleHex($this->transaction->type);
+        $bytes .= Binary::writeUInt32($this->transaction->timestamp);
+        $bytes .= Binary::writeHighNibbleHex($this->transaction->senderPublicKey, strlen($this->transaction->senderPublicKey));
+        $bytes .= Binary::writeUInt64($this->transaction->fee);
 
         if (isset($this->transaction->vendorField)) {
             $vendorFieldLength = strlen($this->transaction->vendorField);
-            $bytes .= pack('C', $vendorFieldLength);
+            $bytes .= Binary::writeUInt8($vendorFieldLength);
             $bytes .= $this->transaction->vendorField;
         } elseif (isset($this->transaction->vendorFieldHex)) {
             $vendorFieldHexLength = strlen($this->transaction->vendorFieldHex);
-            $bytes .= pack('C', $vendorFieldHexLength / 2);
+            $bytes .= Binary::writeUInt8($vendorFieldHexLength / 2);
             $bytes .= $this->transaction->vendorFieldHex;
         } else {
-            $bytes .= pack('C', 0x00);
+            $bytes .= Binary::writeUInt8(0x00);
         }
 
         $bytes = $this->handleByType($bytes);
@@ -111,7 +111,7 @@ class Serialiser
         }
 
         if (isset($this->transaction->signatures)) {
-            $bytes .= pack('C', 0xff);
+            $bytes .= Binary::writeUInt8(0xff);
             $bytes .= hex2bin(implode('', $this->transaction->signatures));
         }
 
@@ -173,11 +173,11 @@ class Serialiser
      */
     private function handleTransfer(string $bytes): string
     {
-        $bytes .= pack('P', $this->transaction->amount);
-        $bytes .= pack('V', $this->transaction->expiration ?? 0);
+        $bytes .= Binary::writeUInt64($this->transaction->amount);
+        $bytes .= Binary::writeUInt32($this->transaction->expiration ?? 0);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= pack('H'.strlen($recipientId), $recipientId);
+        $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
 
         return $bytes;
     }
@@ -206,7 +206,7 @@ class Serialiser
     private function handleDelegateRegistration(string $bytes): string
     {
         $delegateBytes = bin2hex($this->transaction->asset['delegate']['username']);
-        $bytes .= pack('C', strlen($delegateBytes) / 2);
+        $bytes .= Binary::writeUInt8(strlen($delegateBytes) / 2);
         $bytes .= hex2bin($delegateBytes);
 
         return $bytes;
@@ -229,7 +229,7 @@ class Serialiser
                 : '00'.substr($vote, 1);
         }
 
-        $bytes .= pack('C', count($this->transaction->asset['votes']));
+        $bytes .= Binary::writeUInt8(count($this->transaction->asset['votes']));
         $bytes .= hex2bin(implode('', $voteBytes));
 
         return $bytes;
@@ -254,9 +254,9 @@ class Serialiser
             $keysgroup = $this->transaction->asset['multisignature']['keysgroup'];
         }
 
-        $bytes .= pack('C', $this->transaction->asset['multisignature']['min']);
-        $bytes .= pack('C', count($this->transaction->asset['multisignature']['keysgroup']));
-        $bytes .= pack('C', $this->transaction->asset['multisignature']['lifetime']);
+        $bytes .= Binary::writeUInt8($this->transaction->asset['multisignature']['min']);
+        $bytes .= Binary::writeUInt8(count($this->transaction->asset['multisignature']['keysgroup']));
+        $bytes .= Binary::writeUInt8($this->transaction->asset['multisignature']['lifetime']);
         $bytes .= hex2bin(implode('', $keysgroup));
 
         return $bytes;
@@ -273,7 +273,7 @@ class Serialiser
     {
         $dag = $this->transaction->asset['ipfs']['dag'];
 
-        $bytes .= pack('C', strlen($dag) / 2);
+        $bytes .= Binary::writeUInt8(strlen($dag) / 2);
         $bytes .= hex2bin($dag);
 
         return $bytes;
@@ -288,12 +288,12 @@ class Serialiser
      */
     private function handleTimelockTransfer(string $bytes): string
     {
-        $bytes .= pack('P', $this->transaction->amount);
-        $bytes .= pack('h', $this->transaction->timelocktype);
-        $bytes .= pack('V', $this->transaction->timelock);
+        $bytes .= Binary::writeUInt64($this->transaction->amount);
+        $bytes .= Binary::writeLowNibbleHex($this->transaction->timelocktype);
+        $bytes .= Binary::writeUInt32($this->transaction->timelock);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= pack('H'.strlen($recipientId), $recipientId);
+        $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
 
         return $bytes;
     }
@@ -307,13 +307,13 @@ class Serialiser
      */
     private function handleMultiPayment(string $bytes): string
     {
-        $bytes .= pack('V', count($this->transaction->asset['payments']));
+        $bytes .= Binary::writeUInt32(count($this->transaction->asset['payments']));
 
         foreach ($this->transaction->asset['payments'] as $payment) {
-            $bytes .= pack('P', $payment->amount);
+            $bytes .= Binary::writeUInt64($payment->amount);
 
             $recipientId = Base58::decodeCheck($payment->recipientId)->getHex();
-            $bytes .= pack('H'.strlen($recipientId), $recipientId);
+            $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
         }
 
         return $bytes;
