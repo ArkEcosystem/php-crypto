@@ -325,10 +325,10 @@ class Deserialiser
      */
     private function handleTimelockTransfer(int $assetOffset, object $transaction): object
     {
-        $transaction->amount       = unpack('V', $this->binary, $assetOffset / 2)[1];
-        $transaction->timelocktype = unpack('V', $this->binary, $assetOffset / 2 + 8)[1] & 0xff;
+        $transaction->amount       = unpack('P', $this->binary, $assetOffset / 2)[1];
+        $transaction->timelocktype = unpack('C', $this->binary, $assetOffset / 2 + 8)[1] & 0xff;
         $transaction->timelock     = unpack('V', $this->binary, $assetOffset / 2 + 9)[1];
-        $transaction->recipientId  = unpack('H21', $this->binary, $assetOffset / 2 + 13)[1];
+        $transaction->recipientId  = unpack('H42', $this->binary, $assetOffset / 2 + 13)[1];
         $transaction->recipientId  = Base58::encodeCheck(new Buffer(hex2bin($transaction->recipientId)));
 
         return $this->parseSignatures($transaction, $assetOffset + (21 + 13) * 2);
@@ -397,7 +397,7 @@ class Deserialiser
         if (0 === strlen($transaction->signature)) {
             unset($transaction->signature);
         } else {
-            $length1 = intval(substr($transaction->signature, 2, 2), 16) + 2;
+            $length1                = intval(substr($transaction->signature, 2, 2), 16) + 2;
             $transaction->signature = substr($this->hex, $startOffset, $length1 * 2);
             $multiSignatureOffset += $length1 * 2;
             $transaction->secondSignature = substr($this->hex, $startOffset + $length1 * 2);
@@ -408,7 +408,7 @@ class Deserialiser
                 if ('ff' === substr($transaction->secondSignature, 0, 2)) { // start of multi-signature
                     unset($transaction->secondSignature);
                 } else {
-                    $length2 = intval(substr($transaction->secondSignature, 2, 2), 16) + 2;
+                    $length2                      = intval(substr($transaction->secondSignature, 2, 2), 16) + 2;
                     $transaction->secondSignature = substr($transaction->secondSignature, 0, $length2 * 2);
                     $multiSignatureOffset += $length2 * 2;
                 }
@@ -424,7 +424,7 @@ class Deserialiser
                 return $transaction;
             }
 
-            $signatures = substr($signatures, 2);
+            $signatures              = substr($signatures, 2);
             $transaction->signatures = [];
 
             $moreSignatures = true;
