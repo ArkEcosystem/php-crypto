@@ -16,7 +16,8 @@ namespace ArkEcosystem\Crypto;
 use ArkEcosystem\Crypto\Transactions\Enums\Types;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Binary;
+use BrianFaust\Binary\Hex\Writer as Hex;
+use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
 
 /**
  * This is the serialiser class.
@@ -79,24 +80,24 @@ class Serialiser
     public function serialise(): Buffer
     {
         $bytes = '';
-        $bytes .= Binary::writeUInt8(0xff);
-        $bytes .= Binary::writeLowNibbleHex($this->transaction->version ?? 0x01);
-        $bytes .= Binary::writeUInt8($this->transaction->network ?? 0x23);
-        $bytes .= Binary::writeLowNibbleHex($this->transaction->type);
-        $bytes .= Binary::writeUInt32($this->transaction->timestamp);
-        $bytes .= Binary::writeHighNibbleHex($this->transaction->senderPublicKey, strlen($this->transaction->senderPublicKey));
-        $bytes .= Binary::writeUInt64($this->transaction->fee);
+        $bytes .= UnsignedInteger::bit8(0xff);
+        $bytes .= Hex::low($this->transaction->version ?? 0x01);
+        $bytes .= UnsignedInteger::bit8($this->transaction->network ?? 0x23);
+        $bytes .= Hex::low($this->transaction->type);
+        $bytes .= UnsignedInteger::bit32($this->transaction->timestamp);
+        $bytes .= Hex::high($this->transaction->senderPublicKey, strlen($this->transaction->senderPublicKey));
+        $bytes .= UnsignedInteger::bit64($this->transaction->fee);
 
         if (isset($this->transaction->vendorField)) {
             $vendorFieldLength = strlen($this->transaction->vendorField);
-            $bytes .= Binary::writeUInt8($vendorFieldLength);
+            $bytes .= UnsignedInteger::bit8($vendorFieldLength);
             $bytes .= $this->transaction->vendorField;
         } elseif (isset($this->transaction->vendorFieldHex)) {
             $vendorFieldHexLength = strlen($this->transaction->vendorFieldHex);
-            $bytes .= Binary::writeUInt8($vendorFieldHexLength / 2);
+            $bytes .= UnsignedInteger::bit8($vendorFieldHexLength / 2);
             $bytes .= $this->transaction->vendorFieldHex;
         } else {
-            $bytes .= Binary::writeUInt8(0x00);
+            $bytes .= UnsignedInteger::bit8(0x00);
         }
 
         $bytes = $this->handleByType($bytes);
@@ -112,7 +113,7 @@ class Serialiser
         }
 
         if (isset($this->transaction->signatures)) {
-            $bytes .= Binary::writeUInt8(0xff);
+            $bytes .= UnsignedInteger::bit8(0xff);
             $bytes .= hex2bin(implode('', $this->transaction->signatures));
         }
 
@@ -174,11 +175,11 @@ class Serialiser
      */
     private function handleTransfer(string $bytes): string
     {
-        $bytes .= Binary::writeUInt64($this->transaction->amount);
-        $bytes .= Binary::writeUInt32($this->transaction->expiration ?? 0);
+        $bytes .= UnsignedInteger::bit64($this->transaction->amount);
+        $bytes .= UnsignedInteger::bit32($this->transaction->expiration ?? 0);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
+        $bytes .= Hex::high($recipientId, strlen($recipientId));
 
         return $bytes;
     }
@@ -207,7 +208,7 @@ class Serialiser
     private function handleDelegateRegistration(string $bytes): string
     {
         $delegateBytes = bin2hex($this->transaction->asset['delegate']['username']);
-        $bytes .= Binary::writeUInt8(strlen($delegateBytes) / 2);
+        $bytes .= UnsignedInteger::bit8(strlen($delegateBytes) / 2);
         $bytes .= hex2bin($delegateBytes);
 
         return $bytes;
@@ -230,7 +231,7 @@ class Serialiser
                 : '00'.substr($vote, 1);
         }
 
-        $bytes .= Binary::writeUInt8(count($this->transaction->asset['votes']));
+        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset['votes']));
         $bytes .= hex2bin(implode('', $voteBytes));
 
         return $bytes;
@@ -255,9 +256,9 @@ class Serialiser
             $keysgroup = $this->transaction->asset['multisignature']['keysgroup'];
         }
 
-        $bytes .= Binary::writeUInt8($this->transaction->asset['multisignature']['min']);
-        $bytes .= Binary::writeUInt8(count($this->transaction->asset['multisignature']['keysgroup']));
-        $bytes .= Binary::writeUInt8($this->transaction->asset['multisignature']['lifetime']);
+        $bytes .= UnsignedInteger::bit8($this->transaction->asset['multisignature']['min']);
+        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset['multisignature']['keysgroup']));
+        $bytes .= UnsignedInteger::bit8($this->transaction->asset['multisignature']['lifetime']);
         $bytes .= hex2bin(implode('', $keysgroup));
 
         return $bytes;
@@ -274,7 +275,7 @@ class Serialiser
     {
         $dag = $this->transaction->asset['ipfs']['dag'];
 
-        $bytes .= Binary::writeUInt8(strlen($dag) / 2);
+        $bytes .= UnsignedInteger::bit8(strlen($dag) / 2);
         $bytes .= hex2bin($dag);
 
         return $bytes;
@@ -289,12 +290,12 @@ class Serialiser
      */
     private function handleTimelockTransfer(string $bytes): string
     {
-        $bytes .= Binary::writeUInt64($this->transaction->amount);
-        $bytes .= Binary::writeLowNibbleHex($this->transaction->timelocktype);
-        $bytes .= Binary::writeUInt32($this->transaction->timelock);
+        $bytes .= UnsignedInteger::bit64($this->transaction->amount);
+        $bytes .= Hex::low($this->transaction->timelocktype);
+        $bytes .= UnsignedInteger::bit32($this->transaction->timelock);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
+        $bytes .= Hex::high($recipientId, strlen($recipientId));
 
         return $bytes;
     }
@@ -308,13 +309,13 @@ class Serialiser
      */
     private function handleMultiPayment(string $bytes): string
     {
-        $bytes .= Binary::writeUInt32(count($this->transaction->asset['payments']));
+        $bytes .= UnsignedInteger::bit32(count($this->transaction->asset['payments']));
 
         foreach ($this->transaction->asset['payments'] as $payment) {
-            $bytes .= Binary::writeUInt64($payment->amount);
+            $bytes .= UnsignedInteger::bit64($payment->amount);
 
             $recipientId = Base58::decodeCheck($payment->recipientId)->getHex();
-            $bytes .= Binary::writeHighNibbleHex($recipientId, strlen($recipientId));
+            $bytes .= Hex::high($recipientId, strlen($recipientId));
         }
 
         return $bytes;
