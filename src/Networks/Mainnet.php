@@ -42,7 +42,7 @@ class Mainnet extends Network
     /**
      * {@inheritdoc}
      */
-    public static function getWIF(): int
+    public static function getWif(): int
     {
         return 170;
     }

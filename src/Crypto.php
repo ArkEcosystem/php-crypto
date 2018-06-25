@@ -14,13 +14,11 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Enums\Types;
-use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
+use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
-use BitWasp\Bitcoin\Network\Network;
-use BitWasp\Bitcoin\Network\NetworkFactory;
-use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
@@ -32,23 +30,6 @@ use stdClass;
  */
 class Crypto
 {
-    /**
-     * Derive an address from the given private key.
-     *
-     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null               $network
-     *
-     * @return string
-     */
-    public static function getAddress(PrivateKey $privateKey, NetworkInterface $network = null): string
-    {
-        $network   = $network ?? static::getDefaultNetwork();
-        $publicKey = $privateKey->getPublicKey();
-        $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
-
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
-    }
-
     /**
      * Convert the transaction to its byte representation.
      *
@@ -194,7 +175,7 @@ class Crypto
      */
     public static function getDefaultNetwork(): Network
     {
-        return NetworkFactory::create('17', '00', '00');
+        return Mainnet::create();
     }
 
     /**

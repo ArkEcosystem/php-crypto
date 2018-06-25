@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identity;
 
+use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\UnsignedInteger\Reader;
 use BrianFaust\Binary\UnsignedInteger\Writer;
@@ -32,15 +32,15 @@ class Address
     /**
      * Derive the address from the given public key.
      *
-     * @param string $publicKey
-     * @param int    $version
+     * @param string                                     $publicKey
+     * @param \ArkEcosystem\Crypto\Networks\Network|null $network
      *
      * @return string
      */
-    public static function fromPublicKey(string $publicKey, int $version = 0x17): string
+    public static function fromPublicKey(string $publicKey, Network $network = null): string
     {
         $ripemd160 = Hash::ripemd160(new Buffer(hex2bin($publicKey)));
-        $seed      = Writer::bit8($version).$ripemd160->getBinary();
+        $seed      = Writer::bit8($network->getVersion()).$ripemd160->getBinary();
 
         return Base58::encodeCheck(new Buffer($seed));
     }
@@ -48,12 +48,12 @@ class Address
     /**
      * Derive the address from the given secret.
      *
-     * @param string                                         $secret
-     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null $network
+     * @param string                                     $secret
+     * @param \ArkEcosystem\Crypto\Networks\Network|null $network
      *
      * @return string
      */
-    public static function fromSecret(string $secret, NetworkInterface $network = null): string
+    public static function fromSecret(string $secret, Network $network = null): string
     {
         return static::fromPrivateKey(PrivateKey::fromSecret($secret), $network);
     }
@@ -62,30 +62,30 @@ class Address
      * Derive the address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null               $network
+     * @param ArkEcosystem\Crypto\Networks\Network|null                    $network
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, NetworkInterface $network = null): string
+    public static function fromPrivateKey(EccPrivateKey $privateKey, Network $network = null): string
     {
         $publicKey = $privateKey->getPublicKey();
         $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
 
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
+        return (new PayToPubKeyHashAddress($digest))->getAddress($network->getFactory());
     }
 
     /**
      * Validate the given address.
      *
-     * @param string $address
-     * @param string $networkVersion
+     * @param string                                     $address
+     * @param \ArkEcosystem\Crypto\Networks\Network|null $network
      *
      * @return bool
      */
-    public static function validate(string $address, int $version = 0x17): bool
+    public static function validate(string $address, Network $network = null): bool
     {
         $address = Base58::decodeCheck($address);
 
-        return Reader::bit8($address->getBinary()) === $version;
+        return Reader::bit8($address->getBinary()) === $network->getVersion();
     }
 }

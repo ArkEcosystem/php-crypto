@@ -16,6 +16,8 @@ namespace ArkEcosystem\Tests\Crypto;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\Address;
 use ArkEcosystem\Crypto\Identity\WIF;
+use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Mainnet;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 
 /**
@@ -34,7 +36,7 @@ class CryptoTest extends TestCase
         $address   = 'DARiJqhogp2Lu6bxufUFQQMuMyZbxjCydN';
 
         // Act...
-        $result = Address::fromPublicKey($publicKey, 0x1E);
+        $result = Address::fromPublicKey($publicKey, Devnet::create());
 
         // Assert...
         $this->assertSame($result, $address);
@@ -59,7 +61,7 @@ class CryptoTest extends TestCase
     {
         // Arrange...
         $secret  = 'this is a top secret passphrase';
-        $network = NetworkFactory::create('17', '00', '00');
+        $network = Mainnet::create();
 
         // Act...
         $actual = Address::fromSecret($secret, $network);
@@ -73,7 +75,7 @@ class CryptoTest extends TestCase
     {
         // Arrange...
         $secret  = 'this is a top secret passphrase';
-        $network = NetworkFactory::create('1e', '00', '00');
+        $network = Devnet::create();
 
         // Act...
         $actual = Address::fromSecret($secret, $network);

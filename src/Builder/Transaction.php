@@ -16,8 +16,8 @@ namespace ArkEcosystem\Crypto\Builder;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
+use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
 
@@ -75,9 +75,9 @@ abstract class Transaction
     /**
      * Derive an address from the given private key.
      *
-     * @param \BitWasp\Bitcoin\Network\NetworkInterface $network
+     * @param \ArkEcosystem\Crypto\Networks\Network $network
      */
-    public function network(NetworkInterface $network): voi
+    public function network(Network $network): void
     {
         $this->network = $network;
     }

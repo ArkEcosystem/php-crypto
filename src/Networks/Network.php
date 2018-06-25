@@ -36,6 +36,38 @@ abstract class Network
     }
 
     /**
+     * Create a new network instance.
+     *
+     * @return mixed
+     */
+    public static function create()
+    {
+        return new static();
+    }
+
+    /**
+     * Get the version of the network.
+     *
+     * @return int
+     */
+    public static function getVersion(): int
+    {
+        $byte = static::getAddressByte();
+
+        return hexdec("0x{$byte}");
+    }
+
+    /**
+     * Get the byte representation of the wif prefix.
+     *
+     * @return int
+     */
+    public static function getWifByte(): string
+    {
+        return dechex(static::getWif());
+    }
+
+    /**
      * Get the message prefix of the network.
      *
      * @return string
@@ -54,10 +86,10 @@ abstract class Network
      *
      * @return int
      */
-    abstract public static function getWIF(): int;
+    abstract public static function getWif(): int;
 
     /**
-     * [getFactory description].
+     * Get a network instance.
      *
      * @return \BitWasp\Bitcoin\Network\Network
      */
