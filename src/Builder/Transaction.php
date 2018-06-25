@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Config;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\FeeManager;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
-use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
@@ -36,8 +34,6 @@ abstract class Transaction
      */
     public function __construct()
     {
-        $this->network = Config::getNetwork();
-
         $this->data              = new \stdClass();
         $this->data->recipientId = null;
         $this->data->type        = $this->getType();
@@ -76,23 +72,13 @@ abstract class Transaction
     }
 
     /**
-     * Derive an address from the given private key.
-     *
-     * @param \ArkEcosystem\Crypto\Networks\Network $network
-     */
-    public function network(Network $network): void
-    {
-        $this->network = $network;
-    }
-
-    /**
      * Set the transaction fee.
      *
      * @param int $fee
      *
      * @return \ArkEcosystem\Crypto\Builder\Transaction
      */
-    public function fee(int $fee): self
+    public function withFee(int $fee): self
     {
         $this->data->fee = $fee;
 
