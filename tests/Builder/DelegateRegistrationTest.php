@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration transaction test class.
+ * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\SecondSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the second signature registration serialiser class.
+ * This is the second signature registration serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -27,7 +27,7 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(1);
+        $transaction = $this->getTransactionFixture(1);
 
         $actual = (new SecondSignatureRegistration($transaction))->serialise();
 

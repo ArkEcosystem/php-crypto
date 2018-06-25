@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Models\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration deserialiser class.
+ * This is the delegate registration deserialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -28,7 +28,7 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(2);
+        $transaction = $this->getTransactionFixture(2);
 
         $actual = (new DelegateRegistration($transaction))->deserialise();
 

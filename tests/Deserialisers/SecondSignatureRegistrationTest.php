@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Models\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the second signature registration deserialiser class.
+ * This is the second signature registration deserialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -28,7 +28,7 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(1);
+        $transaction = $this->getTransactionFixture(1);
 
         $actual = (new SecondSignatureRegistration($transaction))->deserialise();
 

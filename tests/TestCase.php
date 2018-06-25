@@ -17,7 +17,14 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function getTransactionType(int $type): object
+    /**
+     * Get a transaction fixture by type.
+     *
+     * @param int $type
+     *
+     * @return object
+     */
+    protected function getTransactionFixture(int $type): object
     {
         $path = __DIR__."/fixtures/Transactions/type-{$type}.json";
 

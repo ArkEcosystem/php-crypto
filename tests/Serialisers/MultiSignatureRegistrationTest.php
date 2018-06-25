@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\MultiSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi signature registration serialiser class.
+ * This is the multi signature registration serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -27,7 +27,7 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(4);
+        $transaction = $this->getTransactionFixture(4);
 
         $actual = (new MultiSignatureRegistration($transaction))->serialise();
 

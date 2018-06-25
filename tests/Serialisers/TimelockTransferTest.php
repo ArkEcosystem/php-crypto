@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\TimelockTransfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the timelock transfer serialiser class.
+ * This is the timelock transfer serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -29,7 +29,7 @@ class TimelockTransferTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionType(6);
+        $transaction = $this->getTransactionFixture(6);
 
         $actual = (new TimelockTransfer($transaction))->serialise();
 

@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\MultiPayment;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi payment serialiser class.
+ * This is the multi payment serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -29,7 +29,7 @@ class MultiPaymentTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionType(7);
+        $transaction = $this->getTransactionFixture(7);
 
         $actual = (new MultiPayment($transaction))->serialise();
 

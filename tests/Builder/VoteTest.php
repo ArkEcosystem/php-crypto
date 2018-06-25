@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote transaction test class.
+ * This is the vote builder test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

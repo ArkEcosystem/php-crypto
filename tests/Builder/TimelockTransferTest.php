@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the timelock transfer transaction test class.
+ * This is the timelock transfer builder test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi payment transaction test class.
+ * This is the multi payment builder test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

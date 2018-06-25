@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\IPFS;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the ipfs serialiser class.
+ * This is the ipfs serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -29,7 +29,7 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionType(5);
+        $transaction = $this->getTransactionFixture(5);
 
         $actual = (new IPFS($transaction))->serialise();
 

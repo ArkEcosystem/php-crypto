@@ -19,7 +19,7 @@ use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the second signature registration transaction test class.
+ * This is the second signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing

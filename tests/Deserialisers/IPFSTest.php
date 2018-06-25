@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Models\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the ipfs deserialiser class.
+ * This is the ipfs deserialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -30,7 +30,7 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionType(5);
+        $transaction = $this->getTransactionFixture(5);
 
         $actual = (new IPFS($transaction))->deserialise();
 

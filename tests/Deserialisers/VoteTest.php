@@ -18,7 +18,7 @@ use ArkEcosystem\Crypto\Models\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote deserialiser class.
+ * This is the vote deserialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -28,7 +28,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(3);
+        $transaction = $this->getTransactionFixture(3);
 
         $actual = (new Vote($transaction))->deserialise();
 

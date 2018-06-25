@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\Transfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the transfer serialiser class.
+ * This is the transfer serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -27,7 +27,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(0);
+        $transaction = $this->getTransactionFixture(0);
 
         $actual = (new Transfer($transaction))->serialise();
 

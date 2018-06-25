@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Serialisers\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote serialiser class.
+ * This is the vote serialiser test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -27,7 +27,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
-        $transaction = $this->getTransactionType(3);
+        $transaction = $this->getTransactionFixture(3);
 
         $actual = (new Vote($transaction))->serialise();
 
