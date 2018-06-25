@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\Configuration\Fee as FeeConfiguration;
+use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -27,7 +27,7 @@ class FeeTest extends TestCase
     /** @test */
     public function it_should_get_the_fee()
     {
-        $actual = FeeConfiguration::get(0);
+        $actual = Fee::get(0);
 
         $this->assertSame(10000000, $actual);
     }
@@ -35,12 +35,12 @@ class FeeTest extends TestCase
     /** @test */
     public function it_should_set_the_fee()
     {
-        $actual = FeeConfiguration::get(0);
+        $actual = Fee::get(0);
         $this->assertSame(10000000, $actual);
 
-        FeeConfiguration::set(0, 5);
+        Fee::set(0, 5);
 
-        $actual = FeeConfiguration::get(0);
+        $actual = Fee::get(0);
         $this->assertSame(5, $actual);
     }
 }

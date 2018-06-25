@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\Address;
 use stdClass;
@@ -58,7 +58,7 @@ class Vote extends AbstractTransaction
      */
     public function sign(string $secret): AbstractTransaction
     {
-        $this->data->recipientId = Address::fromSecret($secret, NetworkConfiguration::get());
+        $this->data->recipientId = Address::fromSecret($secret, Network::get());
 
         parent::sign($secret);
 

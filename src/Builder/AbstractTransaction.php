@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Fee as FeeConfiguration;
+use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
@@ -199,7 +199,7 @@ abstract class AbstractTransaction
      */
     private function getFee(): int
     {
-        return FeeConfiguration::get($this->data->type);
+        return Fee::get($this->data->type);
     }
 
     /**

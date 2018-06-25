@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -29,7 +29,7 @@ class NetworkTest extends TestCase
     /** @test */
     public function it_should_get_the_network()
     {
-        $actual = NetworkConfiguration::get();
+        $actual = Network::get();
 
         $this->assertInstanceOf(Mainnet::class, $actual);
     }
@@ -37,12 +37,12 @@ class NetworkTest extends TestCase
     /** @test */
     public function it_should_set_the_network()
     {
-        $actual = NetworkConfiguration::get();
+        $actual = Network::get();
         $this->assertInstanceOf(Mainnet::class, $actual);
 
-        NetworkConfiguration::set(Devnet::create());
+        Network::set(Devnet::create());
 
-        $actual = NetworkConfiguration::get();
+        $actual = Network::get();
         $this->assertInstanceOf(Devnet::class, $actual);
     }
 }
