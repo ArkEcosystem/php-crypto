@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Deserialisers;
 
+use ArkEcosystem\Tests\Crypto\TestCase;
+
 /**
  * This is the delegate registration deserialiser test class.
  *

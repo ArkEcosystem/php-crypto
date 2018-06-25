@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Tests\Crypto\TestCase;
+
 /**
  * This is the second signature registration serialiser class.
  *
