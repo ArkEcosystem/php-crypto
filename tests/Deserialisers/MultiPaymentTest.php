@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Deserialisers;
 
+use ArkEcosystem\Crypto\Deserialisers\MultiPayment;
+use ArkEcosystem\Crypto\Models\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi payment deserialiser test class.
+ * This is the multi payment deserialiser class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -24,7 +26,18 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class MultiPaymentTest extends TestCase
 {
     /** @test */
-    public function it_should_serialise_the_transaction()
+    public function it_should_deserialise_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = $this->getTransactionType(7);
+
+        $actual = (new MultiPayment($transaction))->deserialise();
+
+        $this->assertSame($transaction->version, $actual->version);
+        $this->assertSame($transaction->network, $actual->network);
+        $this->assertSame($transaction->type, $actual->type);
+        $this->assertSame($transaction->senderPublicKey, $actual->senderPublicKey);
+        $this->assertSame($transaction->serialized, Transaction::fromObject($actual)->serialise()->getHex());
     }
 }
