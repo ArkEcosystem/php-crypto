@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto;
 
-use ArkEcosystem\Crypto\Transactions\Enums\Types;
-use ArkEcosystem\Crypto\Utils\Base58;
+use ArkEcosystem\Crypto\Enums\Types;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
@@ -34,68 +33,6 @@ use stdClass;
  */
 class Crypto
 {
-    /**
-     * Compute an ARK Address from the given public key.
-     *
-     * @param string $secret
-     * @param int    $version
-     *
-     * @return string
-     */
-    public static function addressFromPublicKey(string $publicKey, int $version = 0x17): string
-    {
-        $ripemd160 = hash('ripemd160', hex2bin($publicKey), true);
-        $seed      = pack('C*', $version).$ripemd160;
-
-        return Base58::encodeCheck($seed);
-    }
-
-    /**
-     * Validate an ARK Address.
-     *
-     * @param string $address
-     * @param string $networkVersion
-     *
-     * @return bool
-     */
-    public static function validateAddress(string $address, string $networkVersion = '17'): bool
-    {
-        $address    = new Buffer(Base58::decode($address));
-        $prefixByte = $address->slice(0, 1)->getHex();
-
-        return $prefixByte === $networkVersion;
-    }
-
-    /**
-     * Compute an WIF address from the given secret.
-     *
-     * @param string $secret
-     * @param int    $wif
-     *
-     * @return string
-     */
-    public static function wif(string $secret, int $wif = 0xaa): string
-    {
-        $secret = hash('sha256', $secret, true);
-        $seed   = pack('C*', $wif).$secret.pack('C*', 0x01);
-
-        return Base58::encodeCheck($seed);
-    }
-
-    /**
-     * Derive the public & private key from the given secret.
-     *
-     * @param string $secret
-     *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
-     */
-    public static function getKeys(string $secret): PrivateKey
-    {
-        $seed = static::bchexdec(hash('sha256', $secret));
-
-        return PrivateKeyFactory::fromInt($seed, true);
-    }
-
     /**
      * Derive an address from the given private key.
      *
@@ -262,21 +199,67 @@ class Crypto
     }
 
     /**
-     * hexdec but for integers that are bigger than the largest PHP integer
-     * https://stackoverflow.com/questions/1273484/large-hex-values-with-php-hexdec.
+     * [parseSignatures description].
      *
-     * @param $hex
+     * @param string $serialized
+     * @param object $transaction
+     * @param int    $startOffset
      *
-     * @return int|string
+     * @return object
      */
-    private static function bchexdec(string $hex): string
+    public static function parseSignatures(string $serialized, object $transaction, int $startOffset): object
     {
-        $dec = '0';
-        $len = strlen($hex);
-        for ($i = 1; $i <= $len; ++$i) {
-            $dec = bcadd($dec, bcmul((string) (hexdec($hex[$i - 1])), bcpow('16', (string) ($len - $i))));
+        $transaction->signature = substr($serialized, $startOffset);
+
+        $multiSignatureOffset = 0;
+
+        if (0 === strlen($transaction->signature)) {
+            unset($transaction->signature);
+        } else {
+            $length1                = intval(substr($transaction->signature, 2, 2), 16) + 2;
+            $transaction->signature = substr($serialized, $startOffset, $length1 * 2);
+            $multiSignatureOffset += $length1 * 2;
+            $transaction->secondSignature = substr($serialized, $startOffset + $length1 * 2);
+
+            if (0 === strlen($transaction->secondSignature)) {
+                unset($transaction->secondSignature);
+            } else {
+                if ('ff' === substr($transaction->secondSignature, 0, 2)) { // start of multi-signature
+                    unset($transaction->secondSignature);
+                } else {
+                    $length2                      = intval(substr($transaction->secondSignature, 2, 2), 16) + 2;
+                    $transaction->secondSignature = substr($transaction->secondSignature, 0, $length2 * 2);
+                    $multiSignatureOffset += $length2 * 2;
+                }
+            }
+
+            $signatures = substr($serialized, $startOffset + $multiSignatureOffset);
+
+            if (0 === strlen($signatures)) {
+                return $transaction;
+            }
+
+            if ('ff' !== substr($signatures, 0, 2)) {
+                return $transaction;
+            }
+
+            $signatures              = substr($signatures, 2);
+            $transaction->signatures = [];
+
+            $moreSignatures = true;
+            while ($moreSignatures) {
+                $mLength = intval(substr($signatures, 2, 2), 16);
+
+                if ($mLength > 0) {
+                    $transaction->signatures[] = substr($signatures, 0, ($mLength + 2) * 2);
+                } else {
+                    $moreSignatures = false;
+                }
+
+                $signatures = substr($signatures, ($mLength + 2) * 2);
+            }
         }
 
-        return $dec;
+        return $transaction;
     }
 }
