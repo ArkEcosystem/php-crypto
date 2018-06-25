@@ -16,7 +16,6 @@ namespace ArkEcosystem\Crypto\Builder;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 
 /**

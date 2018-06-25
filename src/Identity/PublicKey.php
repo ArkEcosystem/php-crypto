@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identity;
 
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as ECKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 
 /**
  * This is the public key class.
@@ -29,7 +29,7 @@ class PublicKey
      *
      * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey
      */
-    public static function fromSecret(string $secret): ECKey
+    public static function fromSecret(string $secret): EcPublicKey
     {
         return PrivateKey::fromSecret($secret)->getPublicKey();
     }

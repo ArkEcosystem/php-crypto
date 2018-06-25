@@ -17,7 +17,6 @@ use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Network\NetworkFactory;
 use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\UnsignedInteger\Reader;
@@ -49,8 +48,8 @@ class Address
     /**
      * Derive the address from the given secret.
      *
-     * @param string $secret
-     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null    $network
+     * @param string                                         $secret
+     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null $network
      *
      * @return string
      */
