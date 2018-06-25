@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\FeeManager;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
+use ArkEcosystem\Crypto\Managers\FeeManager;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use stdClass;

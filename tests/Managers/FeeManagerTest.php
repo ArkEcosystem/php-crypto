@@ -11,9 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto;
+namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\FeeManager;
+use ArkEcosystem\Crypto\Managers\FeeManager;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the fee manager test class.

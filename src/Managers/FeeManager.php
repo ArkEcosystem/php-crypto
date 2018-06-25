@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto;
+namespace ArkEcosystem\Crypto\Managers;
 
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;

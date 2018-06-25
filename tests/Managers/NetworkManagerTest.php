@@ -11,12 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto;
+namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\Config as TestClass;
+use ArkEcosystem\Crypto\Managers\NetworkManager;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Crypto\Networks\Network;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the config test class.
@@ -24,12 +25,12 @@ use ArkEcosystem\Crypto\Networks\Network;
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class ConfigTest extends TestCase
+class NetworkManagerTest extends TestCase
 {
     /** @test */
     public function it_should_get_the_network()
     {
-        $actual = TestClass::getNetwork();
+        $actual = NetworkManager::get();
 
         $this->assertInstanceOf(Network::class, $actual);
     }
@@ -37,12 +38,12 @@ class ConfigTest extends TestCase
     /** @test */
     public function it_should_set_the_network()
     {
-        $actual = TestClass::getNetwork();
+        $actual = NetworkManager::get();
         $this->assertInstanceOf(Mainnet::class, $actual);
 
-        TestClass::setNetwork(Devnet::create());
+        NetworkManager::set(Devnet::create());
 
-        $actual = TestClass::getNetwork();
+        $actual = NetworkManager::get();
         $this->assertInstanceOf(Devnet::class, $actual);
     }
 }
