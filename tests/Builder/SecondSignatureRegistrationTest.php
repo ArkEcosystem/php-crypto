@@ -11,11 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto;
+namespace ArkEcosystem\Tests\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Builder\SecondSignatureRegistration;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PublicKey;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the second signature registration transaction test class.

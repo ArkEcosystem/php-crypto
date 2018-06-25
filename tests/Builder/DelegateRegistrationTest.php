@@ -11,10 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto;
+namespace ArkEcosystem\Tests\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Builder\DelegateRegistration;
 use ArkEcosystem\Crypto\Utils\Crypto;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration transaction test class.

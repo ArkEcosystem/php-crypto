@@ -18,7 +18,6 @@ use ArkEcosystem\Crypto\Identity\Address;
 use ArkEcosystem\Crypto\Identity\WIF;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
-use BitWasp\Bitcoin\Network\NetworkFactory;
 
 /**
  * This is the crypto test class.
