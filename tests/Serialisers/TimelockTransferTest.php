@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\TimelockTransfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -26,5 +27,12 @@ class TimelockTransferTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = $this->getTransactionType(6);
+
+        $actual = (new TimelockTransfer($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\MultiPayment;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is multi payment serialiser class.
+ * This is the multi payment serialiser class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -26,5 +27,12 @@ class MultiPaymentTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = $this->getTransactionType(7);
+
+        $actual = (new MultiPayment($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

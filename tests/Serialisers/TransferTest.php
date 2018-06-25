@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\Transfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -26,5 +27,10 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $transaction = $this->getTransactionType(0);
+
+        $actual = (new Transfer($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

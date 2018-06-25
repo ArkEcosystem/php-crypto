@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\DelegateResignation;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is delegate resignation serialiser class.
+ * This is the delegate resignation serialiser class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -26,5 +27,12 @@ class DelegateResignationTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = $this->getTransactionType(8);
+
+        $actual = (new DelegateResignation($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

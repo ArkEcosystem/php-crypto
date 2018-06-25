@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\IPFS;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is ipfs serialiser class.
+ * This is the ipfs serialiser class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -26,5 +27,12 @@ class IPFSTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = $this->getTransactionType(5);
+
+        $actual = (new IPFS($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

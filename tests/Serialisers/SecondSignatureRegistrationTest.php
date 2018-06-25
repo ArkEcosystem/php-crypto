@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\SecondSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -26,5 +27,10 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $transaction = $this->getTransactionType(1);
+
+        $actual = (new SecondSignatureRegistration($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }

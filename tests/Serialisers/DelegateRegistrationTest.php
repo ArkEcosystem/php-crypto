@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialisers\DelegateRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration serialiser test class.
+ * This is the delegate registration serialiser class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
@@ -26,5 +27,10 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialise_the_transaction()
     {
+        $transaction = $this->getTransactionType(2);
+
+        $actual = (new DelegateRegistration($transaction))->serialise();
+
+        $this->assertSame($transaction->serialized, $actual->getHex());
     }
 }
