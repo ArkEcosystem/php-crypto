@@ -67,23 +67,23 @@ class Crypto
         $out .= pack('P', $transaction->fee);
 
         if (Types::SECOND_SIGNATURE_REGISTRATION === $transaction->type) { // second signature
-            $assetSigPubKey = $transaction->asset['signature']['publicKey'];
+            $assetSigPubKey = $transaction->asset->signature->publicKey;
 
             $out .= pack('H'.strlen($assetSigPubKey), $assetSigPubKey);
         }
 
         if (Types::DELEGATE_REGISTRATION === $transaction->type) {
-            $out .= $transaction->asset['delegate']['username'];
+            $out .= $transaction->asset->delegate->username;
         }
 
         if (Types::VOTE === $transaction->type) {
-            $out .= implode('', $transaction->asset['votes']);
+            $out .= implode('', $transaction->asset->votes);
         }
 
         if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
-            $out .= pack('C', $transaction->asset['multisignature']['min']);
-            $out .= pack('C', $transaction->asset['multisignature']['lifetime']);
-            $out .= implode('', $transaction->asset['multisignature']['keysgroup']);
+            $out .= pack('C', $transaction->asset->multisignature->min);
+            $out .= pack('C', $transaction->asset->multisignature->lifetime);
+            $out .= implode('', $transaction->asset->multisignature->keysgroup);
         }
 
         if (!$skipSignature && $transaction->signature) {

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Enums\Types;
-
 /**
  * This is the multi payment transaction class.
  *
@@ -22,14 +20,4 @@ use ArkEcosystem\Crypto\Enums\Types;
  */
 class MultiPayment extends Transaction
 {
-    /**
-     * Create a new multi payment transaction instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data->type = Types::MULTI_PAYMENT;
-        $this->data->fee  = Fees::MULTI_PAYMENT;
-    }
 }

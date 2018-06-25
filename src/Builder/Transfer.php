@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Enums\Fees;
-use ArkEcosystem\Crypto\Enums\Types;
-
 /**
  * This is the transfer transaction class.
  *
@@ -23,17 +20,6 @@ use ArkEcosystem\Crypto\Enums\Types;
  */
 class Transfer extends Transaction
 {
-    /**
-     * Create a new vote transaction instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data->type = Types::TRANSFER;
-        $this->data->fee  = Fees::TRANSFER;
-    }
-
     /**
      * Set the recipient of the transfer.
      *

@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\Fees;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\PublicKey;
+use stdClass;
 
 /**
  * This is the second signature registration transaction class.
@@ -26,18 +25,6 @@ use ArkEcosystem\Crypto\Identity\PublicKey;
 class SecondSignatureRegistration extends Transaction
 {
     /**
-     * Create a new second signature registration transaction instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data->type   = Types::SECOND_SIGNATURE_REGISTRATION;
-        $this->data->fee    = Fees::SECOND_SIGNATURE_REGISTRATION;
-        $this->data->amount = 0;
-    }
-
-    /**
      * Set the signature asset to register the second secret.
      *
      * @param string $secondSecret
@@ -46,9 +33,9 @@ class SecondSignatureRegistration extends Transaction
      */
     public function signature(string $secondSecret): self
     {
-        $this->data->asset['signature'] = [
-            'publicKey' => PublicKey::fromSecret($secondSecret)->getHex(),
-        ];
+        $this->data->asset                       = new stdClass();
+        $this->data->asset->signature            = new stdClass();
+        $this->data->asset->signature->publicKey = PublicKey::fromSecret($secondSecret)->getHex();
 
         return $this;
     }

@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\Fees;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
+use stdClass;
 
 /**
  * This is the delegate registration transaction class.
@@ -32,10 +31,8 @@ class DelegateRegistration extends Transaction
     {
         parent::__construct();
 
-        $this->data->type              = Types::DELEGATE_REGISTRATION;
-        $this->data->fee               = Fees::DELEGATE_REGISTRATION;
-        $this->data->amount            = 0;
-        $this->data->asset['delegate'] = [];
+        $this->data->asset           = new stdClass();
+        $this->data->asset->delegate = new stdClass();
     }
 
     /**
@@ -47,7 +44,7 @@ class DelegateRegistration extends Transaction
      */
     public function username(string $username): self
     {
-        $this->data->asset['delegate']['username'] = $username;
+        $this->data->asset->delegate->username = $username;
 
         return $this;
     }
@@ -64,7 +61,7 @@ class DelegateRegistration extends Transaction
         $keys                          = PrivateKey::fromSecret($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
-        $this->data->asset['delegate']['publicKey'] = $this->data->senderPublicKey;
+        $this->data->asset->delegate->publicKey = $this->data->senderPublicKey;
 
         Crypto::sign($this->getSignedObject(), $keys);
 

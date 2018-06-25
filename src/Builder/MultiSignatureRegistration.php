@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Enums\Fees;
-use ArkEcosystem\Crypto\Enums\Types;
+use stdClass;
 
 /**
  * This is the multisignature registration transaction class.
@@ -30,9 +29,8 @@ class MultiSignatureRegistration extends Transaction
     {
         parent::__construct();
 
-        $this->data->type                    = Types::MULTI_SIGNATURE_REGISTRATION;
-        $this->data->amount                  = 0;
-        $this->data->asset['multisignature'] = [];
+        $this->data->asset                 = new stdClass();
+        $this->data->asset->multisignature = new stdClass();
     }
 
     /**
@@ -44,7 +42,7 @@ class MultiSignatureRegistration extends Transaction
      */
     public function min(int $min): self
     {
-        $this->data->asset['multisignature']['min'] = $min;
+        $this->data->asset->multisignature->min = $min;
 
         return $this;
     }
@@ -58,7 +56,7 @@ class MultiSignatureRegistration extends Transaction
      */
     public function lifetime(int $lifetime): self
     {
-        $this->data->asset['multisignature']['lifetime'] = $lifetime;
+        $this->data->asset->multisignature->lifetime = $lifetime;
 
         return $this;
     }
@@ -72,9 +70,9 @@ class MultiSignatureRegistration extends Transaction
      */
     public function keysgroup(array $keysgroup): self
     {
-        $this->data->asset['multisignature']['keysgroup'] = $keysgroup;
+        $this->data->asset->multisignature->keysgroup = $keysgroup;
 
-        $this->fee = (count($keysgroup) + 1) * Fees::MULTI_SIGNATURE_REGISTRATION;
+        $this->data->fee = (count($keysgroup) + 1) * $this->data->fee;
 
         return $this;
     }

@@ -15,12 +15,14 @@ namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Config;
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\FeeManager;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
+use function Stringy\create as s;
 
 /**
  * This is the abstract transaction class.
@@ -38,9 +40,9 @@ abstract class Transaction
 
         $this->data              = new \stdClass();
         $this->data->recipientId = null;
-        $this->data->type        = null;
-        $this->data->amount      = null;
-        $this->data->fee         = null;
+        $this->data->type        = $this->getType();
+        $this->data->amount      = 0;
+        $this->data->fee         = $this->getFee();
         $this->data->vendorField = null;
         $this->data->timestamp   = $this->getTimeSinceEpoch();
 
@@ -90,7 +92,7 @@ abstract class Transaction
      *
      * @return \ArkEcosystem\Crypto\Builder\Transaction
      */
-    public function withFee(int $fee): self
+    public function fee(int $fee): self
     {
         $this->data->fee = $fee;
 
@@ -190,5 +192,41 @@ abstract class Transaction
     protected function getTimeSinceEpoch(): int
     {
         return time() - strtotime('2017-03-21 13:00:00');
+    }
+
+    /**
+     * Get the class identifier to be used with enums.
+     *
+     * @return int
+     */
+    private function getType(): int
+    {
+        $identifier = $this->getIdentifier();
+
+        return constant("ArkEcosystem\Crypto\Enums\Types::{$identifier}");
+    }
+
+    /**
+     * Set the transaction fee for the given type.
+     *
+     * @return int
+     */
+    private function getFee(): int
+    {
+        return FeeManager::get($this->data->type);
+    }
+
+    /**
+     * Get the class identifier to be used with enums.
+     *
+     * @return string
+     */
+    private function getIdentifier(): string
+    {
+        $className = (new \ReflectionClass($this))->getShortName();
+
+        return (string) s($className)
+            ->underscored()
+            ->toUpperCase();
     }
 }

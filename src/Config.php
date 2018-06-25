@@ -43,7 +43,7 @@ class Config
     /**
      * Set the network used for crypto operations.
      *
-     * @param $network \ArkEcosystem\Crypto\Networks\Network
+     * @param \ArkEcosystem\Crypto\Networks\Network $network
      */
     public static function setNetwork(Network $network): void
     {

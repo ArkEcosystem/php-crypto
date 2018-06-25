@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\Fees;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\Address;
+use stdClass;
 
 /**
  * This is the vote transaction class.
@@ -26,15 +25,13 @@ use ArkEcosystem\Crypto\Identity\Address;
 class Vote extends Transaction
 {
     /**
-     * Create a new vote transaction instance.
+     * Create a new multi signature transaction instance.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->data->type   = Types::VOTE;
-        $this->data->fee    = Fees::VOTE;
-        $this->data->amount = 0;
+        $this->data->asset = new stdClass();
     }
 
     /**
@@ -46,7 +43,7 @@ class Vote extends Transaction
      */
     public function votes(array $votes): self
     {
-        $this->data->asset = compact('votes');
+        $this->data->asset->votes = $votes;
 
         return $this;
     }

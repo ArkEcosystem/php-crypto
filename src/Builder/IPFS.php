@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Enums\Fees;
-
 /**
  * This is the ipfs transaction class.
  *
@@ -22,14 +20,4 @@ use ArkEcosystem\Crypto\Enums\Fees;
  */
 class IPFS extends Transaction
 {
-    /**
-     * Create a new ipfs transaction instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data->type = Types::IPFS;
-        $this->data->fee  = Fees::IPFS;
-    }
 }

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Enums\Types;
-
 /**
  * This is the timelock transfer transaction class.
  *
@@ -22,14 +20,4 @@ use ArkEcosystem\Crypto\Enums\Types;
  */
 class TimelockTransfer extends Transaction
 {
-    /**
-     * Create a new timelock transfer transaction instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->data->type = Types::TIMELOCK_TRANSFER;
-        $this->data->fee  = Fees::TIMELOCK_TRANSFER;
-    }
 }
