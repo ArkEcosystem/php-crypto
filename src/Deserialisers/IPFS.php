@@ -21,7 +21,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class IPFS extends Deserialiser
+class IPFS extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "ipfs" data.

@@ -23,7 +23,7 @@ use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class TimelockTransfer extends Deserialiser
+class TimelockTransfer extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "timelock transfer" data.

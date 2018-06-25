@@ -22,7 +22,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Transfer extends Serialiser
+class Transfer extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "transfer" data.

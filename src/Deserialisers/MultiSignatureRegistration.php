@@ -21,7 +21,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiSignatureRegistration extends Deserialiser
+class MultiSignatureRegistration extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "multi signature registration" data.

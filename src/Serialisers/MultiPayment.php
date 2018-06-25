@@ -22,7 +22,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiPayment extends Serialiser
+class MultiPayment extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "multi payment" data.

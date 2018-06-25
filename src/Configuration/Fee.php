@@ -11,17 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto\Managers;
+namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
 
 /**
- * This is the fee manager class.
+ * This is the fee configuration class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class FeeManager
+class Fee
 {
     /**
      * The default transaction fees.

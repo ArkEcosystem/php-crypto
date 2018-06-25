@@ -26,7 +26,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-abstract class Deserialiser
+abstract class AbstractDeserialiser
 {
     /**
      * Create a new deserialiser instance.

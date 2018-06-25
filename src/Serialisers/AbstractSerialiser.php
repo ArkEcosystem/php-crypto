@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serialisers;
 
-use ArkEcosystem\Crypto\Managers\NetworkManager;
+use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Hex\Writer as Hex;
 use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
@@ -23,7 +23,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-abstract class Serialiser
+abstract class AbstractSerialiser
 {
     /**
      * Create a new serialiser instance.
@@ -45,7 +45,7 @@ abstract class Serialiser
         $bytes = '';
         $bytes .= UnsignedInteger::bit8(0xff);
         $bytes .= Hex::low($this->transaction->version ?? 0x01);
-        $bytes .= UnsignedInteger::bit8($this->transaction->network ?? NetworkManager::get()->getVersion());
+        $bytes .= UnsignedInteger::bit8($this->transaction->network ?? NetworkConfiguration::get()->getVersion());
         $bytes .= Hex::low($this->transaction->type);
         $bytes .= UnsignedInteger::bit32($this->transaction->timestamp);
         $bytes .= Hex::high($this->transaction->senderPublicKey, strlen($this->transaction->senderPublicKey));

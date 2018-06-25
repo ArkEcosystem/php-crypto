@@ -20,7 +20,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class IPFS extends Serialiser
+class IPFS extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "ipfs" data.

@@ -21,7 +21,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateRegistration extends Deserialiser
+class DelegateRegistration extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "vote" data.

@@ -21,7 +21,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Vote extends Deserialiser
+class Vote extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "second signature registration" data.

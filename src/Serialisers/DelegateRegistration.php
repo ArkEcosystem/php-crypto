@@ -20,7 +20,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateRegistration extends Serialiser
+class DelegateRegistration extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "vote" data.

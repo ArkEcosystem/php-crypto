@@ -20,7 +20,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Vote extends Serialiser
+class Vote extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "second signature registration" data.

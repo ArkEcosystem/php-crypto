@@ -20,7 +20,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiSignatureRegistration extends Serialiser
+class MultiSignatureRegistration extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "multi signature registration" data.

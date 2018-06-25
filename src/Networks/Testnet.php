@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
+use ArkEcosystem\Crypto\Contracts\Network;
 use BitWasp\Bitcoin\Network\Network as TokenNetwork;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 
@@ -21,7 +22,7 @@ use BitWasp\Bitcoin\Network\NetworkFactory;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Testnet extends Network
+class Testnet extends AbstractNetwork implements Network
 {
     /**
      * {@inheritdoc}

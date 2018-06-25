@@ -20,7 +20,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class SecondSignatureRegistration extends Deserialiser
+class SecondSignatureRegistration extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "delegate registration" data.

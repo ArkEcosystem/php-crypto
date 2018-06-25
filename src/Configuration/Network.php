@@ -11,31 +11,31 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto\Managers;
+namespace ArkEcosystem\Crypto\Configuration;
 
+use ArkEcosystem\Crypto\Contracts\Network as AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Mainnet;
-use ArkEcosystem\Crypto\Networks\Network;
 
 /**
- * This is the network manager class.
+ * This is the network configuration class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class NetworkManager
+class Network
 {
     /**
      * The network used for crypto operations.
      *
-     * @var \ArkEcosystem\Crypto\Networks\Network
+     * @var \ArkEcosystem\Crypto\Contracts\Network
      */
     private static $network;
 
     /**
      * Get the network used for crypto operations.
      *
-     * @return \ArkEcosystem\Crypto\Networks\Network
+     * @return \ArkEcosystem\Crypto\Contracts\Network
      */
-    public static function get(): Network
+    public static function get(): AbstractNetwork
     {
         return static::$network ?? Mainnet::create();
     }
@@ -43,9 +43,9 @@ class NetworkManager
     /**
      * Set the network used for crypto operations.
      *
-     * @param \ArkEcosystem\Crypto\Networks\Network $network
+     * @param \ArkEcosystem\Crypto\Contracts\Network $network
      */
-    public static function set(Network $network): void
+    public static function set(AbstractNetwork $network): void
     {
         static::$network = $network;
     }

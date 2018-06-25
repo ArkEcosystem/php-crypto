@@ -22,7 +22,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class SecondSignatureRegistration extends Transaction
+class SecondSignatureRegistration extends AbstractTransaction
 {
     /**
      * Set the signature asset to register the second secret.

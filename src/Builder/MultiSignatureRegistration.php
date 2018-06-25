@@ -20,7 +20,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiSignatureRegistration extends Transaction
+class MultiSignatureRegistration extends AbstractTransaction
 {
     /**
      * Create a new multi signature transaction instance.

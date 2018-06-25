@@ -18,7 +18,7 @@ namespace ArkEcosystem\Crypto\Serialisers;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class SecondSignatureRegistration extends Serialiser
+class SecondSignatureRegistration extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "delegate registration" data.

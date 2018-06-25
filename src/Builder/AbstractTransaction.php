@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
+use ArkEcosystem\Crypto\Configuration\Fee as FeeConfiguration;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
-use ArkEcosystem\Crypto\Managers\FeeManager;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
@@ -27,7 +27,7 @@ use function Stringy\create as s;
  *
  * @author Brian Faust <brian@ark.io>
  */
-abstract class Transaction
+abstract class AbstractTransaction
 {
     /**
      * Create a new transaction instance.
@@ -64,7 +64,7 @@ abstract class Transaction
     /**
      * Create a new transaction instance.
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
     public static function create(): self
     {
@@ -76,7 +76,7 @@ abstract class Transaction
      *
      * @param int $fee
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
     public function withFee(int $fee): self
     {
@@ -90,9 +90,9 @@ abstract class Transaction
      *
      * @param string $secret
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): Transaction
+    public function sign(string $secret): AbstractTransaction
     {
         $keys                          = PrivateKey::fromSecret($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
@@ -107,9 +107,9 @@ abstract class Transaction
      *
      * @param string $secondSecret
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function secondSign(string $secondSecret): Transaction
+    public function secondSign(string $secondSecret): AbstractTransaction
     {
         Crypto::secondSign($this->getSignedObject(), PrivateKey::fromSecret($secondSecret));
 
@@ -199,7 +199,7 @@ abstract class Transaction
      */
     private function getFee(): int
     {
-        return FeeManager::get($this->data->type);
+        return FeeConfiguration::get($this->data->type);
     }
 
     /**

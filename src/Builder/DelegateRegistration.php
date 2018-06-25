@@ -22,7 +22,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateRegistration extends Transaction
+class DelegateRegistration extends AbstractTransaction
 {
     /**
      * Create a new delegate registration transaction instance.
@@ -54,9 +54,9 @@ class DelegateRegistration extends Transaction
      *
      * @param string $secret
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): Transaction
+    public function sign(string $secret): AbstractTransaction
     {
         $keys                          = PrivateKey::fromSecret($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();

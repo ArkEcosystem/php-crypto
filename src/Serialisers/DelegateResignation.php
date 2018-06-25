@@ -18,7 +18,7 @@ namespace ArkEcosystem\Crypto\Serialisers;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateResignation extends Serialiser
+class DelegateResignation extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "delegate resignation" data.

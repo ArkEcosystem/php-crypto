@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
+use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\Address;
-use ArkEcosystem\Crypto\Managers\NetworkManager;
 use stdClass;
 
 /**
@@ -23,7 +23,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Vote extends Transaction
+class Vote extends AbstractTransaction
 {
     /**
      * Create a new multi signature transaction instance.
@@ -54,11 +54,11 @@ class Vote extends Transaction
      *
      * @param string $secret
      *
-     * @return \ArkEcosystem\Crypto\Builder\Transaction
+     * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): Transaction
+    public function sign(string $secret): AbstractTransaction
     {
-        $this->data->recipientId = Address::fromSecret($secret, NetworkManager::get());
+        $this->data->recipientId = Address::fromSecret($secret, NetworkConfiguration::get());
 
         parent::sign($secret);
 

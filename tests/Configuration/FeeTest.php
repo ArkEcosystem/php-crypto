@@ -13,21 +13,21 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\Managers\FeeManager;
+use ArkEcosystem\Crypto\Configuration\Fee as FeeConfiguration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the fee manager test class.
+ * This is the fee configuration test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class FeeManagerTest extends TestCase
+class FeeTest extends TestCase
 {
     /** @test */
     public function it_should_get_the_fee()
     {
-        $actual = FeeManager::get(0);
+        $actual = FeeConfiguration::get(0);
 
         $this->assertSame(10000000, $actual);
     }
@@ -35,12 +35,12 @@ class FeeManagerTest extends TestCase
     /** @test */
     public function it_should_set_the_fee()
     {
-        $actual = FeeManager::get(0);
+        $actual = FeeConfiguration::get(0);
         $this->assertSame(10000000, $actual);
 
-        FeeManager::set(0, 5);
+        FeeConfiguration::set(0, 5);
 
-        $actual = FeeManager::get(0);
+        $actual = FeeConfiguration::get(0);
         $this->assertSame(5, $actual);
     }
 }

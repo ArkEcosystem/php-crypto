@@ -18,7 +18,7 @@ namespace ArkEcosystem\Crypto\Deserialisers;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateResignation extends Deserialiser
+class DelegateResignation extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "delegate resignation" data.

@@ -13,37 +13,36 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Crypto\Managers\NetworkManager;
+use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
-use ArkEcosystem\Crypto\Networks\Network;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the config test class.
+ * This is the network configuration test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class NetworkManagerTest extends TestCase
+class NetworkTest extends TestCase
 {
     /** @test */
     public function it_should_get_the_network()
     {
-        $actual = NetworkManager::get();
+        $actual = NetworkConfiguration::get();
 
-        $this->assertInstanceOf(Network::class, $actual);
+        $this->assertInstanceOf(Mainnet::class, $actual);
     }
 
     /** @test */
     public function it_should_set_the_network()
     {
-        $actual = NetworkManager::get();
+        $actual = NetworkConfiguration::get();
         $this->assertInstanceOf(Mainnet::class, $actual);
 
-        NetworkManager::set(Devnet::create());
+        NetworkConfiguration::set(Devnet::create());
 
-        $actual = NetworkManager::get();
+        $actual = NetworkConfiguration::get();
         $this->assertInstanceOf(Devnet::class, $actual);
     }
 }

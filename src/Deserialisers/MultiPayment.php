@@ -24,7 +24,7 @@ use stdClass;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiPayment extends Deserialiser
+class MultiPayment extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "multi payment" data.

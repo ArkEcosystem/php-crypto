@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identity;
 
-use ArkEcosystem\Crypto\Managers\NetworkManager;
-use ArkEcosystem\Crypto\Networks\Network;
+use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
+use ArkEcosystem\Crypto\Contracts\Network;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
@@ -30,14 +30,14 @@ class WIF
     /**
      * Derive the WIF from the given secret.
      *
-     * @param string                                     $secret
-     * @param \ArkEcosystem\Crypto\Networks\Network|null $network
+     * @param string                                      $secret
+     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
      *
      * @return string
      */
     public static function fromSecret(string $secret, Network $network = null): string
     {
-        $network = $network ?? NetworkManager::get();
+        $network = $network ?? NetworkConfiguration::get();
 
         $secret = Hash::sha256(new Buffer($secret));
         $seed   = Writer::bit8($network->getWif());

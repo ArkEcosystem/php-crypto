@@ -22,7 +22,7 @@ use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class TimelockTransfer extends Serialiser
+class TimelockTransfer extends AbstractSerialiser
 {
     /**
      * Handle the serialisation of "timelock transfer" data.

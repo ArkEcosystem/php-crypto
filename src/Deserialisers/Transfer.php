@@ -23,7 +23,7 @@ use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Transfer extends Deserialiser
+class Transfer extends AbstractDeserialiser
 {
     /**
      * Handle the deserialisation of "transfer" data.

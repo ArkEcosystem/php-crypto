@@ -18,7 +18,7 @@ namespace ArkEcosystem\Crypto\Builder;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Transfer extends Transaction
+class Transfer extends AbstractTransaction
 {
     /**
      * Set the recipient of the transfer.

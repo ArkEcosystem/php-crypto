@@ -18,6 +18,6 @@ namespace ArkEcosystem\Crypto\Builder;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateResignation extends Transaction
+class DelegateResignation extends AbstractTransaction
 {
 }
