@@ -1,4 +1,4 @@
-# Ark PHP Crypto - Crypto
+# Ark PHP - Crypto
 
 <p align="center">
     <img src="https://github.com/ArkEcosystem/php-crypto/blob/master/banner.png" />
