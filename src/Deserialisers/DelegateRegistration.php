@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserialisers;
 
 use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
+use stdClass;
 
 /**
  * This is the deserialiser class.
@@ -34,11 +35,9 @@ class DelegateRegistration extends Deserialiser
     {
         $usernameLength = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
 
-        $transaction->asset = [
-            'delegate' => [
-                'username' => hex2bin(substr($this->hex, $assetOffset + 2, $usernameLength * 2)),
-            ],
-        ];
+        $transaction->asset                     = new stdClass();
+        $transaction->asset->delegate           = new stdClass();
+        $transaction->asset->delegate->username = hex2bin(substr($this->hex, $assetOffset + 2, $usernameLength * 2));
 
         return $this->parseSignatures($transaction, $assetOffset + ($usernameLength + 1) * 2);
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserialisers;
 
 use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
+use stdClass;
 
 /**
  * This is the deserialiser class.
@@ -32,10 +33,10 @@ class IPFS extends Deserialiser
      */
     public function handle(int $assetOffset, object $transaction): object
     {
-        $transaction->asset = [];
+        $length = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
 
-        $length                    = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
-        $transaction->asset['dag'] = substr($this->hex, $assetOffset + 2, $length * 2);
+        $transaction->asset      = new stdClass();
+        $transaction->asset->dag = substr($this->hex, $assetOffset + 2, $length * 2);
 
         return $this->parseSignatures($transaction, $assetOffset + 2 + $length * 2);
     }

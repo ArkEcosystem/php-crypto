@@ -33,13 +33,13 @@ class Vote extends Serialiser
     {
         $voteBytes = [];
 
-        foreach ($this->transaction->asset['votes'] as $vote) {
+        foreach ($this->transaction->asset->votes as $vote) {
             $voteBytes[] = '+' === substr($vote, 0, 1)
                 ? '01'.substr($vote, 1)
                 : '00'.substr($vote, 1);
         }
 
-        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset['votes']));
+        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset->votes));
         $bytes .= hex2bin(implode('', $voteBytes));
 
         return $bytes;

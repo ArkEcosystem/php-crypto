@@ -72,7 +72,7 @@ class Transaction
      */
     public static function fromArray(array $transaction): self
     {
-        return $this->fromString(json_encode($transaction));
+        return static::fromString(json_encode($transaction));
     }
 
     /**

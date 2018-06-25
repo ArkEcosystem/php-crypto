@@ -36,7 +36,9 @@ class MultiPayment extends Deserialiser
      */
     public function handle(int $assetOffset, object $transaction): object
     {
-        $transaction->asset = [
+        $transaction->asset = new stdClass();
+
+        [
             'payments' => [],
         ];
 

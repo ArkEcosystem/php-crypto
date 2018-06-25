@@ -29,7 +29,7 @@ class SecondSignatureRegistration extends Serialiser
      */
     public function handle(string $bytes): string
     {
-        $bytes .= hex2bin($this->transaction->asset['signature']['publicKey']);
+        $bytes .= hex2bin($this->transaction->asset->signature->publicKey);
 
         return $bytes;
     }

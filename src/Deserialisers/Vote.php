@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserialisers;
 
 use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
+use stdClass;
 
 /**
  * This is the deserialiser class.
@@ -34,13 +35,14 @@ class Vote extends Deserialiser
     {
         $voteLength = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
 
-        $transaction->asset = ['votes' => []];
+        $transaction->asset        = new stdClass();
+        $transaction->asset->votes = [];
 
         $vote = null;
         for ($i = 0; $i < $voteLength; ++$i) {
             $vote                            = substr($this->hex, $assetOffset + 2 + $i * 2 * 34, 2 * 34);
             $vote                            = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $transaction->asset['votes'][]   = $vote;
+            $transaction->asset->votes[]     = $vote;
         }
 
         return $this->parseSignatures($transaction, $assetOffset + 2 + $voteLength * 34 * 2);

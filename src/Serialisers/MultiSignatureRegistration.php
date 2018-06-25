@@ -33,17 +33,19 @@ class MultiSignatureRegistration extends Serialiser
     {
         $keysgroup = [];
 
-        if (!isset($transaction->version) || 1 === $transaction->version) {
-            foreach ($this->transaction->asset['multisignature']['keysgroup'] as $key) {
-                $keysgroup[] = substr($key, 1);
+        if (!isset($this->transaction->version) || 1 === $this->transaction->version) {
+            foreach ($this->transaction->asset->multisignature->keysgroup as $key) {
+                $keysgroup[] = '+' === substr($key, 0, 1)
+                    ? substr($key, 1)
+                    : $key;
             }
         } else {
-            $keysgroup = $this->transaction->asset['multisignature']['keysgroup'];
+            $keysgroup = $this->transaction->asset->multisignature->keysgroup;
         }
 
-        $bytes .= UnsignedInteger::bit8($this->transaction->asset['multisignature']['min']);
-        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset['multisignature']['keysgroup']));
-        $bytes .= UnsignedInteger::bit8($this->transaction->asset['multisignature']['lifetime']);
+        $bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->min);
+        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset->multisignature->keysgroup));
+        $bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->lifetime);
         $bytes .= hex2bin(implode('', $keysgroup));
 
         return $bytes;

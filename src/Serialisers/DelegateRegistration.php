@@ -31,7 +31,7 @@ class DelegateRegistration extends Serialiser
      */
     public function handle(string $bytes): string
     {
-        $delegateBytes = bin2hex($this->transaction->asset['delegate']['username']);
+        $delegateBytes = bin2hex($this->transaction->asset->delegate->username);
 
         $bytes .= UnsignedInteger::bit8(strlen($delegateBytes) / 2);
         $bytes .= hex2bin($delegateBytes);

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserialisers;
 
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\Address;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Hex\Reader as Hex;
@@ -36,7 +37,10 @@ abstract class Deserialiser
     {
         $this->transaction = $transaction;
 
-        $buffer       = new Buffer($transaction->serialized);
+        $buffer = false === strpos($transaction->serialized, "\0")
+            ? Buffer::hex($transaction->serialized)
+            : new Buffer($transaction->serialized);
+
         $this->binary = $buffer->getBinary();
         $this->hex    = $buffer->getHex();
     }
@@ -76,15 +80,15 @@ abstract class Deserialiser
                 $transaction->signSignature = $transaction->secondSignature;
             }
 
-            if ($this->transaction->is_vote) {
+            if (Types::VOTE === $this->transaction) {
                 $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
             }
 
-            if ($this->transaction->is_second_signature) {
+            if (Types::SECOND_SIGNATURE_REGISTRATION === $this->transaction) {
                 $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
             }
 
-            if ($this->transaction->is_multi_signature) {
+            if (Types::MULTI_SIGNATURE_REGISTRATION === $this->transaction) {
                 $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
 
                 $transaction->asset['multisignature']['keysgroup'] = array_map(function ($key) {

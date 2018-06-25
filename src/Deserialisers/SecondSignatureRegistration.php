@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Deserialisers;
 
+use stdClass;
+
 /**
  * This is the deserialiser class.
  *
@@ -30,11 +32,9 @@ class SecondSignatureRegistration extends Deserialiser
      */
     public function handle(int $assetOffset, object $transaction): object
     {
-        $transaction->asset = [
-            'signature' => [
-                'publicKey' => substr($this->hex, $assetOffset, 66),
-            ],
-        ];
+        $transaction->asset                       = new stdClass();
+        $transaction->asset->signature            = new stdClass();
+        $transaction->asset->signature->publicKey = substr($this->hex, $assetOffset, 66);
 
         return $this->parseSignatures($transaction, $assetOffset + 66);
     }

@@ -31,7 +31,7 @@ class IPFS extends Serialiser
      */
     public function handle(string $bytes): string
     {
-        $dag = $this->transaction->asset['ipfs']['dag'];
+        $dag = $this->transaction->asset->ipfs->dag;
 
         $bytes .= UnsignedInteger::bit8(strlen($dag) / 2);
         $bytes .= hex2bin($dag);
