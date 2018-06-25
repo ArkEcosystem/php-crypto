@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto;
 
-use ArkEcosystem\Crypto\Transactions\Transfer;
+use ArkEcosystem\Crypto\Builder\Transfer;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**

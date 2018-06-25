@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto;
 
+use ArkEcosystem\Crypto\Builder\SecondSignatureRegistration;
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Transactions\SecondSignatureRegistration;
 
 /**
  * This is the second signature registration transaction test class.

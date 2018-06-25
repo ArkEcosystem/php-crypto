@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto;
 
-use ArkEcosystem\Crypto\Transactions\MultiSignatureRegistration;
+use ArkEcosystem\Crypto\Builder\MultiSignatureRegistration;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**

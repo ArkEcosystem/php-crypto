@@ -13,22 +13,22 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto;
 
-use ArkEcosystem\Crypto\Transactions\DelegateRegistration;
+use ArkEcosystem\Crypto\Builder\Vote;
 use ArkEcosystem\Crypto\Utils\Crypto;
 
 /**
- * This is the delegate registration transaction test class.
+ * This is the vote transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class DelegateRegistrationTest extends TestCase
+class VoteTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = DelegateRegistration::create()
-            ->username('polopolo')
+        $transaction = Vote::create()
+            ->votes(['+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192'])
             ->sign('This is a top secret passphrase');
 
         $this->assertInternalType('object', $transaction);
