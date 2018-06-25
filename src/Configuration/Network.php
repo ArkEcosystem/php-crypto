@@ -31,6 +31,19 @@ class Network
     private static $network;
 
     /**
+     * Call a method on the network instance.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return mixed
+     */
+    public static function __callStatic(string $method, array $args)
+    {
+        return static::get()->{$method}(...$args);
+    }
+
+    /**
      * Get the network used for crypto operations.
      *
      * @return \ArkEcosystem\Crypto\Contracts\Network
