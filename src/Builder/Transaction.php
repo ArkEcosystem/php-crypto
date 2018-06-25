@@ -195,7 +195,7 @@ abstract class Transaction
     }
 
     /**
-     * Get the class identifier to be used with enums.
+     * Get the transaction type.
      *
      * @return int
      */
@@ -207,7 +207,7 @@ abstract class Transaction
     }
 
     /**
-     * Set the transaction fee for the given type.
+     * Get the transaction fee.
      *
      * @return int
      */
