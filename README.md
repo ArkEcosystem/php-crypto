@@ -6,7 +6,7 @@
 
 > A simple PHP Cryptography Implementation for the ARK Blockchain.
 
-[![Build Status](https://img.shields.io/travis/ArkEcosystem/php-crypto/master.svg?style=flat-square)](https://travis-ci.org/ArkEcosystem/php-crypto)
+[![Build Status](https://travis-ci.org/ArkEcosystem/php-crypto.svg?branch=develop)](https://travis-ci.org/ArkEcosystem/php-crypto)
 [![Latest Version](https://img.shields.io/github/release/ArkEcosystem/php-crypto.svg?style=flat-square)](https://github.com/ArkEcosystem/php-crypto/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
