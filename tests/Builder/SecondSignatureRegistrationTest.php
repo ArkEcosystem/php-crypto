@@ -15,6 +15,7 @@ namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Builder\SecondSignatureRegistration;
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Identity\PublicKey;
 
 /**
  * This is the second signature registration transaction test class.
@@ -34,6 +35,6 @@ class SecondSignatureRegistrationTest extends TestCase
         $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
         $this->assertFalse(isset($transaction->signSignature));
-        $this->assertSame($transaction->data->asset['signature']['publicKey'], Crypto::getKeys('second passphrase')->getPublicKey()->getHex());
+        $this->assertSame($transaction->data->asset['signature']['publicKey'], PublicKey::fromSecret('second passphrase')->getHex());
     }
 }

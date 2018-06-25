@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Identity\PrivateKey;
+use ArkEcosystem\Crypto\Identity\PublicKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Network\NetworkInterface;
 use BitWasp\Buffertools\Buffer;
@@ -103,7 +105,7 @@ abstract class Transaction
      */
     public function sign(string $secret): Transaction
     {
-        $keys                          = Crypto::getKeys($secret);
+        $keys                          = PrivateKey::fromSecret($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
         Crypto::sign($this->getSignedObject(), $keys);
@@ -120,7 +122,7 @@ abstract class Transaction
      */
     public function secondSign(string $secondSecret): Transaction
     {
-        Crypto::secondSign($this->getSignedObject(), Crypto::getKeys($secondSecret));
+        Crypto::secondSign($this->getSignedObject(), PrivateKey::fromSecret($secondSecret));
 
         return $this;
     }
@@ -144,7 +146,7 @@ abstract class Transaction
     {
         return Crypto::secondVerify(
             $this->getSignedObject(),
-            Crypto::getKeys($secondSecret)->getPublicKey()->getHex()
+            PublicKey::fromSecret($secondSecret)->getHex()
         );
     }
 

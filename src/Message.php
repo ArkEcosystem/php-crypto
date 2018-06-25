@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto;
 
+use ArkEcosystem\Crypto\Identity\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
@@ -102,7 +103,7 @@ class Message
      */
     public static function sign(string $message, string $secret): self
     {
-        $keys = Crypto::getKeys($secret);
+        $keys = PrivateKey::fromSecret($secret);
 
         return new static([
             'publicKey' => $keys->getPublicKey()->getHex(),

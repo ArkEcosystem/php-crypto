@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Identity\Address;
+use ArkEcosystem\Crypto\Identity\WIF;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 
 /**
@@ -32,7 +34,7 @@ class CryptoTest extends TestCase
         $address   = 'DARiJqhogp2Lu6bxufUFQQMuMyZbxjCydN';
 
         // Act...
-        $result = Crypto::addressFromPublicKey($publicKey, 0x1E);
+        $result = Address::fromPublicKey($publicKey, 0x1E);
 
         // Assert...
         $this->assertSame($result, $address);
@@ -46,7 +48,7 @@ class CryptoTest extends TestCase
         $wif    = 'SGq4xLgZKCGxs7bjmwnBrWcT4C1ADFEermj846KC97FSv1WFD1dA';
 
         // Act...
-        $result = Crypto::wif($secret);
+        $result = WIF::fromSecret($secret);
 
         // Assert...
         $this->assertSame($result, $wif);
@@ -60,10 +62,10 @@ class CryptoTest extends TestCase
         $network = NetworkFactory::create('17', '00', '00');
 
         // Act...
-        $address = Crypto::getAddress(Crypto::getKeys($secret), $network);
+        $actual = Address::fromSecret($secret, $network);
 
         // Assert...
-        $this->assertSame($address, 'AGeYmgbg2LgGxRW2vNNJvQ88PknEJsYizC');
+        $this->assertSame($actual, 'AGeYmgbg2LgGxRW2vNNJvQ88PknEJsYizC');
     }
 
     /** @test */
@@ -74,9 +76,9 @@ class CryptoTest extends TestCase
         $network = NetworkFactory::create('1e', '00', '00');
 
         // Act...
-        $address = Crypto::getAddress(Crypto::getKeys($secret), $network);
+        $actual = Address::fromSecret($secret, $network);
 
         // Assert...
-        $this->assertSame($address, 'D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib');
+        $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
     }
 }

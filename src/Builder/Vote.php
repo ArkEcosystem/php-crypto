@@ -16,6 +16,7 @@ namespace ArkEcosystem\Crypto\Builder;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
+use ArkEcosystem\Crypto\Identity\Address;
 
 /**
  * This is the vote transaction class.
@@ -59,7 +60,7 @@ class Vote extends Transaction
      */
     public function sign(string $secret): Transaction
     {
-        $this->data->recipientId = Crypto::getAddress(Crypto::getKeys($secret), $this->network);
+        $this->data->recipientId = Address::fromSecret($secret, $this->network);
 
         parent::sign($secret);
 

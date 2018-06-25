@@ -16,6 +16,7 @@ namespace ArkEcosystem\Crypto\Builder;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
+use ArkEcosystem\Crypto\Identity\PrivateKey;
 
 /**
  * This is the delegate registration transaction class.
@@ -60,7 +61,7 @@ class DelegateRegistration extends Transaction
      */
     public function sign(string $secret): Transaction
     {
-        $keys                          = Crypto::getKeys($secret);
+        $keys                          = PrivateKey::fromSecret($secret);
         $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
 
         $this->data->asset['delegate']['publicKey'] = $this->data->senderPublicKey;

@@ -16,6 +16,8 @@ namespace ArkEcosystem\Crypto\Builder;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
+use ArkEcosystem\Crypto\Identity\PrivateKey;
+use ArkEcosystem\Crypto\Identity\PublicKey;
 
 /**
  * This is the second signature registration transaction class.
@@ -46,7 +48,7 @@ class SecondSignatureRegistration extends Transaction
     public function signature(string $secondSecret): self
     {
         $this->data->asset['signature'] = [
-            'publicKey' => Crypto::getKeys($secondSecret)->getPublicKey()->getHex(),
+            'publicKey' => PublicKey::fromSecret($secondSecret)->getHex(),
         ];
 
         return $this;

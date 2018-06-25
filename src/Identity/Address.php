@@ -15,7 +15,7 @@ namespace ArkEcosystem\Crypto\Identity;
 
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Network\NetworkFactory;
 use BitWasp\Bitcoin\Network\NetworkInterface;
@@ -50,13 +50,13 @@ class Address
      * Derive the address from the given secret.
      *
      * @param string $secret
-     * @param int    $version
+     * @param \BitWasp\Bitcoin\Network\NetworkInterface|null    $network
      *
      * @return string
      */
-    public static function fromSecret(string $secret, int $version = 0x17): string
+    public static function fromSecret(string $secret, NetworkInterface $network = null): string
     {
-        return static::fromPrivateKey(Crypto::getKeys($secret));
+        return static::fromPrivateKey(PrivateKey::fromSecret($secret), $network);
     }
 
     /**
@@ -67,9 +67,8 @@ class Address
      *
      * @return string
      */
-    public static function fromPrivateKey(PrivateKey $privateKey, NetworkInterface $network = null): string
+    public static function fromPrivateKey(EccPrivateKey $privateKey, NetworkInterface $network = null): string
     {
-        $network   = NetworkFactory::create('17', '00', '00');
         $publicKey = $privateKey->getPublicKey();
         $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
 
