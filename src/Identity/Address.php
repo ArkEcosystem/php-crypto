@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identity;
 
+use ArkEcosystem\Crypto\Config;
+use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
@@ -39,6 +41,8 @@ class Address
      */
     public static function fromPublicKey(string $publicKey, Network $network = null): string
     {
+        $network   = $network ?? Config::getNetwork();
+
         $ripemd160 = Hash::ripemd160(new Buffer(hex2bin($publicKey)));
         $seed      = Writer::bit8($network->getVersion()).$ripemd160->getBinary();
 
@@ -68,6 +72,8 @@ class Address
      */
     public static function fromPrivateKey(EccPrivateKey $privateKey, Network $network = null): string
     {
+        $network   = $network ?? Config::getNetwork();
+
         $publicKey = $privateKey->getPublicKey();
         $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
 
@@ -84,6 +90,8 @@ class Address
      */
     public static function validate(string $address, Network $network = null): bool
     {
+        $network = $network ?? Config::getNetwork();
+
         $address = Base58::decodeCheck($address);
 
         return Reader::bit8($address->getBinary()) === $network->getVersion();

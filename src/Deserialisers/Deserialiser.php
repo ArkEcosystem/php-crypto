@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Deserialisers;
 
-use ArkEcosystem\Crypto\Address;
 use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Identity\Address;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Hex\Reader as Hex;
 use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
+use ArkEcosystem\Crypto\Config;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
@@ -33,7 +34,7 @@ abstract class Transaction
      */
     public function __construct()
     {
-        $this->network = Crypto::getDefaultNetwork();
+        $this->network = Config::getNetwork();
 
         $this->data              = new \stdClass();
         $this->data->recipientId = null;

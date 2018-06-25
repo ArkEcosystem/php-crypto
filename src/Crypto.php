@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Networks\Mainnet;
-use ArkEcosystem\Crypto\Networks\Network;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
@@ -169,17 +167,7 @@ class Crypto
     }
 
     /**
-     * Get the default network used.
-     *
-     * @return \BitWasp\Bitcoin\Network\Network
-     */
-    public static function getDefaultNetwork(): Network
-    {
-        return Mainnet::create();
-    }
-
-    /**
-     * [parseSignatures description].
+     * Parse the signature, second signature and multi signatures.
      *
      * @param string $serialized
      * @param object $transaction
