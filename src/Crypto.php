@@ -60,7 +60,7 @@ class Crypto
 
         // TODO: requester public key
 
-        if ($transaction->recipientId) {
+        if (isset($transaction->recipientId)) {
             $out .= \BitWasp\Bitcoin\Base58::decodeCheck($transaction->recipientId)->getBinary();
         } else {
             $out .= pack('x21');
