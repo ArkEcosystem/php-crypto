@@ -32,6 +32,7 @@ class MultiSignatureRegistrationTest extends TestCase
 
         $actual = (new MultiSignatureRegistration($transaction))->deserialise();
 
+        $this->assertSame($transaction->id, $actual->id);
         $this->assertSame($transaction->version, $actual->version);
         $this->assertSame($transaction->network, $actual->network);
         $this->assertSame($transaction->type, $actual->type);
