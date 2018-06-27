@@ -29,6 +29,20 @@ use stdClass;
 class Crypto
 {
     /**
+     * Convert the byte representation to a unique identifier.
+     *
+     * @param object $transaction
+     *
+     * @return string
+     */
+    public static function getId(object $transaction): string
+    {
+        $bytes = static::getBytes($transaction, false, false);
+
+        return Hash::sha256(new Buffer($bytes))->getHex();
+    }
+
+    /**
      * Convert the transaction to its byte representation.
      *
      * @param object $transaction

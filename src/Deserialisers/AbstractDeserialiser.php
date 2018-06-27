@@ -53,7 +53,6 @@ abstract class AbstractDeserialiser
     public function deserialise(): stdClass
     {
         $transaction                  = new stdClass();
-        $transaction->id              = $this->transaction->id;
         $transaction->version         = (int) Hex::low($this->binary, 1);
         $transaction->network         = UnsignedInteger::bit8($this->binary, 2);
         $transaction->type            = UnsignedInteger::bit8($this->binary, 3);
@@ -98,6 +97,10 @@ abstract class AbstractDeserialiser
 
             if (isset($transaction->vendorFieldHex)) {
                 $transaction->vendorField = hex2bin($transaction->vendorFieldHex);
+            }
+
+            if (!isset($transaction->id)) {
+                $transaction->id = Crypto::getId($transaction);
             }
         }
 
