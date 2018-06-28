@@ -50,13 +50,13 @@ class Message
     /**
      * Create a new message instance.
      *
-     * @param array $message
+     * @param object $message
      */
-    public function __construct(array $message)
+    public function __construct(object $message)
     {
-        $this->publicKey = $message['publicKey'];
-        $this->signature = $message['signature'];
-        $this->message   = $message['message'];
+        $this->publicKey = $message->publicKey;
+        $this->signature = $message->signature;
+        $this->message   = $message->message;
     }
 
     /**
@@ -78,7 +78,7 @@ class Message
      */
     public static function fromObject(object $message): self
     {
-        return static::fromString(json_encode($message));
+        return new static($message);
     }
 
     /**
@@ -90,7 +90,7 @@ class Message
      */
     public static function fromArray(array $message): self
     {
-        return new static($message);
+        return static::fromString(json_encode($transaction));
     }
 
     /**
@@ -102,7 +102,7 @@ class Message
      */
     public static function fromString(string $message): self
     {
-        return new static(json_decode($message, true));
+        return new static(json_decode($message));
     }
 
     /**
