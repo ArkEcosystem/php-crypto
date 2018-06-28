@@ -70,6 +70,18 @@ class Message
     }
 
     /**
+     * Create a new message instance from an object.
+     *
+     * @param object $message
+     *
+     * @return \ArkEcosystem\Crypto\Message
+     */
+    public static function fromObject(object $message): self
+    {
+        return static::fromString(json_encode($message));
+    }
+
+    /**
      * Create a new message instance from an array.
      *
      * @param array $message
