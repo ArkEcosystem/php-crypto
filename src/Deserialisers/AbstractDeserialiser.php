@@ -79,20 +79,21 @@ abstract class AbstractDeserialiser
                 $transaction->signSignature = $transaction->secondSignature;
             }
 
-            if (Types::VOTE === $this->transaction) {
+            if (Types::VOTE === $this->transaction->type) {
                 $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
             }
 
-            if (Types::SECOND_SIGNATURE_REGISTRATION === $this->transaction) {
+            if (Types::SECOND_SIGNATURE_REGISTRATION === $this->transaction->type) {
                 $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
             }
 
-            if (Types::MULTI_SIGNATURE_REGISTRATION === $this->transaction) {
-                $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
+            if (Types::MULTI_SIGNATURE_REGISTRATION === $this->transaction->type) {
+                // The "recipientId" doesn't exist on v1 multi signature registrations
+                // $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
 
-                $transaction->asset['multisignature']['keysgroup'] = array_map(function ($key) {
+                $transaction->asset->multisignature->keysgroup = array_map(function ($key) {
                     return '+'.$key;
-                }, $transaction->asset['multisignature']['keysgroup']);
+                }, $transaction->asset->multisignature->keysgroup);
             }
 
             if (isset($transaction->vendorFieldHex)) {
