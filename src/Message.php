@@ -66,7 +66,7 @@ class Message
      */
     public function __toString(): string
     {
-        return $this->toString();
+        return $this->toJson();
     }
 
     /**
@@ -88,7 +88,7 @@ class Message
      *
      * @return \ArkEcosystem\Crypto\Message
      */
-    public static function fromJSON(string $message): self
+    public static function fromString(string $message): self
     {
         return new static(json_decode($message, true));
     }
