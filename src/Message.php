@@ -90,7 +90,7 @@ class Message
      */
     public static function fromArray(array $message): self
     {
-        return static::fromString(json_encode($transaction));
+        return static::fromString(json_encode($message));
     }
 
     /**
@@ -117,7 +117,7 @@ class Message
     {
         $keys = PrivateKey::fromSecret($secret);
 
-        return new static([
+        return static::fromArray([
             'publicKey' => $keys->getPublicKey()->getHex(),
             'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
             'message'   => $message,

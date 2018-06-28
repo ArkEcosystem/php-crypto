@@ -41,7 +41,7 @@ class MessageTest extends TestCase
     {
         $rawMessage = $this->getRawMessage();
 
-        $message = Message::fromJSON(json_encode($rawMessage));
+        $message = Message::fromString(json_encode($rawMessage));
 
         $this->assertSame($message->publicKey, $rawMessage['publicKey']);
         $this->assertSame($message->signature, $rawMessage['signature']);
