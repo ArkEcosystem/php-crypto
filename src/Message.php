@@ -70,18 +70,6 @@ class Message
     }
 
     /**
-     * Create a new message instance from an object.
-     *
-     * @param object $message
-     *
-     * @return \ArkEcosystem\Crypto\Message
-     */
-    public static function fromObject(object $message): self
-    {
-        return new static($message);
-    }
-
-    /**
      * Create a new message instance from an array.
      *
      * @param array $message
