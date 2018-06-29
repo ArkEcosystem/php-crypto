@@ -27,6 +27,14 @@ class Testnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
+    public static function getEpoch(): string
+    {
+        return '2017-03-21T13:00:00.000Z';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function getMessagePrefix(): string
     {
         return "TEST message:\n";

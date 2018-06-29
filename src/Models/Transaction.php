@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Models;
 
-use ArkEcosystem\Crypto\Enums\Types;
 use BitWasp\Buffertools\Buffer;
 use stdClass;
 

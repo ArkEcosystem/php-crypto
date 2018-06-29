@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
@@ -177,7 +178,7 @@ abstract class AbstractTransaction
      */
     protected function getTimeSinceEpoch(): int
     {
-        return time() - strtotime('2017-03-21 13:00:00');
+        return time() - strtotime(Network::getEpoch());
     }
 
     /**

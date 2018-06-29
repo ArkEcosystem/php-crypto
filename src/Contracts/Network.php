@@ -30,6 +30,13 @@ interface Network
     public static function create();
 
     /**
+     * Get the epoch of the network.
+     *
+     * @return int
+     */
+    public static function getEpoch(): string;
+
+    /**
      * Get the version of the network.
      *
      * @return int
