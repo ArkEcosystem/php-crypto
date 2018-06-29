@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
-use ArkEcosystem\Crypto\Serialisers\MultiPayment;
+use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -31,7 +31,7 @@ class MultiPaymentTest extends TestCase
 
         $transaction = $this->getTransactionFixture(7);
 
-        $actual = (new MultiPayment($transaction))->serialise();
+        $actual = Serialiser::new($transaction)->serialise();
 
         $this->assertSame($transaction->serialized, $actual->getHex());
     }

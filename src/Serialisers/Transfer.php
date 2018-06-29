@@ -27,18 +27,17 @@ class Transfer extends AbstractSerialiser
     /**
      * Handle the serialisation of "transfer" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
-        $bytes .= UnsignedInteger::bit64($this->transaction->amount);
-        $bytes .= UnsignedInteger::bit32($this->transaction->expiration ?? 0);
+        $this->bytes .= UnsignedInteger::bit64($this->transaction->amount);
+        $this->bytes .= UnsignedInteger::bit32($this->transaction->expiration ?? 0);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= Hex::high($recipientId, strlen($recipientId));
 
-        return $bytes;
+        $this->bytes .= Hex::high($recipientId, strlen($recipientId));
+
+        return $this->bytes;
     }
 }

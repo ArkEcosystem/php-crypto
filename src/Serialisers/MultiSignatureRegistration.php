@@ -25,11 +25,9 @@ class MultiSignatureRegistration extends AbstractSerialiser
     /**
      * Handle the serialisation of "multi signature registration" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
         $keysgroup = [];
 
@@ -43,11 +41,11 @@ class MultiSignatureRegistration extends AbstractSerialiser
             $keysgroup = $this->transaction->asset->multisignature->keysgroup;
         }
 
-        $bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->min);
-        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset->multisignature->keysgroup));
-        $bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->lifetime);
-        $bytes .= hex2bin(implode('', $keysgroup));
+        $this->bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->min);
+        $this->bytes .= UnsignedInteger::bit8(count($this->transaction->asset->multisignature->keysgroup));
+        $this->bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->lifetime);
+        $this->bytes .= hex2bin(implode('', $keysgroup));
 
-        return $bytes;
+        return $this->bytes;
     }
 }

@@ -26,25 +26,22 @@ class Vote extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "second signature registration" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $voteLength = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
+        $voteLength = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2) & 0xff;
 
-        $transaction->asset        = new stdClass();
-        $transaction->asset->votes = [];
+        $this->transaction->asset        = new stdClass();
+        $this->transaction->asset->votes = [];
 
         $vote = null;
         for ($i = 0; $i < $voteLength; ++$i) {
-            $vote                            = substr($this->hex, $assetOffset + 2 + $i * 2 * 34, 2 * 34);
-            $vote                            = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $transaction->asset->votes[]     = $vote;
+            $vote                                  = substr($this->hex, $this->assetOffset + 2 + $i * 2 * 34, 2 * 34);
+            $vote                                  = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
+            $this->transaction->asset->votes[]     = $vote;
         }
 
-        return $this->parseSignatures($transaction, $assetOffset + 2 + $voteLength * 34 * 2);
+        return $this->parseSignatures($this->assetOffset + 2 + $voteLength * 34 * 2);
     }
 }

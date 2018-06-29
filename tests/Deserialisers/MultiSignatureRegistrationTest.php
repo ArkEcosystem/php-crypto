@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Deserialisers;
 
-use ArkEcosystem\Crypto\Deserialisers\MultiSignatureRegistration;
-use ArkEcosystem\Crypto\Models\Transaction;
+use ArkEcosystem\Crypto\Deserialiser;
+use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -30,13 +30,13 @@ class MultiSignatureRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixture(4);
 
-        $actual = (new MultiSignatureRegistration($transaction))->deserialise();
+        $actual = Deserialiser::new($transaction->serialized)->deserialise();
 
         $this->assertSame($transaction->id, $actual->id);
         $this->assertSame($transaction->version, $actual->version);
         $this->assertSame($transaction->network, $actual->network);
         $this->assertSame($transaction->type, $actual->type);
         $this->assertSame($transaction->senderPublicKey, $actual->senderPublicKey);
-        $this->assertSame($transaction->serialized, Transaction::fromObject($actual)->serialise()->getHex());
+        $this->assertSame($transaction->serialized, Serialiser::new($actual)->serialise()->getHex());
     }
 }

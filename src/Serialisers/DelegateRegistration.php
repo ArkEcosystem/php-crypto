@@ -25,17 +25,15 @@ class DelegateRegistration extends AbstractSerialiser
     /**
      * Handle the serialisation of "vote" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
         $delegateBytes = bin2hex($this->transaction->asset->delegate->username);
 
-        $bytes .= UnsignedInteger::bit8(strlen($delegateBytes) / 2);
-        $bytes .= hex2bin($delegateBytes);
+        $this->bytes .= UnsignedInteger::bit8(strlen($delegateBytes) / 2);
+        $this->bytes .= hex2bin($delegateBytes);
 
-        return $bytes;
+        return $this->bytes;
     }
 }

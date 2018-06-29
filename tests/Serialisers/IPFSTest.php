@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
+use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Crypto\Serialisers\IPFS;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -31,7 +32,7 @@ class IPFSTest extends TestCase
 
         $transaction = $this->getTransactionFixture(5);
 
-        $actual = (new IPFS($transaction))->serialise();
+        $actual = Serialiser::new($transaction)->serialise();
 
         $this->assertSame($transaction->serialized, $actual->getHex());
     }

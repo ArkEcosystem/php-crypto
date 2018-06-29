@@ -26,19 +26,16 @@ class DelegateRegistration extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "vote" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $usernameLength = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
+        $usernameLength = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2) & 0xff;
 
-        $transaction->asset                     = new stdClass();
-        $transaction->asset->delegate           = new stdClass();
-        $transaction->asset->delegate->username = hex2bin(substr($this->hex, $assetOffset + 2, $usernameLength * 2));
+        $this->transaction->asset                     = new stdClass();
+        $this->transaction->asset->delegate           = new stdClass();
+        $this->transaction->asset->delegate->username = hex2bin(substr($this->hex, $this->assetOffset + 2, $usernameLength * 2));
 
-        return $this->parseSignatures($transaction, $assetOffset + ($usernameLength + 1) * 2);
+        return $this->parseSignatures($this->assetOffset + ($usernameLength + 1) * 2);
     }
 }

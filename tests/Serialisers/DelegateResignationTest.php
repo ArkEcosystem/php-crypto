@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
-use ArkEcosystem\Crypto\Serialisers\DelegateResignation;
+use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -31,7 +31,7 @@ class DelegateResignationTest extends TestCase
 
         $transaction = $this->getTransactionFixture(8);
 
-        $actual = (new DelegateResignation($transaction))->serialise();
+        $actual = Serialiser::new($transaction)->serialise();
 
         $this->assertSame($transaction->serialized, $actual->getHex());
     }

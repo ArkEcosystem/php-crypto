@@ -26,31 +26,28 @@ class MultiSignatureRegistration extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "multi signature registration" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $transaction->asset                            = new stdClass();
-        $transaction->asset->multisignature            = new stdClass();
-        $transaction->asset->multisignature->keysgroup = [];
+        $this->transaction->asset                            = new stdClass();
+        $this->transaction->asset->multisignature            = new stdClass();
+        $this->transaction->asset->multisignature->keysgroup = [];
 
-        $transaction->asset->multisignature->min      = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
-        $transaction->asset->multisignature->lifetime = UnsignedInteger::bit8($this->binary, $assetOffset / 2 + 2) & 0xff;
+        $this->transaction->asset->multisignature->min      = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2) & 0xff;
+        $this->transaction->asset->multisignature->lifetime = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2 + 2) & 0xff;
 
-        $count = UnsignedInteger::bit8($this->binary, $assetOffset / 2 + 1) & 0xff;
+        $count = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2 + 1) & 0xff;
         for ($i = 0; $i < $count; ++$i) {
-            $indexStart = $assetOffset + 6;
+            $indexStart = $this->assetOffset + 6;
 
             if ($i > 0) {
                 $indexStart += $i * 66;
             }
 
-            $transaction->asset->multisignature->keysgroup[] = substr($this->hex, $indexStart, 66);
+            $this->transaction->asset->multisignature->keysgroup[] = substr($this->hex, $indexStart, 66);
         }
 
-        return $this->parseSignatures($transaction, $assetOffset + 6 + $count * 66);
+        return $this->parseSignatures($this->assetOffset + 6 + $count * 66);
     }
 }

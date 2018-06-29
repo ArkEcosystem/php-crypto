@@ -27,19 +27,18 @@ class TimelockTransfer extends AbstractSerialiser
     /**
      * Handle the serialisation of "timelock transfer" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
-        $bytes .= UnsignedInteger::bit64($this->transaction->amount);
-        $bytes .= Hex::low($this->transaction->timelocktype);
-        $bytes .= UnsignedInteger::bit32($this->transaction->timelock);
+        $this->bytes .= UnsignedInteger::bit64($this->transaction->amount);
+        $this->bytes .= Hex::low($this->transaction->timelocktype);
+        $this->bytes .= UnsignedInteger::bit32($this->transaction->timelock);
 
         $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-        $bytes .= Hex::high($recipientId, strlen($recipientId));
 
-        return $bytes;
+        $this->bytes .= Hex::high($recipientId, strlen($recipientId));
+
+        return $this->bytes;
     }
 }

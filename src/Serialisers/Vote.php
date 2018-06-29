@@ -25,11 +25,9 @@ class Vote extends AbstractSerialiser
     /**
      * Handle the serialisation of "second signature registration" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
         $voteBytes = [];
 
@@ -39,9 +37,9 @@ class Vote extends AbstractSerialiser
                 : '00'.substr($vote, 1);
         }
 
-        $bytes .= UnsignedInteger::bit8(count($this->transaction->asset->votes));
-        $bytes .= hex2bin(implode('', $voteBytes));
+        $this->bytes .= UnsignedInteger::bit8(count($this->transaction->asset->votes));
+        $this->bytes .= hex2bin(implode('', $voteBytes));
 
-        return $bytes;
+        return $this->bytes;
     }
 }

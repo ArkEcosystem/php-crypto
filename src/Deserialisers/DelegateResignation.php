@@ -23,13 +23,10 @@ class DelegateResignation extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "delegate resignation" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        return $this->parseSignatures($transaction, $assetOffset);
+        return $this->parseSignatures($this->assetOffset);
     }
 }

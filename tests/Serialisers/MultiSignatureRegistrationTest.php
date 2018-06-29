@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Serialisers;
 
-use ArkEcosystem\Crypto\Serialisers\MultiSignatureRegistration;
+use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -29,7 +29,7 @@ class MultiSignatureRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixture(4);
 
-        $actual = (new MultiSignatureRegistration($transaction))->serialise();
+        $actual = Serialiser::new($transaction)->serialise();
 
         $this->assertSame($transaction->serialized, $actual->getHex());
     }

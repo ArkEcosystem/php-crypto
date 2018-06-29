@@ -27,21 +27,20 @@ class MultiPayment extends AbstractSerialiser
     /**
      * Handle the serialisation of "multi payment" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
-        $bytes .= UnsignedInteger::bit32(count($this->transaction->asset['payments']));
+        $this->bytes .= UnsignedInteger::bit32(count($this->transaction->asset['payments']));
 
         foreach ($this->transaction->asset['payments'] as $payment) {
-            $bytes .= UnsignedInteger::bit64($payment->amount);
+            $this->bytes .= UnsignedInteger::bit64($payment->amount);
 
             $recipientId = Base58::decodeCheck($payment->recipientId)->getHex();
-            $bytes .= Hex::high($recipientId, strlen($recipientId));
+
+            $this->bytes .= Hex::high($recipientId, strlen($recipientId));
         }
 
-        return $bytes;
+        return $this->bytes;
     }
 }

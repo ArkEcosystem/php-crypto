@@ -25,17 +25,14 @@ class SecondSignatureRegistration extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "delegate registration" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $transaction->asset                       = new stdClass();
-        $transaction->asset->signature            = new stdClass();
-        $transaction->asset->signature->publicKey = substr($this->hex, $assetOffset, 66);
+        $this->transaction->asset                       = new stdClass();
+        $this->transaction->asset->signature            = new stdClass();
+        $this->transaction->asset->signature->publicKey = substr($this->hex, $this->assetOffset, 66);
 
-        return $this->parseSignatures($transaction, $assetOffset + 66);
+        return $this->parseSignatures($this->assetOffset + 66);
     }
 }

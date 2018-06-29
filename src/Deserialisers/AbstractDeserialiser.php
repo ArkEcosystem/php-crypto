@@ -14,12 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserialisers;
 
 use ArkEcosystem\Crypto\Crypto;
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Identity\Address;
-use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Hex\Reader as Hex;
-use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
-use stdClass;
 
 /**
  * This is the deserialiser class.
@@ -29,83 +23,39 @@ use stdClass;
 abstract class AbstractDeserialiser
 {
     /**
-     * Create a new deserialiser instance.
-     *
-     * @param object $transaction
+     * @var string
      */
-    public function __construct(object $transaction)
-    {
-        $this->transaction = $transaction;
-
-        $buffer = false === strpos($transaction->serialized, "\0")
-            ? Buffer::hex($transaction->serialized)
-            : new Buffer($transaction->serialized);
-
-        $this->binary = $buffer->getBinary();
-        $this->hex    = $buffer->getHex();
-    }
+    protected $hex;
 
     /**
-     * Perform AIP11 compliant deserialisation.
-     *
-     * @return stdClass
+     * @var string
      */
-    public function deserialise(): stdClass
+    protected $binary;
+
+    /**
+     * @var int
+     */
+    protected $assetOffset;
+
+    /**
+     * @var object
+     */
+    protected $transaction;
+
+    /**
+     * Create a new deserialiser instance.
+     *
+     * @param string $hex
+     * @param string $binary
+     * @param int    $assetOffset
+     * @param object $transaction
+     */
+    public function __construct(string $hex, string $binary, int $assetOffset, object $transaction)
     {
-        $transaction                  = new stdClass();
-        $transaction->version         = (int) Hex::low($this->binary, 1);
-        $transaction->network         = UnsignedInteger::bit8($this->binary, 2);
-        $transaction->type            = UnsignedInteger::bit8($this->binary, 3);
-        $transaction->timestamp       = UnsignedInteger::bit32($this->binary, 4);
-        $transaction->senderPublicKey = Hex::high($this->binary, 8, 66);
-        $transaction->fee             = UnsignedInteger::bit32($this->binary, 41);
-
-        $vendorFieldLength = UnsignedInteger::bit8($this->binary, 41 + 8);
-        if ($vendorFieldLength > 0) {
-            $vendorFieldOffset             = $vendorFieldLength * 2;
-            $transaction->vendorFieldHex   = Hex::high($this->binary, 41 + 8 + 1, $vendorFieldOffset);
-        }
-
-        $assetOffset = (41 + 8 + 1) * 2 + $vendorFieldLength * 2;
-
-        $transaction = $this->handle($assetOffset, $transaction);
-
-        if (!isset($transaction->amount)) {
-            $transaction->amount = 0;
-        }
-
-        if (!isset($transaction->version) || 1 === $transaction->version) {
-            if (isset($transaction->secondSignature)) {
-                $transaction->signSignature = $transaction->secondSignature;
-            }
-
-            if (Types::VOTE === $this->transaction->type) {
-                $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
-            }
-
-            if (Types::SECOND_SIGNATURE_REGISTRATION === $this->transaction->type) {
-                $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
-            }
-
-            if (Types::MULTI_SIGNATURE_REGISTRATION === $this->transaction->type) {
-                // The "recipientId" doesn't exist on v1 multi signature registrations
-                // $transaction->recipientId = Address::fromPublicKey($this->transaction->senderPublicKey);
-
-                $transaction->asset->multisignature->keysgroup = array_map(function ($key) {
-                    return '+'.$key;
-                }, $transaction->asset->multisignature->keysgroup);
-            }
-
-            if (isset($transaction->vendorFieldHex)) {
-                $transaction->vendorField = hex2bin($transaction->vendorFieldHex);
-            }
-
-            if (!isset($transaction->id)) {
-                $transaction->id = Crypto::getId($transaction);
-            }
-        }
-
-        return $transaction;
+        $this->hex         = $hex;
+        $this->binary      = $binary;
+        $this->assetOffset = $assetOffset;
+        $this->transaction = $transaction;
     }
 
     /**
@@ -116,18 +66,17 @@ abstract class AbstractDeserialiser
      *
      * @return object
      */
-    abstract public function handle(int $assetOffset, object $transaction): object;
+    abstract public function deserialise(): object;
 
     /**
      * Parse the signatures of the given transaction.
      *
-     * @param object $transaction
-     * @param int    $startOffset
+     * @param int $startOffset
      *
      * @return object
      */
-    protected function parseSignatures(object $transaction, int $startOffset): object
+    protected function parseSignatures(int $startOffset): object
     {
-        return Crypto::parseSignatures($this->hex, $transaction, $startOffset);
+        return Crypto::parseSignatures($this->hex, $this->transaction, $startOffset);
     }
 }

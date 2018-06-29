@@ -26,18 +26,15 @@ class IPFS extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "ipfs" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $length = UnsignedInteger::bit8($this->binary, $assetOffset / 2) & 0xff;
+        $length = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2) & 0xff;
 
-        $transaction->asset      = new stdClass();
-        $transaction->asset->dag = substr($this->hex, $assetOffset + 2, $length * 2);
+        $this->transaction->asset      = new stdClass();
+        $this->transaction->asset->dag = substr($this->hex, $this->assetOffset + 2, $length * 2);
 
-        return $this->parseSignatures($transaction, $assetOffset + 2 + $length * 2);
+        return $this->parseSignatures($this->assetOffset + 2 + $length * 2);
     }
 }

@@ -25,17 +25,15 @@ class IPFS extends AbstractSerialiser
     /**
      * Handle the serialisation of "ipfs" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
         $dag = $this->transaction->asset->ipfs->dag;
 
-        $bytes .= UnsignedInteger::bit8(strlen($dag) / 2);
-        $bytes .= hex2bin($dag);
+        $this->bytes .= UnsignedInteger::bit8(strlen($dag) / 2);
+        $this->bytes .= hex2bin($dag);
 
-        return $bytes;
+        return $this->bytes;
     }
 }

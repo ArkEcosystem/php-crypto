@@ -29,21 +29,18 @@ class MultiPayment extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "multi payment" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $transaction->asset = new stdClass();
+        $this->transaction->asset = new stdClass();
 
         [
             'payments' => [],
         ];
 
-        $total  = UnsignedInteger::bit8($this->binary, $assetOffset / 2)[1] & 0xff;
-        $offset = $assetOffset / 2 + 1;
+        $total  = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2)[1] & 0xff;
+        $offset = $this->assetOffset / 2 + 1;
 
         for ($i = 0; $i < $total; ++$i) {
             $payment              = new stdClass();
@@ -51,13 +48,13 @@ class MultiPayment extends AbstractDeserialiser
             $payment->recipientId = Hex::high($this->binary, $offset + 1, 42);
             $payment->recipientId = Base58::encodeCheck(new Buffer(hex2bin($payment['recipientId'])));
 
-            $transaction->asset['payments'][] = $payment;
+            $this->transaction->asset['payments'][] = $payment;
 
             $offset += 22;
         }
 
-        $transaction->amount = array_sum(array_column($transaction->asset['payments'], 'amount'));
+        $this->transaction->amount = array_sum(array_column($this->transaction->asset['payments'], 'amount'));
 
-        return $this->parseSignatures($transaction, $offset * 2);
+        return $this->parseSignatures($offset * 2);
     }
 }

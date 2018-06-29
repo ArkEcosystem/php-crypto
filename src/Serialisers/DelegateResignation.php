@@ -23,12 +23,10 @@ class DelegateResignation extends AbstractSerialiser
     /**
      * Handle the serialisation of "delegate resignation" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
-        return $bytes;
+        return $this->bytes;
     }
 }

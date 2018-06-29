@@ -23,14 +23,12 @@ class SecondSignatureRegistration extends AbstractSerialiser
     /**
      * Handle the serialisation of "delegate registration" data.
      *
-     * @param string $bytes
-     *
      * @return string
      */
-    public function handle(string $bytes): string
+    public function serialise(): string
     {
-        $bytes .= hex2bin($this->transaction->asset->signature->publicKey);
+        $this->bytes .= hex2bin($this->transaction->asset->signature->publicKey);
 
-        return $bytes;
+        return $this->bytes;
     }
 }

@@ -28,18 +28,15 @@ class Transfer extends AbstractDeserialiser
     /**
      * Handle the deserialisation of "transfer" data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
-     *
      * @return object
      */
-    public function handle(int $assetOffset, object $transaction): object
+    public function deserialise(): object
     {
-        $transaction->amount      = UnsignedInteger::bit64($this->binary, $assetOffset / 2);
-        $transaction->expiration  = UnsignedInteger::bit32($this->binary, $assetOffset / 2 + 8);
-        $transaction->recipientId = Hex::high($this->binary, $assetOffset / 2 + 12, 42);
-        $transaction->recipientId = Base58::encodeCheck(new Buffer(hex2bin($transaction->recipientId)));
+        $this->transaction->amount      = UnsignedInteger::bit64($this->binary, $this->assetOffset / 2);
+        $this->transaction->expiration  = UnsignedInteger::bit32($this->binary, $this->assetOffset / 2 + 8);
+        $this->transaction->recipientId = Hex::high($this->binary, $this->assetOffset / 2 + 12, 42);
+        $this->transaction->recipientId = Base58::encodeCheck(new Buffer(hex2bin($this->transaction->recipientId)));
 
-        return $this->parseSignatures($transaction, $assetOffset + (21 + 12) * 2);
+        return $this->parseSignatures($this->assetOffset + (21 + 12) * 2);
     }
 }
