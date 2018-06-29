@@ -18,6 +18,7 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
+use InvalidArgumentException;
 
 /**
  * This is the message class.
@@ -72,37 +73,25 @@ class Message
     /**
      * Create a new message instance.
      *
-     * @param object $message
+     * @param mixed $message
      *
      * @return \ArkEcosystem\Crypto\Message
      */
-    public static function new(object $message): self
+    public static function new($message): self
     {
-        return new static($message);
-    }
+        if (is_object($message)) {
+            return new static($message);
+        }
 
-    /**
-     * Create a new message instance from an array.
-     *
-     * @param array $message
-     *
-     * @return \ArkEcosystem\Crypto\Message
-     */
-    public static function fromArray(array $message): self
-    {
-        return static::fromString(json_encode($message));
-    }
+        if (is_array($message)) {
+            return new static(json_decode(json_encode($message)));
+        }
 
-    /**
-     * Create a new message instance from a JSON string.
-     *
-     * @param string $message
-     *
-     * @return \ArkEcosystem\Crypto\Message
-     */
-    public static function fromString(string $message): self
-    {
-        return new static(json_decode($message));
+        if (is_string($message)) {
+            return new static(json_decode($message));
+        }
+
+        throw new InvalidArgumentException('The given message was neither an object, array nor JSON.');
     }
 
     /**
@@ -117,7 +106,7 @@ class Message
     {
         $keys = PrivateKey::fromSecret($secret);
 
-        return static::fromArray([
+        return static::new([
             'publicKey' => $keys->getPublicKey()->getHex(),
             'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
             'message'   => $message,

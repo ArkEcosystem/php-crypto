@@ -29,7 +29,7 @@ class MessageTest extends TestCase
     {
         $rawMessage = $this->getRawMessage();
 
-        $message = Message::fromArray($rawMessage);
+        $message = Message::new($rawMessage);
 
         $this->assertSame($message->publicKey, $rawMessage['publicKey']);
         $this->assertSame($message->signature, $rawMessage['signature']);
@@ -41,7 +41,7 @@ class MessageTest extends TestCase
     {
         $rawMessage = $this->getRawMessage();
 
-        $message = Message::fromString(json_encode($rawMessage));
+        $message = Message::new(json_encode($rawMessage));
 
         $this->assertSame($message->publicKey, $rawMessage['publicKey']);
         $this->assertSame($message->signature, $rawMessage['signature']);
@@ -59,7 +59,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_verify_a_message()
     {
-        $message = Message::fromArray($this->getRawMessage());
+        $message = Message::new($this->getRawMessage());
 
         $this->assertTrue($message->verify());
     }
@@ -67,7 +67,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_an_array()
     {
-        $message = Message::fromArray($this->getRawMessage());
+        $message = Message::new($this->getRawMessage());
 
         $this->assertInternalType('array', $message->toArray());
     }
@@ -75,7 +75,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_a_string()
     {
-        $message = Message::fromArray($this->getRawMessage());
+        $message = Message::new($this->getRawMessage());
 
         $this->assertInternalType('string', $message->toJSON());
     }
