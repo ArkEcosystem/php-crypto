@@ -44,13 +44,6 @@ interface Network
     public static function getVersion(): int;
 
     /**
-     * Get the message prefix of the network.
-     *
-     * @return string
-     */
-    public static function getMessagePrefix(): string;
-
-    /**
      * Get the nethash of the network.
      *
      * @return string

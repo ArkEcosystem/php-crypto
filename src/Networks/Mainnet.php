@@ -35,14 +35,6 @@ class Mainnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getMessagePrefix(): string
-    {
-        return "ARK message:\n";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getNethash(): string
     {
         return '6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988';

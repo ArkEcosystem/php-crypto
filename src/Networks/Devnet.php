@@ -35,14 +35,6 @@ class Devnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getMessagePrefix(): string
-    {
-        return "DARK message:\n";
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public static function getNethash(): string
     {
         return '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23';
