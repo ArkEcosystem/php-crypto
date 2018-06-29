@@ -35,15 +35,6 @@ class DevnetTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_message_prefix()
-    {
-        $actual = TestClass::getMessagePrefix();
-
-        $this->assertInternalType('string', $actual);
-        $this->assertSame($actual, "DARK message:\n");
-    }
-
-    /** @test */
     public function it_should_get_nethash()
     {
         $actual = TestClass::getNethash();
