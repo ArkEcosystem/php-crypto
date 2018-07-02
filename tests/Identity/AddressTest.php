@@ -29,7 +29,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_get_the_address_from_public_key()
     {
-        $actual = TestClass::fromPublicKey('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192', Devnet::create());
+        $actual = TestClass::fromPublicKey('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192', Devnet::new());
 
         $this->assertInternalType('string', $actual);
         $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
@@ -38,7 +38,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_get_the_address_from_secret()
     {
-        $actual = TestClass::fromSecret('this is a top secret passphrase', Devnet::create());
+        $actual = TestClass::fromSecret('this is a top secret passphrase', Devnet::new());
 
         $this->assertInternalType('string', $actual);
         $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
@@ -49,7 +49,7 @@ class AddressTest extends TestCase
     {
         $privateKey = PrivateKey::fromSecret('this is a top secret passphrase');
 
-        $actual = TestClass::fromPrivateKey($privateKey, Devnet::create());
+        $actual = TestClass::fromPrivateKey($privateKey, Devnet::new());
 
         $this->assertInternalType('string', $actual);
         $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
@@ -58,7 +58,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_validate_the_address()
     {
-        $actual = TestClass::validate('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', Devnet::create());
+        $actual = TestClass::validate('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', Devnet::new());
 
         $this->assertInternalType('boolean', $actual);
         $this->assertTrue($actual);

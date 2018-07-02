@@ -28,7 +28,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = Vote::create()
+        $transaction = Vote::new()
             ->votes(['+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192'])
             ->sign('This is a top secret passphrase');
 

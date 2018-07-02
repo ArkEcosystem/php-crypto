@@ -28,7 +28,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = Transfer::create()
+        $transaction = Transfer::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')
@@ -43,7 +43,7 @@ class TransferTest extends TestCase
     {
         $secondSecret = 'this is a top secret second passphrase';
 
-        $transaction = Transfer::create()
+        $transaction = Transfer::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')

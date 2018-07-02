@@ -29,7 +29,7 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_secret()
     {
-        $actual = TestClass::fromSecret('this is a top secret passphrase', Devnet::create());
+        $actual = TestClass::fromSecret('this is a top secret passphrase', Devnet::new());
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
         $this->assertInternalType('string', $actual->getHex());

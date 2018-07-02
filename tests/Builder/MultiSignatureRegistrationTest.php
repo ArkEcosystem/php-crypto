@@ -28,7 +28,7 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = MultiSignatureRegistration::create()
+        $transaction = MultiSignatureRegistration::new()
             ->min(2)
             ->lifetime(255)
             ->keysgroup([

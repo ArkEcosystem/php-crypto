@@ -40,7 +40,7 @@ class NetworkTest extends TestCase
         $actual = Network::get();
         $this->assertInstanceOf(Mainnet::class, $actual);
 
-        Network::set(Devnet::create());
+        Network::set(Devnet::new());
 
         $actual = Network::get();
         $this->assertInstanceOf(Devnet::class, $actual);

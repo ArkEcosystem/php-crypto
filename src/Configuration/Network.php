@@ -50,7 +50,7 @@ class Network
      */
     public static function get(): AbstractNetwork
     {
-        return static::$network ?? Mainnet::create();
+        return static::$network ?? Mainnet::new();
     }
 
     /**

@@ -29,7 +29,7 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = SecondSignatureRegistration::create()
+        $transaction = SecondSignatureRegistration::new()
             ->signature('second passphrase')
             ->sign('first passphrase');
 

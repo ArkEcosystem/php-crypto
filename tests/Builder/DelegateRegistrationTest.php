@@ -28,7 +28,7 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = DelegateRegistration::create()
+        $transaction = DelegateRegistration::new()
             ->username('polopolo')
             ->sign('This is a top secret passphrase');
 

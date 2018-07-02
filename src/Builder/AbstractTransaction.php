@@ -67,7 +67,7 @@ abstract class AbstractTransaction
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public static function create(): self
+    public static function new(): self
     {
         return new static();
     }
