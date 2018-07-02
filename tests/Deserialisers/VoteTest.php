@@ -33,11 +33,17 @@ class VoteTest extends TestCase
 
         $actual = Deserialiser::new($transaction->serialized)->deserialise();
 
-        $this->assertSame($transaction->id, $actual->id);
         $this->assertSame($transaction->version, $actual->version);
         $this->assertSame($transaction->network, $actual->network);
         $this->assertSame($transaction->type, $actual->type);
+        $this->assertSame($transaction->timestamp, $actual->timestamp);
         $this->assertSame($transaction->senderPublicKey, $actual->senderPublicKey);
+        $this->assertSame($transaction->fee, $actual->fee);
+        $this->assertSame($transaction->asset->votes, $actual->asset->votes);
+        $this->assertSame($transaction->signature, $actual->signature);
+        $this->assertSame($transaction->amount, $actual->amount);
+        $this->assertSame($transaction->recipientId, $actual->recipientId);
+        $this->assertSame($transaction->id, $actual->id);
         $this->assertSame($transaction->serialized, Serialiser::new($actual)->serialise()->getHex());
     }
 }

@@ -38,7 +38,7 @@ abstract class AbstractNetwork
      *
      * @return mixed
      */
-    public static function create()
+    public static function new()
     {
         return new static();
     }

@@ -27,7 +27,7 @@ interface Network
      *
      * @return mixed
      */
-    public static function create();
+    public static function new();
 
     /**
      * Get the epoch of the network.
