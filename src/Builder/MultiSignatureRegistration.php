@@ -29,8 +29,8 @@ class MultiSignatureRegistration extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->data->asset                 = new stdClass();
-        $this->data->asset->multisignature = new stdClass();
+        $this->transaction->asset                 = new stdClass();
+        $this->transaction->asset->multisignature = new stdClass();
     }
 
     /**
@@ -42,7 +42,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function min(int $min): self
     {
-        $this->data->asset->multisignature->min = $min;
+        $this->transaction->asset->multisignature->min = $min;
 
         return $this;
     }
@@ -56,7 +56,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function lifetime(int $lifetime): self
     {
-        $this->data->asset->multisignature->lifetime = $lifetime;
+        $this->transaction->asset->multisignature->lifetime = $lifetime;
 
         return $this;
     }
@@ -70,9 +70,9 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function keysgroup(array $keysgroup): self
     {
-        $this->data->asset->multisignature->keysgroup = $keysgroup;
+        $this->transaction->asset->multisignature->keysgroup = $keysgroup;
 
-        $this->data->fee = (count($keysgroup) + 1) * $this->data->fee;
+        $this->transaction->fee = (count($keysgroup) + 1) * $this->transaction->fee;
 
         return $this;
     }

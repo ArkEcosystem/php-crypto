@@ -18,7 +18,6 @@ use ArkEcosystem\Crypto\Identity\Address;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Hex\Reader as Hex;
 use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
-use stdClass;
 
 /**
  * This is the deserialiser class.
@@ -72,11 +71,11 @@ class Deserialiser
     /**
      * Perform AIP11 compliant deserialisation.
      *
-     * @return stdClass
+     * @return \ArkEcosystem\Crypto\Transaction
      */
-    public function deserialise(): stdClass
+    public function deserialise(): Transaction
     {
-        $transaction                  = new stdClass();
+        $transaction                  = new Transaction();
         $transaction->version         = (int) Hex::low($this->binary, 1);
         $transaction->network         = UnsignedInteger::bit8($this->binary, 2);
         $transaction->type            = UnsignedInteger::bit8($this->binary, 3);
@@ -155,7 +154,7 @@ class Deserialiser
         }
 
         if (!isset($transaction->id)) {
-            $transaction->id = Crypto::getId($transaction);
+            $transaction->id = $transaction->getId();
         }
 
         return $transaction;

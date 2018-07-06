@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Deserialisers;
 
-use ArkEcosystem\Crypto\Crypto;
+use ArkEcosystem\Crypto\Transaction;
 
 /**
  * This is the deserialiser class.
@@ -50,7 +50,7 @@ abstract class AbstractDeserialiser
      * @param int    $assetOffset
      * @param object $transaction
      */
-    public function __construct(string $hex, string $binary, int $assetOffset, object $transaction)
+    public function __construct(string $hex, string $binary, int $assetOffset, Transaction $transaction)
     {
         $this->hex         = $hex;
         $this->binary      = $binary;
@@ -77,6 +77,6 @@ abstract class AbstractDeserialiser
      */
     protected function parseSignatures(int $startOffset): object
     {
-        return Crypto::parseSignatures($this->hex, $this->transaction, $startOffset);
+        return $this->transaction->parseSignatures($this->hex, $startOffset);
     }
 }

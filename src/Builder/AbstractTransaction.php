@@ -15,11 +15,9 @@ namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Transaction;
 use stdClass;
 use function Stringy\create as s;
 
@@ -35,21 +33,21 @@ abstract class AbstractTransaction
      */
     public function __construct()
     {
-        $this->data              = new \stdClass();
-        $this->data->recipientId = null;
-        $this->data->type        = $this->getType();
-        $this->data->amount      = 0;
-        $this->data->fee         = $this->getFee();
-        $this->data->vendorField = null;
-        $this->data->timestamp   = $this->getTimeSinceEpoch();
+        $this->transaction              = new Transaction();
+        $this->transaction->recipientId = null;
+        $this->transaction->type        = $this->getType();
+        $this->transaction->amount      = 0;
+        $this->transaction->fee         = $this->getFee();
+        $this->transaction->vendorField = null;
+        $this->transaction->timestamp   = $this->getTimeSinceEpoch();
 
-        $this->data->senderPublicKey = null;
+        $this->transaction->senderPublicKey = null;
 
-        $this->data->signature     = null;
-        $this->data->signSignature = null;
+        $this->transaction->signature     = null;
+        $this->transaction->signSignature = null;
 
-        $this->data->id    = null;
-        $this->data->asset = [];
+        $this->transaction->id    = null;
+        $this->transaction->asset = [];
     }
 
     /**
@@ -81,7 +79,7 @@ abstract class AbstractTransaction
      */
     public function withFee(int $fee): self
     {
-        $this->data->fee = $fee;
+        $this->transaction->fee = $fee;
 
         return $this;
     }
@@ -95,10 +93,10 @@ abstract class AbstractTransaction
      */
     public function sign(string $secret): AbstractTransaction
     {
-        $keys                          = PrivateKey::fromSecret($secret);
-        $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
+        $keys                               = PrivateKey::fromSecret($secret);
+        $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
 
-        Crypto::sign($this->getSignedObject(), $keys);
+        $this->transaction = $this->transaction->sign($keys);
 
         return $this;
     }
@@ -112,7 +110,7 @@ abstract class AbstractTransaction
      */
     public function secondSign(string $secondSecret): AbstractTransaction
     {
-        Crypto::secondSign($this->getSignedObject(), PrivateKey::fromSecret($secondSecret));
+        $this->transaction = $this->transaction->secondSign(PrivateKey::fromSecret($secondSecret));
 
         return $this;
     }
@@ -124,7 +122,7 @@ abstract class AbstractTransaction
      */
     public function verify(): bool
     {
-        return Crypto::verify($this->getSignedObject());
+        return $this->transaction->verify();
     }
 
     /**
@@ -134,8 +132,7 @@ abstract class AbstractTransaction
      */
     public function secondVerify(string $secondSecret): bool
     {
-        return Crypto::secondVerify(
-            $this->getSignedObject(),
+        return $this->transaction->secondVerify(
             PublicKey::fromSecret($secondSecret)->getHex()
         );
     }
@@ -147,18 +144,17 @@ abstract class AbstractTransaction
      */
     public function getSignedObject(): stdClass
     {
-        $idBytes        = Crypto::getBytes($this->data, false, false);
-        $this->data->id = Hash::sha256(new Buffer($idBytes))->getHex();
+        $this->transaction->id = $this->transaction->getId();
 
-        if (empty($this->data->signSignature)) {
-            unset($this->data->signSignature);
+        if (empty($this->transaction->signSignature)) {
+            unset($this->transaction->signSignature);
         }
 
-        if (empty($this->data->asset)) {
-            unset($this->data->asset);
+        if (empty($this->transaction->asset)) {
+            unset($this->transaction->asset);
         }
 
-        return $this->data;
+        return $this->transaction;
     }
 
     /**
@@ -168,7 +164,7 @@ abstract class AbstractTransaction
      */
     public function toJSON(): string
     {
-        return json_encode($this->data);
+        return json_encode($this->transaction);
     }
 
     /**
@@ -200,7 +196,7 @@ abstract class AbstractTransaction
      */
     private function getFee(): int
     {
-        return Fee::get($this->data->type);
+        return Fee::get($this->transaction->type);
     }
 
     /**

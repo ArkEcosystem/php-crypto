@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto;
 
-use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Message;
 
 /**

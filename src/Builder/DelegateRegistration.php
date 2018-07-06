@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use stdClass;
 
@@ -31,8 +30,8 @@ class DelegateRegistration extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->data->asset           = new stdClass();
-        $this->data->asset->delegate = new stdClass();
+        $this->transaction->asset           = new stdClass();
+        $this->transaction->asset->delegate = new stdClass();
     }
 
     /**
@@ -44,7 +43,7 @@ class DelegateRegistration extends AbstractTransaction
      */
     public function username(string $username): self
     {
-        $this->data->asset->delegate->username = $username;
+        $this->transaction->asset->delegate->username = $username;
 
         return $this;
     }
@@ -58,12 +57,11 @@ class DelegateRegistration extends AbstractTransaction
      */
     public function sign(string $secret): AbstractTransaction
     {
-        $keys                          = PrivateKey::fromSecret($secret);
-        $this->data->senderPublicKey   = $keys->getPublicKey()->getHex();
+        $keys                                          = PrivateKey::fromSecret($secret);
+        $this->transaction->senderPublicKey            = $keys->getPublicKey()->getHex();
+        $this->transaction->asset->delegate->publicKey = $this->transaction->senderPublicKey;
 
-        $this->data->asset->delegate->publicKey = $this->data->senderPublicKey;
-
-        Crypto::sign($this->getSignedObject(), $keys);
+        $this->transaction = $this->transaction->sign($keys);
 
         return $this;
     }

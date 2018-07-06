@@ -29,7 +29,7 @@ class Transfer extends AbstractTransaction
      */
     public function recipient(string $recipientId): self
     {
-        $this->data->recipientId = $recipientId;
+        $this->transaction->recipientId = $recipientId;
 
         return $this;
     }
@@ -43,7 +43,7 @@ class Transfer extends AbstractTransaction
      */
     public function amount(int $amount): self
     {
-        $this->data->amount = $amount;
+        $this->transaction->amount = $amount;
 
         return $this;
     }
@@ -57,7 +57,7 @@ class Transfer extends AbstractTransaction
      */
     public function vendorField(string $vendorField): self
     {
-        $this->data->vendorField = $vendorField;
+        $this->transaction->vendorField = $vendorField;
 
         return $this;
     }

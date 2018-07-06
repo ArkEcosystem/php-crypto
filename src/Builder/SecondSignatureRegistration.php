@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 use stdClass;
 
@@ -33,9 +32,9 @@ class SecondSignatureRegistration extends AbstractTransaction
      */
     public function signature(string $secondSecret): self
     {
-        $this->data->asset                       = new stdClass();
-        $this->data->asset->signature            = new stdClass();
-        $this->data->asset->signature->publicKey = PublicKey::fromSecret($secondSecret)->getHex();
+        $this->transaction->asset                       = new stdClass();
+        $this->transaction->asset->signature            = new stdClass();
+        $this->transaction->asset->signature->publicKey = PublicKey::fromSecret($secondSecret)->getHex();
 
         return $this;
     }

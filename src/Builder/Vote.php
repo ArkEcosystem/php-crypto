@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Crypto;
 use ArkEcosystem\Crypto\Identity\Address;
 use stdClass;
 
@@ -32,7 +31,7 @@ class Vote extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->data->asset = new stdClass();
+        $this->transaction->asset = new stdClass();
     }
 
     /**
@@ -44,7 +43,7 @@ class Vote extends AbstractTransaction
      */
     public function votes(array $votes): self
     {
-        $this->data->asset->votes = $votes;
+        $this->transaction->asset->votes = $votes;
 
         return $this;
     }
@@ -58,7 +57,7 @@ class Vote extends AbstractTransaction
      */
     public function sign(string $secret): AbstractTransaction
     {
-        $this->data->recipientId = Address::fromSecret($secret, Network::get());
+        $this->transaction->recipientId = Address::fromSecret($secret, Network::get());
 
         parent::sign($secret);
 
