@@ -205,7 +205,7 @@ class Transaction
             unset($this->signature);
         } else {
             $signatureLength        = intval(substr($this->signature, 2, 2), 16) + 2;
-            $this->signature = substr($serialized, $startOffset, $signatureLength * 2);
+            $this->signature        = substr($serialized, $startOffset, $signatureLength * 2);
             $multiSignatureOffset += $signatureLength * 2;
             $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
 
@@ -216,7 +216,7 @@ class Transaction
                     unset($this->secondSignature);
                 } else {
                     $secondSignatureLength        = intval(substr($this->secondSignature, 2, 2), 16) + 2;
-                    $this->secondSignature = substr($this->secondSignature, 0, $secondSignatureLength * 2);
+                    $this->secondSignature        = substr($this->secondSignature, 0, $secondSignatureLength * 2);
                     $multiSignatureOffset += $secondSignatureLength * 2;
                 }
             }
@@ -232,7 +232,7 @@ class Transaction
             }
 
             $signatures              = substr($signatures, 2);
-            $this->signatures = [];
+            $this->signatures        = [];
 
             $moreSignatures = true;
             while ($moreSignatures) {

@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
+use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Configuration\Fee;
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Crypto\Transaction;
-use stdClass;
 use function Stringy\create as s;
+use stdClass;
 
 /**
  * This is the abstract transaction class.
@@ -39,7 +39,7 @@ abstract class AbstractTransaction
         $this->transaction->amount      = 0;
         $this->transaction->fee         = $this->getFee();
         $this->transaction->vendorField = null;
-        $this->transaction->timestamp   = $this->getTimeSinceEpoch();
+        $this->transaction->timestamp   = Slot::getTime();
 
         $this->transaction->senderPublicKey = null;
 
@@ -165,16 +165,6 @@ abstract class AbstractTransaction
     public function toJSON(): string
     {
         return json_encode($this->transaction);
-    }
-
-    /**
-     * Get the transaction timestamp.
-     *
-     * @return int
-     */
-    protected function getTimeSinceEpoch(): int
-    {
-        return time() - strtotime(Network::getEpoch());
     }
 
     /**
