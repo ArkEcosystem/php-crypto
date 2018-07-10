@@ -15,10 +15,6 @@ namespace ArkEcosystem\Crypto\Identity;
 
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Contracts\Network;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\UnsignedInteger\Writer;
 
 /**
  * This is the wif class.
@@ -28,17 +24,17 @@ use BrianFaust\Binary\UnsignedInteger\Writer;
 class WIF
 {
     /**
-     * Derive the WIF from the given secret.
+     * Derive the WIF from the given passphrase.
      *
-     * @param string                                      $secret
+     * @param string                                      $passphrase
      * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
      *
      * @return string
      */
-    public static function fromSecret(string $secret, Network $network = null): string
+    public static function fromPassphrase(string $passphrase, Network $network = null): string
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        return PrivateKey::fromSecret($secret)->toWif($network->getFactory());
+        return PrivateKey::fromPassphrase($passphrase)->toWif($network->getFactory());
     }
 }

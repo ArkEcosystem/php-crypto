@@ -85,15 +85,15 @@ abstract class AbstractTransaction
     }
 
     /**
-     * Sign the transaction using the given secret.
+     * Sign the transaction using the given passphrase.
      *
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): AbstractTransaction
+    public function sign(string $passphrase): AbstractTransaction
     {
-        $keys                               = PrivateKey::fromSecret($secret);
+        $keys                               = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
 
         $this->transaction = $this->transaction->sign($keys);
@@ -102,7 +102,7 @@ abstract class AbstractTransaction
     }
 
     /**
-     * Sign the transaction using the given second secret.
+     * Sign the transaction using the given second passphrase.
      *
      * @param string $secondSecret
      *
@@ -110,7 +110,7 @@ abstract class AbstractTransaction
      */
     public function secondSign(string $secondSecret): AbstractTransaction
     {
-        $this->transaction = $this->transaction->secondSign(PrivateKey::fromSecret($secondSecret));
+        $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondSecret));
 
         return $this;
     }
@@ -133,7 +133,7 @@ abstract class AbstractTransaction
     public function secondVerify(string $secondSecret): bool
     {
         return $this->transaction->secondVerify(
-            PublicKey::fromSecret($secondSecret)->getHex()
+            PublicKey::fromPassphrase($secondSecret)->getHex()
         );
     }
 

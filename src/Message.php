@@ -95,16 +95,16 @@ class Message
     }
 
     /**
-     * Sign a message using the given secret.
+     * Sign a message using the given passphrase.
      *
      * @param string $message
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \ArkEcosystem\Crypto\Message
      */
-    public static function sign(string $message, string $secret): self
+    public static function sign(string $message, string $passphrase): self
     {
-        $keys = PrivateKey::fromSecret($secret);
+        $keys = PrivateKey::fromPassphrase($passphrase);
 
         return static::new([
             'publicKey' => $keys->getPublicKey()->getHex(),

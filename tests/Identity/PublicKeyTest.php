@@ -26,9 +26,9 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 class PublicKeyTest extends TestCase
 {
     /** @test */
-    public function it_should_get_the_public_key_from_secret()
+    public function it_should_get_the_public_key_from_passphrase()
     {
-        $actual = TestClass::fromSecret('this is a top secret passphrase');
+        $actual = TestClass::fromPassphrase('this is a top secret passphrase');
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
         $this->assertInternalType('string', $actual->getHex());

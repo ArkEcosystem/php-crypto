@@ -35,6 +35,6 @@ class SecondSignatureRegistrationTest extends TestCase
         $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
         $this->assertFalse(isset($transaction->signSignature));
-        $this->assertSame($transaction->transaction->asset->signature->publicKey, PublicKey::fromSecret('second passphrase')->getHex());
+        $this->assertSame($transaction->transaction->asset->signature->publicKey, PublicKey::fromPassphrase('second passphrase')->getHex());
     }
 }

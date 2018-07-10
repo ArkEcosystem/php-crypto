@@ -49,15 +49,15 @@ class DelegateRegistration extends AbstractTransaction
     }
 
     /**
-     * Sign the transaction using the given secret.
+     * Sign the transaction using the given passphrase.
      *
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): AbstractTransaction
+    public function sign(string $passphrase): AbstractTransaction
     {
-        $keys                                          = PrivateKey::fromSecret($secret);
+        $keys                                          = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->senderPublicKey            = $keys->getPublicKey()->getHex();
         $this->transaction->asset->delegate->publicKey = $this->transaction->senderPublicKey;
 

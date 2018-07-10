@@ -24,7 +24,7 @@ use stdClass;
 class SecondSignatureRegistration extends AbstractTransaction
 {
     /**
-     * Set the signature asset to register the second secret.
+     * Set the signature asset to register the second passphrase.
      *
      * @param string $secondSecret
      *
@@ -34,7 +34,7 @@ class SecondSignatureRegistration extends AbstractTransaction
     {
         $this->transaction->asset                       = new stdClass();
         $this->transaction->asset->signature            = new stdClass();
-        $this->transaction->asset->signature->publicKey = PublicKey::fromSecret($secondSecret)->getHex();
+        $this->transaction->asset->signature->publicKey = PublicKey::fromPassphrase($secondSecret)->getHex();
 
         return $this;
     }

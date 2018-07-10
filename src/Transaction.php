@@ -59,7 +59,7 @@ class Transaction
     }
 
     /**
-     * Sign the transaction using the given secret.
+     * Sign the transaction using the given passphrase.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
@@ -74,7 +74,7 @@ class Transaction
     }
 
     /**
-     * Sign the transaction using the given second secret.
+     * Sign the transaction using the given second passphrase.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *

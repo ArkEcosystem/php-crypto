@@ -22,7 +22,6 @@ use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\UnsignedInteger\Reader;
 use BrianFaust\Binary\UnsignedInteger\Writer;
 
 /**
@@ -33,16 +32,16 @@ use BrianFaust\Binary\UnsignedInteger\Writer;
 class Address
 {
     /**
-     * Derive the address from the given secret.
+     * Derive the address from the given passphrase.
      *
-     * @param string                                      $secret
+     * @param string                                      $passphrase
      * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
      *
      * @return string
      */
-    public static function fromSecret(string $secret, Network $network = null): string
+    public static function fromPassphrase(string $passphrase, Network $network = null): string
     {
-        return static::fromPrivateKey(PrivateKey::fromSecret($secret), $network);
+        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
     }
 
     /**

@@ -50,7 +50,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_sign_a_message()
     {
-        $message = Message::sign('Hello World', 'secret');
+        $message = Message::sign('Hello World', 'passphrase');
 
         $this->assertInstanceOf(Message::class, $message);
     }

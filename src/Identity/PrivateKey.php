@@ -28,17 +28,17 @@ use BitWasp\Buffertools\Buffer;
 class PrivateKey
 {
     /**
-     * Derive the private key for the given secret.
+     * Derive the private key for the given passphrase.
      *
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
      */
-    public static function fromSecret(string $secret): EcPrivateKey
+    public static function fromPassphrase(string $passphrase): EcPrivateKey
     {
-        $secret = Hash::sha256(new Buffer($secret));
+        $passphrase = Hash::sha256(new Buffer($passphrase));
 
-        return PrivateKeyFactory::fromHex($secret, true);
+        return PrivateKeyFactory::fromHex($passphrase, true);
     }
 
     /**

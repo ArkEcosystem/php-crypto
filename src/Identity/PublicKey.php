@@ -24,15 +24,15 @@ use BitWasp\Bitcoin\Key\PublicKeyFactory;
 class PublicKey
 {
     /**
-     * Derive the public from the given secret.
+     * Derive the public from the given passphrase.
      *
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey
      */
-    public static function fromSecret(string $secret): EcPublicKey
+    public static function fromPassphrase(string $passphrase): EcPublicKey
     {
-        return PrivateKey::fromSecret($secret)->getPublicKey();
+        return PrivateKey::fromPassphrase($passphrase)->getPublicKey();
     }
 
     /**

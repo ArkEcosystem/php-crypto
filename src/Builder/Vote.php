@@ -49,17 +49,17 @@ class Vote extends AbstractTransaction
     }
 
     /**
-     * Sign the transaction using the given secret.
+     * Sign the transaction using the given passphrase.
      *
-     * @param string $secret
+     * @param string $passphrase
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $secret): AbstractTransaction
+    public function sign(string $passphrase): AbstractTransaction
     {
-        $this->transaction->recipientId = Address::fromSecret($secret, Network::get());
+        $this->transaction->recipientId = Address::fromPassphrase($passphrase, Network::get());
 
-        parent::sign($secret);
+        parent::sign($passphrase);
 
         return $this;
     }

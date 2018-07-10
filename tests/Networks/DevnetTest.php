@@ -30,7 +30,6 @@ class DevnetTest extends TestCase
     {
         $actual = TestClass::getVersion();
 
-        $this->assertInternalType('integer', $actual);
         $this->assertSame($actual, 30);
     }
 
@@ -39,7 +38,6 @@ class DevnetTest extends TestCase
     {
         $actual = TestClass::getNethash();
 
-        $this->assertInternalType('string', $actual);
         $this->assertSame($actual, '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23');
     }
 
@@ -48,7 +46,6 @@ class DevnetTest extends TestCase
     {
         $actual = TestClass::getWif();
 
-        $this->assertInternalType('integer', $actual);
         $this->assertSame($actual, 170);
     }
 
@@ -57,7 +54,6 @@ class DevnetTest extends TestCase
     {
         $actual = TestClass::getWifByte();
 
-        $this->assertInternalType('string', $actual);
         $this->assertSame($actual, 'aa');
     }
 
