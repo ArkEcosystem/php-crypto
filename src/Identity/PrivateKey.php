@@ -42,6 +42,18 @@ class PrivateKey
     }
 
     /**
+     * Create a private key instance from a hex string.
+     *
+     * @param \BitWasp\Buffertools\BufferInterface|string $privateKey
+     *
+     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
+     */
+    public static function fromHex($privateKey): EcPrivateKey
+    {
+        return PrivateKeyFactory::fromHex($privateKey);
+    }
+
+    /**
      * Derive the private key for the given WIF.
      *
      * @param string                                      $wif
