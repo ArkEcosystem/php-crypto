@@ -39,11 +39,6 @@ class WIF
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        $secret = Hash::sha256(new Buffer($secret));
-        $seed   = Writer::bit8($network->getWif());
-        $seed .= $secret->getBinary();
-        $seed .= Writer::bit8(0x01);
-
-        return Base58::encodeCheck(new Buffer($seed));
+        return PrivateKey::fromSecret($secret)->toWif($network->getFactory());
     }
 }
