@@ -30,8 +30,6 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialise_the_transaction()
     {
-        Network::set(Devnet::new());
-
         $transaction = $this->getTransactionFixture(1);
 
         $actual = Deserialiser::new($transaction->serialized)->deserialise();

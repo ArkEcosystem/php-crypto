@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
+use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Transaction;
-use function Stringy\create as s;
 use stdClass;
+use function Stringy\create as s;
 
 /**
  * This is the abstract transaction class.
