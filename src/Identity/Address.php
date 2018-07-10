@@ -16,6 +16,7 @@ namespace ArkEcosystem\Crypto\Identity;
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Contracts\Network;
 use ArkEcosystem\Crypto\Helpers;
+use BitWasp\Bitcoin\Address\AddressFactory;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
@@ -56,7 +57,7 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        $ripemd160 = Hash::ripemd160(new Buffer(hex2bin($publicKey)));
+        $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
         $seed      = Writer::bit8(Helpers::getVersion($network)).$ripemd160->getBinary();
 
         return Base58::encodeCheck(new Buffer($seed));
@@ -74,8 +75,7 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        $publicKey = $privateKey->getPublicKey();
-        $digest    = Hash::ripemd160(new Buffer($publicKey->getBinary()));
+        $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
 
         return (new PayToPubKeyHashAddress($digest))->getAddress($network->getFactory());
     }
@@ -92,8 +92,6 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        $address = Base58::decodeCheck($address);
-
-        return Reader::bit8($address->getBinary()) === Helpers::getVersion($network);
+        return AddressFactory::isValidAddress($address, $network->getFactory());
     }
 }
