@@ -53,7 +53,7 @@ class Devnet extends AbstractNetwork implements Network
      */
     public static function getFactory(): TokenNetwork
     {
-        return NetworkFactory::create('1e', '00', '00')
+        return NetworkFactory::create('1e', '00', 'aa')
             ->setHDPubByte('46090600')
             ->setHDPrivByte('46089520');
     }

@@ -53,7 +53,7 @@ class Testnet extends AbstractNetwork implements Network
      */
     public static function getFactory(): TokenNetwork
     {
-        return NetworkFactory::create('17', '00', '00', true)
+        return NetworkFactory::create('17', '00', 'ba', true)
             ->setHDPubByte('70617039')
             ->setHDPrivByte('70615956');
     }
