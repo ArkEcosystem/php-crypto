@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identity;
 
+use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
+use ArkEcosystem\Crypto\Contracts\Network;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PrivateKeyFactory;
@@ -26,7 +28,7 @@ use BitWasp\Buffertools\Buffer;
 class PrivateKey
 {
     /**
-     * Derive the private key from the given secret.
+     * Derive the private key for the given secret.
      *
      * @param string $secret
      *
@@ -37,5 +39,20 @@ class PrivateKey
         $secret = Hash::sha256(new Buffer($secret));
 
         return PrivateKeyFactory::fromHex($secret, true);
+    }
+
+    /**
+     * Derive the private key for the given WIF.
+     *
+     * @param string $wif
+     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
+     *
+     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
+     */
+    public static function fromWif(string $wif, Network $network = null): EcPrivateKey
+    {
+        $network = $network ?? NetworkConfiguration::get();
+
+        return PrivateKeyFactory::fromWif($wif, null, $network->getFactory());
     }
 }

@@ -35,4 +35,12 @@ class PrivateKeyTest extends TestCase
         $this->assertInternalType('string', $actual->getHex());
         $this->assertSame('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712', $actual->getHex());
     }
+
+    /** @test */
+    public function it_should_get_the_private_key_from_wif()
+    {
+        $actual = TestClass::fromWif('SGq4xLgZKCGxs7bjmwnBrWcT4C1ADFEermj846KC97FSv1WFD1dA', Devnet::new());
+
+        $this->assertSame('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712', $actual->getHex());
+    }
 }
