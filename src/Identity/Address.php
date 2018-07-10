@@ -32,6 +32,19 @@ use BrianFaust\Binary\UnsignedInteger\Writer;
 class Address
 {
     /**
+     * Derive the address from the given secret.
+     *
+     * @param string                                      $secret
+     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
+     *
+     * @return string
+     */
+    public static function fromSecret(string $secret, Network $network = null): string
+    {
+        return static::fromPrivateKey(PrivateKey::fromSecret($secret), $network);
+    }
+
+    /**
      * Derive the address from the given public key.
      *
      * @param string                                      $publicKey
@@ -50,23 +63,10 @@ class Address
     }
 
     /**
-     * Derive the address from the given secret.
-     *
-     * @param string                                      $secret
-     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
-     *
-     * @return string
-     */
-    public static function fromSecret(string $secret, Network $network = null): string
-    {
-        return static::fromPrivateKey(PrivateKey::fromSecret($secret), $network);
-    }
-
-    /**
      * Derive the address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param ArkEcosystem\Crypto\Contracts\Network|int|null               $network
+     * @param ArkEcosystem\Crypto\Contracts\Network|null                   $network
      *
      * @return string
      */

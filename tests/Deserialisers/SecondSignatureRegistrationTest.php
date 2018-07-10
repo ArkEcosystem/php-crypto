@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Deserialisers;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Deserialiser;
-use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Serialiser;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
