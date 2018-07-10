@@ -33,9 +33,9 @@ class Transaction
      *
      * @return \BitWasp\Buffertools\Buffer
      */
-    public function serialise(): Buffer
+    public function serialize(): Buffer
     {
-        return Serialiser::new($serialised)->deserialise();
+        return Serializer::new($serialized)->deserialize();
     }
 
     /**
@@ -43,9 +43,9 @@ class Transaction
      *
      * @return stdClass
      */
-    public function deserialise(string $serialised): stdClass
+    public function deserialize(string $serialized): stdClass
     {
-        return Deserialiser::new($serialised)->deserialise();
+        return Deserializer::new($serialized)->deserialize();
     }
 
     /**
@@ -130,7 +130,7 @@ class Transaction
      */
     public function toBytes(bool $skipSignature = true, bool $skipSecondSignature = true): Buffer
     {
-        // TODO: replace pack calls with binary writer - see serialiser
+        // TODO: replace pack calls with binary writer - see serializer
         $bytes = '';
         $bytes .= pack('h', $this->type);
         $bytes .= pack('V', $this->timestamp);

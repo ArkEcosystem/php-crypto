@@ -44,7 +44,7 @@ class PrivateKey
     /**
      * Derive the private key for the given WIF.
      *
-     * @param string $wif
+     * @param string                                      $wif
      * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
      *
      * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
