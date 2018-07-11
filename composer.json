@@ -1,6 +1,6 @@
 {
     "name": "arkecosystem/crypto",
-    "description": "A simple PHP Cryptography Implementation for the ARK Blockchain.",
+    "description": "A simple PHP Cryptography Implementation for the Ark Blockchain.",
     "keywords": ["api", "ark", "blockchain", "crypto", "currency"],
     "license": "MIT",
     "authors": [{
