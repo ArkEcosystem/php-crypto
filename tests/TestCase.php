@@ -30,4 +30,16 @@ abstract class TestCase extends BaseTestCase
 
         return json_decode(file_get_contents($path));
     }
+
+    /**
+     * Get the identity fixture.
+     *
+     * @return object
+     */
+    protected function getIdentityFixtures(): object
+    {
+        $path = __DIR__."/fixtures/identity.json";
+
+        return json_decode(file_get_contents($path));
+    }
 }

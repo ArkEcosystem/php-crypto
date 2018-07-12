@@ -27,37 +27,44 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class AddressTest extends TestCase
 {
     /** @test */
-    public function it_should_get_the_address_from_public_key()
+    public function it_should_get_the_address_from_passphrase()
     {
-        $actual = TestClass::fromPublicKey('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192', Devnet::new());
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
+        $actual = TestClass::fromPassphrase($fixture->passphrase, Devnet::new());
+
+        $this->assertSame($fixture->data->address, $actual);
     }
 
     /** @test */
-    public function it_should_get_the_address_from_passphrase()
+    public function it_should_get_the_address_from_public_key()
     {
-        $actual = TestClass::fromPassphrase('this is a top secret passphrase', Devnet::new());
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
+        $actual = TestClass::fromPublicKey($fixture->data->publicKey, Devnet::new());
+
+        $this->assertSame($fixture->data->address, $actual);
     }
 
     /** @test */
     public function it_should_get_the_address_from_private_key()
     {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
+        $fixture = $this->getIdentityFixtures();
+
+        $privateKey = PrivateKey::fromPassphrase($fixture->passphrase);
 
         $actual = TestClass::fromPrivateKey($privateKey, Devnet::new());
 
-        $this->assertSame('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', $actual);
+        $this->assertSame($fixture->data->address, $actual);
     }
 
     /** @test */
     public function it_should_validate_the_address()
     {
-        $actual = TestClass::validate('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib', Devnet::new());
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertInternalType('boolean', $actual);
+        $actual = TestClass::validate($fixture->data->address, Devnet::new());
+
         $this->assertTrue($actual);
     }
 }

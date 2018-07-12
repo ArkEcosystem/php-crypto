@@ -28,25 +28,30 @@ class PublicKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_public_key_from_passphrase()
     {
-        $actual = TestClass::fromPassphrase('this is a top secret passphrase');
+        $fixture = $this->getIdentityFixtures();
+
+        $actual = TestClass::fromPassphrase($fixture->passphrase);
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
-        $this->assertInternalType('string', $actual->getHex());
-        $this->assertSame('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192', $actual->getHex());
+        $this->assertSame($fixture->data->publicKey, $actual->getHex());
     }
 
     /** @test */
     public function it_should_get_the_public_key_from_hex()
     {
-        $actual = TestClass::fromHex('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192');
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertSame('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192', $actual->getHex());
+        $actual = TestClass::fromHex($fixture->data->publicKey);
+
+        $this->assertSame($fixture->data->publicKey, $actual->getHex());
     }
 
     /** @test */
     public function it_should_validate_the_public_key()
     {
-        $actual = TestClass::validate('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192');
+        $fixture = $this->getIdentityFixtures();
+
+        $actual = TestClass::validate($fixture->data->publicKey);
 
         $this->assertTrue($actual);
     }

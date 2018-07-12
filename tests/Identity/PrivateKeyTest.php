@@ -29,25 +29,31 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_passphrase()
     {
-        $actual = TestClass::fromPassphrase('this is a top secret passphrase', Devnet::new());
+        $fixture = $this->getIdentityFixtures();
+
+        $actual = TestClass::fromPassphrase($fixture->passphrase, Devnet::new());
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
-        $this->assertSame('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712', $actual->getHex());
+        $this->assertSame($fixture->data->privateKey, $actual->getHex());
     }
 
     /** @test */
     public function it_should_get_the_private_key_from_hex()
     {
-        $actual = TestClass::fromHex('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712');
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertSame('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712', $actual->getHex());
+        $actual = TestClass::fromHex($fixture->data->privateKey);
+
+        $this->assertSame($fixture->data->privateKey, $actual->getHex());
     }
 
     /** @test */
     public function it_should_get_the_private_key_from_wif()
     {
-        $actual = TestClass::fromWif('SGq4xLgZKCGxs7bjmwnBrWcT4C1ADFEermj846KC97FSv1WFD1dA', Devnet::new());
+        $fixture = $this->getIdentityFixtures();
 
-        $this->assertSame('d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712', $actual->getHex());
+        $actual = TestClass::fromWif($fixture->data->wif, Devnet::new());
+
+        $this->assertSame($fixture->data->privateKey, $actual->getHex());
     }
 }
