@@ -107,12 +107,12 @@ class Deserializer
     /**
      * Handle the deserialisation of transaction data.
      *
-     * @param int    $assetOffset
-     * @param object $transaction
+     * @param int                              $assetOffset
+     * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
-     * @return object
+     * @return \ArkEcosystem\Crypto\Transaction
      */
-    public function handleType(int $assetOffset, object $transaction): object
+    public function handleType(int $assetOffset, Transaction $transaction): Transaction
     {
         $deserializer = $this->deserializers[$transaction->type];
 
@@ -122,19 +122,14 @@ class Deserializer
     /**
      * Handle the deserialisation of transaction data.
      *
-     * @param object $transaction
+     * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
-     * @return object
+     * @return \ArkEcosystem\Crypto\Transaction
      */
-    public function handleVersionOne(object $transaction): object
+    public function handleVersionOne(Transaction $transaction): Transaction
     {
         if (isset($transaction->secondSignature)) {
             $transaction->signSignature = $transaction->secondSignature;
-        }
-
-        if (Types::SECOND_SIGNATURE_REGISTRATION === $transaction->type) {
-            // The "recipientId" doesn't exist on v1 second signature registrations
-            // $transaction->recipientId = Address::fromPublicKey($transaction->senderPublicKey, $transaction->network);
         }
 
         if (Types::VOTE === $transaction->type) {
@@ -142,9 +137,6 @@ class Deserializer
         }
 
         if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
-            // The "recipientId" doesn't exist on v1 multi signature registrations
-            // $transaction->recipientId = Address::fromPublicKey($transaction->senderPublicKey, $transaction->network);
-
             $transaction->asset->multisignature->keysgroup = array_map(function ($key) {
                 return '+'.$key;
             }, $transaction->asset->multisignature->keysgroup);
@@ -156,6 +148,14 @@ class Deserializer
 
         if (!isset($transaction->id)) {
             $transaction->id = $transaction->getId();
+        }
+
+        if (Types::SECOND_SIGNATURE_REGISTRATION === $transaction->type) {
+            $transaction->recipientId = Address::fromPublicKey($transaction->senderPublicKey, $transaction->network);
+        }
+
+        if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
+            $transaction->recipientId = Address::fromPublicKey($transaction->senderPublicKey, $transaction->network);
         }
 
         return $transaction;
