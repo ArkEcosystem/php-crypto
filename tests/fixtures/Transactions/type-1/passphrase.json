@@ -1,0 +1,18 @@
+{
+    "data": {
+        "type": 1,
+        "amount": 0,
+        "fee": 500000000,
+        "recipientId": "D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyib",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "timestamp": 41269567,
+        "asset": {
+            "signature": {
+                "publicKey": "02e012f0a7cac12a74bdc17d844cbc9f637177b470019c32a53cef94c7a56e2ea9"
+            }
+        },
+        "signature": "304502210093c5368c7dd9ed4adae90fe030f497591ad33b23e73c3bae728109bc717201f902201686c812f7b76341cfa14ced8c686f168e8aa2f4de982ffa84c2848c9cc07abb",
+        "id": "77f85238a0b47d404ee037a3248c78f6eff23d1e8b899cdf0c60933b07a2db74"
+    },
+    "serialized": "ff011e013fb97502034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed1920065cd1d000000000002e012f0a7cac12a74bdc17d844cbc9f637177b470019c32a53cef94c7a56e2ea9304502210093c5368c7dd9ed4adae90fe030f497591ad33b23e73c3bae728109bc717201f902201686c812f7b76341cfa14ced8c686f168e8aa2f4de982ffa84c2848c9cc07abb"
+}

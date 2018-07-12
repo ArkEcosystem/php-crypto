@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Enums\Types;
+use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
@@ -137,7 +138,7 @@ class Transaction
         $bytes .= pack('H'.strlen($this->senderPublicKey), $this->senderPublicKey);
 
         if (isset($this->recipientId)) {
-            $bytes .= \BitWasp\Bitcoin\Base58::decodeCheck($this->recipientId)->getBinary();
+            $bytes .= Base58::decodeCheck($this->recipientId)->getBinary();
         } else {
             $bytes .= pack('x21');
         }
@@ -157,9 +158,9 @@ class Transaction
         $bytes .= pack('P', $this->fee);
 
         if (Types::SECOND_SIGNATURE_REGISTRATION === $this->type) {
-            $assetSigPubKey = $this->asset->signature->publicKey;
+            $publicKey = $this->asset->signature->publicKey;
 
-            $bytes .= pack('H'.strlen($assetSigPubKey), $assetSigPubKey);
+            $bytes .= pack('H'.strlen($publicKey), $publicKey);
         }
 
         if (Types::DELEGATE_REGISTRATION === $this->type) {
@@ -204,8 +205,8 @@ class Transaction
         if (0 === strlen($this->signature)) {
             unset($this->signature);
         } else {
-            $signatureLength        = intval(substr($this->signature, 2, 2), 16) + 2;
-            $this->signature        = substr($serialized, $startOffset, $signatureLength * 2);
+            $signatureLength       = intval(substr($this->signature, 2, 2), 16) + 2;
+            $this->signature       = substr($serialized, $startOffset, $signatureLength * 2);
             $multiSignatureOffset += $signatureLength * 2;
             $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
 

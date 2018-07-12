@@ -26,19 +26,19 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class MultiPaymentTest extends TestCase
 {
     /** @test */
-    public function it_should_deserialize_the_transaction()
+    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(7);
+        $transaction = $this->getTransactionFixtureWithPassphrase(7);
 
         $actual = Deserializer::new($transaction->serialized)->deserialize();
 
-        $this->assertSame($transaction->id, $actual->id);
-        $this->assertSame($transaction->version, $actual->version);
-        $this->assertSame($transaction->network, $actual->network);
-        $this->assertSame($transaction->type, $actual->type);
-        $this->assertSame($transaction->senderPublicKey, $actual->senderPublicKey);
+        $this->assertSame($transaction->data->id, $actual->id);
+        $this->assertSame($transaction->data->version, $actual->version);
+        $this->assertSame($transaction->data->network, $actual->network);
+        $this->assertSame($transaction->data->type, $actual->type);
+        $this->assertSame($transaction->data->senderPublicKey, $actual->senderPublicKey);
         $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
     }
 }

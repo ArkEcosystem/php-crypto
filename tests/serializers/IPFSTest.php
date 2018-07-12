@@ -30,9 +30,9 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(5);
+        $transaction = $this->getTransactionFixtureWithPassphrase(5);
 
-        $actual = Serializer::new($transaction)->serialize();
+        $actual = Serializer::new($transaction->data)->serialize();
 
         $this->assertSame($transaction->serialized, $actual->getHex());
     }
