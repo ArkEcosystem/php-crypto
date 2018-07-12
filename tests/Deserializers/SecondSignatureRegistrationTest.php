@@ -46,7 +46,7 @@ class SecondSignatureRegistrationTest extends TestCase
         $this->assertSame($transaction->data->asset->signature->publicKey, $actual->asset->signature->publicKey);
         $this->assertSame($transaction->data->signature, $actual->signature);
         $this->assertSame($transaction->data->amount, $actual->amount);
-        $this->assertSame($transaction->data->recipientId, $actual->recipientId);
+        $this->assertSame($transaction->data->recipientId, null);
         $this->assertSame($transaction->data->id, $actual->id);
         $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
     }
