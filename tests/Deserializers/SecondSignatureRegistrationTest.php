@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Deserializer;
+use ArkEcosystem\Crypto\Identity\Address;
 use ArkEcosystem\Crypto\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -46,8 +47,10 @@ class SecondSignatureRegistrationTest extends TestCase
         $this->assertSame($transaction->data->asset->signature->publicKey, $actual->asset->signature->publicKey);
         $this->assertSame($transaction->data->signature, $actual->signature);
         $this->assertSame($transaction->data->amount, $actual->amount);
-        $this->assertSame($transaction->data->recipientId, null);
         $this->assertSame($transaction->data->id, $actual->id);
         $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
+
+        // special case as the type 1 transaction itself has no recipientId
+        $this->assertSame($actual->recipientId, Address::fromPublicKey($actual->senderPublicKey, $actual->network));
     }
 }
