@@ -32,7 +32,6 @@ class DelegateRegistrationTest extends TestCase
             ->username('polopolo')
             ->sign('This is a top secret passphrase');
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
     }
 }

@@ -34,7 +34,6 @@ class MultiPaymentTest extends TestCase
             ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', 100000000)
             ->sign('This is a top secret passphrase');
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
     }
 }

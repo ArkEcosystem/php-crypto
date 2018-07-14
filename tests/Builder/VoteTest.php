@@ -32,7 +32,6 @@ class VoteTest extends TestCase
             ->votes(['+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192'])
             ->sign('This is a top secret passphrase');
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
     }
 }

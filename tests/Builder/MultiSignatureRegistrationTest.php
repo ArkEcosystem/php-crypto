@@ -39,7 +39,6 @@ class MultiSignatureRegistrationTest extends TestCase
             ->sign('secret')
             ->secondSign('second secret');
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
     }
 }

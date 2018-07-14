@@ -34,7 +34,6 @@ class TransferTest extends TestCase
             ->vendorField('This is a transaction from PHP')
             ->sign('This is a top secret passphrase');
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
     }
 
@@ -50,7 +49,6 @@ class TransferTest extends TestCase
             ->sign('This is a top secret passphrase')
             ->secondSign($secondSecret);
 
-        $this->assertInternalType('object', $transaction);
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify($secondSecret));
     }
