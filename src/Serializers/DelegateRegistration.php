@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serializers;
 
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
-
 /**
  * This is the serializer class.
  *
@@ -27,13 +25,11 @@ class DelegateRegistration extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        $delegateBytes = bin2hex($this->transaction->asset->delegate->username);
+        $delegateBytes = bin2hex($this->transaction['asset']['delegate']['username']);
 
-        $this->bytes .= UnsignedInteger::bit8(strlen($delegateBytes) / 2);
-        $this->bytes .= hex2bin($delegateBytes);
-
-        return $this->bytes;
+        $this->buffer->writeUInt8(strlen($delegateBytes) / 2);
+        $this->buffer->writeHexBytes($delegateBytes);
     }
 }

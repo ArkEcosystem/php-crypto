@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serializers;
 
+use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
+
 /**
  * This is the serializer class.
  *
@@ -21,33 +23,33 @@ namespace ArkEcosystem\Crypto\Serializers;
 abstract class AbstractSerializer
 {
     /**
-     * @var object
+     * @var array
      */
     protected $transaction;
 
     /**
      * @var string
      */
-    protected $bytes;
+    protected $buffer;
 
     /**
      * Create a new serializer instance.
      *
-     * @param object $transaction
-     * @param string $this->bytes
+     * @param array  $transaction
+     * @param string $buffer
      */
-    public function __construct(object $transaction, string $bytes)
+    public function __construct(array $transaction, Writer $buffer)
     {
         $this->transaction = $transaction;
-        $this->bytes       = $bytes;
+        $this->buffer      = $buffer;
     }
 
-    /**
+    /*
      * Handle the serialisation of transaction data.
      *
-     * @param string $bytes
+     * @param string $buffer
      *
      * @return string
      */
-    abstract public function serialize(): string;
+    abstract public function serialize(): void;
 }

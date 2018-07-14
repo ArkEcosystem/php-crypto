@@ -15,9 +15,6 @@ namespace ArkEcosystem\Crypto\Deserializers;
 
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Hex\Reader as Hex;
-use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
-use stdClass;
 
 /**
  * This is the deserializer class.
@@ -33,22 +30,18 @@ class MultiPayment extends AbstractDeserializer
      */
     public function deserialize(): object
     {
-        $this->transaction->asset = new stdClass();
+        $this->transaction->asset = ['payments' => []];
 
-        [
-            'payments' => [],
-        ];
-
-        $total  = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2)[1] & 0xff;
+        $total  = $this->buffer->readUInt8() & 0xff;
         $offset = $this->assetOffset / 2 + 1;
 
         for ($i = 0; $i < $total; ++$i) {
-            $payment              = new stdClass();
-            $payment->amount      = UnsignedInteger::bit64($this->binary, $offset);
-            $payment->recipientId = Hex::high($this->binary, $offset + 1, 42);
-            $payment->recipientId = Base58::encodeCheck(new Buffer(hex2bin($payment['recipientId'])));
+            $this->buffer->position($offset);
 
-            $this->transaction->asset['payments'][] = $payment;
+            $this->transaction->asset->payments[] = [
+                'amount'      => $this->buffer->readUInt64(),
+                'recipientId' => Base58::encodeCheck(new Buffer(hex2bin($this->buffer->readHex(21)))),
+            ];
 
             $offset += 22;
         }

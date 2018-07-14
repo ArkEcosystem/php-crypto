@@ -31,9 +31,9 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromPassphrase($fixture->passphrase, Devnet::new());
+        $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
-        $this->assertSame($fixture->data->address, $actual);
+        $this->assertSame($fixture['data']['address'], $actual);
     }
 
     /** @test */
@@ -41,9 +41,9 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromPublicKey($fixture->data->publicKey, Devnet::new());
+        $actual = TestClass::fromPublicKey($fixture['data']['publicKey'], Devnet::new());
 
-        $this->assertSame($fixture->data->address, $actual);
+        $this->assertSame($fixture['data']['address'], $actual);
     }
 
     /** @test */
@@ -51,11 +51,11 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $privateKey = PrivateKey::fromPassphrase($fixture->passphrase);
+        $privateKey = PrivateKey::fromPassphrase($fixture['passphrase']);
 
         $actual = TestClass::fromPrivateKey($privateKey, Devnet::new());
 
-        $this->assertSame($fixture->data->address, $actual);
+        $this->assertSame($fixture['data']['address'], $actual);
     }
 
     /** @test */
@@ -63,7 +63,7 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::validate($fixture->data->address, Devnet::new());
+        $actual = TestClass::validate($fixture['data']['address'], Devnet::new());
 
         $this->assertTrue($actual);
     }

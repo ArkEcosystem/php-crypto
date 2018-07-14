@@ -15,8 +15,6 @@ namespace ArkEcosystem\Crypto\Deserializers;
 
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Hex\Reader as Hex;
-use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
 
 /**
  * This is the deserializer class.
@@ -32,11 +30,12 @@ class TimelockTransfer extends AbstractDeserializer
      */
     public function deserialize(): object
     {
-        $this->transaction->amount       = UnsignedInteger::bit64($this->binary, $this->assetOffset / 2);
-        $this->transaction->timelocktype = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2 + 8) & 0xff;
-        $this->transaction->timelock     = UnsignedInteger::bit32($this->binary, $this->assetOffset / 2 + 9);
-        $this->transaction->recipientId  = Hex::high($this->binary, $this->assetOffset / 2 + 13, 42);
-        $this->transaction->recipientId  = Base58::encodeCheck(new Buffer(hex2bin($this->transaction->recipientId)));
+        $this->buffer->position($this->assetOffset / 2);
+
+        $this->transaction->amount       = $this->buffer->readUInt64();
+        $this->transaction->timelocktype = $this->buffer->readUInt8() & 0xff;
+        $this->transaction->timelock     = $this->buffer->readUInt32();
+        $this->transaction->recipientId  = Base58::encodeCheck(new Buffer(hex2bin($this->buffer->readHex(21))));
 
         return $this->parseSignatures($this->assetOffset + (21 + 13) * 2);
     }

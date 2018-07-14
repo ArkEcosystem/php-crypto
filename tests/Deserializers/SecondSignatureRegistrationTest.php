@@ -31,7 +31,7 @@ class SecondSignatureRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixtureWithPassphrase(1);
 
-        $actual = Deserializer::new($transaction->serialized)->deserialize();
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
         $this->assertTransaction($transaction, $actual);
     }
@@ -40,15 +40,15 @@ class SecondSignatureRegistrationTest extends TestCase
     {
         $this->assertSame(1, $actual->version);
         $this->assertSame(30, $actual->network);
-        $this->assertSame($transaction->data->type, $actual->type);
-        $this->assertSame($transaction->data->timestamp, $actual->timestamp);
-        $this->assertSame($transaction->data->senderPublicKey, $actual->senderPublicKey);
-        $this->assertSame($transaction->data->fee, $actual->fee);
-        $this->assertSame($transaction->data->asset->signature->publicKey, $actual->asset->signature->publicKey);
-        $this->assertSame($transaction->data->signature, $actual->signature);
-        $this->assertSame($transaction->data->amount, $actual->amount);
-        $this->assertSame($transaction->data->id, $actual->id);
-        $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
+        $this->assertSame($transaction['data']['type'], $actual->type);
+        $this->assertSame($transaction['data']['timestamp'], $actual->timestamp);
+        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
+        $this->assertSame($transaction['data']['fee'], $actual->fee);
+        $this->assertSame($transaction['data']['asset']['signature']['publicKey'], $actual->asset['signature']['publicKey']);
+        $this->assertSame($transaction['data']['signature'], $actual->signature);
+        $this->assertSame($transaction['data']['amount'], $actual->amount);
+        $this->assertSame($transaction['data']['id'], $actual->id);
+        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
 
         // special case as the type 1 transaction itself has no recipientId
         $this->assertSame($actual->recipientId, Address::fromPublicKey($actual->senderPublicKey, $actual->network));

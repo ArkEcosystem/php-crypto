@@ -31,10 +31,10 @@ class PrivateKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromPassphrase($fixture->passphrase, Devnet::new());
+        $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
-        $this->assertSame($fixture->data->privateKey, $actual->getHex());
+        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
     }
 
     /** @test */
@@ -42,9 +42,9 @@ class PrivateKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromHex($fixture->data->privateKey);
+        $actual = TestClass::fromHex($fixture['data']['privateKey']);
 
-        $this->assertSame($fixture->data->privateKey, $actual->getHex());
+        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
     }
 
     /** @test */
@@ -52,8 +52,8 @@ class PrivateKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromWif($fixture->data->wif, Devnet::new());
+        $actual = TestClass::fromWif($fixture['data']['wif'], Devnet::new());
 
-        $this->assertSame($fixture->data->privateKey, $actual->getHex());
+        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
     }
 }

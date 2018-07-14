@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serializers;
 
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
-
 /**
  * This is the serializer class.
  *
@@ -27,13 +25,11 @@ class IPFS extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        $dag = $this->transaction->asset->ipfs->dag;
+        $dag = $this->transaction['asset']['ipfs']['dag'];
 
-        $this->bytes .= UnsignedInteger::bit8(strlen($dag) / 2);
-        $this->bytes .= hex2bin($dag);
-
-        return $this->bytes;
+        $this->buffer->writeUInt8(strlen($dag) / 2);
+        $this->buffer->writeHexBytes($dag);
     }
 }

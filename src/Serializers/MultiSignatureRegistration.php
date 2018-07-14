@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serializers;
 
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
-
 /**
  * This is the serializer class.
  *
@@ -27,25 +25,23 @@ class MultiSignatureRegistration extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
         $keysgroup = [];
 
-        if (!isset($this->transaction->version) || 1 === $this->transaction->version) {
-            foreach ($this->transaction->asset->multisignature->keysgroup as $key) {
+        if (!isset($this->transaction['version']) || 1 === $this->transaction['version']) {
+            foreach ($this->transaction['asset']['multisignature']['keysgroup'] as $key) {
                 $keysgroup[] = '+' === substr($key, 0, 1)
                     ? substr($key, 1)
                     : $key;
             }
         } else {
-            $keysgroup = $this->transaction->asset->multisignature->keysgroup;
+            $keysgroup = $this->transaction['asset']['multisignature']['keysgroup'];
         }
 
-        $this->bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->min);
-        $this->bytes .= UnsignedInteger::bit8(count($this->transaction->asset->multisignature->keysgroup));
-        $this->bytes .= UnsignedInteger::bit8($this->transaction->asset->multisignature->lifetime);
-        $this->bytes .= hex2bin(implode('', $keysgroup));
-
-        return $this->bytes;
+        $this->buffer->writeUInt8($this->transaction['asset']['multisignature']['min']);
+        $this->buffer->writeUInt8(count($this->transaction['asset']['multisignature']['keysgroup']));
+        $this->buffer->writeUInt8($this->transaction['asset']['multisignature']['lifetime']);
+        $this->buffer->writeHexBytes(implode('', $keysgroup));
     }
 }

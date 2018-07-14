@@ -30,8 +30,8 @@ class TransferTest extends TestCase
     {
         $transaction = $this->getTransactionFixtureWithPassphrase(0);
 
-        $actual = Serializer::new($transaction->data)->serialize();
+        $actual = Serializer::new($transaction['data'])->serialize();
 
-        $this->assertSame($transaction->serialized, $actual->getHex());
+        $this->assertSame($transaction['serialized'], $actual->getHex());
     }
 }

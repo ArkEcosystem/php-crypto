@@ -25,10 +25,8 @@ class SecondSignatureRegistration extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        $this->bytes .= hex2bin($this->transaction->asset->signature->publicKey);
-
-        return $this->bytes;
+        $this->buffer->writeHexBytes($this->transaction['asset']['signature']['publicKey']);
     }
 }

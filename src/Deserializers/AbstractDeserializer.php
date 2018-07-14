@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Transaction;
+use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 
 /**
  * This is the deserializer class.
@@ -30,7 +31,7 @@ abstract class AbstractDeserializer
     /**
      * @var string
      */
-    protected $binary;
+    protected $buffer;
 
     /**
      * @var int
@@ -46,14 +47,14 @@ abstract class AbstractDeserializer
      * Create a new deserializer instance.
      *
      * @param string $hex
-     * @param string $binary
+     * @param string $buffer
      * @param int    $assetOffset
      * @param object $transaction
      */
-    public function __construct(string $hex, string $binary, int $assetOffset, Transaction $transaction)
+    public function __construct(string $hex, Reader $buffer, int $assetOffset, Transaction $transaction)
     {
         $this->hex         = $hex;
-        $this->binary      = $binary;
+        $this->buffer      = $buffer;
         $this->assetOffset = $assetOffset;
         $this->transaction = $transaction;
     }

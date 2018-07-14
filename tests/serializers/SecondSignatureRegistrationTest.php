@@ -29,8 +29,8 @@ class SecondSignatureRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixtureWithPassphrase(1);
 
-        $actual = Serializer::new($transaction->data)->serialize();
+        $actual = Serializer::new($transaction['data'])->serialize();
 
-        $this->assertSame($transaction->serialized, $actual->getHex());
+        $this->assertSame($transaction['serialized'], $actual->getHex());
     }
 }

@@ -30,10 +30,10 @@ class PublicKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromPassphrase($fixture->passphrase);
+        $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
         $this->assertInstanceOf(EcPublicKey::class, $actual);
-        $this->assertSame($fixture->data->publicKey, $actual->getHex());
+        $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
 
     /** @test */
@@ -41,9 +41,9 @@ class PublicKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromHex($fixture->data->publicKey);
+        $actual = TestClass::fromHex($fixture['data']['publicKey']);
 
-        $this->assertSame($fixture->data->publicKey, $actual->getHex());
+        $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
 
     /** @test */
@@ -51,7 +51,7 @@ class PublicKeyTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::validate($fixture->data->publicKey);
+        $actual = TestClass::validate($fixture['data']['publicKey']);
 
         $this->assertTrue($actual);
     }

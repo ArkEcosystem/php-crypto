@@ -15,8 +15,7 @@ namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Hex\Writer as Hex;
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
+use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 
 /**
  * This is the serializer class.
@@ -45,19 +44,23 @@ class Serializer
     /**
      * Create a new serializer instance.
      *
-     * @param object $transaction
+     * @param \ArkEcosystem\Crypto\Transaction $transaction
      */
-    public function __construct(object $transaction)
+    private function __construct(array $transaction)
     {
+        if ($transaction instanceof Transaction) {
+            $transaction = $transaction->toArray();
+        }
+
         $this->transaction = $transaction;
     }
 
     /**
      * Create a new deserializer instance.
      *
-     * @param object $transaction
+     * @param \ArkEcosystem\Crypto\Transaction $transaction
      */
-    public static function new(object $transaction)
+    public static function new($transaction)
     {
         return new static($transaction);
     }
@@ -69,71 +72,69 @@ class Serializer
      */
     public function serialize(): Buffer
     {
-        $bytes = '';
-        $bytes .= UnsignedInteger::bit8(0xff);
-        $bytes .= Hex::low($this->transaction->version ?? 0x01);
-        $bytes .= UnsignedInteger::bit8($this->transaction->network ?? Network::getVersion());
-        $bytes .= Hex::low($this->transaction->type);
-        $bytes .= UnsignedInteger::bit32($this->transaction->timestamp);
-        $bytes .= Hex::high($this->transaction->senderPublicKey, strlen($this->transaction->senderPublicKey));
-        $bytes .= UnsignedInteger::bit64($this->transaction->fee);
+        $buffer = new Writer();
+        $buffer->writeUInt8(0xff);
+        $buffer->writeUInt8($this->transaction['version'] ?? 0x01);
+        $buffer->writeUInt8($this->transaction['network'] ?? Network::getVersion());
+        $buffer->writeUInt8($this->transaction['type']);
+        $buffer->writeUInt32($this->transaction['timestamp']);
+        $buffer->writeHex($this->transaction['senderPublicKey']);
+        $buffer->writeUInt64($this->transaction['fee']);
 
-        if (isset($this->transaction->vendorField)) {
-            $vendorFieldLength = strlen($this->transaction->vendorField);
-            $bytes .= UnsignedInteger::bit8($vendorFieldLength);
-            $bytes .= $this->transaction->vendorField;
-        } elseif (isset($this->transaction->vendorFieldHex)) {
-            $vendorFieldHexLength = strlen($this->transaction->vendorFieldHex);
-            $bytes .= UnsignedInteger::bit8($vendorFieldHexLength / 2);
-            $bytes .= $this->transaction->vendorFieldHex;
+        if (isset($this->transaction['vendorField'])) {
+            $vendorFieldLength = strlen($this->transaction['vendorField']);
+            $buffer->writeUInt8($vendorFieldLength);
+            $buffer->writeString($this->transaction['vendorField']);
+        } elseif (isset($this->transaction['vendorFieldHex'])) {
+            $vendorFieldHexLength = strlen($this->transaction['vendorFieldHex']);
+            $buffer->writeUInt8($vendorFieldHexLength / 2);
+            $buffer->writeString($this->transaction['vendorFieldHex']);
         } else {
-            $bytes .= UnsignedInteger::bit8(0x00);
+            $buffer->writeUInt8(0x00);
         }
 
-        $bytes = $this->handleType($bytes);
-        $bytes = $this->handleSignatures($bytes);
+        $this->handleType($buffer);
+        $this->handleSignatures($buffer);
 
-        return Buffer::hex(bin2hex($bytes));
+        return new Buffer($buffer->getBytes());
     }
 
     /**
      * Handle the serialisation of transaction data.
      *
-     * @param string $bytes
+     * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
      *
      * @return string
      */
-    public function handleType(string $bytes): string
+    public function handleType(Writer $buffer): void
     {
-        $serializer = $this->serializers[$this->transaction->type];
+        $serializer = $this->serializers[$this->transaction['type']];
 
-        return (new $serializer($this->transaction, $bytes))->serialize();
+        (new $serializer($this->transaction, $buffer))->serialize();
     }
 
     /**
      * Handle the serialisation of transaction data.
      *
-     * @param string $bytes
+     * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
      *
      * @return string
      */
-    public function handleSignatures(string $bytes): string
+    public function handleSignatures(Writer $buffer): void
     {
-        if (isset($this->transaction->signature)) {
-            $bytes .= hex2bin($this->transaction->signature);
+        if (isset($this->transaction['signature'])) {
+            $buffer->writeHexBytes($this->transaction['signature']);
         }
 
-        if (isset($this->transaction->secondSignature)) {
-            $bytes .= hex2bin($this->transaction->secondSignature);
-        } elseif (isset($this->transaction->signSignature)) {
-            $bytes .= hex2bin($this->transaction->signSignature);
+        if (isset($this->transaction['secondSignature'])) {
+            $buffer->writeHexBytes($this->transaction['secondSignature']);
+        } elseif (isset($this->transaction['signSignature'])) {
+            $buffer->writeHexBytes($this->transaction['signSignature']);
         }
 
-        if (isset($this->transaction->signatures)) {
-            $bytes .= UnsignedInteger::bit8(0xff);
-            $bytes .= hex2bin(implode('', $this->transaction->signatures));
+        if (isset($this->transaction['signatures'])) {
+            $buffer->writeUInt8(0xff);
+            $buffer->writeHexBytes(implode('', $this->transaction['signatures']));
         }
-
-        return $bytes;
     }
 }

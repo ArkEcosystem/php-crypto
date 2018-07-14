@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Deserializers;
 
-use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
-use stdClass;
-
 /**
  * This is the deserializer class.
  *
@@ -30,14 +27,16 @@ class MultiSignatureRegistration extends AbstractDeserializer
      */
     public function deserialize(): object
     {
-        $this->transaction->asset                            = new stdClass();
-        $this->transaction->asset->multisignature            = new stdClass();
-        $this->transaction->asset->multisignature->keysgroup = [];
+        $this->buffer->position($this->assetOffset / 2);
 
-        $this->transaction->asset->multisignature->min      = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2) & 0xff;
-        $this->transaction->asset->multisignature->lifetime = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2 + 2) & 0xff;
+        $this->transaction->asset = [
+            'multisignature' => [
+                'min'      => $this->buffer->readUInt8() & 0xff,
+                'lifetime' => $this->buffer->skip(1)->readUInt8() & 0xff,
+            ],
+        ];
 
-        $count = UnsignedInteger::bit8($this->binary, $this->assetOffset / 2 + 1) & 0xff;
+        $count = $this->buffer->readUInt8() & 0xff;
         for ($i = 0; $i < $count; ++$i) {
             $indexStart = $this->assetOffset + 6;
 
@@ -45,7 +44,7 @@ class MultiSignatureRegistration extends AbstractDeserializer
                 $indexStart += $i * 66;
             }
 
-            $this->transaction->asset->multisignature->keysgroup[] = substr($this->hex, $indexStart, 66);
+            $this->transaction->asset['multisignature']['keysgroup'][] = $this->buffer->position($indexStart)->readHexRaw(66);
         }
 
         return $this->parseSignatures($this->assetOffset + 6 + $count * 66);

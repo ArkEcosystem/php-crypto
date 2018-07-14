@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Serializers;
 
 use BitWasp\Bitcoin\Base58;
-use BrianFaust\Binary\Hex\Writer as Hex;
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
 
 /**
  * This is the serializer class.
@@ -29,18 +27,13 @@ class MultiPayment extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        $this->bytes .= UnsignedInteger::bit32(count($this->transaction->asset['payments']));
+        $this->buffer->writeUInt32(count($this->transaction->asset['payments']));
 
         foreach ($this->transaction->asset['payments'] as $payment) {
-            $this->bytes .= UnsignedInteger::bit64($payment->amount);
-
-            $recipientId = Base58::decodeCheck($payment->recipientId)->getHex();
-
-            $this->bytes .= Hex::high($recipientId, strlen($recipientId));
+            $this->buffer->writeUInt64($payment->amount);
+            $this->buffer->writeHexBytes(Base58::decodeCheck($payment->recipientId)->getHex());
         }
-
-        return $this->bytes;
     }
 }

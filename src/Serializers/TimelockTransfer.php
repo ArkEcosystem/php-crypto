@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Serializers;
 
 use BitWasp\Bitcoin\Base58;
-use BrianFaust\Binary\Hex\Writer as Hex;
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
 
 /**
  * This is the serializer class.
@@ -29,16 +27,11 @@ class TimelockTransfer extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        $this->bytes .= UnsignedInteger::bit64($this->transaction->amount);
-        $this->bytes .= Hex::low($this->transaction->timelocktype);
-        $this->bytes .= UnsignedInteger::bit32($this->transaction->timelock);
-
-        $recipientId = Base58::decodeCheck($this->transaction->recipientId)->getHex();
-
-        $this->bytes .= Hex::high($recipientId, strlen($recipientId));
-
-        return $this->bytes;
+        $this->buffer->writeUInt64($this->transaction['amount']);
+        $this->buffer->writeUInt8($this->transaction['timelocktype']);
+        $this->buffer->writeUInt32($this->transaction['timelock']);
+        $this->buffer->writeHex(Base58::decodeCheck($this->transaction['recipientId'])->getHex());
     }
 }

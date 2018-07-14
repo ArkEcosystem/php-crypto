@@ -36,7 +36,7 @@ class Transaction
      */
     public function serialize(): Buffer
     {
-        return Serializer::new($serialized)->deserialize();
+        return Serializer::new($this->toArray())->deserialize();
     }
 
     /**
@@ -158,23 +158,23 @@ class Transaction
         $bytes .= pack('P', $this->fee);
 
         if (Types::SECOND_SIGNATURE_REGISTRATION === $this->type) {
-            $publicKey = $this->asset->signature->publicKey;
+            $publicKey = $this->asset['signature']['publicKey'];
 
             $bytes .= pack('H'.strlen($publicKey), $publicKey);
         }
 
         if (Types::DELEGATE_REGISTRATION === $this->type) {
-            $bytes .= $this->asset->delegate->username;
+            $bytes .= $this->asset['delegate']['username'];
         }
 
         if (Types::VOTE === $this->type) {
-            $bytes .= implode('', $this->asset->votes);
+            $bytes .= implode('', $this->asset['votes']);
         }
 
         if (Types::MULTI_SIGNATURE_REGISTRATION === $this->type) {
-            $bytes .= pack('C', $this->asset->multisignature->min);
-            $bytes .= pack('C', $this->asset->multisignature->lifetime);
-            $bytes .= implode('', $this->asset->multisignature->keysgroup);
+            $bytes .= pack('C', $this->asset['multisignature']['min']);
+            $bytes .= pack('C', $this->asset['multisignature']['lifetime']);
+            $bytes .= implode('', $this->asset['multisignature']['keysgroup']);
         }
 
         if (!$skipSignature && $this->signature) {
@@ -250,5 +250,15 @@ class Transaction
         }
 
         return $this;
+    }
+
+    /**
+     * Perform AIP11 compliant serialisation.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return json_decode(json_encode($this), true);
     }
 }

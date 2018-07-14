@@ -30,8 +30,8 @@ class WIFTest extends TestCase
     {
         $fixture = $this->getIdentityFixtures();
 
-        $actual = TestClass::fromPassphrase($fixture->passphrase, Devnet::new());
+        $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
-        $this->assertSame($fixture->data->wif, $actual);
+        $this->assertSame($fixture['data']['wif'], $actual);
     }
 }

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Serializers;
 
-use BrianFaust\Binary\UnsignedInteger\Writer as UnsignedInteger;
-
 /**
  * This is the serializer class.
  *
@@ -27,19 +25,17 @@ class Vote extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
         $voteBytes = [];
 
-        foreach ($this->transaction->asset->votes as $vote) {
+        foreach ($this->transaction['asset']['votes'] as $vote) {
             $voteBytes[] = '+' === substr($vote, 0, 1)
                 ? '01'.substr($vote, 1)
                 : '00'.substr($vote, 1);
         }
 
-        $this->bytes .= UnsignedInteger::bit8(count($this->transaction->asset->votes));
-        $this->bytes .= hex2bin(implode('', $voteBytes));
-
-        return $this->bytes;
+        $this->buffer->writeUInt8(count($this->transaction['asset']['votes']));
+        $this->buffer->writeHexBytes(implode('', $voteBytes));
     }
 }

@@ -15,7 +15,6 @@ namespace ArkEcosystem\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identity\Address;
-use stdClass;
 
 /**
  * This is the vote transaction class.
@@ -31,7 +30,7 @@ class Vote extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset = new stdClass();
+        $this->transaction->asset = [];
     }
 
     /**
@@ -43,7 +42,7 @@ class Vote extends AbstractTransaction
      */
     public function votes(array $votes): self
     {
-        $this->transaction->asset->votes = $votes;
+        $this->transaction->asset['votes'] = $votes;
 
         return $this;
     }

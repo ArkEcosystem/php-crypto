@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Builder;
 
-use stdClass;
-
 /**
  * This is the multisignature registration transaction class.
  *
@@ -29,8 +27,7 @@ class MultiSignatureRegistration extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset                 = new stdClass();
-        $this->transaction->asset->multisignature = new stdClass();
+        $this->transaction->asset = ['multisignature' => []];
     }
 
     /**
@@ -42,7 +39,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function min(int $min): self
     {
-        $this->transaction->asset->multisignature->min = $min;
+        $this->transaction->asset['multisignature']['min'] = $min;
 
         return $this;
     }
@@ -56,7 +53,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function lifetime(int $lifetime): self
     {
-        $this->transaction->asset->multisignature->lifetime = $lifetime;
+        $this->transaction->asset['multisignature']['lifetime'] = $lifetime;
 
         return $this;
     }
@@ -70,7 +67,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function keysgroup(array $keysgroup): self
     {
-        $this->transaction->asset->multisignature->keysgroup = $keysgroup;
+        $this->transaction->asset['multisignature']['keysgroup'] = $keysgroup;
 
         $this->transaction->fee = (count($keysgroup) + 1) * $this->transaction->fee;
 

@@ -16,8 +16,8 @@ namespace ArkEcosystem\Crypto;
 use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\Address;
 use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 use BrianFaust\Binary\Hex\Reader as Hex;
-use BrianFaust\Binary\UnsignedInteger\Reader as UnsignedInteger;
 
 /**
  * This is the deserializer class.
@@ -56,6 +56,8 @@ class Deserializer
 
         $this->binary = $buffer->getBinary();
         $this->hex    = $buffer->getHex();
+
+        $this->buffer = Reader::fromHex($this->hex)->skip(1);
     }
 
     /**
@@ -76,17 +78,16 @@ class Deserializer
     public function deserialize(): Transaction
     {
         $transaction                  = new Transaction();
-        $transaction->version         = (int) Hex::low($this->binary, 1);
-        $transaction->network         = UnsignedInteger::bit8($this->binary, 2);
-        $transaction->type            = UnsignedInteger::bit8($this->binary, 3);
-        $transaction->timestamp       = UnsignedInteger::bit32($this->binary, 4);
-        $transaction->senderPublicKey = Hex::high($this->binary, 8, 66);
-        $transaction->fee             = UnsignedInteger::bit32($this->binary, 41);
+        $transaction->version         = $this->buffer->readUInt8();
+        $transaction->network         = $this->buffer->readUInt8();
+        $transaction->type            = $this->buffer->readUInt8();
+        $transaction->timestamp       = $this->buffer->readUInt32();
+        $transaction->senderPublicKey = $this->buffer->readHex(33);
+        $transaction->fee             = $this->buffer->readUInt64();
 
-        $vendorFieldLength = UnsignedInteger::bit8($this->binary, 41 + 8);
+        $vendorFieldLength = $this->buffer->readUInt8();
         if ($vendorFieldLength > 0) {
-            $vendorFieldOffset             = $vendorFieldLength * 2;
-            $transaction->vendorFieldHex   = Hex::high($this->binary, 41 + 8 + 1, $vendorFieldOffset);
+            $transaction->vendorFieldHex = $this->buffer->readHex($vendorFieldLength);
         }
 
         $assetOffset = (41 + 8 + 1) * 2 + $vendorFieldLength * 2;
@@ -116,7 +117,7 @@ class Deserializer
     {
         $deserializer = $this->deserializers[$transaction->type];
 
-        return (new $deserializer($this->hex, $this->binary, $assetOffset, $transaction))->deserialize();
+        return (new $deserializer($this->hex, $this->buffer, $assetOffset, $transaction))->deserialize();
     }
 
     /**
@@ -137,9 +138,9 @@ class Deserializer
         }
 
         if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
-            $transaction->asset->multisignature->keysgroup = array_map(function ($key) {
+            $transaction->asset['multisignature']['keysgroup'] = array_map(function ($key) {
                 return '+'.$key;
-            }, $transaction->asset->multisignature->keysgroup);
+            }, $transaction->asset['multisignature']['keysgroup']);
         }
 
         if (isset($transaction->vendorFieldHex)) {

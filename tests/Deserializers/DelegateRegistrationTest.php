@@ -30,7 +30,7 @@ class DelegateRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixtureWithPassphrase(2);
 
-        $actual = Deserializer::new($transaction->serialized)->deserialize();
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
         $this->assertTransaction($transaction, $actual);
     }
@@ -40,24 +40,24 @@ class DelegateRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixtureWithSecondPassphrase(2);
 
-        $actual = Deserializer::new($transaction->serialized)->deserialize();
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
         $this->assertTransaction($transaction, $actual);
-        $this->assertSame($transaction->data->signSignature, $actual->signSignature);
+        $this->assertSame($transaction['data']['signSignature'], $actual->signSignature);
     }
 
     private function assertTransaction($transaction, $actual)
     {
         $this->assertSame(1, $actual->version);
         $this->assertSame(30, $actual->network);
-        $this->assertSame($transaction->data->type, $actual->type);
-        $this->assertSame($transaction->data->timestamp, $actual->timestamp);
-        $this->assertSame($transaction->data->senderPublicKey, $actual->senderPublicKey);
-        $this->assertSame($transaction->data->fee, $actual->fee);
-        $this->assertSame($transaction->data->asset->delegate->username, $actual->asset->delegate->username);
-        $this->assertSame($transaction->data->signature, $actual->signature);
-        $this->assertSame($transaction->data->amount, $actual->amount);
-        $this->assertSame($transaction->data->id, $actual->id);
-        $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
+        $this->assertSame($transaction['data']['type'], $actual->type);
+        $this->assertSame($transaction['data']['timestamp'], $actual->timestamp);
+        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
+        $this->assertSame($transaction['data']['fee'], $actual->fee);
+        $this->assertSame($transaction['data']['asset']['delegate']['username'], $actual->asset['delegate']['username']);
+        $this->assertSame($transaction['data']['signature'], $actual->signature);
+        $this->assertSame($transaction['data']['amount'], $actual->amount);
+        $this->assertSame($transaction['data']['id'], $actual->id);
+        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
     }
 }

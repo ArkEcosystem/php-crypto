@@ -25,8 +25,7 @@ class DelegateResignation extends AbstractSerializer
      *
      * @return string
      */
-    public function serialize(): string
+    public function serialize(): void
     {
-        return $this->bytes;
     }
 }

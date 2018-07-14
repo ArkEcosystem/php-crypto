@@ -33,13 +33,13 @@ class IPFSTest extends TestCase
 
         $transaction = $this->getTransactionFixtureWithPassphrase(5);
 
-        $actual = Deserializer::new($transaction->serialized)->deserialize();
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
-        $this->assertSame($transaction->data->id, $actual->id);
-        $this->assertSame($transaction->data->version, $actual->version);
-        $this->assertSame($transaction->data->network, $actual->network);
-        $this->assertSame($transaction->data->type, $actual->type);
-        $this->assertSame($transaction->data->senderPublicKey, $actual->senderPublicKey);
-        $this->assertSame($transaction->serialized, Serializer::new($actual)->serialize()->getHex());
+        $this->assertSame($transaction['data']['id'], $actual->id);
+        $this->assertSame($transaction['data']['version'], $actual->version);
+        $this->assertSame($transaction['data']['network'], $actual->network);
+        $this->assertSame($transaction['data']['type'], $actual->type);
+        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
+        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
     }
 }
