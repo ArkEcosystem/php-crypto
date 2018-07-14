@@ -16,6 +16,20 @@ namespace ArkEcosystem\Tests\Crypto\Concerns;
 trait Fixtures
 {
     /**
+     * Get a fixture.
+     *
+     * @param int $file
+     *
+     * @return array
+     */
+    protected function getFixture(string $file): array
+    {
+        $path = __DIR__."/../fixtures/{$file}.json";
+
+        return json_decode(file_get_contents($path), true);
+    }
+
+    /**
      * Get a transaction fixture by type and name.
      *
      * @param int    $type
@@ -25,9 +39,7 @@ trait Fixtures
      */
     protected function getTransactionFixture(int $type, string $name): array
     {
-        $path = __DIR__."/../fixtures/transactions/type-{$type}/{$name}.json";
-
-        return json_decode(file_get_contents($path), true);
+        return $this->getFixture("transactions/type-{$type}/{$name}");
     }
 
     /**
@@ -35,10 +47,18 @@ trait Fixtures
      *
      * @return array
      */
-    protected function getIdentityFixtures(): array
+    protected function getIdentityFixture(): array
     {
-        $path = __DIR__.'/../fixtures/identity.json';
+        return $this->getFixture('identity');
+    }
 
-        return json_decode(file_get_contents($path), true);
+    /**
+     * Get the message fixture.
+     *
+     * @return array
+     */
+    protected function getMessageFixture(): array
+    {
+        return $this->getFixture('message');
     }
 }

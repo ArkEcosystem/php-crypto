@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Builder;
 
 use ArkEcosystem\Crypto\Builder\MultiPayment;
-use ArkEcosystem\Crypto\Deserializer;
-use ArkEcosystem\Crypto\Serializer;
 use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 

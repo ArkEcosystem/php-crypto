@@ -29,7 +29,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_get_the_address_from_passphrase()
     {
-        $fixture = $this->getIdentityFixtures();
+        $fixture = $this->getIdentityFixture();
 
         $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
@@ -39,7 +39,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_get_the_address_from_public_key()
     {
-        $fixture = $this->getIdentityFixtures();
+        $fixture = $this->getIdentityFixture();
 
         $actual = TestClass::fromPublicKey($fixture['data']['publicKey'], Devnet::new());
 
@@ -49,7 +49,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_get_the_address_from_private_key()
     {
-        $fixture = $this->getIdentityFixtures();
+        $fixture = $this->getIdentityFixture();
 
         $privateKey = PrivateKey::fromPassphrase($fixture['passphrase']);
 
@@ -61,7 +61,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_should_validate_the_address()
     {
-        $fixture = $this->getIdentityFixtures();
+        $fixture = $this->getIdentityFixture();
 
         $actual = TestClass::validate($fixture['data']['address'], Devnet::new());
 
