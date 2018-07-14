@@ -18,6 +18,43 @@ namespace ArkEcosystem\Crypto\Builder;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class TimelockTransfer extends AbstractTransaction
+class TimelockTransfer extends Transfer
 {
+    /**
+     * Set the timelock of the transfer.
+     *
+     * @param int $timelock
+     *
+     * @return \ArkEcosystem\Crypto\Builder\TimelockTransfer
+     */
+    public function timelock(int $timelock): self
+    {
+        $this->transaction->timelock = $timelock;
+
+        return $this;
+    }
+
+    /**
+     * Set the timelock type of the transfer to timestamp.
+     *
+     * @return \ArkEcosystem\Crypto\Builder\TimelockTransfer
+     */
+    public function timestamp(): self
+    {
+        $this->transaction->timelocktype = 0x00;
+
+        return $this;
+    }
+
+    /**
+     * Set the timelock type of the transfer to block height.
+     *
+     * @return \ArkEcosystem\Crypto\Builder\TimelockTransfer
+     */
+    public function height(): self
+    {
+        $this->transaction->timelockType = 0x01;
+
+        return $this;
+    }
 }
