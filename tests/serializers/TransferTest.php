@@ -28,19 +28,19 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture(0, 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('transfer', 'passphrase'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture(0, 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('transfer', 'second-passphrase'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase_and_vendor_field()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase-with-vendor-field');
+        $transaction = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 
@@ -50,7 +50,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase_and_vendor_field()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field');
+        $transaction = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 
@@ -60,7 +60,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase_and_vendor_field_hex()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase-with-vendor-field-hex');
+        $transaction = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 
@@ -70,7 +70,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase_and_vendor_field_hex()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field-hex');
+        $transaction = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 

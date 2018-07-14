@@ -27,6 +27,6 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture(4, 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'passphrase'));
     }
 }

@@ -30,7 +30,7 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(5, 'passphrase');
+        $transaction = $this->getTransactionFixture('ipfs', 'passphrase');
 
         $this->assertTransaction($transaction);
     }

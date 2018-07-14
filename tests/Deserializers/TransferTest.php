@@ -29,7 +29,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $fixture = $this->getTransactionFixture(0, 'passphrase');
+        $fixture = $this->getTransactionFixture('transfer', 'passphrase');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame(0, $actual->expiration);
@@ -38,7 +38,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $fixture = $this->getTransactionFixture(0, 'second-passphrase');
+        $fixture = $this->getTransactionFixture('transfer', 'second-passphrase');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['signSignature'], $actual->signSignature);
@@ -47,7 +47,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field()
     {
-        $fixture = $this->getTransactionFixture(0, 'passphrase-with-vendor-field');
+        $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
@@ -56,7 +56,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field()
     {
-        $fixture = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field');
+        $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
@@ -65,7 +65,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field_hex()
     {
-        $fixture = $this->getTransactionFixture(0, 'passphrase-with-vendor-field-hex');
+        $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);
@@ -74,7 +74,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field_hex()
     {
-        $fixture = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field-hex');
+        $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);

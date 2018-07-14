@@ -29,7 +29,7 @@ class DelegateResignationTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(8, 'passphrase');
+        $transaction = $this->getTransactionFixture('delegate_resignation', 'passphrase');
 
         $this->assertTransaction($transaction);
     }

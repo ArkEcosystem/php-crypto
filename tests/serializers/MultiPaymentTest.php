@@ -29,7 +29,7 @@ class MultiPaymentTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(7, 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'passphrase'));
     }
 
     /** @test */
@@ -37,6 +37,6 @@ class MultiPaymentTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(7, 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'second-passphrase'));
     }
 }

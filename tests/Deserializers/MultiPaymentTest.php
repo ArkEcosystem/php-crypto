@@ -29,7 +29,7 @@ class MultiPaymentTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(7, 'passphrase');
+        $transaction = $this->getTransactionFixture('multi_payment', 'passphrase');
 
         $this->assertTransaction($transaction);
     }

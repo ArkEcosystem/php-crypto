@@ -32,13 +32,13 @@ trait Fixtures
     /**
      * Get a transaction fixture by type and name.
      *
-     * @param int    $type
+     * @param string $type
      * @param string $name
      *
      * @return array|object
      */
-    protected function getTransactionFixture(int $type, string $name): array
+    protected function getTransactionFixture(string $type, string $name): array
     {
-        return $this->getFixture("transactions/type-{$type}/{$name}");
+        return $this->getFixture("transactions/{$type}/{$name}");
     }
 }

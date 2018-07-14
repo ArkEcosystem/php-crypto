@@ -30,7 +30,7 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(5, 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'passphrase'));
     }
 
     /** @test */
@@ -38,6 +38,6 @@ class IPFSTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(5, 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'second-passphrase'));
     }
 }

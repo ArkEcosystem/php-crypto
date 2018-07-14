@@ -29,7 +29,7 @@ class DelegateResignationTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(8, 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'passphrase'));
     }
 
     /** @test */
@@ -37,6 +37,6 @@ class DelegateResignationTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSerialized($this->getTransactionFixture(8, 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'second-passphrase'));
     }
 }
