@@ -34,12 +34,10 @@ class MultiPayment extends AbstractDeserializer
 
         $this->transaction->asset = ['payments' => []];
 
-        $total  = $this->buffer->readUInt8() & 0xff;
+        $count  = $this->buffer->readUInt32() & 0xff;
         $offset = $this->assetOffset / 2 + 1;
 
-        for ($i = 0; $i < $total; ++$i) {
-            $this->buffer->position($offset);
-
+        for ($i = 0; $i < $count; ++$i) {
             $this->transaction->asset['payments'][] = [
                 'amount'      => $this->buffer->readUInt64(),
                 'recipientId' => Base58::encodeCheck(new Buffer(hex2bin($this->buffer->readHex(21)))),

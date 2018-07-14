@@ -207,7 +207,7 @@ class Transaction
             $multiSignatureOffset += $signatureLength * 2;
             $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
 
-            if (0 === strlen($this->secondSignature)) {
+            if (!$this->secondSignature || 0 === strlen($this->secondSignature)) {
                 unset($this->secondSignature);
             } else {
                 if ('ff' === substr($this->secondSignature, 0, 2)) {
@@ -221,7 +221,7 @@ class Transaction
 
             $signatures = substr($serialized, $startOffset + $multiSignatureOffset);
 
-            if (0 === strlen($signatures)) {
+            if (!$signatures || 0 === strlen($signatures)) {
                 return $this;
             }
 
