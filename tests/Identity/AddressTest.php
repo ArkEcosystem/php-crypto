@@ -15,7 +15,6 @@ namespace ArkEcosystem\Tests\Crypto\Identity;
 
 use ArkEcosystem\Crypto\Identity\Address as TestClass;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
-use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -31,7 +30,7 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
+        $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
         $this->assertSame($fixture['data']['address'], $actual);
     }
@@ -41,7 +40,7 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::fromPublicKey($fixture['data']['publicKey'], Devnet::new());
+        $actual = TestClass::fromPublicKey($fixture['data']['publicKey']);
 
         $this->assertSame($fixture['data']['address'], $actual);
     }
@@ -53,7 +52,7 @@ class AddressTest extends TestCase
 
         $privateKey = PrivateKey::fromPassphrase($fixture['passphrase']);
 
-        $actual = TestClass::fromPrivateKey($privateKey, Devnet::new());
+        $actual = TestClass::fromPrivateKey($privateKey);
 
         $this->assertSame($fixture['data']['address'], $actual);
     }
@@ -63,7 +62,7 @@ class AddressTest extends TestCase
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::validate($fixture['data']['address'], Devnet::new());
+        $actual = TestClass::validate($fixture['data']['address']);
 
         $this->assertTrue($actual);
     }

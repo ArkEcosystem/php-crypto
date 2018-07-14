@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Networks;
 
-use ArkEcosystem\Crypto\Networks\Devnet as TestClass;
-use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Networks\Devnet;
 use BitWasp\Bitcoin\Network\Network;
 
 /**
@@ -23,43 +22,15 @@ use BitWasp\Bitcoin\Network\Network;
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class DevnetTest extends TestCase
+class DevnetTest extends NetworkTestCase
 {
-    /** @test */
-    public function it_should_get_version()
+    protected $version = 30;
+    protected $nethash = '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23';
+    protected $wif     = 170;
+    protected $wifByte = 'aa';
+
+    public function getTestSubject()
     {
-        $actual = TestClass::getVersion();
-
-        $this->assertSame($actual, 30);
-    }
-
-    /** @test */
-    public function it_should_get_nethash()
-    {
-        $actual = TestClass::getNethash();
-
-        $this->assertSame($actual, '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23');
-    }
-
-    /** @test */
-    public function it_should_get_wif()
-    {
-        $actual = TestClass::getWif();
-
-        $this->assertSame($actual, 170);
-    }
-
-    /** @test */
-    public function it_should_get_wif_byte()
-    {
-        $actual = TestClass::getWifByte();
-
-        $this->assertSame($actual, 'aa');
-    }
-
-    /** @test */
-    public function it_should_get_factory()
-    {
-        $this->assertInstanceOf(Network::class, TestClass::getFactory());
+        return Devnet::class;
     }
 }

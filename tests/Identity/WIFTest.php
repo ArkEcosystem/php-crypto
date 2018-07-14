@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Identity;
 
 use ArkEcosystem\Crypto\Identity\WIF as TestClass;
-use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -30,7 +29,7 @@ class WIFTest extends TestCase
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
+        $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
         $this->assertSame($fixture['data']['wif'], $actual);
     }

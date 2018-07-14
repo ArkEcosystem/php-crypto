@@ -15,7 +15,6 @@ namespace ArkEcosystem\Tests\Crypto\Identity;
 
 use ArkEcosystem\Crypto\Identity\PublicKey as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 
 /**
  * This is the address test class.
@@ -32,7 +31,6 @@ class PublicKeyTest extends TestCase
 
         $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
-        $this->assertInstanceOf(EcPublicKey::class, $actual);
         $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
 
