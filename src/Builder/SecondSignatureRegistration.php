@@ -39,4 +39,14 @@ class SecondSignatureRegistration extends AbstractTransaction
 
         return $this;
     }
+
+    /**
+     * Get the transaction type.
+     *
+     * @return int
+     */
+    protected function getType(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\Types::SECOND_SIGNATURE_REGISTRATION;
+    }
 }

@@ -18,7 +18,6 @@ use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Transaction;
-use function Stringy\create as s;
 
 /**
  * This is the abstract transaction class.
@@ -171,12 +170,7 @@ abstract class AbstractTransaction
      *
      * @return int
      */
-    private function getType(): int
-    {
-        $identifier = $this->getIdentifier();
-
-        return constant("ArkEcosystem\Crypto\Enums\Types::{$identifier}");
-    }
+    abstract protected function getType(): int;
 
     /**
      * Get the transaction fee.
@@ -186,19 +180,5 @@ abstract class AbstractTransaction
     private function getFee(): int
     {
         return Fee::get($this->transaction->type);
-    }
-
-    /**
-     * Get the class identifier to be used with enums.
-     *
-     * @return string
-     */
-    private function getIdentifier(): string
-    {
-        $className = (new \ReflectionClass($this))->getShortName();
-
-        return (string) s($className)
-            ->underscored()
-            ->toUpperCase();
     }
 }

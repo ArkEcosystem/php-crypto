@@ -20,4 +20,13 @@ namespace ArkEcosystem\Crypto\Builder;
  */
 class DelegateResignation extends AbstractTransaction
 {
+    /**
+     * Get the transaction type.
+     *
+     * @return int
+     */
+    protected function getType(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\Types::DELEGATE_RESIGNATION;
+    }
 }

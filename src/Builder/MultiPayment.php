@@ -44,4 +44,14 @@ class MultiPayment extends AbstractTransaction
 
         return $this;
     }
+
+    /**
+     * Get the transaction type.
+     *
+     * @return int
+     */
+    protected function getType(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\Types::MULTI_PAYMENT;
+    }
 }
