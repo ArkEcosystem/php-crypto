@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Deserializer;
 use ArkEcosystem\Crypto\Deserializers\Transfer;
-use ArkEcosystem\Crypto\Serializer;
+use ArkEcosystem\Crypto\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -29,81 +29,68 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase');
+        $fixture = $this->getTransactionFixture(0, 'passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame(0, $actual->expiration);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase');
+        $fixture = $this->getTransactionFixture(0, 'second-passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame($transaction['data']['signSignature'], $actual->signSignature);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame($fixture['data']['signSignature'], $actual->signSignature);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase-with-vendor-field');
+        $fixture = $this->getTransactionFixture(0, 'passphrase-with-vendor-field');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame($transaction['data']['vendorField'], $actual->vendorField);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field');
+        $fixture = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame($transaction['data']['vendorField'], $actual->vendorField);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field_hex()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase-with-vendor-field-hex');
+        $fixture = $this->getTransactionFixture(0, 'passphrase-with-vendor-field-hex');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame(hex2bin($transaction['data']['vendorFieldHex']), $actual->vendorField);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field_hex()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field-hex');
+        $fixture = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field-hex');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame(hex2bin($transaction['data']['vendorFieldHex']), $actual->vendorField);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);
     }
 
-    private function assertTransaction($transaction, $actual)
+    private function assertTransaction(array $fixture): Transaction
     {
-        $this->assertSame(1, $actual->version);
-        $this->assertSame(30, $actual->network);
-        $this->assertSame($transaction['data']['type'], $actual->type);
-        $this->assertSame($transaction['data']['timestamp'], $actual->timestamp);
-        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
-        $this->assertSame($transaction['data']['fee'], $actual->fee);
-        $this->assertSame($transaction['data']['amount'], $actual->amount);
-        $this->assertSame(0, $actual->expiration);
-        $this->assertSame($transaction['data']['recipientId'], $actual->recipientId);
-        $this->assertSame($transaction['data']['signature'], $actual->signature);
-        $this->assertSame($transaction['data']['id'], $actual->id);
-        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
+        return $this->assertDeserialized($fixture, [
+            'type',
+            'timestamp',
+            'senderPublicKey',
+            'fee',
+            'amount',
+            'recipientId',
+            'signature',
+            'id',
+        ]);
     }
 }

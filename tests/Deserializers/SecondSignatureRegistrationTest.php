@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Deserializer;
 use ArkEcosystem\Crypto\Identity\Address;
-use ArkEcosystem\Crypto\Serializer;
+use ArkEcosystem\Crypto\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -27,30 +27,27 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class SecondSignatureRegistrationTest extends TestCase
 {
     /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
+    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
         $transaction = $this->getTransactionFixture(1, 'second-passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-    }
-
-    private function assertTransaction($transaction, $actual)
-    {
-        $this->assertSame(1, $actual->version);
-        $this->assertSame(30, $actual->network);
-        $this->assertSame($transaction['data']['type'], $actual->type);
-        $this->assertSame($transaction['data']['timestamp'], $actual->timestamp);
-        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
-        $this->assertSame($transaction['data']['fee'], $actual->fee);
-        $this->assertSame($transaction['data']['asset']['signature']['publicKey'], $actual->asset['signature']['publicKey']);
-        $this->assertSame($transaction['data']['signature'], $actual->signature);
-        $this->assertSame($transaction['data']['amount'], $actual->amount);
-        $this->assertSame($transaction['data']['id'], $actual->id);
-        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
+        $actual = $this->assertTransaction($transaction);
 
         // special case as the type 1 transaction itself has no recipientId
         $this->assertSame($actual->recipientId, Address::fromPublicKey($actual->senderPublicKey, $actual->network));
+    }
+
+    private function assertTransaction(array $fixture): Transaction
+    {
+        return $this->assertDeserialized($fixture, [
+            'type',
+            'timestamp',
+            'senderPublicKey',
+            'fee',
+            'asset',
+            'signature',
+            'amount',
+            'id',
+        ]);
     }
 }

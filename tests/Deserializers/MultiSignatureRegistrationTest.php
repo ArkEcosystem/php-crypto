@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Deserializer;
-use ArkEcosystem\Crypto\Serializer;
+use ArkEcosystem\Crypto\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -30,13 +30,20 @@ class MultiSignatureRegistrationTest extends TestCase
     {
         $transaction = $this->getTransactionFixture(4, 'passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
+        $this->assertTransaction($transaction);
+    }
 
-        $this->assertSame($transaction['data']['id'], $actual->id);
-        $this->assertSame($transaction['data']['version'], $actual->version);
-        $this->assertSame($transaction['data']['network'], $actual->network);
-        $this->assertSame($transaction['data']['type'], $actual->type);
-        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
-        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
+    private function assertTransaction(array $fixture): Transaction
+    {
+        return $this->assertDeserialized($fixture, [
+            'type',
+            'timestamp',
+            'senderPublicKey',
+            'fee',
+            'asset',
+            'signature',
+            'amount',
+            'id',
+        ], 23);
     }
 }

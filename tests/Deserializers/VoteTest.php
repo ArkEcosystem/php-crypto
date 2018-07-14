@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Deserializers;
 
 use ArkEcosystem\Crypto\Deserializer;
 use ArkEcosystem\Crypto\Deserializers\Vote;
-use ArkEcosystem\Crypto\Serializer;
+use ArkEcosystem\Crypto\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -29,37 +29,32 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(3, 'passphrase');
+        $fixture = $this->getTransactionFixture(3, 'passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
+        $this->assertTransaction($fixture);
     }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixture(3, 'second-passphrase');
+        $fixture = $this->getTransactionFixture(3, 'second-passphrase');
 
-        $actual = Deserializer::new($transaction['serialized'])->deserialize();
-
-        $this->assertTransaction($transaction, $actual);
-        $this->assertSame($transaction['data']['signSignature'], $actual->signSignature);
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame($fixture['data']['signSignature'], $actual->signSignature);
     }
 
-    private function assertTransaction($transaction, $actual)
+    private function assertTransaction(array $fixture): Transaction
     {
-        $this->assertSame(1, $actual->version);
-        $this->assertSame(30, $actual->network);
-        $this->assertSame($transaction['data']['type'], $actual->type);
-        $this->assertSame($transaction['data']['timestamp'], $actual->timestamp);
-        $this->assertSame($transaction['data']['senderPublicKey'], $actual->senderPublicKey);
-        $this->assertSame($transaction['data']['fee'], $actual->fee);
-        $this->assertSame($transaction['data']['asset']['votes'], $actual->asset['votes']);
-        $this->assertSame($transaction['data']['signature'], $actual->signature);
-        $this->assertSame($transaction['data']['amount'], $actual->amount);
-        $this->assertSame($transaction['data']['recipientId'], $actual->recipientId);
-        $this->assertSame($transaction['data']['id'], $actual->id);
-        $this->assertSame($transaction['serialized'], Serializer::new($actual->toArray())->serialize()->getHex());
+        return $this->assertDeserialized($fixture, [
+            'type',
+            'timestamp',
+            'senderPublicKey',
+            'fee',
+            'asset',
+            'signature',
+            'amount',
+            'recipientId',
+            'id',
+        ]);
     }
 }

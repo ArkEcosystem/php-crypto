@@ -17,10 +17,10 @@ use ArkEcosystem\Crypto\Serializer;
 
 trait Serialize
 {
-    protected function assertSerialized($transaction)
+    protected function assertSerialized(array $fixture): void
     {
-        $actual = Serializer::new($transaction['data'])->serialize();
+        $actual = Serializer::new($fixture['data'])->serialize();
 
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+        $this->assertSame($fixture['serialized'], $actual->getHex());
     }
 }
