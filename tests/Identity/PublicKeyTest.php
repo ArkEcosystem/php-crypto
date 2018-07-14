@@ -28,7 +28,7 @@ class PublicKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_public_key_from_passphrase()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
@@ -39,7 +39,7 @@ class PublicKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_public_key_from_hex()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromHex($fixture['data']['publicKey']);
 
@@ -49,7 +49,7 @@ class PublicKeyTest extends TestCase
     /** @test */
     public function it_should_validate_the_public_key()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::validate($fixture['data']['publicKey']);
 

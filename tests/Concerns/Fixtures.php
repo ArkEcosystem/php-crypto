@@ -18,7 +18,7 @@ trait Fixtures
     /**
      * Get a fixture.
      *
-     * @param int $file
+     * @param string $file
      *
      * @return array
      */
@@ -40,25 +40,5 @@ trait Fixtures
     protected function getTransactionFixture(int $type, string $name): array
     {
         return $this->getFixture("transactions/type-{$type}/{$name}");
-    }
-
-    /**
-     * Get the identity fixture.
-     *
-     * @return array
-     */
-    protected function getIdentityFixture(): array
-    {
-        return $this->getFixture('identity');
-    }
-
-    /**
-     * Get the message fixture.
-     *
-     * @return array
-     */
-    protected function getMessageFixture(): array
-    {
-        return $this->getFixture('message');
     }
 }

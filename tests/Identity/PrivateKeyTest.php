@@ -29,7 +29,7 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_passphrase()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
@@ -40,7 +40,7 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_hex()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromHex($fixture['data']['privateKey']);
 
@@ -50,7 +50,7 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_wif()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromWif($fixture['data']['wif'], Devnet::new());
 

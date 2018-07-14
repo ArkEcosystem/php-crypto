@@ -28,7 +28,7 @@ class WIFTest extends TestCase
     /** @test */
     public function it_should_get_the_wif_from_passphrase()
     {
-        $fixture = $this->getIdentityFixture();
+        $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromPassphrase($fixture['passphrase'], Devnet::new());
 
