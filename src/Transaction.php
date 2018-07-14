@@ -36,7 +36,7 @@ class Transaction
      */
     public function serialize(): Buffer
     {
-        return Serializer::new($this->toArray())->deserialize();
+        return Serializer::new($this->toArray())->serialize();
     }
 
     /**

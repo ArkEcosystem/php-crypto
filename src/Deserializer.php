@@ -15,6 +15,7 @@ namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identity\Address;
+use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 use BrianFaust\Binary\Hex\Reader as Hex;
@@ -102,6 +103,10 @@ class Deserializer
             $transaction = $this->handleVersionOne($transaction);
         }
 
+        if (2 === $transaction->version) {
+            $transaction = $this->handleVersionTwo($transaction);
+        }
+
         return $transaction;
     }
 
@@ -121,7 +126,7 @@ class Deserializer
     }
 
     /**
-     * Handle the deserialisation of transaction data.
+     * Handle the deserialisation of transaction data with a version of 1.0.
      *
      * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
@@ -158,6 +163,20 @@ class Deserializer
         if (Types::MULTI_SIGNATURE_REGISTRATION === $transaction->type) {
             $transaction->recipientId = Address::fromPublicKey($transaction->senderPublicKey, $transaction->network);
         }
+
+        return $transaction;
+    }
+
+    /**
+     * Handle the deserialisation of transaction data with a version of 2.0.
+     *
+     * @param \ArkEcosystem\Crypto\Transaction $transaction
+     *
+     * @return \ArkEcosystem\Crypto\Transaction
+     */
+    public function handleVersionTwo(Transaction $transaction): Transaction
+    {
+        $transaction->id = Hash::sha256($transaction->serialize())->getHex();
 
         return $transaction;
     }
