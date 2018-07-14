@@ -33,10 +33,10 @@ class TimelockTransfer extends AbstractDeserializer
         $this->buffer->position($this->assetOffset / 2);
 
         $this->transaction->amount       = $this->buffer->readUInt64();
-        $this->transaction->timelocktype = $this->buffer->readUInt8() & 0xff;
+        $this->transaction->timelockType = $this->buffer->readUInt8() & 0xff;
         $this->transaction->timelock     = $this->buffer->readUInt32();
         $this->transaction->recipientId  = Base58::encodeCheck(new Buffer(hex2bin($this->buffer->readHex(21))));
 
-        return $this->parseSignatures($this->assetOffset + (21 + 13) * 2);
+        return $this->parseSignatures($this->assetOffset + (8 + 1 + 4 + 21) * 2);
     }
 }

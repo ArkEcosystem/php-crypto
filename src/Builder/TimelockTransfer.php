@@ -41,7 +41,7 @@ class TimelockTransfer extends Transfer
      */
     public function timestamp(): self
     {
-        $this->transaction->timelocktype = 0x00;
+        $this->transaction->timelockType = 0x00;
 
         return $this;
     }

@@ -30,7 +30,7 @@ class TimelockTransfer extends AbstractSerializer
     public function serialize(): void
     {
         $this->buffer->writeUInt64($this->transaction['amount']);
-        $this->buffer->writeUInt8($this->transaction['timelocktype']);
+        $this->buffer->writeUInt8($this->transaction['timelockType']);
         $this->buffer->writeUInt32($this->transaction['timelock']);
         $this->buffer->writeHex(Base58::decodeCheck($this->transaction['recipientId'])->getHex());
     }

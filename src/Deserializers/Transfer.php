@@ -36,6 +36,6 @@ class Transfer extends AbstractDeserializer
         $this->transaction->expiration  = $this->buffer->readUInt32();
         $this->transaction->recipientId = Base58::encodeCheck(new Buffer(hex2bin($this->buffer->readHex(21))));
 
-        return $this->parseSignatures($this->assetOffset + (21 + 12) * 2);
+        return $this->parseSignatures($this->assetOffset + (8 + 4 + 21) * 2);
     }
 }
