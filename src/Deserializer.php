@@ -55,10 +55,7 @@ class Deserializer
             ? Buffer::hex($serialized)
             : new Buffer($serialized);
 
-        $this->binary = $buffer->getBinary();
-        $this->hex    = $buffer->getHex();
-
-        $this->buffer = Reader::fromHex($this->hex)->skip(1);
+        $this->buffer = Reader::fromHex($buffer->getHex())->skip(1);
     }
 
     /**
@@ -122,7 +119,7 @@ class Deserializer
     {
         $deserializer = $this->deserializers[$transaction->type];
 
-        return (new $deserializer($this->hex, $this->buffer, $assetOffset, $transaction))->deserialize();
+        return (new $deserializer($this->buffer, $assetOffset, $transaction))->deserialize();
     }
 
     /**

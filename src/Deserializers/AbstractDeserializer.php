@@ -26,11 +26,6 @@ abstract class AbstractDeserializer
     /**
      * @var string
      */
-    protected $hex;
-
-    /**
-     * @var string
-     */
     protected $buffer;
 
     /**
@@ -46,14 +41,12 @@ abstract class AbstractDeserializer
     /**
      * Create a new deserializer instance.
      *
-     * @param string $hex
      * @param string $buffer
      * @param int    $assetOffset
      * @param object $transaction
      */
-    public function __construct(string $hex, Reader $buffer, int $assetOffset, Transaction $transaction)
+    public function __construct(Reader $buffer, int $assetOffset, Transaction $transaction)
     {
-        $this->hex         = $hex;
         $this->buffer      = $buffer;
         $this->assetOffset = $assetOffset;
         $this->transaction = $transaction;
@@ -78,6 +71,6 @@ abstract class AbstractDeserializer
      */
     protected function parseSignatures(int $startOffset): object
     {
-        return $this->transaction->parseSignatures($this->hex, $startOffset);
+        return $this->transaction->parseSignatures($this->buffer->toHex(), $startOffset);
     }
 }

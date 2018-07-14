@@ -137,7 +137,7 @@ class Transaction
         $buffer->writeHex($this->senderPublicKey);
 
         if (isset($this->recipientId)) {
-            $buffer->writeString(Base58::decodeCheck($this->recipientId)->getBinary());
+            $buffer->writeHex(Base58::decodeCheck($this->recipientId)->getHex());
         } else {
             $buffer->fill(21);
         }
