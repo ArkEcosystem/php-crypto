@@ -25,12 +25,8 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction()
+    public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(4, 'passphrase');
-
-        $actual = Serializer::new($transaction['data'])->serialize();
-
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+        $this->assertSerialized($this->getTransactionFixture(4, 'passphrase'));
     }
 }

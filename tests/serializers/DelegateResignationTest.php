@@ -25,14 +25,18 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class DelegateResignationTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction()
+    public function it_should_serialize_the_transaction_with_a_passphrase()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixture(8, 'passphrase');
+        $this->assertSerialized($this->getTransactionFixture(8, 'passphrase'));
+    }
 
-        $actual = Serializer::new($transaction['data'])->serialize();
+    /** @test */
+    public function it_should_serialize_the_transaction_with_a_second_passphrase()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+        $this->assertSerialized($this->getTransactionFixture(8, 'second-passphrase'));
     }
 }

@@ -28,21 +28,13 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(0, 'passphrase');
-
-        $actual = Serializer::new($transaction['data'])->serialize();
-
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+        $this->assertSerialized($this->getTransactionFixture(0, 'passphrase'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixture(0, 'second-passphrase');
-
-        $actual = Serializer::new($transaction['data'])->serialize();
-
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+        $this->assertSerialized($this->getTransactionFixture(0, 'second-passphrase'));
     }
 
     /** @test */

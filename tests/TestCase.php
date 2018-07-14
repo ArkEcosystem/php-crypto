@@ -19,7 +19,9 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use Concerns\Fixtures;
+    use Concerns\Fixtures,
+        Concerns\Serialize,
+        Concerns\Deserialize;
 
     protected function setUp()
     {

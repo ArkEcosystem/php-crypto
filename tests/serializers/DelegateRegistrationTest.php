@@ -25,12 +25,14 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class DelegateRegistrationTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction()
+    public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(2, 'passphrase');
+        $this->assertSerialized($this->getTransactionFixture(2, 'passphrase'));
+    }
 
-        $actual = Serializer::new($transaction['data'])->serialize();
-
-        $this->assertSame($transaction['serialized'], $actual->getHex());
+    /** @test */
+    public function it_should_serialize_the_transaction_with_a_second_passphrase()
+    {
+        $this->assertSerialized($this->getTransactionFixture(2, 'second-passphrase'));
     }
 }

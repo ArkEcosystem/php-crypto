@@ -29,7 +29,7 @@ class SecondSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture(1, 'passphrase');
+        $transaction = $this->getTransactionFixture(1, 'second-passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
