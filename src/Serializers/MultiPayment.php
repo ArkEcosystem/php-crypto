@@ -29,7 +29,7 @@ class MultiPayment extends AbstractSerializer
      */
     public function serialize(): void
     {
-        $this->buffer->writeUInt32(count($this->transaction['asset']['payments']));
+        $this->buffer->writeUInt16(count($this->transaction['asset']['payments']));
 
         foreach ($this->transaction['asset']['payments'] as $payment) {
             $this->buffer->writeUInt64($payment['amount']);
