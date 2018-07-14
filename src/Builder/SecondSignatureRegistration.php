@@ -41,9 +41,7 @@ class SecondSignatureRegistration extends AbstractTransaction
     }
 
     /**
-     * Get the transaction type.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     protected function getType(): int
     {

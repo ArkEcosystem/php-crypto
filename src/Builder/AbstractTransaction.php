@@ -32,20 +32,10 @@ abstract class AbstractTransaction
     public function __construct()
     {
         $this->transaction              = new Transaction();
-        $this->transaction->recipientId = null;
         $this->transaction->type        = $this->getType();
         $this->transaction->amount      = 0;
         $this->transaction->fee         = $this->getFee();
-        $this->transaction->vendorField = null;
         $this->transaction->timestamp   = Slot::getTime();
-
-        $this->transaction->senderPublicKey = null;
-
-        $this->transaction->signature     = null;
-        $this->transaction->signSignature = null;
-
-        $this->transaction->id    = null;
-        $this->transaction->asset = [];
     }
 
     /**
@@ -55,7 +45,7 @@ abstract class AbstractTransaction
      */
     public function __toString()
     {
-        return $this->toJSON();
+        return $this->toJson();
     }
 
     /**
@@ -89,7 +79,7 @@ abstract class AbstractTransaction
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function sign(string $passphrase): AbstractTransaction
+    public function sign(string $passphrase): self
     {
         $keys                               = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
@@ -106,7 +96,7 @@ abstract class AbstractTransaction
      *
      * @return \ArkEcosystem\Crypto\Builder\AbstractTransaction
      */
-    public function secondSign(string $secondSecret): AbstractTransaction
+    public function secondSign(string $secondSecret): self
     {
         $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondSecret));
 
@@ -130,9 +120,7 @@ abstract class AbstractTransaction
      */
     public function secondVerify(string $secondSecret): bool
     {
-        return $this->transaction->secondVerify(
-            PublicKey::fromPassphrase($secondSecret)->getHex()
-        );
+        return $this->transaction->secondVerify(PublicKey::fromPassphrase($secondSecret)->getHex());
     }
 
     /**
@@ -160,7 +148,7 @@ abstract class AbstractTransaction
      *
      * @return string
      */
-    public function toJSON(): string
+    public function toJson(): string
     {
         return json_encode($this->transaction);
     }

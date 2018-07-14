@@ -59,9 +59,7 @@ class TimelockTransfer extends Transfer
     }
 
     /**
-     * Get the transaction type.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     protected function getType(): int
     {

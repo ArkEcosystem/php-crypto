@@ -64,9 +64,7 @@ class Vote extends AbstractTransaction
     }
 
     /**
-     * Get the transaction type.
-     *
-     * @return int
+     * {@inheritdoc}
      */
     protected function getType(): int
     {
