@@ -20,4 +20,28 @@ namespace ArkEcosystem\Crypto\Builder;
  */
 class MultiPayment extends AbstractTransaction
 {
+    /**
+     * Create a new multi signature transaction instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->transaction->asset = ['payments' => []];
+    }
+
+    /**
+     * Add a new payment to the collection.
+     *
+     * @param string $recipientId
+     * @param int    $amount
+     *
+     * @return \ArkEcosystem\Crypto\Builder\MultiPayment
+     */
+    public function add(string $recipientId, int $amount): self
+    {
+        $this->transaction->asset['payments'][] = compact('recipientId', 'amount');
+
+        return $this;
+    }
 }

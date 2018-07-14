@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Builder;
 
+use ArkEcosystem\Crypto\Builder\MultiPayment;
+use ArkEcosystem\Crypto\Deserializer;
+use ArkEcosystem\Crypto\Serializer;
 use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -28,5 +31,12 @@ class MultiPaymentTest extends TestCase
     public function it_should_create_a_valid_transaction()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
+
+        $transaction = MultiPayment::new()
+            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', 100000000)
+            ->sign('This is a top secret passphrase');
+
+        $this->assertInternalType('object', $transaction);
+        $this->assertTrue($transaction->verify());
     }
 }

@@ -29,11 +29,11 @@ class MultiPayment extends AbstractSerializer
      */
     public function serialize(): void
     {
-        $this->buffer->writeUInt32(count($this->transaction->asset['payments']));
+        $this->buffer->writeUInt32(count($this->transaction['asset']['payments']));
 
-        foreach ($this->transaction->asset['payments'] as $payment) {
-            $this->buffer->writeUInt64($payment->amount);
-            $this->buffer->writeHexBytes(Base58::decodeCheck($payment->recipientId)->getHex());
+        foreach ($this->transaction['asset']['payments'] as $payment) {
+            $this->buffer->writeUInt64($payment['amount']);
+            $this->buffer->writeHex(Base58::decodeCheck($payment['recipientId'])->getHex());
         }
     }
 }

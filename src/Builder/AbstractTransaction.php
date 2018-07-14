@@ -18,7 +18,6 @@ use ArkEcosystem\Crypto\Identity\PrivateKey;
 use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Transaction;
-use stdClass;
 use function Stringy\create as s;
 
 /**
@@ -140,9 +139,9 @@ abstract class AbstractTransaction
     /**
      * Convert the message to its plain object representation.
      *
-     * @return \stdClass
+     * @return \ArkEcosystem\Crypto\Transaction
      */
-    public function getSignedObject(): stdClass
+    public function getSignedObject(): Transaction
     {
         $this->transaction->id = $this->transaction->getId();
 
