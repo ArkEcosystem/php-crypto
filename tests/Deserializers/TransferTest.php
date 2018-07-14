@@ -55,6 +55,7 @@ class TransferTest extends TestCase
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
         $this->assertTransaction($transaction, $actual);
+        $this->assertSame($transaction['data']['vendorField'], $actual->vendorField);
     }
 
     /** @test */
@@ -65,6 +66,29 @@ class TransferTest extends TestCase
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
         $this->assertTransaction($transaction, $actual);
+        $this->assertSame($transaction['data']['vendorField'], $actual->vendorField);
+    }
+
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field_hex()
+    {
+        $transaction = $this->getTransactionFixture(0, 'passphrase-with-vendor-field-hex');
+
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
+
+        $this->assertTransaction($transaction, $actual);
+        $this->assertSame(hex2bin($transaction['data']['vendorFieldHex']), $actual->vendorField);
+    }
+
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field_hex()
+    {
+        $transaction = $this->getTransactionFixture(0, 'second-passphrase-with-vendor-field-hex');
+
+        $actual = Deserializer::new($transaction['serialized'])->deserialize();
+
+        $this->assertTransaction($transaction, $actual);
+        $this->assertSame(hex2bin($transaction['data']['vendorFieldHex']), $actual->vendorField);
     }
 
     private function assertTransaction($transaction, $actual)

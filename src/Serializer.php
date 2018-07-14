@@ -88,7 +88,7 @@ class Serializer
         } elseif (isset($this->transaction['vendorFieldHex'])) {
             $vendorFieldHexLength = strlen($this->transaction['vendorFieldHex']);
             $buffer->writeUInt8($vendorFieldHexLength / 2);
-            $buffer->writeString($this->transaction['vendorFieldHex']);
+            $buffer->writeHex($this->transaction['vendorFieldHex']);
         } else {
             $buffer->writeUInt8(0x00);
         }
