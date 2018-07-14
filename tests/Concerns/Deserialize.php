@@ -41,6 +41,14 @@ trait Deserialize
         $expected = array_only($expected['data'], $keys);
         $actual   = array_only($this->object_to_array($actual), $keys);
 
+        ksort($expected);
+        ksort($actual);
+
+        if (isset($actual['asset']['multisignature'])) {
+            ksort($expected['asset']['multisignature']);
+            ksort($actual['asset']['multisignature']);
+        }
+
         $this->assertSame($expected, $actual);
     }
 }
