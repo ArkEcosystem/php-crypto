@@ -25,19 +25,11 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class TimelockTransferTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
+    public function it_should_serialize_the_transaction()
     {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+
         $transaction = $this->getTransactionFixture(6, 'passphrase');
-
-        $actual = Serializer::new($transaction['data'])->serialize();
-
-        $this->assertSame($transaction['serialized'], $actual->getHex());
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $transaction = $this->getTransactionFixture(6, 'second-passphrase');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 

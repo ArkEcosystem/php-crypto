@@ -20,7 +20,6 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
-use stdClass;
 
 /**
  * This is the transaction class.
@@ -42,9 +41,9 @@ class Transaction
     /**
      * Perform AIP11 compliant deserialisation.
      *
-     * @return stdClass
+     * @return \ArkEcosystem\Crypto\Transaction
      */
-    public function deserialize(string $serialized): stdClass
+    public function deserialize(string $serialized): self
     {
         return Deserializer::new($serialized)->deserialize();
     }
