@@ -25,7 +25,7 @@ trait Fixtures
      */
     protected function getTransactionFixture(int $type, string $name): array
     {
-        $path = __DIR__."/../fixtures/Transactions/type-{$type}/{$name}.json";
+        $path = __DIR__."/../fixtures/transactions/type-{$type}/{$name}.json";
 
         return json_decode(file_get_contents($path), true);
     }

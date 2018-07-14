@@ -29,7 +29,7 @@ class IPFS extends AbstractDeserializer
     {
         $this->buffer->position($this->assetOffset / 2);
 
-        $dagLength = $this->buffer->readUInt8 & 0xff;
+        $dagLength = $this->buffer->readUInt8() & 0xff;
 
         $this->transaction->asset = [
             'dag' => $this->buffer->position($this->assetOffset + 2)->readHexBytes($dagLength * 2),
