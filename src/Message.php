@@ -55,7 +55,7 @@ class Message
      */
     public function __construct(object $message)
     {
-        $this->publicKey = $message->publicKey;
+        $this->publicKey = $message->publickey;
         $this->signature = $message->signature;
         $this->message   = $message->message;
     }
@@ -107,7 +107,7 @@ class Message
         $keys = PrivateKey::fromPassphrase($passphrase);
 
         return static::new([
-            'publicKey' => $keys->getPublicKey()->getHex(),
+            'publickey' => $keys->getPublicKey()->getHex(),
             'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
             'message'   => $message,
         ]);
@@ -134,7 +134,7 @@ class Message
     public function toArray(): array
     {
         return [
-            'publicKey' => $this->publicKey,
+            'publickey' => $this->publicKey,
             'signature' => $this->signature,
             'message'   => $this->message,
         ];
