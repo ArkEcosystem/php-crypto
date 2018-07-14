@@ -29,7 +29,7 @@ class DelegateResignationTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixtureWithPassphrase(8);
+        $transaction = $this->getTransactionFixture(8, 'passphrase');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 

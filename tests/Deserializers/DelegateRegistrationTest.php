@@ -28,7 +28,7 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithPassphrase(2);
+        $transaction = $this->getTransactionFixture(2, 'passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
@@ -38,7 +38,7 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithSecondPassphrase(2);
+        $transaction = $this->getTransactionFixture(2, 'second-passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 

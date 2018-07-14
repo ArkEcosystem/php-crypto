@@ -29,7 +29,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithPassphrase(3);
+        $transaction = $this->getTransactionFixture(3, 'passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
@@ -39,7 +39,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithSecondPassphrase(3);
+        $transaction = $this->getTransactionFixture(3, 'second-passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 

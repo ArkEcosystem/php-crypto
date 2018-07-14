@@ -29,7 +29,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithPassphrase(0);
+        $transaction = $this->getTransactionFixture(0, 'passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 
@@ -39,7 +39,7 @@ class TransferTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $transaction = $this->getTransactionFixtureWithSecondPassphrase(0);
+        $transaction = $this->getTransactionFixture(0, 'second-passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 

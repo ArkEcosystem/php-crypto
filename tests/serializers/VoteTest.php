@@ -28,7 +28,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction()
     {
-        $transaction = $this->getTransactionFixtureWithPassphrase(3);
+        $transaction = $this->getTransactionFixture(3, 'passphrase');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 

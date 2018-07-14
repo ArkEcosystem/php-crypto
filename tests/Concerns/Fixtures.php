@@ -31,30 +31,6 @@ trait Fixtures
     }
 
     /**
-     * Get a transaction fixture by type with a passphrase.
-     *
-     * @param int $type
-     *
-     * @return array|object
-     */
-    protected function getTransactionFixtureWithPassphrase(int $type): array
-    {
-        return $this->getTransactionFixture($type, 'passphrase');
-    }
-
-    /**
-     * Get a transaction fixture by type with a second passphrase.
-     *
-     * @param int $type
-     *
-     * @return array|object
-     */
-    protected function getTransactionFixtureWithSecondPassphrase(int $type): array
-    {
-        return $this->getTransactionFixture($type, 'second-passphrase');
-    }
-
-    /**
      * Get the identity fixture.
      *
      * @return array

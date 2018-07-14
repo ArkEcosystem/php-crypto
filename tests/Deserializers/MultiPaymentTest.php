@@ -30,7 +30,7 @@ class MultiPaymentTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixtureWithPassphrase(7);
+        $transaction = $this->getTransactionFixture(7, 'passphrase');
 
         $actual = Deserializer::new($transaction['serialized'])->deserialize();
 

@@ -27,7 +27,7 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction()
     {
-        $transaction = $this->getTransactionFixtureWithPassphrase(2);
+        $transaction = $this->getTransactionFixture(2, 'passphrase');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 

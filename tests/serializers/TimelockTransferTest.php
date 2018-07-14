@@ -29,7 +29,7 @@ class TimelockTransferTest extends TestCase
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
 
-        $transaction = $this->getTransactionFixtureWithPassphrase(6);
+        $transaction = $this->getTransactionFixture(6, 'passphrase');
 
         $actual = Serializer::new($transaction['data'])->serialize();
 
