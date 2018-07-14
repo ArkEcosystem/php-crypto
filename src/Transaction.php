@@ -20,6 +20,7 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 
 /**
  * This is the transaction class.
@@ -130,61 +131,58 @@ class Transaction
      */
     public function toBytes(bool $skipSignature = true, bool $skipSecondSignature = true): Buffer
     {
-        // TODO: replace pack calls with binary writer - see serializer
-        $bytes = '';
-        $bytes .= pack('h', $this->type);
-        $bytes .= pack('V', $this->timestamp);
-        $bytes .= pack('H'.strlen($this->senderPublicKey), $this->senderPublicKey);
+        $buffer = new Writer();
+        $buffer->writeUInt8($this->type);
+        $buffer->writeUInt32($this->timestamp);
+        $buffer->writeHex($this->senderPublicKey);
 
         if (isset($this->recipientId)) {
-            $bytes .= Base58::decodeCheck($this->recipientId)->getBinary();
+            $buffer->writeString(Base58::decodeCheck($this->recipientId)->getBinary());
         } else {
-            $bytes .= pack('x21');
+            $buffer->fill(21);
         }
 
         if (isset($this->vendorField) && strlen($this->vendorField) < 64) {
-            $bytes .= $this->vendorField;
+            $buffer->writeString($this->vendorField);
             $vendorFieldLength = strlen($this->vendorField);
 
             if ($vendorFieldLength < 64) {
-                $bytes .= pack('x'.(64 - $vendorFieldLength));
+                $buffer->fill(64 - $vendorFieldLength);
             }
         } else {
-            $bytes .= pack('x64');
+            $buffer->fill(64);
         }
 
-        $bytes .= pack('P', $this->amount);
-        $bytes .= pack('P', $this->fee);
+        $buffer->writeUInt64($this->amount);
+        $buffer->writeUInt64($this->fee);
 
         if (Types::SECOND_SIGNATURE_REGISTRATION === $this->type) {
-            $publicKey = $this->asset['signature']['publicKey'];
-
-            $bytes .= pack('H'.strlen($publicKey), $publicKey);
+            $buffer->writeHex($this->asset['signature']['publicKey']);
         }
 
         if (Types::DELEGATE_REGISTRATION === $this->type) {
-            $bytes .= $this->asset['delegate']['username'];
+            $buffer->writeString($this->asset['delegate']['username']);
         }
 
         if (Types::VOTE === $this->type) {
-            $bytes .= implode('', $this->asset['votes']);
+            $buffer->writeString(implode('', $this->asset['votes']));
         }
 
         if (Types::MULTI_SIGNATURE_REGISTRATION === $this->type) {
-            $bytes .= pack('C', $this->asset['multisignature']['min']);
-            $bytes .= pack('C', $this->asset['multisignature']['lifetime']);
-            $bytes .= implode('', $this->asset['multisignature']['keysgroup']);
+            $buffer->writeUInt8($this->asset['multisignature']['min']);
+            $buffer->writeUInt8($this->asset['multisignature']['lifetime']);
+            $buffer->writeString(implode('', $this->asset['multisignature']['keysgroup']));
         }
 
         if (!$skipSignature && $this->signature) {
-            $bytes .= pack('H'.strlen($this->signature), $this->signature);
+            $buffer->writeHex($this->signature);
         }
 
         if (!$skipSecondSignature && isset($this->signSignature)) {
-            $bytes .= pack('H'.strlen($this->signSignature), $this->signSignature);
+            $buffer->writeHex($this->signSignature);
         }
 
-        return new Buffer($bytes);
+        return new Buffer($buffer->getBytes());
     }
 
     /**
