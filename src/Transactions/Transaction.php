@@ -288,6 +288,6 @@ class Transaction
      */
     public function toJson(): string
     {
-        return json_encode($this->transaction->toArray());
+        return json_encode($this->toArray());
     }
 }
