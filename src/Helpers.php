@@ -25,7 +25,7 @@ class Helpers
     /**
      * Get the network version.
      *
-     * @param mixed $network
+     * @param \ArkEcosystem\Crypto\Contracts\Network|int $network
      *
      * @return int
      */
