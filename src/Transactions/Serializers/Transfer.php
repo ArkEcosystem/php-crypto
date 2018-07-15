@@ -23,7 +23,7 @@ use BitWasp\Bitcoin\Base58;
 class Transfer extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "transfer" data.
+     * Handle the serialization of "transfer" data.
      *
      * @return string
      */

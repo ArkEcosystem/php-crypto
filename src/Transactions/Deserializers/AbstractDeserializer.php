@@ -53,7 +53,7 @@ abstract class AbstractDeserializer
     }
 
     /**
-     * Handle the deserialisation of transaction data.
+     * Handle the deserialization of transaction data.
      *
      * @param int    $assetOffset
      * @param object $transaction

@@ -23,7 +23,7 @@ use BitWasp\Bitcoin\Base58;
 class MultiPayment extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "multi payment" data.
+     * Handle the serialization of "multi payment" data.
      *
      * @return string
      */

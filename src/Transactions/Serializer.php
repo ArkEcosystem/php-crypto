@@ -66,7 +66,7 @@ class Serializer
     }
 
     /**
-     * Perform AIP11 compliant serialisation.
+     * Perform AIP11 compliant serialization.
      *
      * @return \BitWasp\Buffertools\Buffer
      */
@@ -100,7 +100,7 @@ class Serializer
     }
 
     /**
-     * Handle the serialisation of transaction data.
+     * Handle the serialization of transaction data.
      *
      * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
      *
@@ -114,7 +114,7 @@ class Serializer
     }
 
     /**
-     * Handle the serialisation of transaction data.
+     * Handle the serialization of transaction data.
      *
      * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
      *

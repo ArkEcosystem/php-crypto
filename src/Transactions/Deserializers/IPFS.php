@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Deserializers;
 class IPFS extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "ipfs" data.
+     * Handle the deserialization of "ipfs" data.
      *
      * @return object
      */

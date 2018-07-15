@@ -126,7 +126,7 @@ abstract class AbstractTransaction
     /**
      * Convert the message to its plain object representation.
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function getSignedObject(): Transaction
     {

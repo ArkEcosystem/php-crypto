@@ -45,7 +45,7 @@ abstract class AbstractSerializer
     }
 
     /*
-     * Handle the serialisation of transaction data.
+     * Handle the serialization of transaction data.
      *
      * @param string $buffer
      *

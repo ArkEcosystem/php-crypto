@@ -69,9 +69,9 @@ class Deserializer
     }
 
     /**
-     * Perform AIP11 compliant deserialisation.
+     * Perform AIP11 compliant deserialization.
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function deserialize(): Transaction
     {
@@ -108,12 +108,12 @@ class Deserializer
     }
 
     /**
-     * Handle the deserialisation of transaction data.
+     * Handle the deserialization of transaction data.
      *
      * @param int                              $assetOffset
      * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function handleType(int $assetOffset, Transaction $transaction): Transaction
     {
@@ -123,11 +123,11 @@ class Deserializer
     }
 
     /**
-     * Handle the deserialisation of transaction data with a version of 1.0.
+     * Handle the deserialization of transaction data with a version of 1.0.
      *
      * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function handleVersionOne(Transaction $transaction): Transaction
     {
@@ -165,11 +165,11 @@ class Deserializer
     }
 
     /**
-     * Handle the deserialisation of transaction data with a version of 2.0.
+     * Handle the deserialization of transaction data with a version of 2.0.
      *
      * @param \ArkEcosystem\Crypto\Transaction $transaction
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function handleVersionTwo(Transaction $transaction): Transaction
     {

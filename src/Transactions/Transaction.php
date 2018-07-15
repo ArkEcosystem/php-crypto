@@ -30,7 +30,7 @@ use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 class Transaction
 {
     /**
-     * Perform AIP11 compliant serialisation.
+     * Perform AIP11 compliant serialization.
      *
      * @return \BitWasp\Buffertools\Buffer
      */
@@ -40,11 +40,11 @@ class Transaction
     }
 
     /**
-     * Perform AIP11 compliant deserialisation.
+     * Perform AIP11 compliant deserialization.
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function deserialize(string $serialized): self
+    public static function deserialize(string $serialized): self
     {
         return Deserializer::new($serialized)->deserialize();
     }
@@ -64,7 +64,7 @@ class Transaction
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function sign(PrivateKey $keys): self
     {
@@ -79,7 +79,7 @@ class Transaction
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function secondSign(PrivateKey $keys): self
     {
@@ -191,7 +191,7 @@ class Transaction
      * @param string $serialized
      * @param int    $startOffset
      *
-     * @return \ArkEcosystem\Crypto\Transaction
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
     public function parseSignatures(string $serialized, int $startOffset): self
     {
@@ -250,7 +250,7 @@ class Transaction
     }
 
     /**
-     * Perform AIP11 compliant serialisation.
+     * Return the array representation of the transaction.
      *
      * @return array
      */

@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Deserializers;
 class Vote extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "second signature registration" data.
+     * Handle the deserialization of "second signature registration" data.
      *
      * @return object
      */

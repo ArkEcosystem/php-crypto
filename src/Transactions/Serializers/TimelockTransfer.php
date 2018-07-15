@@ -23,7 +23,7 @@ use BitWasp\Bitcoin\Base58;
 class TimelockTransfer extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "timelock transfer" data.
+     * Handle the serialization of "timelock transfer" data.
      *
      * @return string
      */

@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Deserializers;
 class MultiSignatureRegistration extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "multi signature registration" data.
+     * Handle the deserialization of "multi signature registration" data.
      *
      * @return object
      */

@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Deserializers;
 class DelegateRegistration extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "vote" data.
+     * Handle the deserialization of "vote" data.
      *
      * @return object
      */

@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Serializers;
 class DelegateResignation extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "delegate resignation" data.
+     * Handle the serialization of "delegate resignation" data.
      *
      * @return string
      */

@@ -24,7 +24,7 @@ use BitWasp\Buffertools\Buffer;
 class MultiPayment extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "multi payment" data.
+     * Handle the deserialization of "multi payment" data.
      *
      * @return object
      */

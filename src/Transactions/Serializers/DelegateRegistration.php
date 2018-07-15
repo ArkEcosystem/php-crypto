@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Serializers;
 class DelegateRegistration extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "vote" data.
+     * Handle the serialization of "vote" data.
      *
      * @return string
      */

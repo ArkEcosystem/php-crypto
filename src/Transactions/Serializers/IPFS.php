@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Serializers;
 class IPFS extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "ipfs" data.
+     * Handle the serialization of "ipfs" data.
      *
      * @return string
      */

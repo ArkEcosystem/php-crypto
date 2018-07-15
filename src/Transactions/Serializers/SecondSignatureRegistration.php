@@ -21,7 +21,7 @@ namespace ArkEcosystem\Crypto\Transactions\Serializers;
 class SecondSignatureRegistration extends AbstractSerializer
 {
     /**
-     * Handle the serialisation of "delegate registration" data.
+     * Handle the serialization of "delegate registration" data.
      *
      * @return string
      */

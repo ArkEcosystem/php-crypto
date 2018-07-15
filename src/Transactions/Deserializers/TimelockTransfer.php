@@ -24,7 +24,7 @@ use BitWasp\Buffertools\Buffer;
 class TimelockTransfer extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "timelock transfer" data.
+     * Handle the deserialization of "timelock transfer" data.
      *
      * @return object
      */

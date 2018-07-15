@@ -24,7 +24,7 @@ use BitWasp\Buffertools\Buffer;
 class Transfer extends AbstractDeserializer
 {
     /**
-     * Handle the deserialisation of "transfer" data.
+     * Handle the deserialization of "transfer" data.
      *
      * @return object
      */
