@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Deserializer;
-use ArkEcosystem\Crypto\Serializer;
-use ArkEcosystem\Crypto\Transaction;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 
 trait Deserialize
 {

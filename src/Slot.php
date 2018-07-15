@@ -29,6 +29,16 @@ class Slot
      */
     public static function getTime(): int
     {
-        return time() - strtotime(Network::getEpoch());
+        return time() - static::getEpoch();
+    }
+
+    /**
+     * Get the network start epoch.
+     *
+     * @return int
+     */
+    public static function getEpoch(): int
+    {
+        return strtotime(Network::getEpoch());
     }
 }
