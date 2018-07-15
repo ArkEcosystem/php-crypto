@@ -25,7 +25,13 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class DelegateResignationTest extends TestCase
 {
     /** @test */
-    public function it_should_create_a_valid_transaction()
+    public function it_should_sign_it_with_a_passphrase()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    }
+
+    /** @test */
+    public function it_should_sign_it_with_a_second_passphrase()
     {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }

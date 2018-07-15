@@ -29,11 +29,11 @@ class SecondSignatureRegistrationTest extends TestCase
     public function it_should_create_a_valid_transaction()
     {
         $transaction = SecondSignatureRegistration::new()
-            ->signature('second passphrase')
-            ->sign('first passphrase');
+            ->signature('this is a top secret second passphrase')
+            ->sign('this is a top secret passphrase');
 
         $this->assertTrue($transaction->verify());
         $this->assertFalse(isset($transaction->signSignature));
-        $this->assertSame($transaction->transaction->asset['signature']['publicKey'], PublicKey::fromPassphrase('second passphrase')->getHex());
+        $this->assertSame($transaction->transaction->asset['signature']['publicKey'], PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex());
     }
 }

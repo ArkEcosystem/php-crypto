@@ -23,6 +23,9 @@ abstract class TestCase extends BaseTestCase
         Concerns\Serialize,
         Concerns\Deserialize;
 
+    protected $passphrase       = 'This is a top secret passphrase';
+    protected $secondPassphrase = 'This is a top secret second passphrase';
+
     protected function setUp()
     {
         Network::set(Devnet::new());
