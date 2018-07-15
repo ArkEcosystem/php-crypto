@@ -15,7 +15,6 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
-use ArkEcosystem\Crypto\Identity\PublicKey;
 use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Transactions\Transaction;
 
@@ -84,7 +83,8 @@ abstract class AbstractTransaction
         $keys                               = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
 
-        $this->transaction = $this->transaction->sign($keys);
+        $this->transaction     = $this->transaction->sign($keys);
+        $this->transaction->id = $this->transaction->getId();
 
         return $this;
     }
@@ -92,13 +92,13 @@ abstract class AbstractTransaction
     /**
      * Sign the transaction using the given second passphrase.
      *
-     * @param string $secondSecret
+     * @param string $secondPassphrase
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
      */
-    public function secondSign(string $secondSecret): self
+    public function secondSign(string $secondPassphrase): self
     {
-        $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondSecret));
+        $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
 
         return $this;
     }
@@ -118,39 +118,29 @@ abstract class AbstractTransaction
      *
      * @return bool
      */
-    public function secondVerify(string $secondSecret): bool
+    public function secondVerify(string $secondPublicKey): bool
     {
-        return $this->transaction->secondVerify(PublicKey::fromPassphrase($secondSecret)->getHex());
+        return $this->transaction->secondVerify($secondPublicKey);
     }
 
     /**
-     * Convert the message to its plain object representation.
+     * Convert the transaction to its array representation.
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return array
      */
-    public function getSignedObject(): Transaction
+    public function toArray(): array
     {
-        $this->transaction->id = $this->transaction->getId();
-
-        if (empty($this->transaction->signSignature)) {
-            unset($this->transaction->signSignature);
-        }
-
-        if (empty($this->transaction->asset)) {
-            unset($this->transaction->asset);
-        }
-
-        return $this->transaction;
+        return $this->transaction->toArray();
     }
 
     /**
-     * Convert the message to its JSON representation.
+     * Convert the transaction to its JSON representation.
      *
      * @return string
      */
     public function toJson(): string
     {
-        return json_encode($this->transaction);
+        return $this->transaction->toJson();
     }
 
     /**

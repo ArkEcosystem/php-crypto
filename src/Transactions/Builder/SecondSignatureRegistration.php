@@ -25,15 +25,15 @@ class SecondSignatureRegistration extends AbstractTransaction
     /**
      * Set the signature asset to register the second passphrase.
      *
-     * @param string $secondSecret
+     * @param string $secondPassphrase
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration
      */
-    public function signature(string $secondSecret): self
+    public function signature(string $secondPassphrase): self
     {
         $this->transaction->asset = [
             'signature' => [
-                'publicKey' => PublicKey::fromPassphrase($secondSecret)->getHex(),
+                'publicKey' => PublicKey::fromPassphrase($secondPassphrase)->getHex(),
             ],
         ];
 

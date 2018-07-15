@@ -250,12 +250,44 @@ class Transaction
     }
 
     /**
-     * Return the array representation of the transaction.
+     * Convert the transaction to its array representation.
      *
      * @return array
      */
     public function toArray(): array
     {
-        return json_decode(json_encode($this), true);
+        return array_filter([
+            'amount'          => $this->amount,
+            'asset'           => $this->asset ?? [],
+            'fee'             => $this->fee,
+            'id'              => $this->id,
+            'network'         => $this->network,
+            'recipientId'     => $this->recipientId ?? null,
+            'secondSignature' => $this->secondSignature ?? null,
+            'senderPublicKey' => $this->senderPublicKey,
+            'signature'       => $this->signature,
+            'signatures'      => $this->signatures ?? null,
+            'signSignature'   => $this->signSignature ?? null,
+            'timestamp'       => $this->timestamp,
+            'type'            => $this->type,
+            'vendorField'     => $this->vendorField ?? null,
+            'version'         => $this->version,
+        ], function ($element) {
+            if (null !== $element) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * Convert the transaction to its JSON representation.
+     *
+     * @return string
+     */
+    public function toJson(): string
+    {
+        return json_encode($this->transaction->toArray());
     }
 }
