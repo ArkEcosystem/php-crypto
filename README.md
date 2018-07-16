@@ -52,6 +52,8 @@
 - [x] getId
 - [x] sign
 - [x] secondSign
+- [x] verify
+- [x] secondVerify
 - [x] parseSignatures
 - [x] serialize
 - [x] deserialize
