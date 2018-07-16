@@ -25,90 +25,90 @@ Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/crypto
 ## TO-DO
 
 ### AIP11 Serialization
-- [ ] Transfer **(Type 0)**
-- [ ] Second Signature Registration **(Type 1)**
-- [ ] Delegate Registration **(Type 2)**
-- [ ] Vote **(Type 3)**
-- [ ] Multi Signature Registration **(Type 4)**
-- [ ] IPFS **(Type 5)**
-- [ ] Timelock Transfer **(Type 6)**
-- [ ] Multi Payment **(Type 7)**
-- [ ] Delegate Resignation **(Type 8)**
+- [x] Transfer
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
+- [x] IPFS
+- [x] Timelock Transfer
+- [x] Multi Payment
+- [x] Delegate Resignation
 
 ### AIP11 Deserialization
-- [ ] Transfer **(Type 0)**
-- [ ] Second Signature Registration **(Type 1)**
-- [ ] Delegate Registration **(Type 2)**
-- [ ] Vote **(Type 3)**
-- [ ] Multi Signature Registration **(Type 4)**
-- [ ] IPFS **(Type 5)**
-- [ ] Timelock Transfer **(Type 6)**
-- [ ] Multi Payment **(Type 7)**
-- [ ] Delegate Resignation **(Type 8)**
+- [x] Transfer
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
+- [x] IPFS
+- [x] Timelock Transfer
+- [x] Multi Payment
+- [x] Delegate Resignation
 
 ### Transaction Signing
-- [ ] Transfer **(Type 0)**
-- [ ] Second Signature Registration **(Type 1)**
-- [ ] Delegate Registration **(Type 2)**
-- [ ] Vote **(Type 3)**
-- [ ] Multi Signature Registration **(Type 4)**
+- [x] Transfer
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
 
 ### Transaction Verifying
-- [ ] Transfer **(Type 0)**
-- [ ] Second Signature Registration **(Type 1)**
-- [ ] Delegate Registration **(Type 2)**
-- [ ] Vote **(Type 3)**
-- [ ] Multi Signature Registration **(Type 4)**
+- [x] Transfer
+- [x] Second Signature Registration
+- [x] Delegate Registration
+- [x] Vote
+- [x] Multi Signature Registration
 
 ## Transaction Entity
-- [ ] getId
-- [ ] sign
-- [ ] secondSign
-- [ ] parseSignatures
-- [ ] serialize
-- [ ] deserialize
-- [ ] toBytes
-- [ ] toArray
-- [ ] toJson
+- [x] getId
+- [x] sign
+- [x] secondSign
+- [x] parseSignatures
+- [x] serialize
+- [x] deserialize
+- [x] toBytes
+- [x] toArray
+- [x] toJson
 
 ### Message
-- [ ] sign
-- [ ] verify
-- [ ] toArray
-- [ ] toJson
+- [x] sign
+- [x] verify
+- [x] toArray
+- [x] toJson
 
 ### Private Key Identity
-- [ ] fromPassphrase
-- [ ] fromHex
+- [x] fromPassphrase
+- [x] fromHex
 
 ### Public Key Identity
-- [ ] fromPassphrase
-- [ ] fromHex
+- [x] fromPassphrase
+- [x] fromHex
 
 ### Address Identity
-- [ ] fromPassphrase
-- [ ] fromPublicKey
-- [ ] fromPrivateKey
-- [ ] validate
+- [x] fromPassphrase
+- [x] fromPublicKey
+- [x] fromPrivateKey
+- [x] validate
 
 ### WIF Identity
-- [ ] fromPassphrase
+- [x] fromPassphrase
 
 ### Configuration
-- [ ] getNetwork
-- [ ] setNetwork
-- [ ] getFee
-- [ ] setFee
+- [x] getNetwork `ArkEcosystem\Crypto\Configuration\Network::get()`
+- [x] setNetwork `ArkEcosystem\Crypto\Configuration\Network::set()`
+- [x] getFee `ArkEcosystem\Crypto\Configuration\Fee::get()`
+- [x] setFee `ArkEcosystem\Crypto\Configuration\Fee::set()`
 
 ### Slot
-- [ ] time
-- [ ] epoch
+- [x] time
+- [x] epoch
 
 ## Networks (Mainnet, Devnet & Testnet)
-- [ ] epoch
-- [ ] version
-- [ ] nethash
-- [ ] wif
+- [x] epoch
+- [x] version
+- [x] nethash
+- [x] wif
 
 ## Testing
 
