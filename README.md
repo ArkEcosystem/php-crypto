@@ -10,18 +10,6 @@
 [![Latest Version](https://img.shields.io/github/release/ArkEcosystem/php-crypto.svg?style=flat-square)](https://github.com/ArkEcosystem/php-crypto/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
-
-Require this package, with [Composer](https://getcomposer.org/), in the root directory of your project.
-
-```bash
-$ composer require arkecosystem/crypto
-```
-
-## Documentation
-
-Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/cryptography-php) for advanced examples and features.
-
 ## TO-DO
 
 ### AIP11 Serialization
@@ -109,6 +97,18 @@ Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/crypto
 - [x] version
 - [x] nethash
 - [x] wif
+
+## Installation
+
+Require this package, with [Composer](https://getcomposer.org/), in the root directory of your project.
+
+```bash
+$ composer require arkecosystem/crypto
+```
+
+## Documentation
+
+Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/cryptography-php) for advanced examples and features.
 
 ## Testing
 
