@@ -34,40 +34,40 @@ interface Network
      *
      * @return int
      */
-    public static function getEpoch(): string;
+    public static function epoch(): string;
 
     /**
      * Get the version of the network.
      *
      * @return int
      */
-    public static function getVersion(): int;
+    public static function version(): int;
 
     /**
      * Get the nethash of the network.
      *
      * @return string
      */
-    public static function getNethash(): string;
+    public static function nethash(): string;
 
     /**
      * Get the wif prefix of the network.
      *
      * @return int
      */
-    public static function getWif(): int;
+    public static function wif(): int;
 
     /**
      * Get the byte representation of the wif prefix.
      *
      * @return int
      */
-    public static function getWifByte(): string;
+    public static function wifByte(): string;
 
     /**
-     * Get a network instance.
+     * Get a network factory.
      *
      * @return \BitWasp\Bitcoin\Network\Network
      */
-    public static function getFactory(): TokenNetwork;
+    public static function factory(): TokenNetwork;
 }

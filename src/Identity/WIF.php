@@ -35,6 +35,6 @@ class WIF
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        return PrivateKey::fromPassphrase($passphrase)->toWif($network->getFactory());
+        return PrivateKey::fromPassphrase($passphrase)->toWif($network->factory());
     }
 }

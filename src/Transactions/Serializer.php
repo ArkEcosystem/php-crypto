@@ -44,9 +44,9 @@ class Serializer
     /**
      * Create a new serializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transaction $transaction
+     * @param \ArkEcosystem\Crypto\Transaction|array $transaction
      */
-    private function __construct(array $transaction)
+    private function __construct($transaction)
     {
         if ($transaction instanceof Transaction) {
             $transaction = $transaction->toArray();
@@ -58,7 +58,7 @@ class Serializer
     /**
      * Create a new deserializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transaction $transaction
+     * @param \ArkEcosystem\Crypto\Transaction|array $transaction
      */
     public static function new($transaction)
     {
@@ -75,7 +75,7 @@ class Serializer
         $buffer = new Writer();
         $buffer->writeUInt8(0xff);
         $buffer->writeUInt8($this->transaction['version'] ?? 0x01);
-        $buffer->writeUInt8($this->transaction['network'] ?? Network::getVersion());
+        $buffer->writeUInt8($this->transaction['network'] ?? Network::version());
         $buffer->writeUInt8($this->transaction['type']);
         $buffer->writeUInt32($this->transaction['timestamp']);
         $buffer->writeHex($this->transaction['senderPublicKey']);

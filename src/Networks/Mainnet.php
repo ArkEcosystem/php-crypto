@@ -27,7 +27,7 @@ class Mainnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getEpoch(): string
+    public static function epoch(): string
     {
         return '2017-03-21T13:00:00.000Z';
     }
@@ -35,7 +35,7 @@ class Mainnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getNethash(): string
+    public static function nethash(): string
     {
         return '6e84d08bd299ed97c212c886c98a57e36545c8f5d645ca7eeae63a8bd62d8988';
     }
@@ -43,7 +43,7 @@ class Mainnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getWif(): int
+    public static function wif(): int
     {
         return 170;
     }
@@ -51,7 +51,7 @@ class Mainnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getFactory(): TokenNetwork
+    public static function factory(): TokenNetwork
     {
         return NetworkFactory::create('17', '00', 'aa')
             ->setHDPubByte('46090600')

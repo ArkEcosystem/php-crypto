@@ -57,7 +57,7 @@ class Address
         $network = $network ?? NetworkConfiguration::get();
 
         $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
-        $seed      = Writer::bit8(Helpers::getVersion($network)).$ripemd160->getBinary();
+        $seed      = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
 
         return Base58::encodeCheck(new Buffer($seed));
     }
@@ -76,7 +76,7 @@ class Address
 
         $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
 
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network->getFactory());
+        return (new PayToPubKeyHashAddress($digest))->getAddress($network->factory());
     }
 
     /**
@@ -91,6 +91,6 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        return AddressFactory::isValidAddress($address, $network->getFactory());
+        return AddressFactory::isValidAddress($address, $network->factory());
     }
 }

@@ -65,6 +65,6 @@ class PrivateKey
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        return PrivateKeyFactory::fromWif($wif, null, $network->getFactory());
+        return PrivateKeyFactory::fromWif($wif, null, $network->factory());
     }
 }

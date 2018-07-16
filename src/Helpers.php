@@ -29,10 +29,10 @@ class Helpers
      *
      * @return int
      */
-    public static function getVersion($network): int
+    public static function version($network): int
     {
         return is_int($network)
             ? $network
-            : $network->getVersion();
+            : $network->version();
     }
 }

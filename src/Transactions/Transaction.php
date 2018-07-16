@@ -30,26 +30,6 @@ use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 class Transaction
 {
     /**
-     * Perform AIP11 compliant serialization.
-     *
-     * @return \BitWasp\Buffertools\Buffer
-     */
-    public function serialize(): Buffer
-    {
-        return Serializer::new($this->toArray())->serialize();
-    }
-
-    /**
-     * Perform AIP11 compliant deserialization.
-     *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
-     */
-    public static function deserialize(string $serialized): self
-    {
-        return Deserializer::new($serialized)->deserialize();
-    }
-
-    /**
      * Convert the byte representation to a unique identifier.
      *
      * @return string
@@ -122,6 +102,70 @@ class Transaction
     }
 
     /**
+     * Parse the signature, second signature and multi signatures.
+     *
+     * @param string $serialized
+     * @param int    $startOffset
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     */
+    public function parseSignatures(string $serialized, int $startOffset): self
+    {
+        $this->signature = substr($serialized, $startOffset);
+
+        $multiSignatureOffset = 0;
+
+        if (0 === strlen($this->signature)) {
+            unset($this->signature);
+        } else {
+            $signatureLength       = intval(substr($this->signature, 2, 2), 16) + 2;
+            $this->signature       = substr($serialized, $startOffset, $signatureLength * 2);
+            $multiSignatureOffset += $signatureLength * 2;
+            $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
+
+            if (!$this->secondSignature || 0 === strlen($this->secondSignature)) {
+                unset($this->secondSignature);
+            } else {
+                if ('ff' === substr($this->secondSignature, 0, 2)) {
+                    unset($this->secondSignature);
+                } else {
+                    $secondSignatureLength        = intval(substr($this->secondSignature, 2, 2), 16) + 2;
+                    $this->secondSignature        = substr($this->secondSignature, 0, $secondSignatureLength * 2);
+                    $multiSignatureOffset += $secondSignatureLength * 2;
+                }
+            }
+
+            $signatures = substr($serialized, $startOffset + $multiSignatureOffset);
+
+            if (!$signatures || 0 === strlen($signatures)) {
+                return $this;
+            }
+
+            if ('ff' !== substr($signatures, 0, 2)) {
+                return $this;
+            }
+
+            $signatures       = substr($signatures, 2);
+            $this->signatures = [];
+
+            $moreSignatures = true;
+            while ($moreSignatures) {
+                $mLength = intval(substr($signatures, 2, 2), 16);
+
+                if ($mLength > 0) {
+                    $this->signatures[] = substr($signatures, 0, ($mLength + 2) * 2);
+                } else {
+                    $moreSignatures = false;
+                }
+
+                $signatures = substr($signatures, ($mLength + 2) * 2);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Convert the transaction to its byte representation.
      *
      * @param bool $skipSignature
@@ -186,67 +230,23 @@ class Transaction
     }
 
     /**
-     * Parse the signature, second signature and multi signatures.
+     * Perform AIP11 compliant serialization.
      *
-     * @param string $serialized
-     * @param int    $startOffset
+     * @return \BitWasp\Buffertools\Buffer
+     */
+    public function serialize(): Buffer
+    {
+        return Serializer::new($this->toArray())->serialize();
+    }
+
+    /**
+     * Perform AIP11 compliant deserialization.
      *
      * @return \ArkEcosystem\Crypto\Transactions\Transaction
      */
-    public function parseSignatures(string $serialized, int $startOffset): self
+    public static function deserialize(string $serialized): self
     {
-        $this->signature = substr($serialized, $startOffset);
-
-        $multiSignatureOffset = 0;
-
-        if (0 === strlen($this->signature)) {
-            unset($this->signature);
-        } else {
-            $signatureLength       = intval(substr($this->signature, 2, 2), 16) + 2;
-            $this->signature       = substr($serialized, $startOffset, $signatureLength * 2);
-            $multiSignatureOffset += $signatureLength * 2;
-            $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
-
-            if (!$this->secondSignature || 0 === strlen($this->secondSignature)) {
-                unset($this->secondSignature);
-            } else {
-                if ('ff' === substr($this->secondSignature, 0, 2)) {
-                    unset($this->secondSignature);
-                } else {
-                    $secondSignatureLength        = intval(substr($this->secondSignature, 2, 2), 16) + 2;
-                    $this->secondSignature        = substr($this->secondSignature, 0, $secondSignatureLength * 2);
-                    $multiSignatureOffset += $secondSignatureLength * 2;
-                }
-            }
-
-            $signatures = substr($serialized, $startOffset + $multiSignatureOffset);
-
-            if (!$signatures || 0 === strlen($signatures)) {
-                return $this;
-            }
-
-            if ('ff' !== substr($signatures, 0, 2)) {
-                return $this;
-            }
-
-            $signatures              = substr($signatures, 2);
-            $this->signatures        = [];
-
-            $moreSignatures = true;
-            while ($moreSignatures) {
-                $mLength = intval(substr($signatures, 2, 2), 16);
-
-                if ($mLength > 0) {
-                    $this->signatures[] = substr($signatures, 0, ($mLength + 2) * 2);
-                } else {
-                    $moreSignatures = false;
-                }
-
-                $signatures = substr($signatures, ($mLength + 2) * 2);
-            }
-        }
-
-        return $this;
+        return Deserializer::new($serialized)->deserialize();
     }
 
     /**

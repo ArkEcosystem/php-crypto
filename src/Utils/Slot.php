@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto;
+namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 
@@ -27,9 +27,9 @@ class Slot
      *
      * @return int
      */
-    public static function getTime(): int
+    public static function time(): int
     {
-        return time() - static::getEpoch();
+        return time() - static::epoch();
     }
 
     /**
@@ -37,8 +37,8 @@ class Slot
      *
      * @return int
      */
-    public static function getEpoch(): int
+    public static function epoch(): int
     {
-        return strtotime(Network::getEpoch());
+        return strtotime(Network::epoch());
     }
 }

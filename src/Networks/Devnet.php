@@ -27,7 +27,7 @@ class Devnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getEpoch(): string
+    public static function epoch(): string
     {
         return '2017-03-21T13:00:00.000Z';
     }
@@ -35,7 +35,7 @@ class Devnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getNethash(): string
+    public static function nethash(): string
     {
         return '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23';
     }
@@ -43,7 +43,7 @@ class Devnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getWif(): int
+    public static function wif(): int
     {
         return 170;
     }
@@ -51,7 +51,7 @@ class Devnet extends AbstractNetwork implements Network
     /**
      * {@inheritdoc}
      */
-    public static function getFactory(): TokenNetwork
+    public static function factory(): TokenNetwork
     {
         return NetworkFactory::create('1e', '00', 'aa')
             ->setHDPubByte('46090600')

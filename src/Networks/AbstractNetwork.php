@@ -30,7 +30,7 @@ abstract class AbstractNetwork
      */
     public static function __callStatic(string $method, array $args)
     {
-        return static::getFactory()->{$method}(...$args);
+        return static::factory()->{$method}(...$args);
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class AbstractNetwork
      *
      * @return int
      */
-    public static function getVersion(): int
+    public static function version(): int
     {
         $byte = static::getAddressByte();
 
@@ -60,8 +60,8 @@ abstract class AbstractNetwork
      *
      * @return int
      */
-    public static function getWifByte(): string
+    public static function wifByte(): string
     {
-        return dechex(static::getWif());
+        return dechex(static::wif());
     }
 }

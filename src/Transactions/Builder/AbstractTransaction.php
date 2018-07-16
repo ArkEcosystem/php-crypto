@@ -15,8 +15,8 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Identity\PrivateKey;
-use ArkEcosystem\Crypto\Slot;
 use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Utils\Slot;
 
 /**
  * This is the abstract transaction class.
@@ -34,7 +34,7 @@ abstract class AbstractTransaction
         $this->transaction->type        = $this->getType();
         $this->transaction->amount      = 0;
         $this->transaction->fee         = $this->getFee();
-        $this->transaction->timestamp   = Slot::getTime();
+        $this->transaction->timestamp   = Slot::time();
     }
 
     /**

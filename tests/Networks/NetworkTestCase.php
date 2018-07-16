@@ -25,17 +25,25 @@ use BitWasp\Bitcoin\Network\Network;
 class NetworkTestCase extends TestCase
 {
     /** @test */
-    public function it_should_get_version()
+    public function it_should_get_address_byte()
     {
-        $actual = $this->getTestSubject()::getVersion();
+        $actual = $this->getTestSubject()::version();
 
         $this->assertSame($actual, $this->version);
     }
 
     /** @test */
+    public function it_should_get_epoch()
+    {
+        $actual = $this->getTestSubject()::epoch();
+
+        $this->assertSame($actual, $this->epoch);
+    }
+
+    /** @test */
     public function it_should_get_nethash()
     {
-        $actual = $this->getTestSubject()::getNethash();
+        $actual = $this->getTestSubject()::nethash();
 
         $this->assertSame($actual, $this->nethash);
     }
@@ -43,7 +51,7 @@ class NetworkTestCase extends TestCase
     /** @test */
     public function it_should_get_wif()
     {
-        $actual = $this->getTestSubject()::getWif();
+        $actual = $this->getTestSubject()::wif();
 
         $this->assertSame($actual, $this->wif);
     }
@@ -51,7 +59,7 @@ class NetworkTestCase extends TestCase
     /** @test */
     public function it_should_get_wif_byte()
     {
-        $actual = $this->getTestSubject()::getWifByte();
+        $actual = $this->getTestSubject()::wifByte();
 
         $this->assertSame($actual, $this->wifByte);
     }
@@ -59,6 +67,6 @@ class NetworkTestCase extends TestCase
     /** @test */
     public function it_should_get_factory()
     {
-        $this->assertInstanceOf(Network::class, $this->getTestSubject()::getFactory());
+        $this->assertInstanceOf(Network::class, $this->getTestSubject()::factory());
     }
 }
