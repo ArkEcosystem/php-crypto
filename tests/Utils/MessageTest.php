@@ -11,9 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto;
+namespace ArkEcosystem\Tests\Crypto\Utils;
 
-use ArkEcosystem\Crypto\Message;
+use ArkEcosystem\Crypto\Utils\Message;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the message test class.

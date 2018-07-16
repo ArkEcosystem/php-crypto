@@ -129,8 +129,8 @@ class Transaction
                 if ('ff' === substr($this->secondSignature, 0, 2)) {
                     unset($this->secondSignature);
                 } else {
-                    $secondSignatureLength        = intval(substr($this->secondSignature, 2, 2), 16) + 2;
-                    $this->secondSignature        = substr($this->secondSignature, 0, $secondSignatureLength * 2);
+                    $secondSignatureLength = intval(substr($this->secondSignature, 2, 2), 16) + 2;
+                    $this->secondSignature = substr($this->secondSignature, 0, $secondSignatureLength * 2);
                     $multiSignatureOffset += $secondSignatureLength * 2;
                 }
             }
