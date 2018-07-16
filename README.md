@@ -22,6 +22,94 @@ $ composer require arkecosystem/crypto
 
 Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/cryptography-php) for advanced examples and features.
 
+## TO-DO
+
+### AIP11 Serialization
+- [ ] Transfer **(Type 0)**
+- [ ] Second Signature Registration **(Type 1)**
+- [ ] Delegate Registration **(Type 2)**
+- [ ] Vote **(Type 3)**
+- [ ] Multi Signature Registration **(Type 4)**
+- [ ] IPFS **(Type 5)**
+- [ ] Timelock Transfer **(Type 6)**
+- [ ] Multi Payment **(Type 7)**
+- [ ] Delegate Resignation **(Type 8)**
+
+### AIP11 Deserialization
+- [ ] Transfer **(Type 0)**
+- [ ] Second Signature Registration **(Type 1)**
+- [ ] Delegate Registration **(Type 2)**
+- [ ] Vote **(Type 3)**
+- [ ] Multi Signature Registration **(Type 4)**
+- [ ] IPFS **(Type 5)**
+- [ ] Timelock Transfer **(Type 6)**
+- [ ] Multi Payment **(Type 7)**
+- [ ] Delegate Resignation **(Type 8)**
+
+### Transaction Signing
+- [ ] Transfer **(Type 0)**
+- [ ] Second Signature Registration **(Type 1)**
+- [ ] Delegate Registration **(Type 2)**
+- [ ] Vote **(Type 3)**
+- [ ] Multi Signature Registration **(Type 4)**
+
+### Transaction Verifying
+- [ ] Transfer **(Type 0)**
+- [ ] Second Signature Registration **(Type 1)**
+- [ ] Delegate Registration **(Type 2)**
+- [ ] Vote **(Type 3)**
+- [ ] Multi Signature Registration **(Type 4)**
+
+## Transaction Entity
+- [ ] getId
+- [ ] sign
+- [ ] secondSign
+- [ ] parseSignatures
+- [ ] serialize
+- [ ] deserialize
+- [ ] toBytes
+- [ ] toArray
+- [ ] toJson
+
+### Message
+- [ ] sign
+- [ ] verify
+- [ ] toArray
+- [ ] toJson
+
+### Private Key Identity
+- [ ] fromPassphrase
+- [ ] fromHex
+
+### Public Key Identity
+- [ ] fromPassphrase
+- [ ] fromHex
+
+### Address Identity
+- [ ] fromPassphrase
+- [ ] fromPublicKey
+- [ ] fromPrivateKey
+- [ ] validate
+
+### WIF Identity
+- [ ] fromPassphrase
+
+### Configuration
+- [ ] getNetwork
+- [ ] setNetwork
+- [ ] getFee
+- [ ] setFee
+
+### Slot
+- [ ] time
+- [ ] epoch
+
+## Networks (Mainnet, Devnet & Testnet)
+- [ ] epoch
+- [ ] version
+- [ ] nethash
+- [ ] wif
+
 ## Testing
 
 ``` bash
