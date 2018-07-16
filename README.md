@@ -60,7 +60,7 @@ Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/crypto
 - [x] Vote
 - [x] Multi Signature Registration
 
-## Transaction Entity
+### Transaction Entity
 - [x] getId
 - [x] sign
 - [x] secondSign
@@ -95,16 +95,16 @@ Have a look at the [official documentation](https://docs.ark.io/v1.0/docs/crypto
 - [x] fromPassphrase
 
 ### Configuration
-- [x] getNetwork `ArkEcosystem\Crypto\Configuration\Network::get()`
-- [x] setNetwork `ArkEcosystem\Crypto\Configuration\Network::set()`
-- [x] getFee `ArkEcosystem\Crypto\Configuration\Fee::get()`
-- [x] setFee `ArkEcosystem\Crypto\Configuration\Fee::set()`
+- [x] getNetwork
+- [x] setNetwork
+- [x] getFee
+- [x] setFee
 
 ### Slot
 - [x] time
 - [x] epoch
 
-## Networks (Mainnet, Devnet & Testnet)
+### Networks (Mainnet, Devnet & Testnet)
 - [x] epoch
 - [x] version
 - [x] nethash
