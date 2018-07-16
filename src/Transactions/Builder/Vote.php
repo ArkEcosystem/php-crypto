@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Identity\Address;
+use ArkEcosystem\Crypto\Identities\Address;
 
 /**
  * This is the vote transaction class.

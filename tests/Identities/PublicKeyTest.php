@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto\Identity;
+namespace ArkEcosystem\Tests\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Identity\PrivateKey as TestClass;
+use ArkEcosystem\Crypto\Identities\PublicKey as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -22,35 +22,35 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * @author Brian Faust <brian@ark.io>
  * @coversNothing
  */
-class PrivateKeyTest extends TestCase
+class PublicKeyTest extends TestCase
 {
     /** @test */
-    public function it_should_get_the_private_key_from_passphrase()
+    public function it_should_get_the_public_key_from_passphrase()
     {
         $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromPassphrase($fixture['passphrase']);
 
-        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
+        $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
 
     /** @test */
-    public function it_should_get_the_private_key_from_hex()
+    public function it_should_get_the_public_key_from_hex()
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::fromHex($fixture['data']['privateKey']);
+        $actual = TestClass::fromHex($fixture['data']['publicKey']);
 
-        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
+        $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
 
     /** @test */
-    public function it_should_get_the_private_key_from_wif()
+    public function it_should_validate_the_public_key()
     {
         $fixture = $this->getFixture('identity');
 
-        $actual = TestClass::fromWif($fixture['data']['wif']);
+        $actual = TestClass::validate($fixture['data']['publicKey']);
 
-        $this->assertSame($fixture['data']['privateKey'], $actual->getHex());
+        $this->assertTrue($actual);
     }
 }

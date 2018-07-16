@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
-use ArkEcosystem\Crypto\Identity\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Utils\Slot;
 

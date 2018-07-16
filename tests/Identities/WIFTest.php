@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto\Identity;
+namespace ArkEcosystem\Tests\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Identity\WIF as TestClass;
+use ArkEcosystem\Crypto\Identities\WIF as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**

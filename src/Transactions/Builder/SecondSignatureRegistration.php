@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identity\PublicKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 
 /**
  * This is the second signature registration transaction class.

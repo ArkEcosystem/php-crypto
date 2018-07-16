@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto\Identity;
+namespace ArkEcosystem\Crypto\Identities;
 
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
-use ArkEcosystem\Crypto\Identity\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;

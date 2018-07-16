@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Identity\Address;
+use ArkEcosystem\Crypto\Identities\Address;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;

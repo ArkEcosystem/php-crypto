@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Tests\Crypto\Identity;
+namespace ArkEcosystem\Tests\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Identity\Address as TestClass;
-use ArkEcosystem\Crypto\Identity\PrivateKey;
+use ArkEcosystem\Crypto\Identities\Address as TestClass;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
