@@ -20,7 +20,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the multi signature registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Transactions\Serializers\TimelockTransferTest
  */
 class MultiSignatureRegistrationTest extends TestCase
 {

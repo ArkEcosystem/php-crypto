@@ -20,7 +20,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate resignation builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\TimelockTransferTest
  */
 class DelegateResignationTest extends TestCase
 {

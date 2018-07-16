@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the vote deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\TimelockTransferTest
  */
 class VoteTest extends TestCase
 {

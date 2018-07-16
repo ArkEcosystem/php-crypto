@@ -20,7 +20,7 @@ use BitWasp\Bitcoin\Network\Network;
  * This is the devnet network test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Networks\Devnet
  */
 class DevnetTest extends NetworkTestCase
 {

@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate registration deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\TimelockTransferTest
  */
 class DelegateRegistrationTest extends TestCase
 {

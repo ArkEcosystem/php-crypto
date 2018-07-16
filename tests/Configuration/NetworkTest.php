@@ -23,7 +23,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the network configuration test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Configuration\Network
  */
 class NetworkTest extends TestCase
 {

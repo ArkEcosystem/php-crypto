@@ -20,7 +20,7 @@ use BitWasp\Bitcoin\Network\Network;
  * This is the testnet network test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @coversNothing
+ * @covers \ArkEcosystem\Crypto\Networks\Testnet
  */
 class TestnetTest extends NetworkTestCase
 {
