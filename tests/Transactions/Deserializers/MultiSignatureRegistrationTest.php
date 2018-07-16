@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the multi signature registration deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\MultiSignatureRegistration
  */
 class MultiSignatureRegistrationTest extends TestCase
 {

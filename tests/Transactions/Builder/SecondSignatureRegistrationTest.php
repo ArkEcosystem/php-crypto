@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the second signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration
  */
 class SecondSignatureRegistrationTest extends TestCase
 {

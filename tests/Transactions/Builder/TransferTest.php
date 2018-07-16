@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the transfer builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\Transfer
  */
 class TransferTest extends TestCase
 {

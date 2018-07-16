@@ -20,7 +20,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the second signature registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Serializers\SecondSignatureRegistration
  */
 class SecondSignatureRegistrationTest extends TestCase
 {

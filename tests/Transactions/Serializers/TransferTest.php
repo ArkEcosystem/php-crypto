@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the transfer serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Serializers\Transfer
  */
 class TransferTest extends TestCase
 {

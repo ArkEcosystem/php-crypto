@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the transfer deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\Transfer
  */
 class TransferTest extends TestCase
 {

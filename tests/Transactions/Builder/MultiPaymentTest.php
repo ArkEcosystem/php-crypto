@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the multi payment builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
  */
 class MultiPaymentTest extends TestCase
 {

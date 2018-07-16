@@ -20,7 +20,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate resignation serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Serializers\DelegateResignation
  */
 class DelegateResignationTest extends TestCase
 {

@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the ipfs deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\TimelockTransferTest
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\IPFS
  */
 class IPFSTest extends TestCase
 {
