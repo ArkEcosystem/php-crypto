@@ -42,6 +42,7 @@ class MultiSignatureRegistrationTest extends TestCase
             'fee',
             'asset',
             'signature',
+            'signatures',
             'amount',
             'id',
         ], 23);
