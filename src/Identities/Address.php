@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
-use ArkEcosystem\Crypto\Contracts\Network;
 use ArkEcosystem\Crypto\Helpers;
-use BitWasp\Bitcoin\Address\AddressFactory;
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
+use BitWasp\Bitcoin\Address\AddressCreator;
 use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
@@ -34,12 +34,12 @@ class Address
     /**
      * Derive the address from the given passphrase.
      *
-     * @param string                                      $passphrase
-     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
+     * @param string                                             $passphrase
+     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, Network $network = null): string
+    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
     {
         return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
     }
@@ -47,8 +47,8 @@ class Address
     /**
      * Derive the address from the given public key.
      *
-     * @param string                                      $publicKey
-     * @param \ArkEcosystem\Crypto\Contracts\Network|null $network
+     * @param string                                             $publicKey
+     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
      *
      * @return string
      */
@@ -66,24 +66,24 @@ class Address
      * Derive the address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param ArkEcosystem\Crypto\Contracts\Network|null                   $network
+     * @param ArkEcosystem\Crypto\Networks\AbstractNetwork|null            $network
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, Network $network = null): string
+    public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
     {
         $network = $network ?? NetworkConfiguration::get();
 
         $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
 
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network->factory());
+        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
     }
 
     /**
      * Validate the given address.
      *
-     * @param string                                          $address
-     * @param \ArkEcosystem\Crypto\Contracts\Network|int|null $network
+     * @param string                                                 $address
+     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|int|null $network
      *
      * @return bool
      */
@@ -91,6 +91,13 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        return AddressFactory::isValidAddress($address, $network->factory());
+        try {
+            $addressCreator = new AddressCreator();
+            $addressCreator->fromString($address, $network);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

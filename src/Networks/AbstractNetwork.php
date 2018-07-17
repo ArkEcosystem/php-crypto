@@ -13,13 +13,24 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
+use BitWasp\Bitcoin\Network\Network;
+use BitWasp\Bitcoin\Script\ScriptType;
+
 /**
  * This is the abstract network class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-abstract class AbstractNetwork
+abstract class AbstractNetwork extends Network
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $bip32ScriptTypeMap = [
+        self::BIP32_PREFIX_XPUB => ScriptType::P2PKH,
+        self::BIP32_PREFIX_XPRV => ScriptType::P2PKH,
+    ];
+
     /**
      * Call a method on the network instance.
      *
@@ -44,24 +55,19 @@ abstract class AbstractNetwork
     }
 
     /**
-     * Get the version of the network.
+     * Get the network version as number.
      *
      * @return int
      */
-    public static function version(): int
+    public function version(): int
     {
-        $byte = static::getAddressByte();
-
-        return hexdec("0x{$byte}");
+        return hexdec($this->getAddressByte());
     }
 
     /**
-     * Get the byte representation of the wif prefix.
+     * Create a new network instance.
      *
-     * @return int
+     * @return string
      */
-    public static function wifByte(): string
-    {
-        return dechex(static::wif());
-    }
+    abstract public function epoch(): string;
 }

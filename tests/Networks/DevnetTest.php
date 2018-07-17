@@ -24,14 +24,10 @@ use BitWasp\Bitcoin\Network\Network;
  */
 class DevnetTest extends NetworkTestCase
 {
-    protected $version = 30;
-    protected $epoch   = '2017-03-21T13:00:00.000Z';
-    protected $nethash = '578e820911f24e039733b45e4882b73e301f813a0d2c31330dafda84534ffa23';
-    protected $wif     = 170;
-    protected $wifByte = 'aa';
+    protected $epoch = '2017-03-21T13:00:00.000Z';
 
     public function getTestSubject()
     {
-        return Devnet::class;
+        return Devnet::new();
     }
 }

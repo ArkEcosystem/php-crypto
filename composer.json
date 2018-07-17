@@ -10,7 +10,7 @@
     }],
     "require": {
         "php": "^7.1",
-        "bitwasp/bitcoin": "^0.0.34.3",
+        "bitwasp/bitcoin": "^0.0.35",
         "faustbrian/binary": "^0.3.8"
     },
     "require-dev": {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Contracts\Network as Contract;
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -32,7 +32,7 @@ class NetworkTest extends TestCase
     {
         $actual = Network::get();
 
-        $this->assertInstanceOf(Contract::class, $actual);
+        $this->assertInstanceOf(AbstractNetwork::class, $actual);
     }
 
     /** @test */

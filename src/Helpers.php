@@ -25,14 +25,12 @@ class Helpers
     /**
      * Get the network version.
      *
-     * @param \ArkEcosystem\Crypto\Contracts\Network|int $network
+     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|int $network
      *
      * @return int
      */
     public static function version($network): int
     {
-        return is_int($network)
-            ? $network
-            : $network->version();
+        return is_int($network) ? $network : $network->version();
     }
 }

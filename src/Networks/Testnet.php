@@ -13,48 +13,39 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-use ArkEcosystem\Crypto\Contracts\Network;
-use BitWasp\Bitcoin\Network\Network as TokenNetwork;
-use BitWasp\Bitcoin\Network\NetworkFactory;
-
 /**
  * This is the testnet network class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Testnet extends AbstractNetwork implements Network
+class Testnet extends AbstractNetwork
 {
     /**
      * {@inheritdoc}
+     *
+     * @see Network::$base58PrefixMap
      */
-    public static function epoch(): string
+    protected $base58PrefixMap = [
+        self::BASE58_ADDRESS_P2PKH => '17',
+        self::BASE58_ADDRESS_P2SH  => '00',
+        self::BASE58_WIF           => 'ba',
+    ];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see Network::$bip32PrefixMap
+     */
+    protected $bip32PrefixMap = [
+        self::BIP32_PREFIX_XPUB => '70617039',
+        self::BIP32_PREFIX_XPRV => '70615956',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function epoch(): string
     {
         return '2017-03-21T13:00:00.000Z';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function nethash(): string
-    {
-        return 'd9acd04bde4234a81addb8482333b4ac906bed7be5a9970ce8ada428bd083192';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function wif(): int
-    {
-        return 186;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function factory(): TokenNetwork
-    {
-        return NetworkFactory::create('17', '00', 'ba', true)
-            ->setHDPubByte('70617039')
-            ->setHDPrivByte('70615956');
     }
 }

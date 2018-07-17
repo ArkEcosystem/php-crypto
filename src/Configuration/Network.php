@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Configuration;
 
-use ArkEcosystem\Crypto\Contracts\Network as AbstractNetwork;
-use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 
 /**
  * This is the network configuration class.
@@ -26,7 +25,7 @@ class Network
     /**
      * The network used for crypto operations.
      *
-     * @var \ArkEcosystem\Crypto\Contracts\Network
+     * @var \ArkEcosystem\Crypto\Networks\AbstractNetwork
      */
     private static $network;
 
@@ -46,17 +45,17 @@ class Network
     /**
      * Get the network used for crypto operations.
      *
-     * @return \ArkEcosystem\Crypto\Contracts\Network
+     * @return \ArkEcosystem\Crypto\Networks\AbstractNetwork
      */
     public static function get(): AbstractNetwork
     {
-        return static::$network ?? Mainnet::new();
+        return static::$network ?? Devnet::new();
     }
 
     /**
      * Set the network used for crypto operations.
      *
-     * @param \ArkEcosystem\Crypto\Contracts\Network $network
+     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork $network
      */
     public static function set(AbstractNetwork $network): void
     {
