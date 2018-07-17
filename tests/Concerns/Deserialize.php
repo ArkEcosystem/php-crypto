@@ -36,7 +36,7 @@ trait Deserialize
         return json_decode(json_encode($value), true);
     }
 
-    private function assertSameTransactions(array $expected, Transaction $actual, array $keys): void
+    protected function assertSameTransactions(array $expected, Transaction $actual, array $keys): void
     {
         $expected = array_only($expected['data'], $keys);
         $actual   = array_only($this->object_to_array($actual), $keys);
