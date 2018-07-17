@@ -27,10 +27,16 @@ class SlotTest extends TestCase
     /** @test */
     public function it_should_get_the_time()
     {
+        $actual = Slot::time();
+
+        $this->assertInternalType('int', $actual);
     }
 
     /** @test */
     public function it_should_get_the_epoch()
     {
+        $actual = Slot::epoch();
+
+        $this->assertInternalType('int', $actual);
     }
 }
