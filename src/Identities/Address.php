@@ -72,8 +72,6 @@ class Address
      */
     public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
     {
-        $network = $network ?? NetworkConfiguration::get();
-
         $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
 
         return (new PayToPubKeyHashAddress($digest))->getAddress($network);
@@ -89,8 +87,6 @@ class Address
      */
     public static function validate(string $address, $network = null): bool
     {
-        $network = $network ?? NetworkConfiguration::get();
-
         try {
             $addressCreator = new AddressCreator();
             $addressCreator->fromString($address, $network);

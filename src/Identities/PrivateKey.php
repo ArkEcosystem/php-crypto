@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
@@ -63,8 +62,6 @@ class PrivateKey
      */
     public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
     {
-        $network = $network ?? NetworkConfiguration::get();
-
         return PrivateKeyFactory::fromWif($wif, null, $network);
     }
 }

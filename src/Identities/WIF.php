@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 
 /**
@@ -33,8 +32,6 @@ class WIF
      */
     public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
     {
-        $network = $network ?? NetworkConfiguration::get();
-
         return PrivateKey::fromPassphrase($passphrase)->toWif($network);
     }
 }
