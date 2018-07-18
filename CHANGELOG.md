@@ -23,7 +23,7 @@ Several files and folders have been moved around for guideline compliance - see 
 - Transaction to Array
 - Transaction to JSON
 
-## Changed
+### Changed
 - Upgraded `bitwasp/bitcoin` to `0.0.35`
 
 ### Removed
