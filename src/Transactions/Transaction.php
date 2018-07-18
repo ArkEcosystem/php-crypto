@@ -70,7 +70,7 @@ class Transaction
     }
 
     /**
-     * Verify the transaction validity.
+     * Verify the transaction.
      *
      * @return bool
      */
@@ -85,9 +85,9 @@ class Transaction
     }
 
     /**
-     * Verify the transaction validity with a second signature.
+     * Verify the transaction with a second public key.
      *
-     * @param string $secondPublicKeyHex
+     * @param string $secondPublicKey
      *
      * @return bool
      */

@@ -66,4 +66,12 @@ class AddressTest extends TestCase
 
         $this->assertTrue($actual);
     }
+
+    /** @test */
+    public function it_should_fail_to_validate_the_address()
+    {
+        $actual = TestClass::validate('invalid');
+
+        $this->assertFalse($actual);
+    }
 }

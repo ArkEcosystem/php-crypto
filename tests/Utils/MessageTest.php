@@ -37,6 +37,18 @@ class MessageTest extends TestCase
     }
 
     /** @test */
+    public function it_should_create_a_message_from_an_object()
+    {
+        $fixture = json_decode(json_encode($this->getFixture('message')['data']));
+
+        $message = Message::new($fixture);
+
+        $this->assertSame($message->publicKey, $fixture->publickey);
+        $this->assertSame($message->signature, $fixture->signature);
+        $this->assertSame($message->message, $fixture->message);
+    }
+
+    /** @test */
     public function it_should_create_a_message_from_an_array()
     {
         $fixture = $this->getFixture('message')['data'];
@@ -58,6 +70,14 @@ class MessageTest extends TestCase
         $this->assertSame($message->publicKey, $fixture['publickey']);
         $this->assertSame($message->signature, $fixture['signature']);
         $this->assertSame($message->message, $fixture['message']);
+    }
+
+    /** @test */
+    public function it_should_not_create_a_message_from_an_invalid_Type()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        Message::new(false);
     }
 
     /** @test */
@@ -85,10 +105,18 @@ class MessageTest extends TestCase
     }
 
     /** @test */
-    public function it_should_turn_a_message_into_a_string()
+    public function it_should_turn_a_message_into_json()
     {
         $message = Message::new($this->getFixture('message')['data']);
 
         $this->assertInternalType('string', $message->toJSON());
+    }
+
+    /** @test */
+    public function it_should_turn_a_message_into_a_string()
+    {
+        $message = Message::new($this->getFixture('message')['data']);
+
+        $this->assertInternalType('string', $message->__toString());
     }
 }
