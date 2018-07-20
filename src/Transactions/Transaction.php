@@ -274,6 +274,10 @@ class Transaction
             'vendorField'     => $this->vendorField ?? null,
             'version'         => $this->version ?: 1,
         ], function ($element) {
+            if ($element === []) {
+                return false;
+            }
+
             if (null !== $element) {
                 return true;
             }
