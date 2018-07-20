@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.2.1 - 2018-07-20
+
+### Fixed
+- Added missing `ArkEcosystem\Crypto\Networks\Devnet` use to `ArkEcosystem\Crypto\Configuration\Network`
+
 ## 0.2.0 - 2018-07-18
 
 Several files and folders have been moved around for guideline compliance - see the [diff](https://github.com/ArkEcosystem/php-crypto/compare/0.1.0...0.2.0) for more details
