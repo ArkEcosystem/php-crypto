@@ -86,9 +86,9 @@ class Transaction
     }
 
     /**
-     * Verify the transaction with a second signature.
+     * Verify the transaction with a second public key.
      *
-     * @param string $secondPublicKeyHex
+     * @param string $secondPublicKey
      *
      * @return bool
      */
