@@ -259,10 +259,10 @@ class Transaction
     {
         return array_filter([
             'amount'          => $this->amount,
-            'asset'           => $this->asset ?? [],
+            'asset'           => $this->asset ?? null,
             'fee'             => $this->fee,
             'id'              => $this->id,
-            'network'         => $this->network ?: Network::get()->version(),
+            'network'         => $this->network ?? Network::get()->version(),
             'recipientId'     => $this->recipientId ?? null,
             'secondSignature' => $this->secondSignature ?? null,
             'senderPublicKey' => $this->senderPublicKey,
@@ -272,12 +272,8 @@ class Transaction
             'timestamp'       => $this->timestamp,
             'type'            => $this->type,
             'vendorField'     => $this->vendorField ?? null,
-            'version'         => $this->version ?: 1,
+            'version'         => $this->version ?? 1,
         ], function ($element) {
-            if ($element === []) {
-                return false;
-            }
-
             if (null !== $element) {
                 return true;
             }
