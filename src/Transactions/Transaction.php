@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\Types;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
@@ -85,9 +86,9 @@ class Transaction
     }
 
     /**
-     * Verify the transaction with a second public key.
+     * Verify the transaction with a second signature.
      *
-     * @param string $secondPublicKey
+     * @param string $secondPublicKeyHex
      *
      * @return bool
      */
@@ -261,7 +262,7 @@ class Transaction
             'asset'           => $this->asset ?? [],
             'fee'             => $this->fee,
             'id'              => $this->id,
-            'network'         => $this->network,
+            'network'         => $this->network ?: Network::get()->version(),
             'recipientId'     => $this->recipientId ?? null,
             'secondSignature' => $this->secondSignature ?? null,
             'senderPublicKey' => $this->senderPublicKey,
@@ -271,7 +272,7 @@ class Transaction
             'timestamp'       => $this->timestamp,
             'type'            => $this->type,
             'vendorField'     => $this->vendorField ?? null,
-            'version'         => $this->version,
+            'version'         => $this->version ?: 1,
         ], function ($element) {
             if (null !== $element) {
                 return true;
