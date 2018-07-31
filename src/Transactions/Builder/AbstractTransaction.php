@@ -99,6 +99,7 @@ abstract class AbstractTransaction
     public function secondSign(string $secondPassphrase): self
     {
         $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
+        $this->transaction->id = $this->transaction->getId();
 
         return $this;
     }
