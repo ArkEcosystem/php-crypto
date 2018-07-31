@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 0.2.2 - 2018-07-31
 
 ### Fixed
-- Properly calculate the transaction `id` for second signatures.
+- Properly calculate the transaction `id` if signed with second signature.
 
 ## 0.2.1 - 2018-07-20
 
