@@ -181,7 +181,8 @@ class Transaction
         $buffer->writeUInt32($this->timestamp);
         $buffer->writeHex($this->senderPublicKey);
 
-        if (isset($this->recipientId)) {
+        $skipRecipientId = $this->type === Types::SECOND_SIGNATURE_REGISTRATION || $this->type === Types::MULTI_SIGNATURE_REGISTRATION;
+        if (isset($this->recipientId) && !$skipRecipientId) {
             $buffer->writeHex(Base58::decodeCheck($this->recipientId)->getHex());
         } else {
             $buffer->fill(21);
