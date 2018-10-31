@@ -49,7 +49,7 @@ class Transaction
      */
     public function sign(PrivateKey $keys): self
     {
-        $transaction     = Hash::sha256($this->toBytes());
+        $transaction = Hash::sha256($this->toBytes());
         $this->signature = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
@@ -64,7 +64,7 @@ class Transaction
      */
     public function secondSign(PrivateKey $keys): self
     {
-        $transaction         = Hash::sha256($this->toBytes(false));
+        $transaction = Hash::sha256($this->toBytes(false));
         $this->signSignature = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
@@ -119,8 +119,8 @@ class Transaction
         if (0 === strlen($this->signature)) {
             unset($this->signature);
         } else {
-            $signatureLength       = intval(substr($this->signature, 2, 2), 16) + 2;
-            $this->signature       = substr($serialized, $startOffset, $signatureLength * 2);
+            $signatureLength = intval(substr($this->signature, 2, 2), 16) + 2;
+            $this->signature = substr($serialized, $startOffset, $signatureLength * 2);
             $multiSignatureOffset += $signatureLength * 2;
             $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
 
@@ -146,7 +146,7 @@ class Transaction
                 return $this;
             }
 
-            $signatures       = substr($signatures, 2);
+            $signatures = substr($signatures, 2);
             $this->signatures = [];
 
             $moreSignatures = true;

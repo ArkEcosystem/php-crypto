@@ -37,7 +37,7 @@ class MultiSignatureRegistration extends AbstractDeserializer
         ];
 
         $count = $this->buffer->readUInt8() & 0xff;
-        for ($i = 0; $i < $count; ++$i) {
+        for ($i = 0; $i < $count; $i++) {
             $indexStart = $this->assetOffset + 6;
 
             if ($i > 0) {

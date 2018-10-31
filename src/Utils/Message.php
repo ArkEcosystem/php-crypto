@@ -57,7 +57,7 @@ class Message
     {
         $this->publicKey = $message->publickey;
         $this->signature = $message->signature;
-        $this->message   = $message->message;
+        $this->message = $message->message;
     }
 
     /**

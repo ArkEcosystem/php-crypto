@@ -75,13 +75,13 @@ class Deserializer
      */
     public function deserialize(): Transaction
     {
-        $transaction                  = new Transaction();
-        $transaction->version         = $this->buffer->readUInt8();
-        $transaction->network         = $this->buffer->readUInt8();
-        $transaction->type            = $this->buffer->readUInt8();
-        $transaction->timestamp       = $this->buffer->readUInt32();
+        $transaction = new Transaction();
+        $transaction->version = $this->buffer->readUInt8();
+        $transaction->network = $this->buffer->readUInt8();
+        $transaction->type = $this->buffer->readUInt8();
+        $transaction->timestamp = $this->buffer->readUInt32();
         $transaction->senderPublicKey = $this->buffer->readHex(33);
-        $transaction->fee             = $this->buffer->readUInt64();
+        $transaction->fee = $this->buffer->readUInt64();
 
         $vendorFieldLength = $this->buffer->readUInt8();
         if ($vendorFieldLength > 0) {

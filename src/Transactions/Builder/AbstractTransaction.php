@@ -30,11 +30,11 @@ abstract class AbstractTransaction
      */
     public function __construct()
     {
-        $this->transaction              = new Transaction();
-        $this->transaction->type        = $this->getType();
-        $this->transaction->amount      = 0;
-        $this->transaction->fee         = $this->getFee();
-        $this->transaction->timestamp   = Slot::time();
+        $this->transaction = new Transaction();
+        $this->transaction->type = $this->getType();
+        $this->transaction->amount = 0;
+        $this->transaction->fee = $this->getFee();
+        $this->transaction->timestamp = Slot::time();
     }
 
     /**
@@ -80,10 +80,10 @@ abstract class AbstractTransaction
      */
     public function sign(string $passphrase): self
     {
-        $keys                               = PrivateKey::fromPassphrase($passphrase);
+        $keys = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
 
-        $this->transaction     = $this->transaction->sign($keys);
+        $this->transaction = $this->transaction->sign($keys);
         $this->transaction->id = $this->transaction->getId();
 
         return $this;

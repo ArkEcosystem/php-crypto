@@ -47,7 +47,7 @@ abstract class AbstractDeserializer
      */
     public function __construct(Reader $buffer, int $assetOffset, Transaction $transaction)
     {
-        $this->buffer      = $buffer;
+        $this->buffer = $buffer;
         $this->assetOffset = $assetOffset;
         $this->transaction = $transaction;
     }

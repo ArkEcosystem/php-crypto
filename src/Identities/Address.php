@@ -57,7 +57,7 @@ class Address
         $network = $network ?? NetworkConfiguration::get();
 
         $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
-        $seed      = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
+        $seed = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
 
         return Base58::encodeCheck(new Buffer($seed));
     }
