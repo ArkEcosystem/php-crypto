@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Configuration;
 
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use ArkEcosystem\Crypto\Networks\Devnet;
 use BitWasp\Bitcoin\Bitcoin;
+use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 
 /**
  * This is the network configuration class.

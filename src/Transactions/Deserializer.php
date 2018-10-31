@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Identities\Address;
-use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
+use BitWasp\Bitcoin\Crypto\Hash;
+use ArkEcosystem\Crypto\Enums\Types;
 use BrianFaust\Binary\Hex\Reader as Hex;
+use ArkEcosystem\Crypto\Identities\Address;
+use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 
 /**
  * This is the deserializer class.
@@ -75,13 +75,13 @@ class Deserializer
      */
     public function deserialize(): Transaction
     {
-        $transaction                  = new Transaction();
-        $transaction->version         = $this->buffer->readUInt8();
-        $transaction->network         = $this->buffer->readUInt8();
-        $transaction->type            = $this->buffer->readUInt8();
-        $transaction->timestamp       = $this->buffer->readUInt32();
+        $transaction = new Transaction();
+        $transaction->version = $this->buffer->readUInt8();
+        $transaction->network = $this->buffer->readUInt8();
+        $transaction->type = $this->buffer->readUInt8();
+        $transaction->timestamp = $this->buffer->readUInt32();
         $transaction->senderPublicKey = $this->buffer->readHex(33);
-        $transaction->fee             = $this->buffer->readUInt64();
+        $transaction->fee = $this->buffer->readUInt64();
 
         $vendorFieldLength = $this->buffer->readUInt8();
         if ($vendorFieldLength > 0) {
@@ -92,11 +92,11 @@ class Deserializer
 
         $transaction = $this->handleType($assetOffset, $transaction);
 
-        if (!isset($transaction->amount)) {
+        if (! isset($transaction->amount)) {
             $transaction->amount = 0;
         }
 
-        if (!isset($transaction->version) || 1 === $transaction->version) {
+        if (! isset($transaction->version) || 1 === $transaction->version) {
             $transaction = $this->handleVersionOne($transaction);
         }
 
@@ -149,7 +149,7 @@ class Deserializer
             $transaction->vendorField = hex2bin($transaction->vendorFieldHex);
         }
 
-        if (!isset($transaction->id)) {
+        if (! isset($transaction->id)) {
             $transaction->id = $transaction->getId();
         }
 
