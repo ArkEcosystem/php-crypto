@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Networks;
 
-use ArkEcosystem\Crypto\Networks\Mainnet;
 use BitWasp\Bitcoin\Network\Network;
+use ArkEcosystem\Crypto\Networks\Mainnet;
 
 /**
  * This is the mainnet network test class.

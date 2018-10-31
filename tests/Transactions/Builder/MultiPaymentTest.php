@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\MultiPayment;
 use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Transactions\Builder\MultiPayment;
 
 /**
  * This is the multi payment builder test class.

@@ -29,7 +29,7 @@ class MultiSignatureRegistration extends AbstractSerializer
     {
         $keysgroup = [];
 
-        if (!isset($this->transaction['version']) || 1 === $this->transaction['version']) {
+        if (! isset($this->transaction['version']) || 1 === $this->transaction['version']) {
             foreach ($this->transaction['asset']['multisignature']['keysgroup'] as $key) {
                 $keysgroup[] = '+' === substr($key, 0, 1)
                     ? substr($key, 1)
