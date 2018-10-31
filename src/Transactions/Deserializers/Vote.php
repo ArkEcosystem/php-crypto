@@ -34,11 +34,11 @@ class Vote extends AbstractDeserializer
         $this->transaction->asset = ['votes' => []];
 
         $vote = null;
-        for ($i = 0; $i < $voteLength; ++$i) {
+        for ($i = 0; $i < $voteLength; $i++) {
             $this->buffer->position($this->assetOffset + 2 + $i * 2 * 34);
 
-            $vote                                = $this->buffer->readHexRaw(34 * 2);
-            $vote                                = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
+            $vote = $this->buffer->readHexRaw(34 * 2);
+            $vote = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
             $this->transaction->asset['votes'][] = $vote;
         }
 

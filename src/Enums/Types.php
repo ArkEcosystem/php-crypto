@@ -20,13 +20,13 @@ namespace ArkEcosystem\Crypto\Enums;
  */
 class Types
 {
-    const TRANSFER                      = 0;
+    const TRANSFER = 0;
     const SECOND_SIGNATURE_REGISTRATION = 1;
-    const DELEGATE_REGISTRATION         = 2;
-    const VOTE                          = 3;
-    const MULTI_SIGNATURE_REGISTRATION  = 4;
-    const IPFS                          = 5;
-    const TIMELOCK_TRANSFER             = 6;
-    const MULTI_PAYMENT                 = 7;
-    const DELEGATE_RESIGNATION          = 8;
+    const DELEGATE_REGISTRATION = 2;
+    const VOTE = 3;
+    const MULTI_SIGNATURE_REGISTRATION = 4;
+    const IPFS = 5;
+    const TIMELOCK_TRANSFER = 6;
+    const MULTI_PAYMENT = 7;
+    const DELEGATE_RESIGNATION = 8;
 }

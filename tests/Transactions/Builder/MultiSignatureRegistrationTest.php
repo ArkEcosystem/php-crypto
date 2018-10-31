@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration;
 use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration;
 
 /**
  * This is the multi signature registration builder test class.

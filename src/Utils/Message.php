@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
-use ArkEcosystem\Crypto\Identities\PrivateKey;
+use InvalidArgumentException;
+use BitWasp\Buffertools\Buffer;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\PublicKeyFactory;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Buffertools\Buffer;
-use InvalidArgumentException;
 
 /**
  * This is the message class.
@@ -57,7 +57,7 @@ class Message
     {
         $this->publicKey = $message->publickey;
         $this->signature = $message->signature;
-        $this->message   = $message->message;
+        $this->message = $message->message;
     }
 
     /**

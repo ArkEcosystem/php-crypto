@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
+use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Transactions\Serializers\IPFS;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the ipfs serializer test class.
