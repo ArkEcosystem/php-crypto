@@ -20,13 +20,13 @@ namespace ArkEcosystem\Crypto\Enums;
  */
 class Fees
 {
-    const TRANSFER                      = 10000000;
+    const TRANSFER = 10000000;
     const SECOND_SIGNATURE_REGISTRATION = 500000000;
-    const DELEGATE_REGISTRATION         = 2500000000;
-    const VOTE                          = 100000000;
-    const MULTI_SIGNATURE_REGISTRATION  = 500000000;
-    const IPFS                          = 0;
-    const TIMELOCK_TRANSFER             = 0;
-    const MULTI_PAYMENT                 = 0;
-    const DELEGATE_RESIGNATION          = 0;
+    const DELEGATE_REGISTRATION = 2500000000;
+    const VOTE = 100000000;
+    const MULTI_SIGNATURE_REGISTRATION = 500000000;
+    const IPFS = 0;
+    const TIMELOCK_TRANSFER = 0;
+    const MULTI_PAYMENT = 0;
+    const DELEGATE_RESIGNATION = 0;
 }

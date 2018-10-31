@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
+use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Deserializers\Vote;
-use ArkEcosystem\Crypto\Transactions\Transaction;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the vote deserializer test class.

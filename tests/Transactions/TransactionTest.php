@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Transaction;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
 
 /**
  * This is the transaction test class.
@@ -41,7 +41,7 @@ class TransactionTest extends TestCase
     {
         $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
-        $transaction            = $this->getTransaction();
+        $transaction = $this->getTransaction();
         $transaction->signature = null;
 
         $this->assertEmpty($transaction->signature);
@@ -54,7 +54,7 @@ class TransactionTest extends TestCase
     {
         $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
 
-        $transaction                = $this->getTransaction();
+        $transaction = $this->getTransaction();
         $transaction->signSignature = null;
 
         $this->assertEmpty($transaction->signSignature);
@@ -87,7 +87,7 @@ class TransactionTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('transfer', 'passphrase');
 
-        $transaction            = $this->getTransaction();
+        $transaction = $this->getTransaction();
         $transaction->signature = null;
 
         $this->assertEmpty($transaction->signature);
@@ -100,8 +100,8 @@ class TransactionTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase');
 
-        $transaction                  = $this->getTransaction();
-        $transaction->signature       = null;
+        $transaction = $this->getTransaction();
+        $transaction->signature = null;
         $transaction->secondSignature = null;
 
         $this->assertEmpty($transaction->signature);
@@ -118,10 +118,10 @@ class TransactionTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('multi_signature_registration', 'passphrase');
 
-        $transaction                  = $this->getTransaction();
-        $transaction->signature       = null;
+        $transaction = $this->getTransaction();
+        $transaction->signature = null;
         $transaction->secondSignature = null;
-        $transaction->signatures      = null;
+        $transaction->signatures = null;
 
         $this->assertEmpty($transaction->signature);
         $this->assertEmpty($transaction->secondSignature);

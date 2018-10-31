@@ -41,7 +41,7 @@ abstract class AbstractSerializer
     public function __construct(array $transaction, Writer $buffer)
     {
         $this->transaction = $transaction;
-        $this->buffer      = $buffer;
+        $this->buffer = $buffer;
     }
 
     /*

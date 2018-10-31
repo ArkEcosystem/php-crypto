@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Identities\Address as TestClass;
-use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\Address as TestClass;
 
 /**
  * This is the address test class.
