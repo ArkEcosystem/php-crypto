@@ -188,7 +188,7 @@ class Transaction
             $buffer->fill(21);
         }
 
-        if (isset($this->vendorField) && strlen($this->vendorField) < 64) {
+        if (isset($this->vendorField) && strlen($this->vendorField) <= 64) {
             $buffer->writeString($this->vendorField);
             $vendorFieldLength = strlen($this->vendorField);
 
