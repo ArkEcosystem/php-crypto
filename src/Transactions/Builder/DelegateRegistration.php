@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PrivateKey;
-
 /**
  * This is the delegate registration transaction class.
  *
