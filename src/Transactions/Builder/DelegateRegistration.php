@@ -55,12 +55,7 @@ class DelegateRegistration extends AbstractTransaction
      */
     public function sign(string $passphrase): AbstractTransaction
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
-        $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
-        $this->transaction->asset['delegate']['publicKey'] = $this->transaction->senderPublicKey;
-
-        $this->transaction = $this->transaction->sign($keys);
-        $this->transaction->id = $this->transaction->getId();
+        parent::sign($passphrase);
 
         return $this;
     }
