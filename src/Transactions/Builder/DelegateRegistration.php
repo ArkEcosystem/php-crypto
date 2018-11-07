@@ -60,6 +60,7 @@ class DelegateRegistration extends AbstractTransaction
         $this->transaction->asset['delegate']['publicKey'] = $this->transaction->senderPublicKey;
 
         $this->transaction = $this->transaction->sign($keys);
+        $this->transaction->id = $this->transaction->getId();
 
         return $this;
     }
