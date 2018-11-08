@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-## 0.2.3
+## 0.2.4 - 2018-11-08
+
+### Fixed
+- Missing ID from delegate registrations
+- Maximum vendor field length _(previously 63, now 74)_
+
+## 0.2.3 - 2018-09-30
 
 ### Fixed
 - Skip recipient id in `toBytes` for type 1 and 4 transactions.
