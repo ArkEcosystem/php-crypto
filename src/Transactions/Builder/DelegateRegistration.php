@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 
 /**
  * This is the delegate registration transaction class.
@@ -55,11 +55,10 @@ class DelegateRegistration extends AbstractTransaction
      */
     public function sign(string $passphrase): AbstractTransaction
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
-        $this->transaction->senderPublicKey = $keys->getPublicKey()->getHex();
-        $this->transaction->asset['delegate']['publicKey'] = $this->transaction->senderPublicKey;
+        $publicKey = PublicKey::fromPassphrase($passphrase);
+        $this->transaction->asset['delegate']['publicKey'] = $publicKey->getHex();
 
-        $this->transaction = $this->transaction->sign($keys);
+        parent::sign($passphrase);
 
         return $this;
     }
