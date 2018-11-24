@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
-use ArkEcosystem\Crypto\Identities\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Buffertools\Buffer;
 use InvalidArgumentException;
+use BitWasp\Buffertools\Buffer;
+use BitWasp\Bitcoin\Crypto\Hash;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 
 /**
  * This is the message class.
