@@ -43,14 +43,4 @@ class PublicKeyTest extends TestCase
 
         $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
     }
-
-    /** @test */
-    public function it_should_validate_the_public_key()
-    {
-        $fixture = $this->getFixture('identity');
-
-        $actual = TestClass::validate($fixture['data']['publicKey']);
-
-        $this->assertTrue($actual);
-    }
 }

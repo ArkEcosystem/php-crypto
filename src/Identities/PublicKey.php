@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 
 /**
  * This is the public key class.
@@ -44,18 +44,6 @@ class PublicKey
      */
     public static function fromHex($publicKey): EcPublicKey
     {
-        return PublicKeyFactory::fromHex($publicKey);
-    }
-
-    /**
-     * Validate the given public key.
-     *
-     * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
-     *
-     * @return bool
-     */
-    public static function validate(string $publicKey): bool
-    {
-        return PublicKeyFactory::validateHex($publicKey);
+        return (new PublicKeyFactory)->fromHex($publicKey);
     }
 }

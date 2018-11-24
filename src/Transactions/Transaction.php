@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
-use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\Enums\Types;
-use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use ArkEcosystem\Crypto\Configuration\Network;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
+use ArkEcosystem\Crypto\Enums\Types;
+use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 
 /**
  * This is the transaction class.
@@ -77,7 +77,8 @@ class Transaction
      */
     public function verify(): bool
     {
-        $publicKey = PublicKeyFactory::fromHex($this->senderPublicKey);
+        $factory = new PublicKeyFactory;
+        $publicKey = $factory->fromHex($this->senderPublicKey);
 
         return $publicKey->verify(
             Hash::sha256($this->toBytes()),
@@ -94,7 +95,8 @@ class Transaction
      */
     public function secondVerify(string $secondPublicKey): bool
     {
-        $secondPublicKey = PublicKeyFactory::fromHex($secondPublicKey);
+        $factory = new PublicKeyFactory;
+        $secondPublicKey = $factory->fromHex($secondPublicKey);
 
         return $secondPublicKey->verify(
             Hash::sha256($this->toBytes(false)),
