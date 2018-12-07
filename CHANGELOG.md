@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.2.5 - 2018-12-07
+
+### Fixed
+- Handle signed messages that were created through Desktop Wallet 2.0
+
 ## 0.2.4 - 2018-11-08
 
 ### Fixed
