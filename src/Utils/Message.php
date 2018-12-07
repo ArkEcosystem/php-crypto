@@ -55,7 +55,14 @@ class Message
      */
     public function __construct(object $message)
     {
-        $this->publicKey = $message->publickey;
+        if (property_exists($message, 'publickey')) {
+            $this->publicKey = $message->publickey;
+        } else if (property_exists($message, 'publicKey')) {
+            $this->publicKey = $message->publicKey;
+        } else {
+            throw new InvalidArgumentException('The given message did not contain a valid public key.');
+        }
+
         $this->signature = $message->signature;
         $this->message = $message->message;
     }
