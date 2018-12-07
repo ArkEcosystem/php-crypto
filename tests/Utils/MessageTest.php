@@ -27,7 +27,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_sign_a_valid_message()
     {
-        $fixture = $this->getFixture('message');
+        $fixture = $this->getFixture('message-v1');
 
         $message = Message::sign($fixture['data']['message'], $fixture['passphrase']);
 
@@ -39,7 +39,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_create_a_message_from_an_object()
     {
-        $fixture = json_decode(json_encode($this->getFixture('message')['data']));
+        $fixture = json_decode(json_encode($this->getFixture('message-v1')['data']));
 
         $message = Message::new($fixture);
 
@@ -51,7 +51,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_create_a_message_from_an_array()
     {
-        $fixture = $this->getFixture('message')['data'];
+        $fixture = $this->getFixture('message-v1')['data'];
 
         $message = Message::new($fixture);
 
@@ -63,7 +63,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_create_a_message_from_a_string()
     {
-        $fixture = $this->getFixture('message')['data'];
+        $fixture = $this->getFixture('message-v1')['data'];
 
         $message = Message::new(json_encode($fixture));
 
@@ -89,9 +89,17 @@ class MessageTest extends TestCase
     }
 
     /** @test */
-    public function it_should_verify_a_message()
+    public function it_should_verify_a_message_from_v1()
     {
-        $message = Message::new($this->getFixture('message')['data']);
+        $message = Message::new($this->getFixture('message-v1')['data']);
+
+        $this->assertTrue($message->verify());
+    }
+
+    /** @test */
+    public function it_should_verify_a_message_from_v2()
+    {
+        $message = Message::new($this->getFixture('message-v2')['data']);
 
         $this->assertTrue($message->verify());
     }
@@ -99,7 +107,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_an_array()
     {
-        $message = Message::new($this->getFixture('message')['data']);
+        $message = Message::new($this->getFixture('message-v1')['data']);
 
         $this->assertInternalType('array', $message->toArray());
     }
@@ -107,7 +115,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_json()
     {
-        $message = Message::new($this->getFixture('message')['data']);
+        $message = Message::new($this->getFixture('message-v1')['data']);
 
         $this->assertInternalType('string', $message->toJSON());
     }
@@ -115,7 +123,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_a_string()
     {
-        $message = Message::new($this->getFixture('message')['data']);
+        $message = Message::new($this->getFixture('message-v1')['data']);
 
         $this->assertInternalType('string', $message->__toString());
     }
