@@ -37,7 +37,7 @@ class PrivateKey
     {
         $passphrase = Hash::sha256(new Buffer($passphrase));
 
-        return PrivateKeyFactory::compressed()->fromHex($passphrase->getHex());
+        return (new PrivateKeyFactory())->fromHexCompressed($passphrase->getHex());
     }
 
     /**
@@ -49,7 +49,7 @@ class PrivateKey
      */
     public static function fromHex($privateKey): EcPrivateKey
     {
-        return PrivateKeyFactory::compressed()->fromHex($privateKey);
+        return (new PrivateKeyFactory())->fromHexCompressed($privateKey);
     }
 
     /**
@@ -62,6 +62,6 @@ class PrivateKey
      */
     public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
     {
-        return PrivateKeyFactory::compressed()->fromWif($wif, null, $network);
+        return (new PrivateKeyFactory())->fromWif($wif, $network);
     }
 }
