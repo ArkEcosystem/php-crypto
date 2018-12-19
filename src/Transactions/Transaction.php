@@ -230,7 +230,7 @@ class Transaction
             $buffer->writeHex($this->signSignature);
         }
 
-        return new Buffer($buffer->getBytes());
+        return new Buffer($buffer->toBytes());
     }
 
     /**

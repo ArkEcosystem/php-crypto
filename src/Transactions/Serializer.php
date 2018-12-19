@@ -96,7 +96,7 @@ class Serializer
         $this->handleType($buffer);
         $this->handleSignatures($buffer);
 
-        return new Buffer($buffer->getBytes());
+        return new Buffer($buffer->toBytes());
     }
 
     /**
