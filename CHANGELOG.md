@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## 0.3.0 - 2018-12-19
+
+### Changed
+- Upgraded `bitwasp/bitcoin` to `1.0.0`
+
 ## 0.2.5 - 2018-12-07
 
 ### Fixed
