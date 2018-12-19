@@ -16,9 +16,9 @@ namespace ArkEcosystem\Crypto\Utils;
 use InvalidArgumentException;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Key\PublicKeyFactory;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 
 /**
  * This is the message class.
@@ -127,7 +127,9 @@ class Message
      */
     public function verify(): bool
     {
-        return PublicKeyFactory::fromHex($this->publicKey)->verify(
+        $factory = new PublicKeyFactory;
+
+        return $factory->fromHex($this->publicKey)->verify(
             new Buffer(hash('sha256', $this->message, true)),
             SignatureFactory::fromHex($this->signature)
         );
