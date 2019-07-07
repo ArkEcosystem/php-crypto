@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Builder\TimelockTransfer;
 
