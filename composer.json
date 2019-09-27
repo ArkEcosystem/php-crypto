@@ -16,7 +16,7 @@
     "require-dev": {
         "illuminate/support": "^5.7",
         "mockery/mockery": "^1.2",
-        "phpunit/phpunit": "^7.5",
+        "phpunit/phpunit": "^8.0.0",
         "spatie/phpunit-watcher": "^1.8",
         "symfony/var-dumper": "^4.2"
     },
