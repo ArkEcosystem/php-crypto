@@ -26,7 +26,7 @@ abstract class TestCase extends BaseTestCase
     protected $passphrase = 'This is a top secret passphrase';
     protected $secondPassphrase = 'This is a top secret second passphrase';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Network::set(Devnet::new());
     }
