@@ -18,6 +18,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 
 /**
@@ -33,7 +34,7 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->getId();
 
-        $this->assertSame('da61c6cba363cc39baa0ca3f9ba2c5db81b9805045bd0b9fc58af07ad4206856', $actual);
+        $this->assertSame('4616027183c83139a16f3e6853d90ae4e79b4708c54f2256a4db88e4e916af17', $actual);
     }
 
     /** @test */
@@ -42,11 +43,11 @@ class TransactionTest extends TestCase
         $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
         $transaction = $this->getTransaction();
-        $transaction->signature = null;
+        $transaction->data['signature'] = null;
 
-        $this->assertEmpty($transaction->signature);
+        $this->assertEmpty($transaction->data['signature']);
         $transaction->sign($privateKey);
-        $this->assertNotEmpty($transaction->signature);
+        $this->assertNotEmpty($transaction->data['signature']);
     }
 
     /** @test */
@@ -55,11 +56,11 @@ class TransactionTest extends TestCase
         $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
 
         $transaction = $this->getTransaction();
-        $transaction->signSignature = null;
+        $transaction->data['secondSignature'] = null;
 
-        $this->assertEmpty($transaction->signSignature);
+        $this->assertEmpty($transaction->data['secondSignature']);
         $transaction->secondSign($privateKey);
-        $this->assertNotEmpty($transaction->signSignature);
+        $this->assertNotEmpty($transaction->data['secondSignature']);
     }
 
     /** @test */
@@ -83,92 +84,11 @@ class TransactionTest extends TestCase
     }
 
     /** @test */
-    public function should_parse_a_signature()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'passphrase');
-
-        $transaction = $this->getTransaction();
-        $transaction->signature = null;
-
-        $this->assertEmpty($transaction->signature);
-        $transaction->parseSignatures($fixture['serialized'], 166);
-        $this->assertNotEmpty($transaction->signature);
-    }
-
-    /** @test */
-    public function should_parse_a_second_signature()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'second-passphrase');
-
-        $transaction = $this->getTransaction();
-        $transaction->signature = null;
-        $transaction->secondSignature = null;
-
-        $this->assertEmpty($transaction->signature);
-        $this->assertEmpty($transaction->secondSignature);
-
-        $transaction->parseSignatures($fixture['serialized'], 166);
-
-        $this->assertNotEmpty($transaction->signature);
-        $this->assertNotEmpty($transaction->secondSignature);
-    }
-
-    /** @test */
-    public function should_parse_a_multi_signature()
-    {
-        $fixture = $this->getTransactionFixture('multi_signature_registration', 'passphrase');
-
-        $transaction = $this->getTransaction();
-        $transaction->signature = null;
-        $transaction->secondSignature = null;
-        $transaction->signatures = null;
-
-        $this->assertEmpty($transaction->signature);
-        $this->assertEmpty($transaction->secondSignature);
-        $this->assertEmpty($transaction->signatures);
-
-        $transaction->parseSignatures($fixture['serialized'], 304);
-
-        $this->assertNotEmpty($transaction->signature);
-        $this->assertNotEmpty($transaction->secondSignature);
-        $this->assertNotEmpty($transaction->signatures);
-    }
-
-    /** @test */
     public function should_turn_the_transaction_to_bytes()
     {
-        $actual = $this->getTransaction()->toBytes();
+        $actual = $this->getTransaction()->getBytes();
 
         $this->assertInstanceOf(Buffer::class, $actual);
-    }
-
-    /** @test */
-    public function should_serialize_the_transaction()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'passphrase');
-
-        $actual = $this->getTransaction()->serialize();
-
-        $this->assertSame($fixture['serialized'], $actual->getHex());
-    }
-
-    /** @test */
-    public function should_deserialize_the_given_hex_value()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'passphrase');
-
-        $actual = Transaction::deserialize($fixture['serialized']);
-
-        $this->assertSameTransactions($fixture, $actual, [
-            'type',
-            'timestamp',
-            'senderPublicKey',
-            'fee',
-            'amount',
-            'recipientId',
-            'signature',
-            'id',
-        ]);
     }
 
     /** @test */
@@ -187,7 +107,7 @@ class TransactionTest extends TestCase
         $this->assertInternalType('string', $actual);
     }
 
-    private function getTransaction($file = 'passphrase'): Transaction
+    private function getTransaction($file = 'passphrase'): Transfer
     {
         $fixture = $this->getTransactionFixture('transfer', $file);
 

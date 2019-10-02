@@ -14,26 +14,33 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
+use ArkEcosystem\Crypto\Transactions\Types\HtlcRefund;
 
 /**
- * This is the multi payment deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\MultiPayment
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcRefund
  */
-class MultiPaymentTest extends TestCase
+class HtlcRefundTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture('multi_payment', 'passphrase');
+        $fixture = $this->getTransactionFixture('htlc_refund', 'passphrase');
 
-        $this->assertTransaction($transaction);
+        $this->assertTransaction($fixture);
     }
 
-    private function assertTransaction(array $fixture): MultiPayment
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_refund', 'second-passphrase');
+
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
+    }
+
+    private function assertTransaction(array $fixture): HtlcRefund
     {
         return $this->assertDeserialized($fixture, [
             'version',

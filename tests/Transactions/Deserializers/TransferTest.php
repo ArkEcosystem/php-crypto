@@ -16,7 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Deserializers\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 
 /**
  * This is the transfer deserializer test class.
@@ -32,7 +32,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'passphrase');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame(0, $actual->expiration);
+        $this->assertSame(0, $actual->data['expiration']);
     }
 
     /** @test */
@@ -41,7 +41,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['signSignature'], $actual->signSignature);
+        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
+        $this->assertSame($fixture['data']['vendorField'], $actual->data["vendorField"]);
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->vendorField);
+        $this->assertSame($fixture['data']['vendorField'], $actual->data["vendorField"]);
     }
 
     /** @test */
@@ -68,7 +68,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data["vendorField"]);
     }
 
     /** @test */
@@ -77,19 +77,22 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->vendorField);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data["vendorField"]);
     }
 
-    private function assertTransaction(array $fixture): Transaction
+    private function assertTransaction(array $fixture): Transfer
     {
         return $this->assertDeserialized($fixture, [
+            'version',
+            'network',
             'type',
-            'timestamp',
+            'nonce',
             'senderPublicKey',
             'fee',
-            'amount',
-            'recipientId',
+            'asset',
             'signature',
+            'secondSignature',
+            'amount',
             'id',
         ]);
     }

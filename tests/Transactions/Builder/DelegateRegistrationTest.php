@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration;
+use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder;
 
 /**
  * This is the delegate registration builder test class.
@@ -23,12 +23,12 @@ use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration
  */
-class DelegateRegistrationTest extends TestCase
+class DelegateRegistrationBuilderTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = DelegateRegistration::new()
+        $transaction = DelegateRegistrationBuilder::new()
             ->username('polopolo')
             ->sign($this->passphrase);
 
@@ -40,7 +40,7 @@ class DelegateRegistrationTest extends TestCase
     {
         $secondPassphrase = 'this is a top secret second passphrase';
 
-        $transaction = DelegateRegistration::new()
+        $transaction = DelegateRegistrationBuilder::new()
             ->username('polopolo')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);

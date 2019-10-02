@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\Transfer;
+use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
 
 /**
  * This is the transfer builder test class.
@@ -23,12 +23,12 @@ use ArkEcosystem\Crypto\Transactions\Builder\Transfer;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\Transfer
  */
-class TransferTest extends TestCase
+class TransferBuilderTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = Transfer::new()
+        $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')
@@ -42,7 +42,7 @@ class TransferTest extends TestCase
     {
         $secondPassphrase = 'this is a top secret second passphrase';
 
-        $transaction = Transfer::new()
+        $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
             ->amount(133380000000)
             ->vendorField('This is a transaction from PHP')

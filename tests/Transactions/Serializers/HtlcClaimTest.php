@@ -17,22 +17,19 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
- * This is the multi payment serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\MutliPayment
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcClaim
  */
-class MultiPaymentTest extends TestCase
+class HtlcClaimTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'passphrase'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'second-passphrase'));
     }
 }

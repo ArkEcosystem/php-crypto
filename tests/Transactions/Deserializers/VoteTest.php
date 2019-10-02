@@ -15,8 +15,9 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Deserializers\Vote;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the vote deserializer test class.
@@ -40,20 +41,22 @@ class VoteTest extends TestCase
         $fixture = $this->getTransactionFixture('vote', 'second-passphrase');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['signSignature'], $actual->signSignature);
+        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
     }
 
-    private function assertTransaction(array $fixture): Transaction
+    private function assertTransaction(array $fixture): Vote
     {
         return $this->assertDeserialized($fixture, [
+            'version',
+            'network',
             'type',
-            'timestamp',
+            'nonce',
             'senderPublicKey',
             'fee',
             'asset',
             'signature',
+            'secondSignature',
             'amount',
-            'recipientId',
             'id',
         ]);
     }

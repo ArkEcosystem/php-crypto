@@ -17,26 +17,19 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
- * This is the timelock transfer serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\TimelockTransfer
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcLock
  */
-class TimelockTransferTest extends TestCase
+class HtlcLockTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('timelock_transfer', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_lock', 'passphrase'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('timelock_transfer', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_lock', 'second-passphrase'));
     }
 }

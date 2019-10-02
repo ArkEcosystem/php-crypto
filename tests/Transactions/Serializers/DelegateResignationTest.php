@@ -20,7 +20,7 @@ use ArkEcosystem\Crypto\Transactions\Serializer;
  * This is the delegate resignation serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\DelegateResignation
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateResignation
  */
 class DelegateResignationTest extends TestCase
 {

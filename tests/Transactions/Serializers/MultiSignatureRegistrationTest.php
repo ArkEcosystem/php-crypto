@@ -20,7 +20,7 @@ use ArkEcosystem\Crypto\Transactions\Serializer;
  * This is the multi signature registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\MultiSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
  */
 class MultiSignatureRegistrationTest extends TestCase
 {
@@ -28,5 +28,11 @@ class MultiSignatureRegistrationTest extends TestCase
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
         $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'passphrase'));
+    }
+
+    /** @test */
+    public function it_should_serialize_the_transaction_with_a_second_passphrase()
+    {
+        $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'second-passphrase'));
     }
 }

@@ -20,7 +20,7 @@ use ArkEcosystem\Crypto\Transactions\Serializer;
  * This is the delegate registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\DelegateRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration
  */
 class DelegateRegistrationTest extends TestCase
 {

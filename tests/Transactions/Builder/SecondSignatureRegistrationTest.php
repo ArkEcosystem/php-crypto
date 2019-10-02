@@ -15,25 +15,25 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration;
+use ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder;
 
 /**
  * This is the second signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder
  */
-class SecondSignatureRegistrationTest extends TestCase
+class SecondSignatureRegistrationBuilderTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = SecondSignatureRegistration::new()
+        $transaction = SecondSignatureRegistrationBuilder::new()
             ->signature('this is a top secret second passphrase')
             ->sign('this is a top secret passphrase');
 
         $this->assertTrue($transaction->verify());
-        $this->assertFalse(isset($transaction->signSignature));
-        $this->assertSame($transaction->transaction->asset['signature']['publicKey'], PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex());
+        $this->assertFalse(isset($transaction->secondSignature));
+        $this->assertSame($transaction->transaction->data['asset']['signature']['publicKey'], PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex());
     }
 }
