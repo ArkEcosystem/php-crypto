@@ -29,7 +29,7 @@ class SlotTest extends TestCase
     {
         $actual = Slot::time();
 
-        $this->assertInternalType('int', $actual);
+        $this->assertIsInt($actual);
     }
 
     /** @test */
@@ -37,6 +37,6 @@ class SlotTest extends TestCase
     {
         $actual = Slot::epoch();
 
-        $this->assertInternalType('int', $actual);
+        $this->assertIsInt($actual);
     }
 }

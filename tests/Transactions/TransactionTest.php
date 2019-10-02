@@ -176,7 +176,7 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->toArray();
 
-        $this->assertInternalType('array', $actual);
+        $this->assertIsArray($actual);
     }
 
     /** @test */
@@ -184,7 +184,7 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->toJson();
 
-        $this->assertInternalType('string', $actual);
+        $this->assertIsString($actual);
     }
 
     private function getTransaction($file = 'passphrase'): Transaction
