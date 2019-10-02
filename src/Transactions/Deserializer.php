@@ -13,12 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Buffertools\Buffer;
 use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\Enums\Types as TransactionTypes;
-use ArkEcosystem\Crypto\Transactions\Types as Transactions;
 use BrianFaust\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Transactions\Types as Transactions;
 
 /**
  * This is the deserializer class.
@@ -79,7 +76,7 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        $transactionClass = $this->transactionsClasses[$data["type"]];
+        $transactionClass = $this->transactionsClasses[$data['type']];
         $transaction = new $transactionClass();
         $transaction->data = $data;
 
@@ -90,8 +87,8 @@ class Deserializer
 
         $this->deserializeSignatures($transaction->data);
 
-        if (! isset($transaction->data["amount"])) {
-            $transaction->data["amount"] = '0';
+        if (! isset($transaction->data['amount'])) {
+            $transaction->data['amount'] = '0';
         }
 
         $transaction = $this->handleVersionTwo($transaction);
@@ -99,16 +96,16 @@ class Deserializer
         return $transaction;
     }
 
-    private function deserializeCommon(array & $data): void
+    private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
-        $data["version"] = $this->buffer->readUInt8();
-        $data["network"] = $this->buffer->readUInt8();
-        $data["typeGroup"] = $this->buffer->readUInt32();
-        $data["type"] = $this->buffer->readUInt16();
-        $data["nonce"] = strval($this->buffer->readUInt64());
-        $data["senderPublicKey"] = $this->buffer->readHex(33 * 2);
-        $data["fee"] = strval($this->buffer->readUInt64());
+        $data['version'] = $this->buffer->readUInt8();
+        $data['network'] = $this->buffer->readUInt8();
+        $data['typeGroup'] = $this->buffer->readUInt32();
+        $data['type'] = $this->buffer->readUInt16();
+        $data['nonce'] = strval($this->buffer->readUInt64());
+        $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
+        $data['fee'] = strval($this->buffer->readUInt64());
     }
 
     private function deserializeVendorField(Transactions\Transaction $transaction): void
@@ -117,21 +114,21 @@ class Deserializer
         if ($vendorFieldLength > 0) {
             if ($transaction->hasVendorField()) {
                 $marker = $this->buffer->current();
-                $transaction->data["vendorFieldHex"] = $this->buffer->readHex($vendorFieldLength * 2);
+                $transaction->data['vendorFieldHex'] = $this->buffer->readHex($vendorFieldLength * 2);
                 $this->buffer->position($marker);
-                $transaction->data["vendorField"] = $this->buffer->readHexString($vendorFieldLength * 2);
+                $transaction->data['vendorField'] = $this->buffer->readHexString($vendorFieldLength * 2);
             } else {
                 $this->buffer->skip($vendorFieldLength);
             }
         }
     }
 
-    private function deserializeSignatures(array & $data): void
+    private function deserializeSignatures(array &$data): void
     {
         $this->deserializeSchnorrOrECDSA($data);
     }
 
-    private function deserializeSchnorrOrECDSA(array & $data): void
+    private function deserializeSchnorrOrECDSA(array &$data): void
     {
         if ($this->detectSchnorr()) {
             $this->deserializeSchnorr($data);
@@ -140,19 +137,19 @@ class Deserializer
         }
     }
 
-    private function deserializeSchnorr(array & $data): void
+    private function deserializeSchnorr(array &$data): void
     {
         if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data["signature"] = $this->buffer->readHex(64 * 2);
+            $data['signature'] = $this->buffer->readHex(64 * 2);
         }
 
         if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data["secondSignature"] = $this->buffer->readHex(64 * 2);
+            $data['secondSignature'] = $this->buffer->readHex(64 * 2);
         }
 
         if ($this->buffer->remaining()) {
             if ($this->buffer->remaining() % 65 === 0) {
-                $data["signatures"] = [];
+                $data['signatures'] = [];
 
                 $count = $this->buffer->remaining() / 65;
                 $publicKeyIndexes = [];
@@ -160,28 +157,28 @@ class Deserializer
                     $multiSignaturePart = $this->buffer->readHex(65 * 2);
                     $publicKeyIndex = intval(substr($multiSignaturePart, 0, 2), 16);
 
-                    if (!isset($publicKeyIndexes[$publicKeyIndex])) {
+                    if (! isset($publicKeyIndexes[$publicKeyIndex])) {
                         $publicKeyIndexes[$publicKeyIndex] = true;
                     } else {
-                        throw new \Exception("Duplicate participant in multisignature");
+                        throw new \Exception('Duplicate participant in multisignature');
                     }
 
-                    $data["signatures"][] = $multiSignaturePart;
+                    $data['signatures'][] = $multiSignaturePart;
                 }
             } else {
-                throw new \Exception("signature buffer not exhausted");
+                throw new \Exception('signature buffer not exhausted');
             }
         }
     }
 
-    private function canReadNonMultiSignature(ByteBuffer $buffer) {
-        return (
+    private function canReadNonMultiSignature(ByteBuffer $buffer)
+    {
+        return
             $buffer->remaining()
-            && ($buffer->remaining() % 64 === 0 || $buffer->remaining() % 65 !== 0)
-        );
+            && ($buffer->remaining() % 64 === 0 || $buffer->remaining() % 65 !== 0);
     }
 
-    private function deserializeECDSA(array & $data): void
+    private function deserializeECDSA(array &$data): void
     {
         // Signature
         if ($this->buffer->remaining()) {
@@ -190,16 +187,16 @@ class Deserializer
         }
 
         // Second Signature
-        if ($this->buffer->remaining() && !$this->beginningMultiSignature($this->buffer)) {
+        if ($this->buffer->remaining() && ! $this->beginningMultiSignature($this->buffer)) {
             $secondSignatureLength = $this->currentSignatureLength($this->buffer);
-            $data["secondSignature"] = $this->buffer->readHex($secondSignatureLength * 2);
+            $data['secondSignature'] = $this->buffer->readHex($secondSignatureLength * 2);
         }
 
         // Multi Signatures
         if ($this->buffer->remaining() && $this->beginningMultiSignature($this->buffer)) {
             $this->buffer->skip(1);
             $signaturesSerialized = $this->buffer->readHex($this->buffer->remaining() * 2);
-            $data["signatures"] = [];
+            $data['signatures'] = [];
 
             $moreSignatures = true;
             while ($moreSignatures) {
@@ -216,20 +213,23 @@ class Deserializer
         }
 
         if ($this->buffer->remaining()) {
-            throw new \Exception("signature buffer not exhausted");
+            throw new \Exception('signature buffer not exhausted');
         }
     }
 
-    private function currentSignatureLength(ByteBuffer $buffer) {
+    private function currentSignatureLength(ByteBuffer $buffer)
+    {
         $mark = $buffer->current();
 
         $lengthHex = $buffer->skip(1)->readHex(1 * 2);
 
         $buffer->position($mark);
+
         return intval($lengthHex, 16) + 2;
     }
 
-    private function beginningMultiSignature(ByteBuffer $buffer) {
+    private function beginningMultiSignature(ByteBuffer $buffer)
+    {
         $mark = $buffer->current();
 
         $marker = $buffer->readUint8();

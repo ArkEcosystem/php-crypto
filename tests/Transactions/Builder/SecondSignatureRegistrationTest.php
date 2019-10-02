@@ -23,7 +23,7 @@ use ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder
  */
-class SecondSignatureRegistrationBuilderTest extends TestCase
+class SecondSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()

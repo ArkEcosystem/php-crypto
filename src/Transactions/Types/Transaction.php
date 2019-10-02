@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BrianFaust\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Configuration\Network;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use ArkEcosystem\Crypto\Transactions\Serializer;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 
 /**
@@ -61,8 +59,8 @@ abstract class Transaction
     public function sign(PrivateKey $keys): self
     {
         $options = [
-            "skipSignature" => true,
-            "skipSecondSignature" => true
+            'skipSignature' => true,
+            'skipSecondSignature' => true,
         ];
         $transaction = Hash::sha256($this->getBytes($options));
         $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
@@ -80,7 +78,7 @@ abstract class Transaction
     public function secondSign(PrivateKey $keys): self
     {
         $options = [
-            "skipSecondSignature" => true
+            'skipSecondSignature' => true,
         ];
         $transaction = Hash::sha256($this->getBytes($options));
         $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
@@ -91,8 +89,8 @@ abstract class Transaction
     public function verify(): bool
     {
         $options = [
-            "skipSignature" => true,
-            "skipSecondSignature" => true
+            'skipSignature' => true,
+            'skipSecondSignature' => true,
         ];
 
         $bytes = $this->getBytes($options);
@@ -105,7 +103,7 @@ abstract class Transaction
     public function secondVerify(string $secondPublicKey): bool
     {
         $options = [
-            "skipSecondSignature" => true
+            'skipSecondSignature' => true,
         ];
         $bytes = $this->getBytes($options);
         $signature = $this->data['secondSignature'];
@@ -167,18 +165,18 @@ abstract class Transaction
         return array_filter([
             'amount'          => $this->data['amount'],
             'asset'           => $this->data['asset'] ?? null,
-            'fee'             => $this->data["fee"],
+            'fee'             => $this->data['fee'],
             'id'              => $this->data['id'],
-            'network'         => $this->data["network"] ?? Network::get()->version(),
+            'network'         => $this->data['network'] ?? Network::get()->version(),
             'recipientId'     => $this->data['recipientId'] ?? null,
             'secondSignature' => $this->data['secondSignature'] ?? null,
-            'senderPublicKey' => $this->data["senderPublicKey"],
+            'senderPublicKey' => $this->data['senderPublicKey'],
             'signature'       => $this->data['signature'],
             'signatures'      => $this->data['signatures'] ?? null,
             'secondSignature'   => $this->data['secondSignature'] ?? null,
-            'timestamp'       => $this->data["timestamp"],
-            'type'            => $this->data["type"],
-            'vendorField'     => $this->data["vendorField"] ?? null,
+            'timestamp'       => $this->data['timestamp'],
+            'type'            => $this->data['type'],
+            'vendorField'     => $this->data['vendorField'] ?? null,
             'version'         => $this->data['version'] ?? 1,
         ], function ($element) {
             if (null !== $element) {

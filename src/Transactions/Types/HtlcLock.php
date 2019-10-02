@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use BrianFaust\ByteBuffer\ByteBuffer;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
+use BrianFaust\ByteBuffer\ByteBuffer;
 
 class HtlcLock extends Transaction
 {
@@ -40,14 +40,14 @@ class HtlcLock extends Transaction
         $expirationValue = $buffer->readUint32();
         $recipientId = Base58::encodeCheck(new Buffer($buffer->readHexString(21 * 2)));
 
-        $this->data["amount"] = $amount;
-        $this->data["recipientId"] = $recipientId;
-        $this->data["asset"] = [
+        $this->data['amount'] = $amount;
+        $this->data['recipientId'] = $recipientId;
+        $this->data['asset'] = [
             'lock' => [
                 'secretHash' => $secretHash,
                 'expiration' => [
                     'type' => $expirationType,
-                    'value' => $expirationValue
+                    'value' => $expirationValue,
                 ],
             ],
         ];

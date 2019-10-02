@@ -44,13 +44,13 @@ class Vote extends Transaction
     {
         $voteLength = $buffer->readUInt8();
 
-        $this->data["asset"] = ['votes' => []];
+        $this->data['asset'] = ['votes' => []];
 
         $vote = null;
         for ($i = 0; $i < $voteLength; $i++) {
             $vote = $buffer->readHex(34 * 2);
             $vote = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $this->data["asset"]['votes'][] = $vote;
+            $this->data['asset']['votes'][] = $vote;
         }
     }
 }

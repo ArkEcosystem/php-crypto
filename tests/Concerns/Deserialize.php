@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 
 trait Deserialize
@@ -47,7 +46,7 @@ trait Deserialize
         if (isset($actual['asset']['multiSignature'])) {
             ksort($expected['asset']['multiSignature']);
             ksort($actual['asset']['multiSignature']);
-        } else if (isset($actual['asset']['multiSignatureLegacy'])) {
+        } elseif (isset($actual['asset']['multiSignatureLegacy'])) {
             ksort($expected['asset']['multiSignatureLegacy']);
             ksort($actual['asset']['multiSignatureLegacy']);
         }

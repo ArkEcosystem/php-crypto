@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 
@@ -50,7 +49,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->data["vendorField"]);
+        $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
     }
 
     /** @test */
@@ -59,7 +58,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->data["vendorField"]);
+        $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
     }
 
     /** @test */
@@ -68,7 +67,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data["vendorField"]);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data['vendorField']);
     }
 
     /** @test */
@@ -77,7 +76,7 @@ class TransferTest extends TestCase
         $fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex');
 
         $actual = $this->assertTransaction($fixture);
-        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data["vendorField"]);
+        $this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data['vendorField']);
     }
 
     private function assertTransaction(array $fixture): Transfer

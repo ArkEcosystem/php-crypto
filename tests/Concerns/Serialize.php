@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Transactions\Types;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 trait Serialize
 {
@@ -35,7 +35,7 @@ trait Serialize
     protected function assertSerialized(array $fixture): void
     {
         $data = $fixture['data'];
-        $transactionClass = $this->transactionsClasses[$fixture['data']["type"]];
+        $transactionClass = $this->transactionsClasses[$fixture['data']['type']];
         $transaction = new $transactionClass();
         $transaction->data = $data;
 

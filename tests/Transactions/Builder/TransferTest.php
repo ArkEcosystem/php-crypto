@@ -23,7 +23,7 @@ use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\Transfer
  */
-class TransferBuilderTest extends TestCase
+class TransferTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
