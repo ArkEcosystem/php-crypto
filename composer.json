@@ -14,7 +14,7 @@
         "faustbrian/binary": "^0.4.0"
     },
     "require-dev": {
-        "illuminate/support": "^6.0.0",
+        "laravel/helpers": "^1.1.1",
         "mockery/mockery": "^1.2",
         "phpunit/phpunit": "^8.0.0",
         "spatie/phpunit-watcher": "^1.8",
