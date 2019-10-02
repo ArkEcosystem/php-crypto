@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
+use Illuminate\Support\Arr;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
@@ -39,8 +40,8 @@ trait Deserialize
 
     protected function assertSameTransactions(array $expected, Transaction $actual, array $keys): void
     {
-        $expected = array_only($expected['data'], $keys);
-        $actual = array_only($this->object_to_array($actual), $keys);
+        $expected = Arr::only($expected['data'], $keys);
+        $actual = Arr::only($this->object_to_array($actual), $keys);
 
         ksort($expected);
         ksort($actual);
