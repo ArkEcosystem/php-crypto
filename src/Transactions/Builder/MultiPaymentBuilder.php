@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
+
 /**
  * This is the multi payment transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiPayment extends AbstractTransaction
+class MultiPaymentBuilder extends AbstractTransactionBuilder
 {
     /**
      * Create a new multi signature transaction instance.
@@ -27,7 +29,7 @@ class MultiPayment extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset = ['payments' => []];
+        $this->transaction->data['asset'] = ['payments' => []];
     }
 
     /**
@@ -40,7 +42,7 @@ class MultiPayment extends AbstractTransaction
      */
     public function add(string $recipientId, int $amount): self
     {
-        $this->transaction->asset['payments'][] = compact('recipientId', 'amount');
+        $this->transaction->data['asset']['payments'][] = compact('recipientId', 'amount');
 
         return $this;
     }
@@ -51,5 +53,10 @@ class MultiPayment extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::MULTI_PAYMENT;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new MultiPayment();
     }
 }

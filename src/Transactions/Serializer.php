@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
+use ArkEcosystem\Crypto\Enums\Types;
 use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
+use BrianFaust\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Enums\TypeGroup;
 
 /**
  * This is the serializer class.
@@ -25,44 +30,28 @@ use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 class Serializer
 {
     /**
-     * The transaction serializers.
-     *
-     * @var array
-     */
-    private $serializers = [
-        Serializers\Transfer::class,
-        Serializers\SecondSignatureRegistration::class,
-        Serializers\DelegateRegistration::class,
-        Serializers\Vote::class,
-        Serializers\MultiSignatureRegistration::class,
-        Serializers\IPFS::class,
-        Serializers\TimelockTransfer::class,
-        Serializers\MultiPayment::class,
-        Serializers\DelegateResignation::class,
-    ];
-
-    /**
      * Create a new serializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transaction|array $transaction
+     * @param \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction
      */
     private function __construct($transaction)
     {
-        if ($transaction instanceof Transaction) {
-            $transaction = $transaction->toArray();
-        }
-
         $this->transaction = $transaction;
     }
 
     /**
      * Create a new deserializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transaction|array $transaction
+     * @param \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction
      */
     public static function new($transaction)
     {
         return new static($transaction);
+    }
+
+    public static function getBytes(Transaction $transaction, array $options = []): Buffer
+    {
+        return Serializer::new($transaction)->serialize($options);
     }
 
     /**
@@ -70,71 +59,92 @@ class Serializer
      *
      * @return \BitWasp\Buffertools\Buffer
      */
-    public function serialize(): Buffer
+    public function serialize(array $options = []): Buffer
     {
-        $buffer = new Writer();
-        $buffer->writeUInt8(0xff);
-        $buffer->writeUInt8($this->transaction['version'] ?? 0x01);
-        $buffer->writeUInt8($this->transaction['network'] ?? Network::version());
-        $buffer->writeUInt8($this->transaction['type']);
-        $buffer->writeUInt32($this->transaction['timestamp']);
-        $buffer->writeHex($this->transaction['senderPublicKey']);
-        $buffer->writeUInt64($this->transaction['fee']);
+        $buffer = ByteBuffer::new(1); // initialize with size 1, size will expand as we add bytes
+        
+        $this->serializeCommon($buffer);
 
-        if (isset($this->transaction['vendorField'])) {
-            $vendorFieldLength = strlen($this->transaction['vendorField']);
-            $buffer->writeUInt8($vendorFieldLength);
-            $buffer->writeString($this->transaction['vendorField']);
-        } elseif (isset($this->transaction['vendorFieldHex'])) {
-            $vendorFieldHexLength = strlen($this->transaction['vendorFieldHex']);
-            $buffer->writeUInt8($vendorFieldHexLength / 2);
-            $buffer->writeHex($this->transaction['vendorFieldHex']);
+        $this->serializeVendorField($buffer);
+
+        $typeBuffer = $this->transaction->serialize($options);
+        $buffer->append($typeBuffer);
+        
+        $this->serializeSignatures($buffer, $options);
+
+        return new Buffer($buffer->toString("binary"));
+    }
+
+    private function serializeCommon(ByteBuffer $buffer): void
+    {
+        $this->transaction->data["version"] = $this->transaction->data["version"] ?? 0x01;
+        if (!isset($this->transaction->data["typeGroup"])) {
+            $this->transaction->data["typeGroup"] = TypeGroup::CORE;
+        }
+
+        $buffer->writeByte(0xff);
+        $buffer->writeByte($this->transaction->data["version"]);
+        $buffer->writeByte($this->transaction->data["network"] ?? Network::version());
+
+        if ($this->transaction->data["version"] === 1) {
+            $buffer->writeByte($this->transaction->data["type"]);
+            $buffer->writeUint32($this->transaction->data["timestamp"]);
+        } else {
+            $buffer->writeUint32($this->transaction->data["typeGroup"]);
+            $buffer->writeUint16($this->transaction->data["type"]);
+            $buffer->writeUint64(+$this->transaction->data["nonce"]);
+        }
+
+        $buffer->writeHex($this->transaction->data["senderPublicKey"]);
+        $buffer->writeUint64(+$this->transaction->data["fee"]);
+    }
+
+    private function serializeVendorField(ByteBuffer $buffer): void
+    {
+        if ($this->transaction->hasVendorField()) {
+            $data = $this->transaction->data;
+
+            if (isset($data["vendorField"])) {
+                $vendorFieldLength = strlen($data["vendorField"]);
+                $buffer->writeUInt8($vendorFieldLength);
+                $buffer->writeString($data["vendorField"]);
+            } elseif (isset($data["vendorFieldHex"])) {
+                $vendorFieldHexLength = strlen($data["vendorFieldHex"]);
+                $buffer->writeUInt8($vendorFieldHexLength / 2);
+                $buffer->writeHex($data["vendorFieldHex"]);
+            } else {
+                $buffer->writeUInt8(0x00);
+            }
         } else {
             $buffer->writeUInt8(0x00);
         }
-
-        $this->handleType($buffer);
-        $this->handleSignatures($buffer);
-
-        return new Buffer($buffer->toBytes());
     }
 
     /**
      * Handle the serialization of transaction data.
      *
-     * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
+     * @param \BrianFaust\ByteBuffer\ByteBuffer $buffer
      *
      * @return string
      */
-    public function handleType(Writer $buffer): void
+    public function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
-        $serializer = $this->serializers[$this->transaction['type']];
+        $skipSignature = $options['skipSignature'] ?? false;
+        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
+        $skipMultiSignature = $options['skipMultiSignature'] ?? false;
 
-        (new $serializer($this->transaction, $buffer))->serialize();
-    }
-
-    /**
-     * Handle the serialization of transaction data.
-     *
-     * @param \BrianFaust\Binary\Buffer\Writer\Buffer $buffer
-     *
-     * @return string
-     */
-    public function handleSignatures(Writer $buffer): void
-    {
-        if (isset($this->transaction['signature'])) {
-            $buffer->writeHexBytes($this->transaction['signature']);
+        if (!$skipSignature && isset($this->transaction->data["signature"])) {
+            $buffer->writeHex($this->transaction->data["signature"]);
         }
 
-        if (isset($this->transaction['secondSignature'])) {
-            $buffer->writeHexBytes($this->transaction['secondSignature']);
-        } elseif (isset($this->transaction['signSignature'])) {
-            $buffer->writeHexBytes($this->transaction['signSignature']);
+        if (!$skipSecondSignature) {
+            if (isset($this->transaction->data["secondSignature"])) {
+                $buffer->writeHex($this->transaction->data["secondSignature"]);
+            }
         }
 
-        if (isset($this->transaction['signatures'])) {
-            $buffer->writeUInt8(0xff);
-            $buffer->writeHexBytes(implode('', $this->transaction['signatures']));
+        if (!$skipMultiSignature && isset($this->transaction->data["signatures"])) {
+            $buffer->writeHex(implode('', $this->transaction->data["signatures"]));
         }
     }
 }

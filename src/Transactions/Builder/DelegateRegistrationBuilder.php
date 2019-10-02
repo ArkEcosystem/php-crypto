@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration;
 
 /**
  * This is the delegate registration transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateRegistration extends AbstractTransaction
+class DelegateRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**
      * Create a new delegate registration transaction instance.
@@ -29,7 +30,7 @@ class DelegateRegistration extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset = ['delegate' => []];
+        $this->transaction->data['asset'] = ['delegate' => []];
     }
 
     /**
@@ -41,7 +42,7 @@ class DelegateRegistration extends AbstractTransaction
      */
     public function username(string $username): self
     {
-        $this->transaction->asset['delegate']['username'] = $username;
+        $this->transaction->data['asset']['delegate']['username'] = $username;
 
         return $this;
     }
@@ -51,12 +52,12 @@ class DelegateRegistration extends AbstractTransaction
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
-    public function sign(string $passphrase): AbstractTransaction
+    public function sign(string $passphrase): AbstractTransactionBuilder
     {
         $publicKey = PublicKey::fromPassphrase($passphrase);
-        $this->transaction->asset['delegate']['publicKey'] = $publicKey->getHex();
+        $this->transaction->data['asset']['delegate']['publicKey'] = $publicKey->getHex();
 
         parent::sign($passphrase);
 
@@ -69,5 +70,10 @@ class DelegateRegistration extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::DELEGATE_REGISTRATION;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new DelegateRegistration();
     }
 }

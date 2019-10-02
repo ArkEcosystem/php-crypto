@@ -15,13 +15,14 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 /**
  * This is the vote transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Vote extends AbstractTransaction
+class VoteBuilder extends AbstractTransactionBuilder
 {
     /**
      * Create a new multi signature transaction instance.
@@ -30,7 +31,7 @@ class Vote extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset = [];
+        $this->transaction->data['asset'] = [];
     }
 
     /**
@@ -42,7 +43,7 @@ class Vote extends AbstractTransaction
      */
     public function votes(array $votes): self
     {
-        $this->transaction->asset['votes'] = $votes;
+        $this->transaction->data['asset']['votes'] = $votes;
 
         return $this;
     }
@@ -52,11 +53,11 @@ class Vote extends AbstractTransaction
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
-    public function sign(string $passphrase): AbstractTransaction
+    public function sign(string $passphrase): AbstractTransactionBuilder
     {
-        $this->transaction->recipientId = Address::fromPassphrase($passphrase, Network::get());
+        $this->transaction->data['recipientId'] = Address::fromPassphrase($passphrase, Network::get());
 
         parent::sign($passphrase);
 
@@ -69,5 +70,10 @@ class Vote extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::VOTE;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new Vote();
     }
 }

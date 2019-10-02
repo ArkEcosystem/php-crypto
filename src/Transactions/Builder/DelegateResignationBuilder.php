@@ -13,18 +13,25 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Transactions\Types\DelegateResignation;
+
 /**
- * This is the ipfs transaction class.
+ * This is the delegate resignation transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class IPFS extends AbstractTransaction
+class DelegateResignationBuilder extends AbstractTransactionBuilder
 {
     /**
      * {@inheritdoc}
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::IPFS;
+        return \ArkEcosystem\Crypto\Enums\Types::DELEGATE_RESIGNATION;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new DelegateResignation();
     }
 }

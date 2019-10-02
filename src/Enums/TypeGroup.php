@@ -11,21 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace ArkEcosystem\Crypto\Transactions\Serializers;
+namespace ArkEcosystem\Crypto\Enums;
 
 /**
- * This is the serializer class.
+ * This is the transaction type group class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateResignation extends AbstractSerializer
+class TypeGroup
 {
-    /**
-     * Handle the serialization of "delegate resignation" data.
-     *
-     * @return string
-     */
-    public function serialize(): void
-    {
-    }
+    const TEST = 0;
+    const CORE = 1;
+    const RESERVED = 1000; // Everything above is available to anyone
 }

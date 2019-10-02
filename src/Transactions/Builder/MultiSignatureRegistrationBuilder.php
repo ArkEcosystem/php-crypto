@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
+
 /**
  * This is the multisignature registration transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class MultiSignatureRegistration extends AbstractTransaction
+class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**
      * Create a new multi signature transaction instance.
@@ -27,7 +29,7 @@ class MultiSignatureRegistration extends AbstractTransaction
     {
         parent::__construct();
 
-        $this->transaction->asset = ['multisignature' => []];
+        $this->transaction->data['asset'] = ['multisignature' => []];
     }
 
     /**
@@ -39,7 +41,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function min(int $min): self
     {
-        $this->transaction->asset['multisignature']['min'] = $min;
+        $this->transaction->data['asset']['multisignature']['min'] = $min;
 
         return $this;
     }
@@ -53,7 +55,7 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function lifetime(int $lifetime): self
     {
-        $this->transaction->asset['multisignature']['lifetime'] = $lifetime;
+        $this->transaction->data['asset']['multisignature']['lifetime'] = $lifetime;
 
         return $this;
     }
@@ -67,9 +69,9 @@ class MultiSignatureRegistration extends AbstractTransaction
      */
     public function keysgroup(array $keysgroup): self
     {
-        $this->transaction->asset['multisignature']['keysgroup'] = $keysgroup;
+        $this->transaction->data['asset']['multisignature']['keysgroup'] = $keysgroup;
 
-        $this->transaction->fee = (count($keysgroup) + 1) * $this->transaction->fee;
+        $this->transaction->data['fee'] = (count($keysgroup) + 1) * $this->transaction->data['fee'];
 
         return $this;
     }
@@ -80,5 +82,10 @@ class MultiSignatureRegistration extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::MULTI_SIGNATURE_REGISTRATION;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new MultiSignatureRegistration();
     }
 }

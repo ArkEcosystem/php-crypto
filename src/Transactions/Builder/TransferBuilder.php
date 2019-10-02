@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+
 /**
  * This is the transfer transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class Transfer extends AbstractTransaction
+class TransferBuilder extends AbstractTransactionBuilder
 {
     /**
      * Set the recipient of the transfer.
@@ -29,7 +31,7 @@ class Transfer extends AbstractTransaction
      */
     public function recipient(string $recipientId): self
     {
-        $this->transaction->recipientId = $recipientId;
+        $this->transaction->data['recipientId'] = $recipientId;
 
         return $this;
     }
@@ -43,7 +45,7 @@ class Transfer extends AbstractTransaction
      */
     public function amount(int $amount): self
     {
-        $this->transaction->amount = $amount;
+        $this->transaction->data['amount'] = $amount;
 
         return $this;
     }
@@ -57,7 +59,7 @@ class Transfer extends AbstractTransaction
      */
     public function vendorField(string $vendorField): self
     {
-        $this->transaction->vendorField = $vendorField;
+        $this->transaction->data['vendorField'] = $vendorField;
 
         return $this;
     }
@@ -68,5 +70,10 @@ class Transfer extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::TRANSFER;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new Transfer();
     }
 }

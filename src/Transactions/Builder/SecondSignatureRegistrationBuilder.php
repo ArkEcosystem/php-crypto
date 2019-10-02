@@ -14,13 +14,14 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Transactions\Types\SecondSignatureRegistration;
 
 /**
  * This is the second signature registration transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class SecondSignatureRegistration extends AbstractTransaction
+class SecondSignatureRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**
      * Set the signature asset to register the second passphrase.
@@ -31,7 +32,7 @@ class SecondSignatureRegistration extends AbstractTransaction
      */
     public function signature(string $secondPassphrase): self
     {
-        $this->transaction->asset = [
+        $this->transaction->data['asset'] = [
             'signature' => [
                 'publicKey' => PublicKey::fromPassphrase($secondPassphrase)->getHex(),
             ],
@@ -46,5 +47,10 @@ class SecondSignatureRegistration extends AbstractTransaction
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::SECOND_SIGNATURE_REGISTRATION;
+    }
+
+    protected function getTransactionInstance(): object
+    {
+        return new SecondSignatureRegistration();
     }
 }
