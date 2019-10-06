@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcClaim

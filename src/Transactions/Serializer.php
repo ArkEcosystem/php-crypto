@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
-use ArkEcosystem\Crypto\Enums\Types;
-use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 use BrianFaust\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
+use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 
 /**
  * This is the serializer class.
@@ -51,7 +48,7 @@ class Serializer
 
     public static function getBytes(Transaction $transaction, array $options = []): Buffer
     {
-        return Serializer::new($transaction)->serialize($options);
+        return self::new($transaction)->serialize($options);
     }
 
     /**
@@ -62,41 +59,41 @@ class Serializer
     public function serialize(array $options = []): Buffer
     {
         $buffer = ByteBuffer::new(1); // initialize with size 1, size will expand as we add bytes
-        
+
         $this->serializeCommon($buffer);
 
         $this->serializeVendorField($buffer);
 
         $typeBuffer = $this->transaction->serialize($options);
         $buffer->append($typeBuffer);
-        
+
         $this->serializeSignatures($buffer, $options);
 
-        return new Buffer($buffer->toString("binary"));
+        return new Buffer($buffer->toString('binary'));
     }
 
     private function serializeCommon(ByteBuffer $buffer): void
     {
-        $this->transaction->data["version"] = $this->transaction->data["version"] ?? 0x01;
-        if (!isset($this->transaction->data["typeGroup"])) {
-            $this->transaction->data["typeGroup"] = TypeGroup::CORE;
+        $this->transaction->data['version'] = $this->transaction->data['version'] ?? 0x01;
+        if (! isset($this->transaction->data['typeGroup'])) {
+            $this->transaction->data['typeGroup'] = TypeGroup::CORE;
         }
 
         $buffer->writeByte(0xff);
-        $buffer->writeByte($this->transaction->data["version"]);
-        $buffer->writeByte($this->transaction->data["network"] ?? Network::version());
+        $buffer->writeByte($this->transaction->data['version']);
+        $buffer->writeByte($this->transaction->data['network'] ?? Network::version());
 
-        if ($this->transaction->data["version"] === 1) {
-            $buffer->writeByte($this->transaction->data["type"]);
-            $buffer->writeUint32($this->transaction->data["timestamp"]);
+        if ($this->transaction->data['version'] === 1) {
+            $buffer->writeByte($this->transaction->data['type']);
+            $buffer->writeUint32($this->transaction->data['timestamp']);
         } else {
-            $buffer->writeUint32($this->transaction->data["typeGroup"]);
-            $buffer->writeUint16($this->transaction->data["type"]);
-            $buffer->writeUint64(+$this->transaction->data["nonce"]);
+            $buffer->writeUint32($this->transaction->data['typeGroup']);
+            $buffer->writeUint16($this->transaction->data['type']);
+            $buffer->writeUint64(+$this->transaction->data['nonce']);
         }
 
-        $buffer->writeHex($this->transaction->data["senderPublicKey"]);
-        $buffer->writeUint64(+$this->transaction->data["fee"]);
+        $buffer->writeHex($this->transaction->data['senderPublicKey']);
+        $buffer->writeUint64(+$this->transaction->data['fee']);
     }
 
     private function serializeVendorField(ByteBuffer $buffer): void
@@ -104,14 +101,14 @@ class Serializer
         if ($this->transaction->hasVendorField()) {
             $data = $this->transaction->data;
 
-            if (isset($data["vendorField"])) {
-                $vendorFieldLength = strlen($data["vendorField"]);
+            if (isset($data['vendorField'])) {
+                $vendorFieldLength = strlen($data['vendorField']);
                 $buffer->writeUInt8($vendorFieldLength);
-                $buffer->writeString($data["vendorField"]);
-            } elseif (isset($data["vendorFieldHex"])) {
-                $vendorFieldHexLength = strlen($data["vendorFieldHex"]);
+                $buffer->writeString($data['vendorField']);
+            } elseif (isset($data['vendorFieldHex'])) {
+                $vendorFieldHexLength = strlen($data['vendorFieldHex']);
                 $buffer->writeUInt8($vendorFieldHexLength / 2);
-                $buffer->writeHex($data["vendorFieldHex"]);
+                $buffer->writeHex($data['vendorFieldHex']);
             } else {
                 $buffer->writeUInt8(0x00);
             }
@@ -133,18 +130,18 @@ class Serializer
         $skipSecondSignature = $options['skipSecondSignature'] ?? false;
         $skipMultiSignature = $options['skipMultiSignature'] ?? false;
 
-        if (!$skipSignature && isset($this->transaction->data["signature"])) {
-            $buffer->writeHex($this->transaction->data["signature"]);
+        if (! $skipSignature && isset($this->transaction->data['signature'])) {
+            $buffer->writeHex($this->transaction->data['signature']);
         }
 
-        if (!$skipSecondSignature) {
-            if (isset($this->transaction->data["secondSignature"])) {
-                $buffer->writeHex($this->transaction->data["secondSignature"]);
+        if (! $skipSecondSignature) {
+            if (isset($this->transaction->data['secondSignature'])) {
+                $buffer->writeHex($this->transaction->data['secondSignature']);
             }
         }
 
-        if (!$skipMultiSignature && isset($this->transaction->data["signatures"])) {
-            $buffer->writeHex(implode('', $this->transaction->data["signatures"]));
+        if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
+            $buffer->writeHex(implode('', $this->transaction->data['signatures']));
         }
     }
 }

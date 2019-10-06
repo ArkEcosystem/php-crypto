@@ -18,8 +18,8 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Transaction;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 
 /**
  * This is the transaction test class.

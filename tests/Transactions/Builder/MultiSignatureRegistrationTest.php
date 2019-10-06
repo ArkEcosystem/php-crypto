@@ -23,9 +23,9 @@ use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
  */
-class MultiSignatureRegistrationBuilderTest extends TestCase
+class MultiSignatureRegistrationTest extends TestCase
 {
-    /** @test */
+    /* @test */
     /*public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = MultiSignatureRegistrationBuilder::new()

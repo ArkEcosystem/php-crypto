@@ -28,7 +28,7 @@ class HtlcRefund extends Transaction
     {
         $lockTransactionId = $buffer->readHex(32 * 2);
 
-        $this->data["asset"] = [
+        $this->data['asset'] = [
             'refund' => [
                 'lockTransactionId' => $lockTransactionId,
             ],

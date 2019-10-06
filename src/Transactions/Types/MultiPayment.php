@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use BitWasp\Bitcoin\Base58;
-
-use BrianFaust\ByteBuffer\ByteBuffer;
 use BitWasp\Buffertools\Buffer;
+use BrianFaust\ByteBuffer\ByteBuffer;
 
 /**
  * This is the serializer class.

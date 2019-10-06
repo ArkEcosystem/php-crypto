@@ -23,7 +23,7 @@ use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder
  */
-class VoteBuilderTest extends TestCase
+class VoteTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()

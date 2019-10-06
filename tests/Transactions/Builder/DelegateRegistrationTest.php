@@ -23,7 +23,7 @@ use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder;
  * @author Brian Faust <brian@ark.io>
  * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration
  */
-class DelegateRegistrationBuilderTest extends TestCase
+class DelegateRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
