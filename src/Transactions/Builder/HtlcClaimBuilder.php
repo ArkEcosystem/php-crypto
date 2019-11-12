@@ -13,31 +13,32 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Transactions\Types\IPFS;
+use ArkEcosystem\Crypto\Transactions\Types\HtlcClaim;
 
-/**
- * This is the ipfs transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
-class IPFSBuilder extends AbstractTransactionBuilder
+class HtlcClaimBuilder extends AbstractTransactionBuilder
 {
-    public function ipfsAsset(string $ipfsId): self
+    public function htlcClaimAsset(string $lockTransactionId, string $unlockSecret): self
     {
         $this->transaction->data['asset'] = [
-            "ipfs" => $ipfsId
+            "claim" => [
+                "lockTransactionId" => $lockTransactionId,
+                "unlockSecret" => $unlockSecret
+            ]
         ];
 
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::IPFS;
+        return \ArkEcosystem\Crypto\Enums\Types::HTLC_CLAIM;
     }
 
     protected function getTransactionInstance(): object
     {
-        return new IPFS();
+        return new HtlcClaim();
     }
 }

@@ -13,31 +13,31 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Transactions\Types\IPFS;
+use ArkEcosystem\Crypto\Transactions\Types\HtlcRefund;
 
-/**
- * This is the ipfs transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
-class IPFSBuilder extends AbstractTransactionBuilder
+class HtlcRefundBuilder extends AbstractTransactionBuilder
 {
-    public function ipfsAsset(string $ipfsId): self
+    public function htlcRefundAsset(string $lockTransactionId): self
     {
         $this->transaction->data['asset'] = [
-            "ipfs" => $ipfsId
+            "refund" => [
+                "lockTransactionId" => $lockTransactionId
+            ]
         ];
 
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::IPFS;
+        return \ArkEcosystem\Crypto\Enums\Types::HTLC_REFUND;
     }
 
     protected function getTransactionInstance(): object
     {
-        return new IPFS();
+        return new HtlcRefund();
     }
 }

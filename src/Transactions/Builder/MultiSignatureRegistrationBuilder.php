@@ -29,7 +29,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct();
 
-        $this->transaction->data['asset'] = ['multisignature' => []];
+        $this->transaction->data['asset'] = ['multiSignature' => []];
     }
 
     /**
@@ -41,37 +41,45 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      */
     public function min(int $min): self
     {
-        $this->transaction->data['asset']['multisignature']['min'] = $min;
+        $this->transaction->data['asset']['multiSignature']['min'] = $min;
 
         return $this;
     }
 
     /**
-     * Set the transaction lifetime.
+     * Set the publicKeys of signatures.
      *
-     * @param int $lifetime
+     * @param array $publicKeys
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
      */
-    public function lifetime(int $lifetime): self
+    public function publicKeys(array $publicKeys): self
     {
-        $this->transaction->data['asset']['multisignature']['lifetime'] = $lifetime;
+        $this->transaction->data['asset']['multiSignature']['publicKeys'] = $publicKeys;
+
+        $this->transaction->data['fee'] = (count($publicKeys) + 1) * $this->getFee();
 
         return $this;
     }
 
     /**
-     * Set the keysgroup of signatures.
+     * Add a participant to the public keys list
      *
-     * @param array $keysgroup
+     * @param string $publicKey
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
      */
-    public function keysgroup(array $keysgroup): self
+    public function participant(string $publicKey): self
     {
-        $this->transaction->data['asset']['multisignature']['keysgroup'] = $keysgroup;
+        if (!isset($this->transaction->data['asset']['multiSignature']['publicKeys'])) {
+            $this->transaction->data['asset']['multiSignature']['publicKeys'] = [ $publicKey ];
+        } else {
+            array_push($this->transaction->data['asset']['multiSignature']['publicKeys'], $publicKey);
+        }
+        
 
-        $this->transaction->data['fee'] = (count($keysgroup) + 1) * $this->transaction->data['fee'];
+        $this->transaction->data['fee'] = 
+            (count($this->transaction->data['asset']['multiSignature']['publicKeys']) + 1) * $this->getFee();
 
         return $this;
     }

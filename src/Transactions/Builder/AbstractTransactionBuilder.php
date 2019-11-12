@@ -163,7 +163,7 @@ abstract class AbstractTransactionBuilder
      *
      * @return int
      */
-    private function getFee(): int
+    protected function getFee(): int
     {
         return Fee::get($this->transaction->data['type']);
     }

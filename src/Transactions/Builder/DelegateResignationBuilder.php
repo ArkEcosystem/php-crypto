@@ -22,9 +22,6 @@ use ArkEcosystem\Crypto\Transactions\Types\DelegateResignation;
  */
 class DelegateResignationBuilder extends AbstractTransactionBuilder
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function getType(): int
     {
         return \ArkEcosystem\Crypto\Enums\Types::DELEGATE_RESIGNATION;
