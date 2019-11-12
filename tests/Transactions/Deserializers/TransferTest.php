@@ -99,4 +99,16 @@ class TransferTest extends TestCase
             'id',
         ]);
     }
+
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_passphrase_schnorr()
+    {
+        // This is to test Schnorr signature / verification
+        // It doesn't work (doesn't verify, signature does not give the same as fixture...)
+        // Haven't found why yet :think:
+        $fixture = $this->getTransactionFixture('transfer', 'transfer-sign', true);
+
+        $actual = $this->assertTransaction($fixture);
+        $this->assertSame(0, $actual->data['expiration']);
+    }
 }

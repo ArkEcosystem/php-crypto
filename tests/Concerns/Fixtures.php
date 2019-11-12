@@ -37,8 +37,9 @@ trait Fixtures
      *
      * @return array|object
      */
-    protected function getTransactionFixture(string $type, string $name): array
+    protected function getTransactionFixture(string $type, string $name, bool $schnorr = false): array
     {
-        return $this->getFixture("transactions/{$type}/{$name}");
+        $schnorrSuffix = $schnorr ? "-schnorr" : "";
+        return $this->getFixture("transactions{$schnorrSuffix}/{$type}/{$name}");
     }
 }
