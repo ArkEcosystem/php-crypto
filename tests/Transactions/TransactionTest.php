@@ -34,7 +34,7 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->getId();
 
-        $this->assertSame('4616027183c83139a16f3e6853d90ae4e79b4708c54f2256a4db88e4e916af17', $actual);
+        $this->assertSame('8fd1cf0490276edb9b3cba40bcbf9a7b0ce04b90e40ffe4704fc776b2bf8aabe', $actual);
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class TransactionTest extends TestCase
 
         $secondPublicKey = PublicKey::fromPassphrase($secondPassphrase)->getHex();
 
-        $actual = $this->getTransaction('second-passphrase')->secondVerify($secondPublicKey);
+        $actual = $this->getTransaction('transfer-secondSign')->secondVerify($secondPublicKey);
 
         $this->assertTrue($actual);
     }
@@ -96,7 +96,7 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->toArray();
 
-        $this->assertInternalType('array', $actual);
+        $this->assertIsArray($actual);
     }
 
     /** @test */
@@ -104,10 +104,10 @@ class TransactionTest extends TestCase
     {
         $actual = $this->getTransaction()->toJson();
 
-        $this->assertInternalType('string', $actual);
+        $this->assertIsString($actual);
     }
 
-    private function getTransaction($file = 'passphrase'): Transfer
+    private function getTransaction($file = 'transfer-sign'): Transfer
     {
         $fixture = $this->getTransactionFixture('transfer', $file);
 

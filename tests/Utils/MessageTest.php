@@ -109,7 +109,7 @@ class MessageTest extends TestCase
     {
         $message = Message::new($this->getFixture('message-v1')['data']);
 
-        $this->assertInternalType('array', $message->toArray());
+        $this->assertIsArray($message->toArray());
     }
 
     /** @test */
@@ -117,7 +117,7 @@ class MessageTest extends TestCase
     {
         $message = Message::new($this->getFixture('message-v1')['data']);
 
-        $this->assertInternalType('string', $message->toJSON());
+        $this->assertIsString($message->toJSON());
     }
 
     /** @test */
@@ -125,6 +125,6 @@ class MessageTest extends TestCase
     {
         $message = Message::new($this->getFixture('message-v1')['data']);
 
-        $this->assertInternalType('string', $message->__toString());
+        $this->assertIsString($message->__toString());
     }
 }
