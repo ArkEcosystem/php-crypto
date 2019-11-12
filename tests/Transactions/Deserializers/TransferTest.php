@@ -61,34 +61,13 @@ class TransferTest extends TestCase
         $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
     }
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field_hex()
-    {
-        //TODO to re-enable ? (fixture)
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$fixture = $this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex');
-//
-        //$actual = $this->assertTransaction($fixture);
-        //$this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data['vendorField']);
-    }
-
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field_hex()
-    {
-        //TODO to re-enable ? (fixture
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$fixture = $this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex');
-//
-        //$actual = $this->assertTransaction($fixture);
-        //$this->assertSame(hex2bin($fixture['data']['vendorFieldHex']), $actual->data['vendorField']);
-    }
-
     private function assertTransaction(array $fixture): Transfer
     {
-        return $this->assertDeserialized($fixture, [
+        $actual = $this->assertDeserialized($fixture, [
             'version',
             'network',
             'type',
+            'typeGroup',
             'nonce',
             'senderPublicKey',
             'fee',
@@ -98,5 +77,8 @@ class TransferTest extends TestCase
             'amount',
             'id',
         ]);
+
+        $this->assertTrue($actual->verify());
+        return $actual;
     }
 }

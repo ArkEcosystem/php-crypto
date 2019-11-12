@@ -48,20 +48,4 @@ class TransferTest extends TestCase
     {
         $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-secondSign'));
     }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase_and_vendor_field_hex()
-    {
-        // TODO re-enable? (fixture)
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertSerialized($this->getTransactionFixture('transfer', 'passphrase-with-vendor-field-hex'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase_and_vendor_field_hex()
-    {
-        // TODO re-enable? (fixture)
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertSerialized($this->getTransactionFixture('transfer', 'second-passphrase-with-vendor-field-hex'));
-    }
 }

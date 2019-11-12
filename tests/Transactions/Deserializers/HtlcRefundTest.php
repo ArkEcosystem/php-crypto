@@ -40,10 +40,11 @@ class HtlcRefundTest extends TestCase
 
     private function assertTransaction(array $fixture): HtlcRefund
     {
-        return $this->assertDeserialized($fixture, [
+        $actual = $this->assertDeserialized($fixture, [
             'version',
             'network',
             'type',
+            'typeGroup',
             'nonce',
             'senderPublicKey',
             'fee',
@@ -53,5 +54,8 @@ class HtlcRefundTest extends TestCase
             'amount',
             'id',
         ]);
+
+        $this->assertTrue($actual->verify());
+        return $actual;
     }
 }

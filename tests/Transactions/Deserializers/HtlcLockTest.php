@@ -40,10 +40,11 @@ class HtlcLockTest extends TestCase
 
     private function assertTransaction(array $fixture): HtlcLock
     {
-        return $this->assertDeserialized($fixture, [
+        $actual = $this->assertDeserialized($fixture, [
             'version',
             'network',
             'type',
+            'typeGroup',
             'nonce',
             'senderPublicKey',
             'fee',
@@ -53,5 +54,8 @@ class HtlcLockTest extends TestCase
             'amount',
             'id',
         ]);
+
+        $this->assertTrue($actual->verify());
+        return $actual;
     }
 }

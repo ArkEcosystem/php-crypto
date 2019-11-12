@@ -35,10 +35,11 @@ class SecondSignatureRegistrationTest extends TestCase
 
     private function assertTransaction(array $fixture): SecondSignatureRegistration
     {
-        return $this->assertDeserialized($fixture, [
+        $actual = $this->assertDeserialized($fixture, [
             'version',
             'network',
             'type',
+            'typeGroup',
             'nonce',
             'senderPublicKey',
             'fee',
@@ -48,5 +49,8 @@ class SecondSignatureRegistrationTest extends TestCase
             'amount',
             'id',
         ]);
+
+        $this->assertTrue($actual->verify());
+        return $actual;
     }
 }
