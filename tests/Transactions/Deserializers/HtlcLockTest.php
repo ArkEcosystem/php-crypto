@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Types\HtlcLock;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcLock
