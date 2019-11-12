@@ -29,7 +29,7 @@ class MultiPaymentTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', "100000000")
+            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -41,7 +41,7 @@ class MultiPaymentTest extends TestCase
         $secondPassphrase = 'this is a top secret second passphrase';
 
         $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', "100000000")
+            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 

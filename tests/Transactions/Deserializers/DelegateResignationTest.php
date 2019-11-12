@@ -51,6 +51,7 @@ class DelegateResignationTest extends TestCase
         ]);
 
         $this->assertTrue($actual->verify());
+
         return $actual;
     }
 }
