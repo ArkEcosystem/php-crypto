@@ -1,0 +1,31 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 6,
+        "nonce": "0",
+        "senderPublicKey": "03fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f015",
+        "fee": "10000000",
+        "amount": "0",
+        "asset": {
+            "payments": [
+                {
+                    "amount": "1",
+                    "recipientId": "AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri"
+                },
+                {
+                    "amount": "2",
+                    "recipientId": "AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1"
+                }
+            ]
+        },
+        "signatures": [
+            "00c77497a8c06c586e1646eb452b7a93efda34b5862a43e5104cce133dd4017e8d88db0a8aa73bd6b5b93d3b471943e52b9642841e0fd6eb3dcd997fb41a475133",
+            "01dd02454a8d54dbb1d39c72f0d98dff186552cb5263820901520dce28d7590d96e07400c545f61d323703d2a506c48a0ab4eff5c173b6a7e2d537e6908d793d78",
+            "02ba07157942ddbe63f577f624e012b7a11262d3f287b5bed9cc703cd2abb3a0f7e931690750221e95e988f82ac2ae9dae6965be5bf529b8746a787ce2bda47d3c"
+        ],
+        "id": "6345eb641e28683408de179a857b7df11cde9edf0118aad0c5e28da4728e0554"
+    },
+    "serialized": "ff0217010000000600000000000000000003fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f0158096980000000000000200010000000000000017134b5be4b327ddf9c2bb47fec8a1a44189e90f74020000000000000017bfa6aec83cf1bd03a0cab9f35c85ff51a3e9f04100c77497a8c06c586e1646eb452b7a93efda34b5862a43e5104cce133dd4017e8d88db0a8aa73bd6b5b93d3b471943e52b9642841e0fd6eb3dcd997fb41a47513301dd02454a8d54dbb1d39c72f0d98dff186552cb5263820901520dce28d7590d96e07400c545f61d323703d2a506c48a0ab4eff5c173b6a7e2d537e6908d793d7802ba07157942ddbe63f577f624e012b7a11262d3f287b5bed9cc703cd2abb3a0f7e931690750221e95e988f82ac2ae9dae6965be5bf529b8746a787ce2bda47d3c"
+}

@@ -1,0 +1,21 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 2,
+        "nonce": "0",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "2500000000",
+        "amount": "0",
+        "asset": {
+            "delegate": {
+                "username": "boldninja"
+            }
+        },
+        "signature": "5873d5eb98dbb1fe115cba4b0446d1e0f811b4e4cc3d5720dbbb234e12c9e65df41c0933a77394550cab0fb3e46dd70a102b14cf3f3032548b1dd50f6bc70458",
+        "secondSignature": "b5990823b7a6557c5769adaf57d67b1d201bc183391b06efdaac5bb534c7e9e9fdae1e5ead7e532e1e4861f861f7d47adbf8991a479c8437af6316b136d12eb5",
+        "id": "e24d8c9f70ea420774b8b8508f4ad38e1e5be45d3c946b6b62cc0555ce132094"
+    },
+    "serialized": "ff02170100000002000000000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed19200f90295000000000009626f6c646e696e6a615873d5eb98dbb1fe115cba4b0446d1e0f811b4e4cc3d5720dbbb234e12c9e65df41c0933a77394550cab0fb3e46dd70a102b14cf3f3032548b1dd50f6bc70458b5990823b7a6557c5769adaf57d67b1d201bc183391b06efdaac5bb534c7e9e9fdae1e5ead7e532e1e4861f861f7d47adbf8991a479c8437af6316b136d12eb5"
+}
