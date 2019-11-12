@@ -35,9 +35,11 @@ class Fee
         Types::VOTE                          => Fees::VOTE,
         Types::MULTI_SIGNATURE_REGISTRATION  => Fees::MULTI_SIGNATURE_REGISTRATION,
         Types::IPFS                          => Fees::IPFS,
-        Types::TIMELOCK_TRANSFER             => Fees::TIMELOCK_TRANSFER,
         Types::MULTI_PAYMENT                 => Fees::MULTI_PAYMENT,
         Types::DELEGATE_RESIGNATION          => Fees::DELEGATE_RESIGNATION,
+        Types::HTLC_LOCK                     => Fees::HTLC_LOCK,
+        Types::HTLC_CLAIM                    => Fees::HTLC_CLAIM,
+        Types::HTLC_REFUND                   => Fees::HTLC_REFUND,
     ];
 
     /**
