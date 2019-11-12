@@ -15,22 +15,24 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder;
+use ArkEcosystem\Crypto\Transactions\Builder\HtlcClaimBuilder;
 
 /**
- * This is the multi payment builder test class.
+ * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\HtlcClaim
  */
-class MultiPaymentTest extends TestCase
+class HtlcClaimTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', 100000000)
-            ->sign($this->passphrase);
+        $transaction = HtlcClaimBuilder::new()
+            ->htlcClaimAsset(
+                "fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78",
+                "my secret that should be 32bytes"
+            )->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
     }
@@ -40,9 +42,11 @@ class MultiPaymentTest extends TestCase
     {
         $secondPassphrase = 'this is a top secret second passphrase';
 
-        $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', 100000000)
-            ->sign($this->passphrase)
+        $transaction = HtlcClaimBuilder::new()
+            ->htlcClaimAsset(
+                "fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78",
+                "my secret that should be 32bytes"
+            )->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 
         $this->assertTrue($transaction->verify());

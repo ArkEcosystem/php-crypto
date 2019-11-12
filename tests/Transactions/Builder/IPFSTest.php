@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Identities\PublicKey;
+use ArkEcosystem\Crypto\Transactions\Builder\IPFSBuilder;
 
 /**
  * This is the ipfs builder test class.
@@ -26,12 +28,24 @@ class IPFSTest extends TestCase
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $transaction = IPFSBuilder::new()
+            ->ipfsAsset("QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w")
+            ->sign($this->passphrase);
+
+        $this->assertTrue($transaction->verify());
     }
 
     /** @test */
     public function it_should_sign_it_with_a_second_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $secondPassphrase = 'this is a top secret second passphrase';
+
+        $transaction = IPFSBuilder::new()
+            ->ipfsAsset("QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w")
+            ->sign($this->passphrase)
+            ->secondSign($secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
     }
 }
