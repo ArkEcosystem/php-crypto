@@ -24,14 +24,30 @@ class MultiSignatureRegistration extends Transaction
 {
     public function serialize(array $options = []): ByteBuffer
     {
-        $publicKeysLength = count($this->data['asset']['multiSignature']['publicKeys']);
-        $buffer = ByteBuffer::new(2 + 33 * $publicKeysLength);
+        $buffer = ByteBuffer::new(1);
+        if ($this->data['version'] == 2) {
+            $publicKeysLength = count($this->data['asset']['multiSignature']['publicKeys']);
+            $buffer = ByteBuffer::new(2 + 33 * $publicKeysLength);
 
-        $buffer->writeUInt8($this->data['asset']['multiSignature']['min']);
-        $buffer->writeUInt8($publicKeysLength);
+            $buffer->writeUInt8($this->data['asset']['multiSignature']['min']);
+            $buffer->writeUInt8($publicKeysLength);
 
-        foreach ($this->data['asset']['multiSignature']['publicKeys'] as $publicKey) {
-            $buffer->writeHex($publicKey);
+            foreach ($this->data['asset']['multiSignature']['publicKeys'] as $publicKey) {
+                $buffer->writeHex($publicKey);
+            }
+        }
+        else {
+            // legacy
+            $keysgroup = [];
+            foreach ($this->data['asset']['multiSignatureLegacy']['keysgroup'] as $key) {
+                $keysgroup[] = '+' === substr($key, 0, 1)
+                    ? substr($key, 1)
+                    : $key;
+            }
+            $buffer->writeUInt8($this->data['asset']['multiSignatureLegacy']['min']);
+            $buffer->writeUInt8(count($this->data['asset']['multiSignatureLegacy']['keysgroup']));
+            $buffer->writeUInt8($this->data['asset']['multiSignatureLegacy']['lifetime']);
+            $buffer->writeHex(implode('', $keysgroup));
         }
 
         return $buffer;
@@ -39,16 +55,36 @@ class MultiSignatureRegistration extends Transaction
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        $this->data['asset'] = [
-            'multiSignature' => [
-                'min'      => $buffer->readUInt8(),
-                'publicKeys' => [],
-            ],
-        ];
+        if ($this->data['version'] == 2) {
+            $this->data['asset'] = [
+                'multiSignature' => [
+                    'min'      => $buffer->readUInt8(),
+                    'publicKeys' => [],
+                ],
+            ];
 
-        $count = $buffer->readUInt8();
-        for ($i = 0; $i < $count; $i++) {
-            $this->data['asset']['multiSignature']['publicKeys'][] = $buffer->readHex(33 * 2);
+            $count = $buffer->readUInt8();
+            for ($i = 0; $i < $count; $i++) {
+                $this->data['asset']['multiSignature']['publicKeys'][] = $buffer->readHex(33 * 2);
+            }
+        }
+        else {
+            // legacy
+            $min = $buffer->readUInt8();
+            $keysgroupCount = $buffer->readUInt8();
+            $lifetime = $buffer->readUInt8();
+
+            $this->data->asset = [
+                'multiSignatureLegacy' => [
+                    'min'      => $min,
+                    'lifetime' => $lifetime,
+                    'keysgroup' => []
+                ],
+            ];
+            
+            for ($i = 0; $i < $keysgroupCount; $i++) {
+                $this->data->asset['multiSignatureLegacy']['keysgroup'][] = $buffer->readHex(33 * 2);
+            }
         }
     }
 }

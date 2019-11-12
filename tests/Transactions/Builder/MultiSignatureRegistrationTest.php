@@ -15,30 +15,31 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
+use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the multi signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
+ * @coversNothing
  */
 class MultiSignatureRegistrationTest extends TestCase
 {
-    /* @test */
+    /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = MultiSignatureRegistrationBuilder::new()
             ->min(2)
-            ->publicKeys([
+            ->lifetime(255)
+            ->keysgroup([
                 '03a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
                 '13a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
+                '23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
             ])
-            ->participant('23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933')
             ->sign('secret')
             ->secondSign('second secret');
 
-        $this->assertTrue(count($transaction->transaction->data['asset']['multiSignature']['publicKeys']) == 3);
         $this->assertTrue($transaction->verify());
     }
 
@@ -49,15 +50,15 @@ class MultiSignatureRegistrationTest extends TestCase
 
         $transaction = MultiSignatureRegistrationBuilder::new()
             ->min(2)
-            ->publicKeys([
+            ->lifetime(255)
+            ->keysgroup([
                 '03a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
                 '13a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
+                '23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
             ])
-            ->participant('23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933')
             ->sign('this is a top secret passphrase')
             ->secondSign($secondPassphrase);
 
-        $this->assertTrue(count($transaction->transaction->data['asset']['multiSignature']['publicKeys']) == 3);
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
     }

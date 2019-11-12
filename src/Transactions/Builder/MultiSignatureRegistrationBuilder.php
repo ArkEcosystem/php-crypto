@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
+use ArkEcosystem\Crypto\Utils\Slot;
 
 /**
  * This is the multisignature registration transaction class.
@@ -29,7 +30,9 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct();
 
-        $this->transaction->data['asset'] = ['multiSignature' => []];
+        $this->transaction->data['asset'] = ['multiSignatureLegacy' => []];
+        $this->transaction->data['version'] = 1; // legacy multisig until schnorr implementation (AIP 18)
+        $this->transaction->data['timestamp'] = Slot::time(); // legacy multisig until schnorr implementation (AIP 18)
     }
 
     /**
@@ -41,44 +44,37 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      */
     public function min(int $min): self
     {
-        $this->transaction->data['asset']['multiSignature']['min'] = $min;
+        $this->transaction->data['asset']['multiSignatureLegacy']['min'] = $min;
 
         return $this;
     }
 
     /**
-     * Set the publicKeys of signatures.
+     * Set the transaction lifetime.
      *
-     * @param array $publicKeys
+     * @param int $lifetime
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
      */
-    public function publicKeys(array $publicKeys): self
+    public function lifetime(int $lifetime): self
     {
-        $this->transaction->data['asset']['multiSignature']['publicKeys'] = $publicKeys;
-
-        $this->transaction->data['fee'] = (count($publicKeys) + 1) * $this->getFee();
+        $this->transaction->data['asset']['multiSignatureLegacy']['lifetime'] = $lifetime;
 
         return $this;
     }
 
     /**
-     * Add a participant to the public keys list.
+     * Set the keysgroup of signatures.
      *
-     * @param string $publicKey
+     * @param array $keysgroup
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
      */
-    public function participant(string $publicKey): self
+    public function keysgroup(array $keysgroup): self
     {
-        if (! isset($this->transaction->data['asset']['multiSignature']['publicKeys'])) {
-            $this->transaction->data['asset']['multiSignature']['publicKeys'] = [$publicKey];
-        } else {
-            array_push($this->transaction->data['asset']['multiSignature']['publicKeys'], $publicKey);
-        }
+        $this->transaction->data['asset']['multiSignatureLegacy']['keysgroup'] = $keysgroup;
 
-        $this->transaction->data['fee'] =
-            (count($this->transaction->data['asset']['multiSignature']['publicKeys']) + 1) * $this->getFee();
+        $this->transaction->data['fee'] = (count($keysgroup) + 1) * $this->transaction->data['fee'];
 
         return $this;
     }
@@ -91,6 +87,9 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::MULTI_SIGNATURE_REGISTRATION;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getTypeGroup(): int
     {
         return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
