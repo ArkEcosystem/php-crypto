@@ -49,6 +49,11 @@ class SecondSignatureRegistrationBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::SECOND_SIGNATURE_REGISTRATION;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new SecondSignatureRegistration();

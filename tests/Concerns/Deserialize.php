@@ -52,7 +52,7 @@ trait Deserialize
     protected function assertSameTransactions(array $expected, array $actual, array $keys): void
     {
         $expected = Arr::only($expected['data'], $keys);
-        $actual = Arr::only($this->object_to_array($actual), $keys);
+        $actual = Arr::only($actual, $keys);
 
         ksort($expected);
         ksort($actual);

@@ -32,6 +32,8 @@ abstract class AbstractTransactionBuilder
     {
         $this->transaction = $this->getTransactionInstance();
         $this->transaction->data['type'] = $this->getType();
+        $this->transaction->data['typeGroup'] = $this->getTypeGroup();
+        $this->transaction->data['nonce'] = 0;
         $this->transaction->data['amount'] = 0;
         $this->transaction->data['fee'] = $this->getFee();
         $this->transaction->data['timestamp'] = Slot::time();
@@ -67,6 +69,20 @@ abstract class AbstractTransactionBuilder
     public function withFee(int $fee): self
     {
         $this->transaction->data['fee'] = $fee;
+
+        return $this;
+    }
+
+    /**
+     * Set the transaction nonce.
+     *
+     * @param int $nonce
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     */
+    public function withNonce(int $nonce): self
+    {
+        $this->transaction->data['nonce'] = $nonce;
 
         return $this;
     }
@@ -150,6 +166,13 @@ abstract class AbstractTransactionBuilder
      * @return int
      */
     abstract protected function getType(): int;
+
+    /**
+     * Get the transaction typeGroup.
+     *
+     * @return int
+     */
+    abstract protected function getTypeGroup(): int;
 
     /**
      * Get the transaction instance.

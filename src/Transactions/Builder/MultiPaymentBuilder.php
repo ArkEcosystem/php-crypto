@@ -55,6 +55,11 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::MULTI_PAYMENT;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new MultiPayment();

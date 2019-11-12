@@ -174,8 +174,9 @@ abstract class Transaction
             'signature'       => $this->data['signature'],
             'signatures'      => $this->data['signatures'] ?? null,
             'secondSignature'   => $this->data['secondSignature'] ?? null,
-            'timestamp'       => $this->data['timestamp'],
             'type'            => $this->data['type'],
+            'typeGroup'            => $this->data['typeGroup'],
+            'nonce'            => $this->data['nonce'],
             'vendorField'     => $this->data['vendorField'] ?? null,
             'version'         => $this->data['version'] ?? 1,
         ], function ($element) {

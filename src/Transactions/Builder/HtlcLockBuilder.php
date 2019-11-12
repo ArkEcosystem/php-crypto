@@ -47,6 +47,11 @@ class HtlcLockBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::HTLC_LOCK;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new HtlcLock();

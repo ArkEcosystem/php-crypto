@@ -72,6 +72,11 @@ class TransferBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::TRANSFER;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new Transfer();

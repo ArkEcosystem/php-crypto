@@ -72,6 +72,11 @@ class VoteBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::VOTE;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new Vote();

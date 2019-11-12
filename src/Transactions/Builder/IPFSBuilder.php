@@ -36,6 +36,11 @@ class IPFSBuilder extends AbstractTransactionBuilder
         return \ArkEcosystem\Crypto\Enums\Types::IPFS;
     }
 
+    protected function getTypeGroup(): int
+    {
+        return \ArkEcosystem\Crypto\Enums\TypeGroup::CORE;
+    }
+
     protected function getTransactionInstance(): object
     {
         return new IPFS();
