@@ -27,12 +27,12 @@ class DelegateRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign'));
     }
 }

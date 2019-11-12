@@ -23,12 +23,12 @@ class HtlcRefundTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-secondSign'));
     }
 }

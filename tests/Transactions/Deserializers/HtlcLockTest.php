@@ -24,7 +24,7 @@ class HtlcLockTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $fixture = $this->getTransactionFixture('htlc_lock', 'passphrase');
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-sign');
 
         $this->assertTransaction($fixture);
     }
@@ -32,7 +32,7 @@ class HtlcLockTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $fixture = $this->getTransactionFixture('htlc_lock', 'second-passphrase');
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-secondSign');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);

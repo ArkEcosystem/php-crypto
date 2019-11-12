@@ -28,7 +28,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $fixture = $this->getTransactionFixture('vote', 'passphrase');
+        $fixture = $this->getTransactionFixture('vote', 'vote-sign');
 
         $this->assertTransaction($fixture);
     }
@@ -36,7 +36,7 @@ class VoteTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        $fixture = $this->getTransactionFixture('vote', 'second-passphrase');
+        $fixture = $this->getTransactionFixture('vote', 'vote-secondSign');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);

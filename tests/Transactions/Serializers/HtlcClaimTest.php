@@ -23,12 +23,12 @@ class HtlcClaimTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-secondSign'));
     }
 }

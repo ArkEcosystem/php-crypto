@@ -28,12 +28,12 @@ class IPFSTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('ipfs', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'ipfs-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('ipfs', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'ipfs-secondSign'));
     }
 }
