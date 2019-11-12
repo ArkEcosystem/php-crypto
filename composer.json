@@ -8,9 +8,15 @@
         "email": "hello@brianfaust.me",
         "homepage": "https://github.com/faustbrian"
     }],
+    "repositories": [
+        {
+          "type": "git",
+          "url": "https://github.com/afk11/bitcoin-php.git"
+        }
+      ],
     "require": {
         "php": "^7.2",
-        "bitwasp/bitcoin": "^1.0",
+        "bitwasp/bitcoin": "dev-schnorr",
         "faustbrian/binary": "^0.4.0",
         "faustbrian/byte-buffer": "^0.1.3"
     },

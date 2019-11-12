@@ -21,6 +21,9 @@ use BitWasp\Bitcoin\Signature\SignatureFactory;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
+use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Serializer\Signature\SchnorrSignatureSerializer;
 
 /**
  * This is the transaction class.
@@ -63,7 +66,8 @@ abstract class Transaction
             'skipSecondSignature' => true,
         ];
         $transaction = Hash::sha256($this->getBytes($options));
-        $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $signature = $this->data['version'] > 1 ? $keys->signSchnorr($transaction) : $keys->sign($transaction);
+        $this->data['signature'] = $signature->getBuffer()->getHex();
 
         return $this;
     }
@@ -81,7 +85,8 @@ abstract class Transaction
             'skipSecondSignature' => true,
         ];
         $transaction = Hash::sha256($this->getBytes($options));
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $signature = $this->data['version'] > 1 ? $keys->signSchnorr($transaction) : $keys->sign($transaction);
+        $this->data['secondSignature'] = $signature->getBuffer()->getHex();
 
         return $this;
     }
@@ -125,19 +130,33 @@ abstract class Transaction
 
     public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
     {
-        $factory = new PublicKeyFactory;
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+        $factory = new PublicKeyFactory($ecAdapter);
         $publicKey = $factory->fromHex($publicKey);
 
         return $publicKey->verify(
             Hash::sha256($bytes),
-            SignatureFactory::fromHex($signature)
+            SignatureFactory::fromHex($signature, $ecAdapter)
         );
     }
 
     public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
     {
-        //TODO
-        return false;
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+        $schnorrSerializer = new SchnorrSignatureSerializer($ecAdapter);
+        $factory = new PublicKeyFactory($ecAdapter);
+        $publicKey = $factory->fromHex($publicKey)->asXOnlyPublicKey();
+
+        return $publicKey->verifySchnorr(
+            Hash::sha256($bytes),
+            $schnorrSerializer->parse(Buffer::hex($signature))
+        );
     }
 
     /**
@@ -174,7 +193,6 @@ abstract class Transaction
             'signature'       => $this->data['signature'],
             'signatures'      => $this->data['signatures'] ?? null,
             'secondSignature'   => $this->data['secondSignature'] ?? null,
-            'timestamp'       => $this->data['timestamp'],
             'type'            => $this->data['type'],
             'vendorField'     => $this->data['vendorField'] ?? null,
             'version'         => $this->data['version'] ?? 1,
