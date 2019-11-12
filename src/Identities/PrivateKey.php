@@ -18,6 +18,8 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
+use BitWasp\Bitcoin\Bitcoin;
 
 /**
  * This is the private key class.
@@ -37,7 +39,12 @@ class PrivateKey
     {
         $passphrase = Hash::sha256(new Buffer($passphrase));
 
-        return (new PrivateKeyFactory())->fromHexCompressed($passphrase->getHex());
+        return (new PrivateKeyFactory(
+            EcAdapterFactory::getPhpEcc(
+                Bitcoin::getMath(),
+                Bitcoin::getGenerator()
+            )
+        ))->fromHexCompressed($passphrase->getHex());
     }
 
     /**
@@ -49,7 +56,12 @@ class PrivateKey
      */
     public static function fromHex($privateKey): EcPrivateKey
     {
-        return (new PrivateKeyFactory())->fromHexCompressed($privateKey);
+        return (new PrivateKeyFactory(
+            EcAdapterFactory::getPhpEcc(
+                Bitcoin::getMath(),
+                Bitcoin::getGenerator()
+            )
+        ))->fromHexCompressed($privateKey);
     }
 
     /**
@@ -62,6 +74,11 @@ class PrivateKey
      */
     public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
     {
-        return (new PrivateKeyFactory())->fromWif($wif, $network);
+        return (new PrivateKeyFactory(
+            EcAdapterFactory::getPhpEcc(
+                Bitcoin::getMath(),
+                Bitcoin::getGenerator()
+            )
+        ))->fromWif($wif, $network);
     }
 }

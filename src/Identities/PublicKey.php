@@ -15,6 +15,8 @@ namespace ArkEcosystem\Crypto\Identities;
 
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
+use BitWasp\Bitcoin\Bitcoin;
 
 /**
  * This is the public key class.
@@ -44,6 +46,11 @@ class PublicKey
      */
     public static function fromHex($publicKey): EcPublicKey
     {
-        return (new PublicKeyFactory)->fromHex($publicKey);
+        return (new PublicKeyFactory(
+            EcAdapterFactory::getPhpEcc(
+                Bitcoin::getMath(),
+                Bitcoin::getGenerator()
+            )
+        ))->fromHex($publicKey);
     }
 }
