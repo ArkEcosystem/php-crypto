@@ -74,7 +74,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     {
         $this->transaction->data['asset']['multiSignatureLegacy']['keysgroup'] = $keysgroup;
 
-        $this->transaction->data['fee'] = (count($keysgroup) + 1) * $this->transaction->data['fee'];
+        $this->transaction->data['fee'] = strval((count($keysgroup) + 1) * intval($this->transaction->data['fee']));
 
         return $this;
     }

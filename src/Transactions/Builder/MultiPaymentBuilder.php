@@ -36,11 +36,11 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
      * Add a new payment to the collection.
      *
      * @param string $recipientId
-     * @param int    $amount
+     * @param string    $amount
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
      */
-    public function add(string $recipientId, int $amount): self
+    public function add(string $recipientId, string $amount): self
     {
         $this->transaction->data['asset']['payments'][] = compact('recipientId', 'amount');
 

@@ -32,10 +32,11 @@ abstract class AbstractTransactionBuilder
         $this->transaction = $this->getTransactionInstance();
         $this->transaction->data['type'] = $this->getType();
         $this->transaction->data['typeGroup'] = $this->getTypeGroup();
-        $this->transaction->data['nonce'] = 0;
-        $this->transaction->data['amount'] = 0;
+        $this->transaction->data['nonce'] = "0";
+        $this->transaction->data['amount'] = '0';
         $this->transaction->data['fee'] = $this->getFee();
         $this->transaction->data['version'] = 2;
+        $this->transaction->data['network'] = 23;
     }
 
     /**
@@ -61,11 +62,11 @@ abstract class AbstractTransactionBuilder
     /**
      * Set the transaction fee.
      *
-     * @param int $fee
+     * @param string $fee
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
      */
-    public function withFee(int $fee): self
+    public function withFee(string $fee): self
     {
         $this->transaction->data['fee'] = $fee;
 
@@ -75,13 +76,27 @@ abstract class AbstractTransactionBuilder
     /**
      * Set the transaction nonce.
      *
-     * @param int $nonce
+     * @param string $nonce
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
      */
-    public function withNonce(int $nonce): self
+    public function withNonce(string $nonce): self
     {
         $this->transaction->data['nonce'] = $nonce;
+
+        return $this;
+    }
+
+    /**
+     * Set the transaction network.
+     *
+     * @param int $network
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     */
+    public function withNetwork(int $network): self
+    {
+        $this->transaction->data['network'] = $network;
 
         return $this;
     }
@@ -183,9 +198,9 @@ abstract class AbstractTransactionBuilder
     /**
      * Get the transaction fee.
      *
-     * @return int
+     * @return string
      */
-    protected function getFee(): int
+    protected function getFee(): string
     {
         return Fee::get($this->transaction->data['type']);
     }

@@ -39,11 +39,11 @@ class TransferBuilder extends AbstractTransactionBuilder
     /**
      * Set the amount to transfer.
      *
-     * @param int $amount
+     * @param string $amount
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\Transfer
      */
-    public function amount(int $amount): self
+    public function amount(string $amount): self
     {
         $this->transaction->data['amount'] = $amount;
 

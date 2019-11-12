@@ -45,9 +45,9 @@ class Fee
     /**
      * Get the transaction fee for the given type.
      *
-     * @return int
+     * @return string
      */
-    public static function get(int $type): int
+    public static function get(int $type): string
     {
         return static::$fees[$type];
     }
@@ -56,9 +56,9 @@ class Fee
      * Set the transaction fee for the given type.
      *
      * @param int $type
-     * @param int $fee
+     * @param string $fee
      */
-    public static function set(int $type, int $fee): void
+    public static function set(int $type, string $fee): void
     {
         static::$fees[$type] = $fee;
     }
