@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 trait Deserialize
 {
@@ -38,11 +38,12 @@ trait Deserialize
     private function array_only(array $arr, array $keys): array
     {
         $returnArray = [];
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             if (isset($arr[$key])) {
                 $returnArray[$key] = $arr[$key];
             }
         }
+
         return $returnArray;
     }
 

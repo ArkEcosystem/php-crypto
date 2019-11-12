@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcClaimBuilder;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
@@ -30,8 +30,8 @@ class HtlcClaimTest extends TestCase
     {
         $transaction = HtlcClaimBuilder::new()
             ->htlcClaimAsset(
-                "fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78",
-                "my secret that should be 32bytes"
+                'fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78',
+                'my secret that should be 32bytes'
             )->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -44,8 +44,8 @@ class HtlcClaimTest extends TestCase
 
         $transaction = HtlcClaimBuilder::new()
             ->htlcClaimAsset(
-                "fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78",
-                "my secret that should be 32bytes"
+                'fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78',
+                'my secret that should be 32bytes'
             )->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 

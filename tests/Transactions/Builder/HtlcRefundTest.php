@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcRefundBuilder;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
@@ -29,7 +29,7 @@ class HtlcRefundTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = HtlcRefundBuilder::new()
-            ->htlcRefundAsset("fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78")
+            ->htlcRefundAsset('fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -41,7 +41,7 @@ class HtlcRefundTest extends TestCase
         $secondPassphrase = 'this is a top secret second passphrase';
 
         $transaction = HtlcRefundBuilder::new()
-            ->htlcRefundAsset("fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78")
+            ->htlcRefundAsset('fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 

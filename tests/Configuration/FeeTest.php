@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Configuration\Fee;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the fee configuration test class.

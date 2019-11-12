@@ -20,10 +20,10 @@ class HtlcClaimBuilder extends AbstractTransactionBuilder
     public function htlcClaimAsset(string $lockTransactionId, string $unlockSecret): self
     {
         $this->transaction->data['asset'] = [
-            "claim" => [
-                "lockTransactionId" => $lockTransactionId,
-                "unlockSecret" => $unlockSecret
-            ]
+            'claim' => [
+                'lockTransactionId' => $lockTransactionId,
+                'unlockSecret' => $unlockSecret,
+            ],
         ];
 
         return $this;
