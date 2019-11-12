@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\Transactions\Types as Transactions;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BrianFaust\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Transactions\Types as Transactions;
 
 /**
  * This is the deserializer class.

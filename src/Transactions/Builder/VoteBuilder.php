@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 /**

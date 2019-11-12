@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Enums\TypeGroup;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Buffertools\Buffer;
 use BrianFaust\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Enums\TypeGroup;
-use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 
 /**
  * This is the serializer class.

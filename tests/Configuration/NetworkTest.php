@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Managers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Networks\Devnet;
-use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
+use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the network configuration test class.

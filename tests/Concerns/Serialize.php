@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Transactions\Types;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Crypto\Transactions\Types;
 
 trait Serialize
 {

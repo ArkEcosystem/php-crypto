@@ -20,9 +20,9 @@ class HtlcRefundBuilder extends AbstractTransactionBuilder
     public function htlcRefundAsset(string $lockTransactionId): self
     {
         $this->transaction->data['asset'] = [
-            "refund" => [
-                "lockTransactionId" => $lockTransactionId
-            ]
+            'refund' => [
+                'lockTransactionId' => $lockTransactionId,
+            ],
         ];
 
         return $this;
