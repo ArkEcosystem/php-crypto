@@ -3,9 +3,10 @@ name: Test
 on:
     push:
         branches:
-            - '**'
+            - "master"
+            - "develop"
     pull_request:
-        types: [opened]
+        types: [ready_for_review, synchronize, opened]
 
 jobs:
     unit:
@@ -13,9 +14,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v1
+
             - name: Install
-              run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest
+              run: composer update --no-interaction --no-suggest
+
             - name: Unit tests
               run: ./vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text
+
             - name: Codecov
               run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
