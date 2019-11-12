@@ -24,7 +24,7 @@ class DelegateResignation extends Transaction
 {
     public function serialize(array $options = []): ByteBuffer
     {
-        return null;
+        return ByteBuffer::new(0);
     }
 
     public function deserialize(ByteBuffer $buffer): void
