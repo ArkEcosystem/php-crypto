@@ -30,7 +30,7 @@ class TransferTest extends TestCase
     {
         $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
-            ->amount(133380000000)
+            ->amount("133380000000")
             ->vendorField('This is a transaction from PHP')
             ->sign($this->passphrase);
 
@@ -44,7 +44,7 @@ class TransferTest extends TestCase
 
         $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
-            ->amount(133380000000)
+            ->amount("133380000000")
             ->vendorField('This is a transaction from PHP')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
