@@ -16,6 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcLockBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the delegate registration builder test class.
@@ -57,5 +58,87 @@ class HtlcLockTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-sign');
+        $builder = HtlcLockBuilder::new()
+            ->recipient($fixture['data']['recipientId'])
+            ->amount($fixture['data']['amount'])
+            ->htlcLockAsset(
+                $fixture['data']['asset']['lock']['secretHash'],
+                $fixture['data']['asset']['lock']['expiration']['type'],
+                $fixture['data']['asset']['lock']['expiration']['value']
+                )
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-secondSign');
+        $builder = HtlcLockBuilder::new()
+            ->recipient($fixture['data']['recipientId'])
+            ->amount($fixture['data']['amount'])
+            ->htlcLockAsset(
+                $fixture['data']['asset']['lock']['secretHash'],
+                $fixture['data']['asset']['lock']['expiration']['type'],
+                $fixture['data']['asset']['lock']['expiration']['value']
+                )
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_vendor_field_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-with-vendor-field-sign');
+        unset($fixture['data']['vendorFieldHex']);
+        $builder = HtlcLockBuilder::new()
+            ->recipient($fixture['data']['recipientId'])
+            ->amount($fixture['data']['amount'])
+            ->htlcLockAsset(
+                $fixture['data']['asset']['lock']['secretHash'],
+                $fixture['data']['asset']['lock']['expiration']['type'],
+                $fixture['data']['asset']['lock']['expiration']['value']
+                )
+            ->vendorField($fixture['data']['vendorField'])
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_vendor_field_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-with-vendor-field-secondSign');
+        unset($fixture['data']['vendorFieldHex']);
+        $builder = HtlcLockBuilder::new()
+            ->recipient($fixture['data']['recipientId'])
+            ->amount($fixture['data']['amount'])
+            ->htlcLockAsset(
+                $fixture['data']['asset']['lock']['secretHash'],
+                $fixture['data']['asset']['lock']['expiration']['type'],
+                $fixture['data']['asset']['lock']['expiration']['value']
+                )
+            ->vendorField($fixture['data']['vendorField'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

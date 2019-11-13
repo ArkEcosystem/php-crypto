@@ -16,6 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the multi payment builder test class.
@@ -47,5 +48,34 @@ class MultiPaymentTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
+        $builder = MultiPaymentBuilder::new()
+            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
+            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-secondSign');
+        $builder = MultiPaymentBuilder::new()
+            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
+            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

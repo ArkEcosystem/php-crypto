@@ -16,6 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\IPFSBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the ipfs builder test class.
@@ -47,5 +48,32 @@ class IPFSTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('ipfs', 'ipfs-sign');
+        $builder = IPFSBuilder::new()
+            ->ipfsAsset($fixture['data']['asset']['ipfs'])
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('ipfs', 'ipfs-secondSign');
+        $builder = IPFSBuilder::new()
+            ->ipfsAsset($fixture['data']['asset']['ipfs'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

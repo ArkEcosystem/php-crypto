@@ -16,6 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\DelegateResignationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the delegate resignation builder test class.
@@ -45,5 +46,30 @@ class DelegateResignationTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign');
+        $builder = DelegateResignationBuilder::new()
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('delegate_resignation', 'delegate-resignation-secondSign');
+        $builder = DelegateResignationBuilder::new()
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

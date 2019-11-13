@@ -48,8 +48,12 @@ trait Deserialize
         return $returnArray;
     }
 
-    protected function assertSameTransactions(array $expected, array $actual, array $keys): void
+    protected function assertSameTransactions(array $expected, array $actual, array $keys = []): void
     {
+        if (empty($keys)) {
+            $keys = array_keys($expected['data']);
+        }
+
         $expected = Arr::only($expected['data'], $keys);
         $actual = Arr::only($actual, $keys);
 
@@ -62,6 +66,12 @@ trait Deserialize
         } elseif (isset($actual['asset']['multiSignatureLegacy'])) {
             ksort($expected['asset']['multiSignatureLegacy']);
             ksort($actual['asset']['multiSignatureLegacy']);
+        }
+
+        if (isset($actual['asset']['payments'])) {
+            for ($i = 0; $i < count($actual['asset']['payments']); $i++) {
+                ksort($actual['asset']['payments'][$i]);
+            }
         }
 
         $this->assertSame($expected, $actual);

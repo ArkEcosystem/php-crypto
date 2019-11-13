@@ -16,6 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcRefundBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the delegate registration builder test class.
@@ -47,5 +48,32 @@ class HtlcRefundTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_refund', 'htlc-refund-sign');
+        $builder = HtlcRefundBuilder::new()
+            ->htlcRefundAsset($fixture['data']['asset']['refund']['lockTransactionId'])
+            ->sign($this->passphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('htlc_refund', 'htlc-refund-secondSign');
+        $builder = HtlcRefundBuilder::new()
+            ->htlcRefundAsset($fixture['data']['asset']['refund']['lockTransactionId'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+            
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }
