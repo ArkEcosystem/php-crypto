@@ -56,6 +56,7 @@ class HtlcRefundTest extends TestCase
         ]);
 
         $this->assertTrue($actual->verify());
+
         return $actual;
     }
 }

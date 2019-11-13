@@ -15,8 +15,8 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the transfer builder test class.
@@ -31,7 +31,7 @@ class TransferTest extends TestCase
     {
         $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
-            ->amount("133380000000")
+            ->amount('133380000000')
             ->vendorField('This is a transaction from PHP')
             ->sign($this->passphrase);
 
@@ -45,7 +45,7 @@ class TransferTest extends TestCase
 
         $transaction = TransferBuilder::new()
             ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
-            ->amount("133380000000")
+            ->amount('133380000000')
             ->vendorField('This is a transaction from PHP')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
@@ -63,7 +63,7 @@ class TransferTest extends TestCase
             ->amount($fixture['data']['amount'])
             ->withFee($fixture['data']['fee'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -80,7 +80,7 @@ class TransferTest extends TestCase
             ->withFee($fixture['data']['fee'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -97,7 +97,7 @@ class TransferTest extends TestCase
             ->withFee($fixture['data']['fee'])
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -116,7 +116,7 @@ class TransferTest extends TestCase
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);

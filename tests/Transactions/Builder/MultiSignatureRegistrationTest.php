@@ -15,9 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
-use ArkEcosystem\Crypto\Utils\Crypto;
 use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 
 /**
  * This is the multi signature registration builder test class.

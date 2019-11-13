@@ -15,8 +15,8 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcLockBuilder;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
@@ -73,7 +73,7 @@ class HtlcLockTest extends TestCase
                 $fixture['data']['asset']['lock']['expiration']['value']
                 )
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -93,7 +93,7 @@ class HtlcLockTest extends TestCase
                 )
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -114,7 +114,7 @@ class HtlcLockTest extends TestCase
                 )
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -136,7 +136,7 @@ class HtlcLockTest extends TestCase
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);

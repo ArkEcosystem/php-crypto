@@ -32,7 +32,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction = $this->getTransactionInstance();
         $this->transaction->data['type'] = $this->getType();
         $this->transaction->data['typeGroup'] = $this->getTypeGroup();
-        $this->transaction->data['nonce'] = "0";
+        $this->transaction->data['nonce'] = '0';
         $this->transaction->data['amount'] = '0';
         $this->transaction->data['fee'] = $this->getFee();
         $this->transaction->data['version'] = 2;

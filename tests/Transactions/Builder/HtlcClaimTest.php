@@ -15,8 +15,8 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcClaimBuilder;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
@@ -64,7 +64,7 @@ class HtlcClaimTest extends TestCase
                 $fixture['data']['asset']['claim']['unlockSecret']
                 )
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -81,7 +81,7 @@ class HtlcClaimTest extends TestCase
                 )
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);

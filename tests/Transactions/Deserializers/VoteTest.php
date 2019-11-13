@@ -60,6 +60,7 @@ class VoteTest extends TestCase
         ]);
 
         $this->assertTrue($actual->verify());
+
         return $actual;
     }
 }

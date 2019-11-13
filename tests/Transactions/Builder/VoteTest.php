@@ -15,8 +15,8 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the vote builder test class.
@@ -57,7 +57,7 @@ class VoteTest extends TestCase
         $builder = VoteBuilder::new()
             ->votes($fixture['data']['asset']['votes'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -71,7 +71,7 @@ class VoteTest extends TestCase
             ->votes($fixture['data']['asset']['votes'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
