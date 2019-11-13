@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Buffertools\Buffer;
 use ArkEcosystem\Crypto\Configuration\Network;
+use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 
 /**

@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Buffertools\Buffer;
-use BitWasp\Bitcoin\Crypto\Hash;
 use ArkEcosystem\Crypto\Enums\Types;
-use BrianFaust\Binary\Hex\Reader as Hex;
 use ArkEcosystem\Crypto\Identities\Address;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 
 /**

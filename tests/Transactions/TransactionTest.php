@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
-use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Tests\Crypto\TestCase;
+use BitWasp\Buffertools\Buffer;
 
 /**
  * This is the transaction test class.
