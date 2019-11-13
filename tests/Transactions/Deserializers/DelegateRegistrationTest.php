@@ -60,6 +60,7 @@ class DelegateRegistrationTest extends TestCase
         ]);
 
         $this->assertTrue($actual->verify());
+
         return $actual;
     }
 }

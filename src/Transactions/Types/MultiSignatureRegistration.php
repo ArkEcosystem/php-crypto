@@ -35,8 +35,7 @@ class MultiSignatureRegistration extends Transaction
             foreach ($this->data['asset']['multiSignature']['publicKeys'] as $publicKey) {
                 $buffer->writeHex($publicKey);
             }
-        }
-        else {
+        } else {
             // legacy
             $keysgroup = [];
             foreach ($this->data['asset']['multiSignatureLegacy']['keysgroup'] as $key) {
@@ -67,8 +66,7 @@ class MultiSignatureRegistration extends Transaction
             for ($i = 0; $i < $count; $i++) {
                 $this->data['asset']['multiSignature']['publicKeys'][] = $buffer->readHex(33 * 2);
             }
-        }
-        else {
+        } else {
             // legacy
             $min = $buffer->readUInt8();
             $keysgroupCount = $buffer->readUInt8();
@@ -78,10 +76,10 @@ class MultiSignatureRegistration extends Transaction
                 'multiSignatureLegacy' => [
                     'min'      => $min,
                     'lifetime' => $lifetime,
-                    'keysgroup' => []
+                    'keysgroup' => [],
                 ],
             ];
-            
+
             for ($i = 0; $i < $keysgroupCount; $i++) {
                 $this->data->asset['multiSignatureLegacy']['keysgroup'][] = $buffer->readHex(33 * 2);
             }

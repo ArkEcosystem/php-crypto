@@ -15,8 +15,8 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the multi payment builder test class.
@@ -30,7 +30,7 @@ class MultiPaymentTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', "100000000")
+            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -42,7 +42,7 @@ class MultiPaymentTest extends TestCase
         $secondPassphrase = 'this is a top secret second passphrase';
 
         $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', "100000000")
+            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 
@@ -58,7 +58,7 @@ class MultiPaymentTest extends TestCase
             ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
             ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
@@ -73,7 +73,7 @@ class MultiPaymentTest extends TestCase
             ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
