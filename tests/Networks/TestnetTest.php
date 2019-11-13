@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Networks;
 
-use BitWasp\Bitcoin\Network\Network;
 use ArkEcosystem\Crypto\Networks\Testnet;
+use BitWasp\Bitcoin\Network\Network;
 
 /**
  * This is the testnet network test class.
