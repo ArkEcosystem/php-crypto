@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder
  */
 class DelegateRegistrationTest extends TestCase
 {

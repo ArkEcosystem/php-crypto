@@ -16,7 +16,7 @@ namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 use BitWasp\Buffertools\Buffer;
@@ -25,7 +25,7 @@ use BitWasp\Buffertools\Buffer;
  * This is the transaction test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Transaction
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
  */
 class TransactionTest extends TestCase
 {

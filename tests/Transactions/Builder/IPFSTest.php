@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the ipfs builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\IPFS
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\IPFSBuilder
  */
 class IPFSTest extends TestCase
 {

@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate resignation builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateResignation
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateResignationBuilder
  */
 class DelegateResignationTest extends TestCase
 {

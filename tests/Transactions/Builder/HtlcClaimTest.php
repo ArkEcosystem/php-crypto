@@ -22,7 +22,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\HtlcClaim
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\HtlcClaimBuilder
  */
 class HtlcClaimTest extends TestCase
 {

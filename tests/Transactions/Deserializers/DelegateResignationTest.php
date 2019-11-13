@@ -21,7 +21,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate resignation deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\DelegateResignation
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateResignation
  */
 class DelegateResignationTest extends TestCase
 {

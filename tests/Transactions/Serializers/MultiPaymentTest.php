@@ -20,7 +20,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the multi payment serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\MutliPayment
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiPayment
  */
 class MultiPaymentTest extends TestCase
 {
