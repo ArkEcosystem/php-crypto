@@ -52,4 +52,9 @@ class HtlcLock extends Transaction
             ],
         ];
     }
+
+    public function hasVendorField(): bool
+    {
+        return true;
+    }
 }

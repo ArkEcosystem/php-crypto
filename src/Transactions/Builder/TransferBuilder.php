@@ -22,6 +22,13 @@ use ArkEcosystem\Crypto\Transactions\Types\Transfer;
  */
 class TransferBuilder extends AbstractTransactionBuilder
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->transaction->data['expiration'] = 0;
+    }
+
     /**
      * Set the recipient of the transfer.
      *

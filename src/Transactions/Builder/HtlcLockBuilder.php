@@ -24,6 +24,13 @@ class HtlcLockBuilder extends AbstractTransactionBuilder
         return $this;
     }
 
+    public function amount(string $amount): self
+    {
+        $this->transaction->data['amount'] = $amount;
+
+        return $this;
+    }
+
     public function htlcLockAsset(string $secretHash, int $expirationType, int $expirationValue): self
     {
         $this->transaction->data['asset'] = [
@@ -35,6 +42,13 @@ class HtlcLockBuilder extends AbstractTransactionBuilder
                 ],
             ],
         ];
+
+        return $this;
+    }
+
+    public function vendorField(string $vendorField): self
+    {
+        $this->transaction->data['vendorField'] = $vendorField;
 
         return $this;
     }

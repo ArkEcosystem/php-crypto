@@ -57,7 +57,6 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
     public function sign(string $passphrase): AbstractTransactionBuilder
     {
         $publicKey = PublicKey::fromPassphrase($passphrase);
-        $this->transaction->data['asset']['delegate']['publicKey'] = $publicKey->getHex();
 
         parent::sign($passphrase);
 
