@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcLockBuilder;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
@@ -30,11 +30,11 @@ class HtlcLockTest extends TestCase
     {
         $transaction = HtlcLockBuilder::new()
             ->htlcLockAsset(
-                "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454",
+                '0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454',
                 1,
                 1
             )
-            ->recipient("ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo")
+            ->recipient('ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -47,11 +47,11 @@ class HtlcLockTest extends TestCase
 
         $transaction = HtlcLockBuilder::new()
             ->htlcLockAsset(
-                "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454",
+                '0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454',
                 1,
                 1
             )
-            ->recipient("ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo")
+            ->recipient('ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 

@@ -23,17 +23,17 @@ class HtlcLockBuilder extends AbstractTransactionBuilder
 
         return $this;
     }
-    
+
     public function htlcLockAsset(string $secretHash, int $expirationType, int $expirationValue): self
     {
         $this->transaction->data['asset'] = [
-            "lock" => [
-                "secretHash" => $secretHash,
-                "expiration" => [
-                    "type" => $expirationType,
-                    "value" => $expirationValue
-                ]
-            ]
+            'lock' => [
+                'secretHash' => $secretHash,
+                'expiration' => [
+                    'type' => $expirationType,
+                    'value' => $expirationValue,
+                ],
+            ],
         ];
 
         return $this;

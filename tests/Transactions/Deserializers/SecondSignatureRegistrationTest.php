@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\SecondSignatureRegistration;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the second signature registration deserializer test class.

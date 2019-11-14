@@ -63,7 +63,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     }
 
     /**
-     * Add a participant to the public keys list
+     * Add a participant to the public keys list.
      *
      * @param string $publicKey
      *
@@ -71,14 +71,13 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      */
     public function participant(string $publicKey): self
     {
-        if (!isset($this->transaction->data['asset']['multiSignature']['publicKeys'])) {
-            $this->transaction->data['asset']['multiSignature']['publicKeys'] = [ $publicKey ];
+        if (! isset($this->transaction->data['asset']['multiSignature']['publicKeys'])) {
+            $this->transaction->data['asset']['multiSignature']['publicKeys'] = [$publicKey];
         } else {
             array_push($this->transaction->data['asset']['multiSignature']['publicKeys'], $publicKey);
         }
-        
 
-        $this->transaction->data['fee'] = 
+        $this->transaction->data['fee'] =
             (count($this->transaction->data['asset']['multiSignature']['publicKeys']) + 1) * $this->getFee();
 
         return $this;

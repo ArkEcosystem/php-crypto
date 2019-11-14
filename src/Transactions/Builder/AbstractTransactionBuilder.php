@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Utils\Slot;
 use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
+use ArkEcosystem\Crypto\Utils\Slot;
 
 /**
  * This is the abstract transaction class.

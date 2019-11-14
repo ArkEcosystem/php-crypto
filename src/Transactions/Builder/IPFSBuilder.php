@@ -25,7 +25,7 @@ class IPFSBuilder extends AbstractTransactionBuilder
     public function ipfsAsset(string $ipfsId): self
     {
         $this->transaction->data['asset'] = [
-            "ipfs" => $ipfsId
+            'ipfs' => $ipfsId,
         ];
 
         return $this;
