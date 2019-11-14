@@ -14,30 +14,26 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Serializers\IPFS;
+use ArkEcosystem\Crypto\Transactions\Types\IPFS;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the ipfs serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\IPFS
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\IPFS
  */
 class IPFSTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('ipfs', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'ipfs-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('ipfs', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('ipfs', 'ipfs-secondSign'));
     }
 }

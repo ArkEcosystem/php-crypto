@@ -14,23 +14,44 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the multi payment deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\MutliPayment
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiPayment
  */
 class MultiPaymentTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $transaction = $this->getTransactionFixture('multi_payment', 'passphrase');
+        $transaction = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
 
         $this->assertTransaction($transaction);
+    }
+
+    private function assertTransaction(array $fixture): MultiPayment
+    {
+        $actual = $this->assertDeserialized($fixture, [
+            'version',
+            'network',
+            'type',
+            'typeGroup',
+            'nonce',
+            'senderPublicKey',
+            'fee',
+            'asset',
+            'signature',
+            'secondSignature',
+            'amount',
+            'id',
+        ]);
+
+        $this->assertTrue($actual->verify());
+
+        return $actual;
     }
 }

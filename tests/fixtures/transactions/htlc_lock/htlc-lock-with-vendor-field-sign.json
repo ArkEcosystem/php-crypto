@@ -1,0 +1,27 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 8,
+        "nonce": "0",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "10000000",
+        "amount": "200000000",
+        "vendorFieldHex": "74686973206973206120746f70207365637265742076656e646f72206669656c64",
+        "vendorField": "this is a top secret vendor field",
+        "recipientId": "AGeYmgbg2LgGxRW2vNNJvQ88PknEJsYizC",
+        "asset": {
+            "lock": {
+                "secretHash": "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454",
+                "expiration": {
+                    "type": 1,
+                    "value": 1573457284
+                }
+            }
+        },
+        "signature": "3044022024a5f9d9e77b78e5943ad8546aa1f4022945d68f97487284f07a4a70e11c9f3302200aa9dba9f3feb18e0e79fa3002acebd6ddd7cb8040a3eb27a49a290483724c05",
+        "id": "4e51bd2092fd37b00538f5a2f875d1539adaba34b13bdd91bdf093e0048e3646"
+    },
+    "serialized": "ff02170100000008000000000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed19280969800000000002174686973206973206120746f70207365637265742076656e646f72206669656c6400c2eb0b000000000f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c545401840dc95d170995750207ecaf0ccf251c1265b92ad84f5536623044022024a5f9d9e77b78e5943ad8546aa1f4022945d68f97487284f07a4a70e11c9f3302200aa9dba9f3feb18e0e79fa3002acebd6ddd7cb8040a3eb27a49a290483724c05"
+}

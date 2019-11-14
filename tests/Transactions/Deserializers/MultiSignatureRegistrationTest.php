@@ -14,37 +14,54 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the multi signature registration deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\MultiSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
  */
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture('multi_signature_registration', 'passphrase');
+        //TODO fail to verify : fixture is schnorr
+        $transaction = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration');
 
         $this->assertTransaction($transaction);
     }
 
-    private function assertTransaction(array $fixture): Transaction
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
     {
-        return $this->assertDeserialized($fixture, [
+        //TODO fixture
+        $this->markTestIncomplete('This test has not been implemented yet.');
+        //$transaction = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-secondSign');
+//
+        //$this->assertTransaction($transaction);
+    }
+
+    private function assertTransaction(array $fixture): MultiSignatureRegistration
+    {
+        $actual = $this->assertDeserialized($fixture, [
+            'version',
+            'network',
             'type',
-            'timestamp',
+            'typeGroup',
+            'nonce',
             'senderPublicKey',
             'fee',
             'asset',
             'signature',
-            'signatures',
+            'secondSignature',
             'amount',
             'id',
-        ], 23);
+        ]);
+
+        // TODO $this->assertTrue($actual->verify()); when AIP-18 with Schnorr implemented
+        return $actual;
     }
 }

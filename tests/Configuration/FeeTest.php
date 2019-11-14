@@ -29,18 +29,18 @@ class FeeTest extends TestCase
     {
         $actual = Fee::get(0);
 
-        $this->assertSame(10000000, $actual);
+        $this->assertSame('10000000', $actual);
     }
 
     /** @test */
     public function it_should_set_the_fee()
     {
         $actual = Fee::get(0);
-        $this->assertSame(10000000, $actual);
+        $this->assertSame('10000000', $actual);
 
-        Fee::set(0, 5);
+        Fee::set(0, '5');
 
         $actual = Fee::get(0);
-        $this->assertSame(5, $actual);
+        $this->assertSame('5', $actual);
     }
 }

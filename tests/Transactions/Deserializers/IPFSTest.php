@@ -13,25 +13,41 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
-use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Deserializers\IPFS;
+use ArkEcosystem\Crypto\Transactions\Types\IPFS;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the ipfs deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Deserializers\IPFS
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\IPFS
  */
 class IPFSTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $transaction = $this->getTransactionFixture('ipfs', 'passphrase');
+        $transaction = $this->getTransactionFixture('ipfs', 'ipfs-sign');
 
         $this->assertTransaction($transaction);
+    }
+
+    private function assertTransaction(array $fixture): IPFS
+    {
+        $actual = $this->assertDeserialized($fixture, [
+            'version',
+            'network',
+            'type',
+            'typeGroup',
+            'nonce',
+            'senderPublicKey',
+            'fee',
+            'asset',
+            'signature',
+            'secondSignature',
+            'amount',
+            'id',
+        ]);
+
+        $this->assertTrue($actual->verify());
+
+        return $actual;
     }
 }

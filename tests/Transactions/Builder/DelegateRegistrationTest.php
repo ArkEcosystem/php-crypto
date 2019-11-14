@@ -14,21 +14,22 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration;
+use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder
  */
 class DelegateRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = DelegateRegistration::new()
+        $transaction = DelegateRegistrationBuilder::new()
             ->username('polopolo')
             ->sign($this->passphrase);
 
@@ -40,12 +41,39 @@ class DelegateRegistrationTest extends TestCase
     {
         $secondPassphrase = 'this is a top secret second passphrase';
 
-        $transaction = DelegateRegistration::new()
+        $transaction = DelegateRegistrationBuilder::new()
             ->username('polopolo')
             ->sign($this->passphrase)
             ->secondSign($secondPassphrase);
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
+        $builder = DelegateRegistrationBuilder::new()
+            ->username($fixture['data']['asset']['delegate']['username'])
+            ->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
+        $builder = DelegateRegistrationBuilder::new()
+            ->username($fixture['data']['asset']['delegate']['username'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

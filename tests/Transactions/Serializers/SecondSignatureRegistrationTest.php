@@ -20,13 +20,13 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the second signature registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\SecondSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\SecondSignatureRegistration
  */
 class SecondSignatureRegistrationTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
+    public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('second_signature_registration', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('second_signature_registration', 'second-signature-registration'));
     }
 }

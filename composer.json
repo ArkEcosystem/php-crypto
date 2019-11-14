@@ -11,7 +11,8 @@
     "require": {
         "php": "^7.2",
         "bitwasp/bitcoin": "^1.0",
-        "faustbrian/binary": "^0.4.0"
+        "faustbrian/binary": "^0.4.0",
+        "faustbrian/byte-buffer": "^0.1.3"
     },
     "require-dev": {
         "illuminate/support": "^6.0.0",

@@ -20,23 +20,19 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the multi payment serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\MutliPayment
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiPayment
  */
 class MultiPaymentTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'multi-payment-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-
-        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'multi-payment-secondSign'));
     }
 }

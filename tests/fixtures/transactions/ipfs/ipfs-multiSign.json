@@ -1,0 +1,18 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 5,
+        "nonce": "0",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "500000000",
+        "amount": "0",
+        "asset": {
+            "ipfs": "QmR45FmbVVrixReBwJkhEKde2qwHYaQzGxu4ZoDeswuF9w"
+        },
+        "signature": "3045022100e48815798c5aa671f60a0bf3b1264a29d795a8a9bb97207318fe7517ff362aee022021b8037442b41ca17f6c320c742e0aadbf97121bc3a4c3d38a39a7018c9e79cd",
+        "id": "15e8ecd8017637728c0855962bb5bf3130684681f881c936094429c5dc56bba8"
+    },
+    "serialized": "ff02170100000005000000000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed1920065cd1d000000000012202853f0f11ab91d73b73a2a86606103f45dd469ad2e89ec6f9a25febe8758d3fe3045022100e48815798c5aa671f60a0bf3b1264a29d795a8a9bb97207318fe7517ff362aee022021b8037442b41ca17f6c320c742e0aadbf97121bc3a4c3d38a39a7018c9e79cd"
+}

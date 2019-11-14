@@ -14,26 +14,26 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Serializers\Vote;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the vote serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Serializers\Vote
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\Vote
  */
 class VoteTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('vote', 'passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('vote', 'vote-sign'));
     }
 
     /** @test */
     public function it_should_serialize_the_transaction_with_a_second_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('vote', 'second-passphrase'));
+        $this->assertSerialized($this->getTransactionFixture('vote', 'vote-secondSign'));
     }
 }

@@ -14,26 +14,40 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration;
+use ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the second signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistrationBuilder
  */
 class SecondSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_create_a_valid_transaction()
     {
-        $transaction = SecondSignatureRegistration::new()
+        $transaction = SecondSignatureRegistrationBuilder::new()
             ->signature('this is a top secret second passphrase')
             ->sign('this is a top secret passphrase');
 
         $this->assertTrue($transaction->verify());
-        $this->assertFalse(isset($transaction->signSignature));
-        $this->assertSame($transaction->transaction->asset['signature']['publicKey'], PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex());
+        $this->assertFalse(isset($transaction->secondSignature));
+        $this->assertSame($transaction->transaction->data['asset']['signature']['publicKey'], PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex());
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('second_signature_registration', 'second-signature-registration');
+        $builder = SecondSignatureRegistrationBuilder::new()
+            ->signature($this->secondPassphrase)
+            ->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

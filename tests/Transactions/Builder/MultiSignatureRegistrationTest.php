@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration;
+use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the multi signature registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder
  */
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = MultiSignatureRegistration::new()
+        $transaction = MultiSignatureRegistrationBuilder::new()
             ->min(2)
             ->lifetime(255)
             ->keysgroup([
@@ -47,7 +47,7 @@ class MultiSignatureRegistrationTest extends TestCase
     {
         $secondPassphrase = 'this is a top secret second passphrase';
 
-        $transaction = MultiSignatureRegistration::new()
+        $transaction = MultiSignatureRegistrationBuilder::new()
             ->min(2)
             ->lifetime(255)
             ->keysgroup([
@@ -60,5 +60,12 @@ class MultiSignatureRegistrationTest extends TestCase
 
         $this->assertTrue($transaction->verify());
         $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
+    }
+
+    /** @test */
+    public function it_should_match_fixture_passphrase()
+    {
+        // TODO with AIP 18 because fixture is schnorr
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

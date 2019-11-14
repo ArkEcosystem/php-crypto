@@ -1,0 +1,30 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 6,
+        "nonce": "0",
+        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "fee": "10000000",
+        "amount": "0",
+        "vendorFieldHex": "74686973206973206120746f70207365637265742076656e646f72206669656c64",
+        "vendorField": "this is a top secret vendor field",
+        "asset": {
+            "payments": [
+                {
+                    "amount": "1",
+                    "recipientId": "AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri"
+                },
+                {
+                    "amount": "2",
+                    "recipientId": "AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1"
+                }
+            ]
+        },
+        "signature": "e21d04feadd0b35051940bb01324bce1011e6adfd23d1128321c8a31cfc9e665b137c8a18cac7dc2ea2a2b4784a76cc7d7caf72d20fe87a922b1386f9ecc15d1",
+        "secondSignature": "cc774ee50b6a5fc91fbb792bf00d5db9025a831709ad3bf1a8970ad640655b51d2ce49a34f37759cf0e5247deeed2064c7e3540d4169a5b715b904bee66455c3",
+        "id": "291531eeabb9ede5e6f14bcaef62032c4fa63c222eabc2cedf699e0a8c2bb2e3"
+    },
+    "serialized": "ff02170100000006000000000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed19280969800000000002174686973206973206120746f70207365637265742076656e646f72206669656c640200010000000000000017134b5be4b327ddf9c2bb47fec8a1a44189e90f74020000000000000017bfa6aec83cf1bd03a0cab9f35c85ff51a3e9f041e21d04feadd0b35051940bb01324bce1011e6adfd23d1128321c8a31cfc9e665b137c8a18cac7dc2ea2a2b4784a76cc7d7caf72d20fe87a922b1386f9ecc15d1cc774ee50b6a5fc91fbb792bf00d5db9025a831709ad3bf1a8970ad640655b51d2ce49a34f37759cf0e5247deeed2064c7e3540d4169a5b715b904bee66455c3"
+}

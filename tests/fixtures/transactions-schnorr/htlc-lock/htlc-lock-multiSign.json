@@ -1,0 +1,29 @@
+{
+    "data": {
+        "version": 2,
+        "network": 23,
+        "typeGroup": 1,
+        "type": 8,
+        "nonce": "0",
+        "senderPublicKey": "03fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f015",
+        "fee": "10000000",
+        "amount": "200000000",
+        "recipientId": "AGeYmgbg2LgGxRW2vNNJvQ88PknEJsYizC",
+        "asset": {
+            "lock": {
+                "secretHash": "0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454",
+                "expiration": {
+                    "type": 1,
+                    "value": 1573457007
+                }
+            }
+        },
+        "signatures": [
+            "0061ef05ee1ef7e96de865fafd5b9f966fce16a398265e7eef2e54ac91e7d1e597f373307a0c3f3a3e84bd9698acccb3cea135393ebf38b5b9bb2a0a0ce216c8f0",
+            "019cdf5913cf197b0de01724c174b241e198f8d9dadf0eef445775de2ed81fea532caed6e15456ca311832e3bae33f1a9742811bbb4078751a1f21a5ba01f98ec0",
+            "024c619c22aa69328e3acd2622c1b86e21382369415f1e318b0c0d9ca2dc88e3501d98939252caa828340fa109a166102bf9ae9238ba586d7cc11b1ae2aa29ea27"
+        ],
+        "id": "350a15262ec79567c288763e711059a07eb97f97205d0645016661ea9bd7ed69"
+    },
+    "serialized": "ff0217010000000800000000000000000003fb92a2c3efaa177d8a51fc0cdf41905098d8b2cd900cbac94617492827e5f01580969800000000000000c2eb0b000000000f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454016f0cc95d170995750207ecaf0ccf251c1265b92ad84f5536620061ef05ee1ef7e96de865fafd5b9f966fce16a398265e7eef2e54ac91e7d1e597f373307a0c3f3a3e84bd9698acccb3cea135393ebf38b5b9bb2a0a0ce216c8f0019cdf5913cf197b0de01724c174b241e198f8d9dadf0eef445775de2ed81fea532caed6e15456ca311832e3bae33f1a9742811bbb4078751a1f21a5ba01f98ec0024c619c22aa69328e3acd2622c1b86e21382369415f1e318b0c0d9ca2dc88e3501d98939252caa828340fa109a166102bf9ae9238ba586d7cc11b1ae2aa29ea27"
+}
