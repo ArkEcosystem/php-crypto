@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\Vote;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the vote builder test class.

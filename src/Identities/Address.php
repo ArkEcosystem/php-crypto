@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\Helpers;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Address\AddressCreator;
-use BrianFaust\Binary\UnsignedInteger\Writer;
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
+use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
+use BitWasp\Bitcoin\Address\AddressCreator;
+use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
+use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\UnsignedInteger\Writer;
 
 /**
  * This is the address class.
