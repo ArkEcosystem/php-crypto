@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Transactions\Deserializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate resignation deserializer test class.
