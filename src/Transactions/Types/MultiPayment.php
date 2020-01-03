@@ -57,4 +57,9 @@ class MultiPayment extends Transaction
 
         $this->data['amount'] = '0';
     }
+
+    public function hasVendorField(): bool
+    {
+        return true;
+    }
 }
