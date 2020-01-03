@@ -46,6 +46,20 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
 
         return $this;
     }
+    
+    /**
+     * Set the vendor field / smartbridge.
+     *
+     * @param string $vendorField
+     *
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
+     */
+    public function vendorField(string $vendorField): self
+    {
+        $this->transaction->data['vendorField'] = $vendorField;
+
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
