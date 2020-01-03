@@ -46,7 +46,7 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
 
         return $this;
     }
-    
+
     /**
      * Set the vendor field / smartbridge.
      *
