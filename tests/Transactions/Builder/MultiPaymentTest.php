@@ -78,4 +78,37 @@ class MultiPaymentTest extends TestCase
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
+
+    /** @test */
+    public function it_should_match_fixture_vendor_field_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-with-vendor-field-sign');
+        unset($fixture['data']['vendorFieldHex']);
+        $builder = MultiPaymentBuilder::new()
+            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
+            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
+            ->vendorField($fixture['data']['vendorField'])
+            ->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
+    public function it_should_match_fixture_vendor_field_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-with-vendor-field-secondSign');
+        unset($fixture['data']['vendorFieldHex']);
+        $builder = MultiPaymentBuilder::new()
+            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
+            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
+            ->vendorField($fixture['data']['vendorField'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($builder->verify());
+        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
 }
