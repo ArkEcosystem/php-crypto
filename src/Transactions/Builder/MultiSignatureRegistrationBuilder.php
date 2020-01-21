@@ -30,8 +30,8 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct();
 
-        $this->transaction->data['asset'] = ['multiSignatureLegacy' => []];
-        $this->transaction->data['version'] = 1; // legacy multisig until schnorr implementation (AIP 18)
+        $this->transaction->data['asset']     = ['multiSignatureLegacy' => []];
+        $this->transaction->data['version']   = 1; // legacy multisig until schnorr implementation (AIP 18)
         $this->transaction->data['timestamp'] = Slot::time(); // legacy multisig until schnorr implementation (AIP 18)
     }
 

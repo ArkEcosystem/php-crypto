@@ -21,14 +21,24 @@ namespace ArkEcosystem\Crypto\Enums;
 class Fees
 {
     const TRANSFER = '10000000';
+
     const SECOND_SIGNATURE_REGISTRATION = '500000000';
+
     const DELEGATE_REGISTRATION = '2500000000';
+
     const VOTE = '100000000';
+
     const MULTI_SIGNATURE_REGISTRATION = '500000000';
+
     const IPFS = '500000000';
+
     const MULTI_PAYMENT = '10000000';
+
     const DELEGATE_RESIGNATION = '2500000000';
+
     const HTLC_LOCK = '10000000';
+
     const HTLC_CLAIM = '0';
+
     const HTLC_REFUND = '0';
 }

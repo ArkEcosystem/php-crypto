@@ -31,12 +31,12 @@ class HtlcClaim extends Transaction
     public function deserialize(ByteBuffer $buffer): void
     {
         $lockTransactionId = $buffer->readHex(32 * 2);
-        $unlockSecret = $buffer->readString(32);
+        $unlockSecret      = $buffer->readString(32);
 
         $this->data['asset'] = [
             'claim' => [
                 'lockTransactionId' => $lockTransactionId,
-                'unlockSecret' => $unlockSecret,
+                'unlockSecret'      => $unlockSecret,
             ],
         ];
     }

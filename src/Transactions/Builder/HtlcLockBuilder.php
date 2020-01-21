@@ -37,7 +37,7 @@ class HtlcLockBuilder extends AbstractTransactionBuilder
             'lock' => [
                 'secretHash' => $secretHash,
                 'expiration' => [
-                    'type' => $expirationType,
+                    'type'  => $expirationType,
                     'value' => $expirationValue,
                 ],
             ],

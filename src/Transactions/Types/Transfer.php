@@ -37,8 +37,8 @@ class Transfer extends Transaction
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        $this->data['amount'] = strval($buffer->readUInt64());
-        $this->data['expiration'] = $buffer->readUInt32();
+        $this->data['amount']      = strval($buffer->readUInt64());
+        $this->data['expiration']  = $buffer->readUInt32();
         $this->data['recipientId'] = Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2))));
     }
 

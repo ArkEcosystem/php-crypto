@@ -59,10 +59,10 @@ abstract class Transaction
     public function sign(PrivateKey $keys): self
     {
         $options = [
-            'skipSignature' => true,
+            'skipSignature'       => true,
             'skipSecondSignature' => true,
         ];
-        $transaction = Hash::sha256($this->getBytes($options));
+        $transaction             = Hash::sha256($this->getBytes($options));
         $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
@@ -80,7 +80,7 @@ abstract class Transaction
         $options = [
             'skipSecondSignature' => true,
         ];
-        $transaction = Hash::sha256($this->getBytes($options));
+        $transaction                   = Hash::sha256($this->getBytes($options));
         $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
@@ -89,11 +89,11 @@ abstract class Transaction
     public function verify(): bool
     {
         $options = [
-            'skipSignature' => true,
+            'skipSignature'       => true,
             'skipSecondSignature' => true,
         ];
 
-        $bytes = $this->getBytes($options);
+        $bytes     = $this->getBytes($options);
         $publicKey = $this->data['senderPublicKey'];
         $signature = $this->data['signature'];
 
@@ -105,7 +105,7 @@ abstract class Transaction
         $options = [
             'skipSecondSignature' => true,
         ];
-        $bytes = $this->getBytes($options);
+        $bytes     = $this->getBytes($options);
         $signature = $this->data['secondSignature'];
 
         return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
@@ -125,7 +125,7 @@ abstract class Transaction
 
     public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
     {
-        $factory = new PublicKeyFactory;
+        $factory   = new PublicKeyFactory();
         $publicKey = $factory->fromHex($publicKey);
 
         return $publicKey->verify(
@@ -151,6 +151,7 @@ abstract class Transaction
      * Perform AIP11 compliant deserialization.
      *
      * @param \BrianFaust\ByteBuffer $buffer
+     *
      * @return void
      */
     abstract public function deserialize(ByteBuffer $buffer): void;
@@ -163,22 +164,22 @@ abstract class Transaction
     public function toArray(): array
     {
         return array_filter([
-            'amount'          => $this->data['amount'],
-            'asset'           => $this->data['asset'] ?? null,
-            'fee'             => $this->data['fee'],
-            'id'              => $this->data['id'],
-            'network'         => $this->data['network'] ?? Network::get()->version(),
-            'recipientId'     => $this->data['recipientId'] ?? null,
-            'secondSignature' => $this->data['secondSignature'] ?? null,
-            'senderPublicKey' => $this->data['senderPublicKey'],
-            'signature'       => $this->data['signature'],
-            'signatures'      => $this->data['signatures'] ?? null,
-            'secondSignature'   => $this->data['secondSignature'] ?? null,
-            'type'            => $this->data['type'],
+            'amount'               => $this->data['amount'],
+            'asset'                => $this->data['asset'] ?? null,
+            'fee'                  => $this->data['fee'],
+            'id'                   => $this->data['id'],
+            'network'              => $this->data['network'] ?? Network::get()->version(),
+            'recipientId'          => $this->data['recipientId'] ?? null,
+            'secondSignature'      => $this->data['secondSignature'] ?? null,
+            'senderPublicKey'      => $this->data['senderPublicKey'],
+            'signature'            => $this->data['signature'],
+            'signatures'           => $this->data['signatures'] ?? null,
+            'secondSignature'      => $this->data['secondSignature'] ?? null,
+            'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
-            'nonce'            => $this->data['nonce'],
-            'vendorField'     => $this->data['vendorField'] ?? null,
-            'version'         => $this->data['version'] ?? 1,
+            'nonce'                => $this->data['nonce'],
+            'vendorField'          => $this->data['vendorField'] ?? null,
+            'version'              => $this->data['version'] ?? 1,
         ], function ($element) {
             if (null !== $element) {
                 return true;

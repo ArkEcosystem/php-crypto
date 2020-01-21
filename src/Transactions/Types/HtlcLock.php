@@ -34,19 +34,19 @@ class HtlcLock extends Transaction
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        $amount = strval($buffer->readUint64());
-        $secretHash = $buffer->readHex(32 * 2);
-        $expirationType = $buffer->readUint8();
+        $amount          = strval($buffer->readUint64());
+        $secretHash      = $buffer->readHex(32 * 2);
+        $expirationType  = $buffer->readUint8();
         $expirationValue = $buffer->readUint32();
-        $recipientId = Base58::encodeCheck(new Buffer($buffer->readHexString(21 * 2)));
+        $recipientId     = Base58::encodeCheck(new Buffer($buffer->readHexString(21 * 2)));
 
-        $this->data['amount'] = $amount;
+        $this->data['amount']      = $amount;
         $this->data['recipientId'] = $recipientId;
-        $this->data['asset'] = [
+        $this->data['asset']       = [
             'lock' => [
                 'secretHash' => $secretHash,
                 'expiration' => [
-                    'type' => $expirationType,
+                    'type'  => $expirationType,
                     'value' => $expirationValue,
                 ],
             ],

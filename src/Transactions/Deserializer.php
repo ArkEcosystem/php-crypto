@@ -76,8 +76,8 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        $transactionClass = $this->transactionsClasses[$data['type']];
-        $transaction = new $transactionClass();
+        $transactionClass  = $this->transactionsClasses[$data['type']];
+        $transaction       = new $transactionClass();
         $transaction->data = $data;
 
         $this->deserializeVendorField($transaction);
@@ -99,13 +99,13 @@ class Deserializer
     private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
-        $data['version'] = $this->buffer->readUInt8();
-        $data['network'] = $this->buffer->readUInt8();
-        $data['typeGroup'] = $this->buffer->readUInt32();
-        $data['type'] = $this->buffer->readUInt16();
-        $data['nonce'] = strval($this->buffer->readUInt64());
+        $data['version']         = $this->buffer->readUInt8();
+        $data['network']         = $this->buffer->readUInt8();
+        $data['typeGroup']       = $this->buffer->readUInt32();
+        $data['type']            = $this->buffer->readUInt16();
+        $data['nonce']           = strval($this->buffer->readUInt64());
         $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
-        $data['fee'] = strval($this->buffer->readUInt64());
+        $data['fee']             = strval($this->buffer->readUInt64());
     }
 
     private function deserializeVendorField(Transactions\Transaction $transaction): void
@@ -113,7 +113,7 @@ class Deserializer
         $vendorFieldLength = $this->buffer->readUInt8();
         if ($vendorFieldLength > 0) {
             if ($transaction->hasVendorField()) {
-                $marker = $this->buffer->current();
+                $marker                              = $this->buffer->current();
                 $transaction->data['vendorFieldHex'] = $this->buffer->readHex($vendorFieldLength * 2);
                 $this->buffer->position($marker);
                 $transaction->data['vendorField'] = $this->buffer->readHexString($vendorFieldLength * 2);
@@ -151,11 +151,11 @@ class Deserializer
             if ($this->buffer->remaining() % 65 === 0) {
                 $data['signatures'] = [];
 
-                $count = $this->buffer->remaining() / 65;
+                $count            = $this->buffer->remaining() / 65;
                 $publicKeyIndexes = [];
                 for ($i = 0; $i < $count; $i++) {
                     $multiSignaturePart = $this->buffer->readHex(65 * 2);
-                    $publicKeyIndex = intval(substr($multiSignaturePart, 0, 2), 16);
+                    $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
 
                     if (! isset($publicKeyIndexes[$publicKeyIndex])) {
                         $publicKeyIndexes[$publicKeyIndex] = true;
@@ -182,13 +182,13 @@ class Deserializer
     {
         // Signature
         if ($this->buffer->remaining()) {
-            $signatureLength = $this->currentSignatureLength($this->buffer);
+            $signatureLength   = $this->currentSignatureLength($this->buffer);
             $data['signature'] = $this->buffer->readHex($signatureLength * 2);
         }
 
         // Second Signature
         if ($this->buffer->remaining() && ! $this->beginningMultiSignature($this->buffer)) {
-            $secondSignatureLength = $this->currentSignatureLength($this->buffer);
+            $secondSignatureLength   = $this->currentSignatureLength($this->buffer);
             $data['secondSignature'] = $this->buffer->readHex($secondSignatureLength * 2);
         }
 
@@ -196,7 +196,7 @@ class Deserializer
         if ($this->buffer->remaining() && $this->beginningMultiSignature($this->buffer)) {
             $this->buffer->skip(1);
             $signaturesSerialized = $this->buffer->readHex($this->buffer->remaining() * 2);
-            $data['signatures'] = [];
+            $data['signatures']   = [];
 
             $moreSignatures = true;
             while ($moreSignatures) {

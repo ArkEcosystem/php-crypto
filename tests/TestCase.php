@@ -24,6 +24,7 @@ abstract class TestCase extends BaseTestCase
         Concerns\Deserialize;
 
     protected $passphrase = 'this is a top secret passphrase';
+
     protected $secondPassphrase = 'this is a top secret second passphrase';
 
     protected function setUp(): void

@@ -36,7 +36,7 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
      * Add a new payment to the collection.
      *
      * @param string $recipientId
-     * @param string    $amount
+     * @param string $amount
      *
      * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
      */

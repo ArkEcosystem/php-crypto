@@ -29,14 +29,14 @@ abstract class AbstractTransactionBuilder
      */
     public function __construct()
     {
-        $this->transaction = $this->getTransactionInstance();
-        $this->transaction->data['type'] = $this->getType();
+        $this->transaction                    = $this->getTransactionInstance();
+        $this->transaction->data['type']      = $this->getType();
         $this->transaction->data['typeGroup'] = $this->getTypeGroup();
-        $this->transaction->data['nonce'] = '0';
-        $this->transaction->data['amount'] = '0';
-        $this->transaction->data['fee'] = $this->getFee();
-        $this->transaction->data['version'] = 2;
-        $this->transaction->data['network'] = 23;
+        $this->transaction->data['nonce']     = '0';
+        $this->transaction->data['amount']    = '0';
+        $this->transaction->data['fee']       = $this->getFee();
+        $this->transaction->data['version']   = 2;
+        $this->transaction->data['network']   = 23;
     }
 
     /**
@@ -110,10 +110,10 @@ abstract class AbstractTransactionBuilder
      */
     public function sign(string $passphrase): self
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $keys                                       = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
-        $this->transaction = $this->transaction->sign($keys);
+        $this->transaction             = $this->transaction->sign($keys);
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;
@@ -128,7 +128,7 @@ abstract class AbstractTransactionBuilder
      */
     public function secondSign(string $secondPassphrase): self
     {
-        $this->transaction = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
+        $this->transaction             = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;

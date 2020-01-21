@@ -64,7 +64,7 @@ class Message
         }
 
         $this->signature = $message->signature;
-        $this->message = $message->message;
+        $this->message   = $message->message;
     }
 
     /**
@@ -127,7 +127,7 @@ class Message
      */
     public function verify(): bool
     {
-        $factory = new PublicKeyFactory;
+        $factory = new PublicKeyFactory();
 
         return $factory->fromHex($this->publicKey)->verify(
             new Buffer(hash('sha256', $this->message, true)),

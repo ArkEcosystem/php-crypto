@@ -22,7 +22,7 @@ class HtlcClaimBuilder extends AbstractTransactionBuilder
         $this->transaction->data['asset'] = [
             'claim' => [
                 'lockTransactionId' => $lockTransactionId,
-                'unlockSecret' => $unlockSecret,
+                'unlockSecret'      => $unlockSecret,
             ],
         ];
 

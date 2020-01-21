@@ -42,7 +42,7 @@ class TransactionTest extends TestCase
     {
         $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
-        $transaction = $this->getTransaction();
+        $transaction                    = $this->getTransaction();
         $transaction->data['signature'] = null;
 
         $this->assertEmpty($transaction->data['signature']);
@@ -55,7 +55,7 @@ class TransactionTest extends TestCase
     {
         $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
 
-        $transaction = $this->getTransaction();
+        $transaction                          = $this->getTransaction();
         $transaction->data['secondSignature'] = null;
 
         $this->assertEmpty($transaction->data['secondSignature']);

@@ -55,7 +55,7 @@ class Fee
     /**
      * Set the transaction fee for the given type.
      *
-     * @param int $type
+     * @param int    $type
      * @param string $fee
      */
     public static function set(int $type, string $fee): void

@@ -22,7 +22,7 @@ trait Deserialize
     protected function assertDeserialized(array $expected, array $keys, int $network = 30): object
     {
         $actual = Deserializer::new($expected['serialized'])->deserialize();
-        $data = $actual->data;
+        $data   = $actual->data;
 
         $this->assertSame($expected['serialized'], Serializer::new($actual)->serialize()->getHex());
         $this->assertSameTransactions($expected, $data, $keys);
@@ -54,7 +54,7 @@ trait Deserialize
         }
 
         $expected = Arr::only($expected['data'], $keys);
-        $actual = Arr::only($actual, $keys);
+        $actual   = Arr::only($actual, $keys);
 
         ksort($expected);
         ksort($actual);

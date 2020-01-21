@@ -126,9 +126,9 @@ class Serializer
      */
     public function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
-        $skipSignature = $options['skipSignature'] ?? false;
+        $skipSignature       = $options['skipSignature'] ?? false;
         $skipSecondSignature = $options['skipSecondSignature'] ?? false;
-        $skipMultiSignature = $options['skipMultiSignature'] ?? false;
+        $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
 
         if (! $skipSignature && isset($this->transaction->data['signature'])) {
             $buffer->writeHex($this->transaction->data['signature']);

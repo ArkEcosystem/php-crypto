@@ -25,9 +25,9 @@ class MultiSignatureRegistration extends Transaction
     public function serialize(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1);
-        if ($this->data['version'] == 2) {
+        if ($this->data['version'] === 2) {
             $publicKeysLength = count($this->data['asset']['multiSignature']['publicKeys']);
-            $buffer = ByteBuffer::new(2 + 33 * $publicKeysLength);
+            $buffer           = ByteBuffer::new(2 + 33 * $publicKeysLength);
 
             $buffer->writeUInt8($this->data['asset']['multiSignature']['min']);
             $buffer->writeUInt8($publicKeysLength);
@@ -54,10 +54,10 @@ class MultiSignatureRegistration extends Transaction
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        if ($this->data['version'] == 2) {
+        if ($this->data['version'] === 2) {
             $this->data['asset'] = [
                 'multiSignature' => [
-                    'min'      => $buffer->readUInt8(),
+                    'min'        => $buffer->readUInt8(),
                     'publicKeys' => [],
                 ],
             ];
@@ -68,14 +68,14 @@ class MultiSignatureRegistration extends Transaction
             }
         } else {
             // legacy
-            $min = $buffer->readUInt8();
+            $min            = $buffer->readUInt8();
             $keysgroupCount = $buffer->readUInt8();
-            $lifetime = $buffer->readUInt8();
+            $lifetime       = $buffer->readUInt8();
 
             $this->data->asset = [
                 'multiSignatureLegacy' => [
-                    'min'      => $min,
-                    'lifetime' => $lifetime,
+                    'min'       => $min,
+                    'lifetime'  => $lifetime,
                     'keysgroup' => [],
                 ],
             ];

@@ -48,8 +48,8 @@ class Vote extends Transaction
 
         $vote = null;
         for ($i = 0; $i < $voteLength; $i++) {
-            $vote = $buffer->readHex(34 * 2);
-            $vote = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
+            $vote                           = $buffer->readHex(34 * 2);
+            $vote                           = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
             $this->data['asset']['votes'][] = $vote;
         }
     }

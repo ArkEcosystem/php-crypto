@@ -34,9 +34,9 @@ trait Serialize
 
     protected function assertSerialized(array $fixture): void
     {
-        $data = $fixture['data'];
-        $transactionClass = $this->transactionsClasses[$fixture['data']['type']];
-        $transaction = new $transactionClass();
+        $data              = $fixture['data'];
+        $transactionClass  = $this->transactionsClasses[$fixture['data']['type']];
+        $transaction       = new $transactionClass();
         $transaction->data = $data;
 
         $actual = Serializer::new($transaction)->serialize();

@@ -33,9 +33,9 @@ class IPFS extends Transaction
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        $hashFunction = $buffer->readUint8();
+        $hashFunction   = $buffer->readUint8();
         $ipfsHashLength = $buffer->readUint8();
-        $ipfsHash = $buffer->readHex($ipfsHashLength * 2);
+        $ipfsHash       = $buffer->readHex($ipfsHashLength * 2);
 
         $buffer = ByteBuffer::new(1);
         $buffer->writeUInt8($hashFunction);
