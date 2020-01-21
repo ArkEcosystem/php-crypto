@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Buffertools\Buffer;
-use BitWasp\Bitcoin\Crypto\Hash;
 use ArkEcosystem\Crypto\Enums\Types;
-use BrianFaust\Binary\Hex\Reader as Hex;
 use ArkEcosystem\Crypto\Identities\Address;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Buffertools\Buffer;
 use BrianFaust\Binary\Buffer\Reader\Buffer as Reader;
 
 /**
@@ -92,11 +91,11 @@ class Deserializer
 
         $transaction = $this->handleType($assetOffset, $transaction);
 
-        if (! isset($transaction->amount)) {
+        if (!isset($transaction->amount)) {
             $transaction->amount = 0;
         }
 
-        if (! isset($transaction->version) || 1 === $transaction->version) {
+        if (!isset($transaction->version) || 1 === $transaction->version) {
             $transaction = $this->handleVersionOne($transaction);
         }
 
@@ -149,7 +148,7 @@ class Deserializer
             $transaction->vendorField = hex2bin($transaction->vendorFieldHex);
         }
 
-        if (! isset($transaction->id)) {
+        if (!isset($transaction->id)) {
             $transaction->id = $transaction->getId();
         }
 

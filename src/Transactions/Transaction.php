@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
-use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Configuration\Network;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
+use ArkEcosystem\Crypto\Enums\Types;
+use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use BitWasp\Buffertools\Buffer;
+use BrianFaust\Binary\Buffer\Writer\Buffer as Writer;
 
 /**
  * This is the transaction class.
@@ -77,7 +77,7 @@ class Transaction
      */
     public function verify(): bool
     {
-        $factory = new PublicKeyFactory;
+        $factory = new PublicKeyFactory();
         $publicKey = $factory->fromHex($this->senderPublicKey);
 
         return $publicKey->verify(
@@ -95,7 +95,7 @@ class Transaction
      */
     public function secondVerify(string $secondPublicKey): bool
     {
-        $factory = new PublicKeyFactory;
+        $factory = new PublicKeyFactory();
         $secondPublicKey = $factory->fromHex($secondPublicKey);
 
         return $secondPublicKey->verify(
@@ -126,7 +126,7 @@ class Transaction
             $multiSignatureOffset += $signatureLength * 2;
             $this->secondSignature = substr($serialized, $startOffset + $signatureLength * 2);
 
-            if (! $this->secondSignature || 0 === strlen($this->secondSignature)) {
+            if (!$this->secondSignature || 0 === strlen($this->secondSignature)) {
                 unset($this->secondSignature);
             } else {
                 if ('ff' === substr($this->secondSignature, 0, 2)) {
@@ -140,7 +140,7 @@ class Transaction
 
             $signatures = substr($serialized, $startOffset + $multiSignatureOffset);
 
-            if (! $signatures || 0 === strlen($signatures)) {
+            if (!$signatures || 0 === strlen($signatures)) {
                 return $this;
             }
 
@@ -184,7 +184,7 @@ class Transaction
         $buffer->writeHex($this->senderPublicKey);
 
         $skipRecipientId = $this->type === Types::SECOND_SIGNATURE_REGISTRATION || $this->type === Types::MULTI_SIGNATURE_REGISTRATION;
-        if (isset($this->recipientId) && ! $skipRecipientId) {
+        if (isset($this->recipientId) && !$skipRecipientId) {
             $buffer->writeHex(Base58::decodeCheck($this->recipientId)->getHex());
         } else {
             $buffer->fill(21);
@@ -222,11 +222,11 @@ class Transaction
             $buffer->writeString(implode('', $this->asset['multisignature']['keysgroup']));
         }
 
-        if (! $skipSignature && $this->signature) {
+        if (!$skipSignature && $this->signature) {
             $buffer->writeHex($this->signature);
         }
 
-        if (! $skipSecondSignature && isset($this->signSignature)) {
+        if (!$skipSecondSignature && isset($this->signSignature)) {
             $buffer->writeHex($this->signSignature);
         }
 
