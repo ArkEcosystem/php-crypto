@@ -1,18 +1,26 @@
 {
     "name": "arkecosystem/crypto",
     "description": "A simple PHP Cryptography Implementation for the Ark Blockchain.",
-    "keywords": ["api", "ark", "blockchain", "crypto", "currency"],
+    "keywords": [
+        "api",
+        "ark",
+        "blockchain",
+        "crypto",
+        "currency"
+    ],
     "license": "MIT",
-    "authors": [{
-        "name": "Brian Faust",
-        "email": "hello@brianfaust.me",
-        "homepage": "https://github.com/faustbrian"
-    }],
+    "authors": [
+        {
+            "name": "Brian Faust",
+            "email": "hello@brianfaust.me",
+            "homepage": "https://github.com/faustbrian"
+        }
+    ],
     "require": {
         "php": "^7.2",
         "bitwasp/bitcoin": "^1.0",
-        "faustbrian/binary": "^0.4.0",
-        "faustbrian/byte-buffer": "^0.1.3"
+        "faustbrian/byte-buffer": "^0.1.4",
+        "kodekeep/binary": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
