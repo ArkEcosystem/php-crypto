@@ -15,7 +15,7 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
-use BrianFaust\ByteBuffer\ByteBuffer;
+use KodeKeep\ByteBuffer\ByteBuffer;
 
 class HtlcLock extends Transaction
 {

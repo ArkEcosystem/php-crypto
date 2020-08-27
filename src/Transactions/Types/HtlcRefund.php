@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use BrianFaust\ByteBuffer\ByteBuffer;
+use KodeKeep\ByteBuffer\ByteBuffer;
 
 class HtlcRefund extends Transaction
 {

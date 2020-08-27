@@ -19,7 +19,7 @@
     "require": {
         "php": "^7.2",
         "bitwasp/bitcoin": "^1.0",
-        "faustbrian/byte-buffer": "^0.1.4",
+        "kodekeep/bytebuffer": "^1.0",
         "kodekeep/binary": "^1.0"
     },
     "require-dev": {
