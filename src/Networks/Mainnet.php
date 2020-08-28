@@ -44,6 +44,14 @@ class Mainnet extends AbstractNetwork
     /**
      * {@inheritdoc}
      */
+    public function pubKeyHash(): int
+    {
+        return 23;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function epoch(): string
     {
         return '2017-03-21T13:00:00.000Z';

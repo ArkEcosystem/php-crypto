@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Fee;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 
@@ -36,7 +37,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['amount']    = '0';
         $this->transaction->data['fee']       = $this->getFee();
         $this->transaction->data['version']   = 2;
-        $this->transaction->data['network']   = 23;
+        $this->transaction->data['network']   = Network::get()->pubKeyHash();
     }
 
     /**
