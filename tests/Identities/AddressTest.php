@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Identities;
 
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\Address as TestClass;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -25,6 +27,13 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  */
 class AddressTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Network::set(Devnet::new());
+    }
+
     /** @test */
     public function it_should_get_the_address_from_passphrase()
     {

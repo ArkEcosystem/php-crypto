@@ -31,4 +31,12 @@ class NetworkTestCase extends TestCase
 
         $this->assertSame($actual, $this->epoch);
     }
+
+    /** @test */
+    public function it_should_get_public_key_hash()
+    {
+        $actual = $this->getTestSubject()->pubKeyHash();
+
+        $this->assertSame($actual, $this->pubKeyHash);
+    }
 }

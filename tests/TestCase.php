@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Mainnet;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -29,6 +29,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function setUp(): void
     {
-        Network::set(Devnet::new());
+        Network::set(Mainnet::new());
     }
 }

@@ -44,6 +44,14 @@ class Devnet extends AbstractNetwork
     /**
      * {@inheritdoc}
      */
+    public function pubKeyHash(): int
+    {
+        return 30;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function epoch(): string
     {
         return '2017-03-21T13:00:00.000Z';

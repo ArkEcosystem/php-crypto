@@ -64,10 +64,7 @@ abstract class AbstractNetwork extends Network
         return hexdec($this->getAddressByte());
     }
 
-    /**
-     * Create a new network instance.
-     *
-     * @return string
-     */
+    abstract public function pubKeyHash(): int;
+
     abstract public function epoch(): string;
 }
