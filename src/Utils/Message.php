@@ -59,6 +59,8 @@ class Message
             $this->publicKey = $message->publickey;
         } elseif (property_exists($message, 'publicKey')) {
             $this->publicKey = $message->publicKey;
+        } elseif (property_exists($message, 'signatory')) {
+            $this->publicKey = $message->signatory;
         } else {
             throw new InvalidArgumentException('The given message did not contain a valid public key.');
         }
