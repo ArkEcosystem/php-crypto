@@ -4,3 +4,5 @@ vendor
 clover.xml
 .php_cs.cache
 .phpunit.result.cache
+.coverage
+coverage.xml

@@ -9,13 +9,11 @@
         "currency"
     ],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Brian Faust",
-            "email": "hello@brianfaust.me",
-            "homepage": "https://github.com/faustbrian"
-        }
-    ],
+    "authors": [{
+        "name": "Brian Faust",
+        "email": "hello@brianfaust.me",
+        "homepage": "https://github.com/faustbrian"
+    }],
     "require": {
         "php": "^7.2",
         "bitwasp/bitcoin": "^1.0",
@@ -26,8 +24,9 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "illuminate/support": "^7.0.0",
         "mockery/mockery": "^1.2",
-        "phpunit/phpunit": "^9.0.0",
-        "spatie/phpunit-watcher": "^1.8",
+        "pestphp/drift": "^0.3.0",
+        "pestphp/pest": "^0.3.8",
+        "phpunit/phpunit": "^9.3.10",
         "symfony/var-dumper": "^5.0.0"
     },
     "autoload": {
@@ -50,8 +49,13 @@
         }
     },
     "scripts": {
-        "test-watch": [
-            "vendor/bin/phpunit-watcher watch"
+        "format": [
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "test": [
+            "./vendor/bin/pest --coverage --min=100 --coverage-html=.coverage --coverage-clover=coverage.xml"
         ]
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
