@@ -39,7 +39,7 @@ class VoteBuilder extends AbstractTransactionBuilder
      *
      * @param array $votes
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\Vote
+     * @return self
      */
     public function votes(array $votes): self
     {
@@ -53,7 +53,7 @@ class VoteBuilder extends AbstractTransactionBuilder
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return self
      */
     public function sign(string $passphrase): AbstractTransactionBuilder
     {

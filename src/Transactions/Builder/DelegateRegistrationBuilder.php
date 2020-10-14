@@ -38,7 +38,7 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param string $username
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistration
+     * @return self
      */
     public function username(string $username): self
     {
@@ -52,7 +52,7 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return self
      */
     public function sign(string $passphrase): AbstractTransactionBuilder
     {

@@ -40,7 +40,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param int $min
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
+     * @return self
      */
     public function min(int $min): self
     {
@@ -54,7 +54,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param int $lifetime
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
+     * @return self
      */
     public function lifetime(int $lifetime): self
     {
@@ -68,7 +68,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param array $keysgroup
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistration
+     * @return self
      */
     public function keysgroup(array $keysgroup): self
     {

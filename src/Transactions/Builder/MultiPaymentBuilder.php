@@ -38,7 +38,7 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
      * @param string $recipientId
      * @param string $amount
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
+     * @return self
      */
     public function add(string $recipientId, string $amount): self
     {
@@ -52,7 +52,7 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
      *
      * @param string $vendorField
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\MultiPayment
+     * @return self
      */
     public function vendorField(string $vendorField): self
     {

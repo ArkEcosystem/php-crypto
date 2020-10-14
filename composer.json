@@ -9,19 +9,22 @@
         "currency"
     ],
     "license": "MIT",
-    "authors": [{
-        "name": "Brian Faust",
-        "email": "hello@brianfaust.me",
-        "homepage": "https://github.com/faustbrian"
-    }],
+    "authors": [
+        {
+            "name": "Brian Faust",
+            "email": "hello@brianfaust.me",
+            "homepage": "https://github.com/faustbrian"
+        }
+    ],
     "require": {
         "php": "^7.2",
         "bitwasp/bitcoin": "^1.0",
-        "kodekeep/bytebuffer": "^1.0",
-        "kodekeep/binary": "^1.0"
+        "kodekeep/binary": "^1.0",
+        "kodekeep/bytebuffer": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
+        "graham-campbell/analyzer": "^3.0",
         "illuminate/support": "^7.0.0",
         "mockery/mockery": "^1.2",
         "pestphp/drift": "^0.3.0",

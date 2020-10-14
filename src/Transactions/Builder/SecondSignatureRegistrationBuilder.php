@@ -28,7 +28,7 @@ class SecondSignatureRegistrationBuilder extends AbstractTransactionBuilder
      *
      * @param string $secondPassphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\SecondSignatureRegistration
+     * @return self
      */
     public function signature(string $secondPassphrase): self
     {

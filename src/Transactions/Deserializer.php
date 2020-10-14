@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Transactions\Types as Transactions;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
 use KodeKeep\ByteBuffer\ByteBuffer;
 
@@ -30,17 +30,17 @@ class Deserializer
      * @var array
      */
     private $transactionsClasses = [
-        Transactions\Transfer::class,
-        Transactions\SecondSignatureRegistration::class,
-        Transactions\DelegateRegistration::class,
-        Transactions\Vote::class,
-        Transactions\MultiSignatureRegistration::class,
-        Transactions\IPFS::class,
-        Transactions\MultiPayment::class,
-        Transactions\DelegateResignation::class,
-        Transactions\HtlcLock::class,
-        Transactions\HtlcClaim::class,
-        Transactions\HtlcRefund::class,
+        Types\Transfer::class,
+        Types\SecondSignatureRegistration::class,
+        Types\DelegateRegistration::class,
+        Types\Vote::class,
+        Types\MultiSignatureRegistration::class,
+        Types\IPFS::class,
+        Types\MultiPayment::class,
+        Types\DelegateResignation::class,
+        Types\HtlcLock::class,
+        Types\HtlcClaim::class,
+        Types\HtlcRefund::class,
     ];
 
     /**
@@ -68,9 +68,9 @@ class Deserializer
     /**
      * Perform AIP11 compliant deserialization.
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return Transaction
      */
-    public function deserialize(): Transactions\Transaction
+    public function deserialize(): Transaction
     {
         $data = [];
 
@@ -108,7 +108,7 @@ class Deserializer
         $data['fee']             = strval($this->buffer->readUInt64());
     }
 
-    private function deserializeVendorField(Transactions\Transaction $transaction): void
+    private function deserializeVendorField(Transaction $transaction): void
     {
         $vendorFieldLength = $this->buffer->readUInt8();
         if ($vendorFieldLength > 0) {
@@ -264,11 +264,11 @@ class Deserializer
     /**
      * Handle the deserialization of transaction data with a version of 2.0.
      *
-     * @param \ArkEcosystem\Crypto\Transaction $transaction
+     * @param Transaction $transaction
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return Transaction
      */
-    public function handleVersionTwo(Transactions\Transaction $transaction): Transactions\Transaction
+    public function handleVersionTwo(Transaction $transaction): Transaction
     {
         $transaction->data['id'] = Hash::sha256(Serializer::new($transaction)->serialize())->getHex();
 

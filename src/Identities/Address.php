@@ -34,8 +34,8 @@ class Address
     /**
      * Derive the address from the given passphrase.
      *
-     * @param string                                             $passphrase
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
+     * @param string               $passphrase
+     * @param AbstractNetwork|null $network
      *
      * @return string
      */
@@ -47,8 +47,8 @@ class Address
     /**
      * Derive the address from the given public key.
      *
-     * @param string                                             $publicKey
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
+     * @param string               $publicKey
+     * @param AbstractNetwork|null $network
      *
      * @return string
      */
@@ -66,7 +66,7 @@ class Address
      * Derive the address from the given private key.
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
-     * @param ArkEcosystem\Crypto\Networks\AbstractNetwork|null            $network
+     * @param AbstractNetwork|null                                         $network
      *
      * @return string
      */
@@ -80,8 +80,8 @@ class Address
     /**
      * Validate the given address.
      *
-     * @param string                                                 $address
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|int|null $network
+     * @param string                   $address
+     * @param AbstractNetwork|int|null $network
      *
      * @return bool
      */

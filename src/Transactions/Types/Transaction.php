@@ -54,7 +54,7 @@ abstract class Transaction
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return Transaction
      */
     public function sign(PrivateKey $keys): self
     {
@@ -73,7 +73,7 @@ abstract class Transaction
      *
      * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Transaction
+     * @return Transaction
      */
     public function secondSign(PrivateKey $keys): self
     {
@@ -143,14 +143,14 @@ abstract class Transaction
     /**
      * Perform AIP11 compliant serialization.
      *
-     * @return \BrianFaust\ByteBuffer $buffer
+     * @return ByteBuffer $buffer
      */
     abstract public function serialize(array $options = []): ByteBuffer;
 
     /**
      * Perform AIP11 compliant deserialization.
      *
-     * @param \BrianFaust\ByteBuffer $buffer
+     * @param ByteBuffer $buffer
      *
      * @return void
      */

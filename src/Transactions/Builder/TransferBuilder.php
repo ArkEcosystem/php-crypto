@@ -34,7 +34,7 @@ class TransferBuilder extends AbstractTransactionBuilder
      *
      * @param string $recipientId
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\Transfer
+     * @return self
      */
     public function recipient(string $recipientId): self
     {
@@ -48,7 +48,7 @@ class TransferBuilder extends AbstractTransactionBuilder
      *
      * @param string $amount
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\Transfer
+     * @return self
      */
     public function amount(string $amount): self
     {
@@ -62,7 +62,7 @@ class TransferBuilder extends AbstractTransactionBuilder
      *
      * @param string $vendorField
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\Transfer
+     * @return self
      */
     public function vendorField(string $vendorField): self
     {

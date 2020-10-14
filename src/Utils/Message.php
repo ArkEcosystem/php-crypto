@@ -109,7 +109,7 @@ class Message
      * @param string $message
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Message
+     * @return \ArkEcosystem\Crypto\Utils\Message
      */
     public static function sign(string $message, string $passphrase): self
     {

@@ -120,7 +120,7 @@ class Serializer
     /**
      * Handle the serialization of transaction data.
      *
-     * @param \BrianFaust\ByteBuffer\ByteBuffer $buffer
+     * @param ByteBuffer $buffer
      *
      * @return string
      */
