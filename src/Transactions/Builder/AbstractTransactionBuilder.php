@@ -53,7 +53,7 @@ abstract class AbstractTransactionBuilder
     /**
      * Create a new transaction instance.
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public static function new(): self
     {
@@ -65,7 +65,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $fee
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public function withFee(string $fee): self
     {
@@ -79,7 +79,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $nonce
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public function withNonce(string $nonce): self
     {
@@ -93,7 +93,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param int $network
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public function withNetwork(int $network): self
     {
@@ -107,7 +107,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public function sign(string $passphrase): self
     {
@@ -125,7 +125,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $secondPassphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransaction
+     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
      */
     public function secondSign(string $secondPassphrase): self
     {
