@@ -84,7 +84,7 @@ class Message
      *
      * @param mixed $message
      *
-     * @return \ArkEcosystem\Crypto\Message
+     * @return \ArkEcosystem\Crypto\Utils\Message
      */
     public static function new($message): self
     {
