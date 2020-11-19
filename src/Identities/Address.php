@@ -45,6 +45,19 @@ class Address
     }
 
     /**
+     * Derive the address from the given multi-signature asset.
+     *
+     * @param int   $min
+     * @param array $publicKeys
+     *
+     * @return string
+     */
+    public static function fromMultiSignatureAsset(int $min, array $publicKeys): string
+    {
+        return static::fromPublicKey(PublicKey::fromMultiSignatureAsset($min, $publicKeys)->getHex());
+    }
+
+    /**
      * Derive the address from the given public key.
      *
      * @param string               $publicKey
