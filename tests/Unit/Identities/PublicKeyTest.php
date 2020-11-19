@@ -35,6 +35,21 @@ class PublicKeyTest extends TestCase
     }
 
     /** @test */
+    public function it_should_get_the_public_key_from_a_multi_signature_asset()
+    {
+        $actual = TestClass::fromMultiSignatureAsset(3, [
+            TestClass::fromPassphrase('secret 1')->getHex(),
+            TestClass::fromPassphrase('secret 2')->getHex(),
+            TestClass::fromPassphrase('secret 3')->getHex(),
+        ]);
+
+        $this->assertSame(
+            '0279f05076556da7173610a7676399c3620276ebbf8c67552ad3b1f26ec7627794',
+            $actual->getHex()
+        );
+    }
+
+    /** @test */
     public function it_should_get_the_public_key_from_hex()
     {
         $fixture = $this->getFixture('identity');
