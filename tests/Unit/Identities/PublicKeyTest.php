@@ -38,9 +38,9 @@ class PublicKeyTest extends TestCase
     public function it_should_get_the_public_key_from_a_multi_signature_asset()
     {
         $actual = TestClass::fromMultiSignatureAsset(3, [
-            TestClass::fromPassphrase('secret 1'),
-            TestClass::fromPassphrase('secret 2'),
-            TestClass::fromPassphrase('secret 3'),
+            TestClass::fromPassphrase('secret 1')->getHex(),
+            TestClass::fromPassphrase('secret 2')->getHex(),
+            TestClass::fromPassphrase('secret 3')->getHex(),
         ]);
 
         $this->assertSame(

@@ -49,7 +49,7 @@ class PublicKey
     public static function fromMultiSignatureAsset(int $min, array $publicKeys): EcPublicKey
     {
         $minKey = static::fromPassphrase('0'.dechex($min));
-        $keys   = collect([$minKey, ...$publicKeys])->map(fn ($publicKey): string => $publicKey->getHex());
+        $keys   = [$minKey->getHex(), ...$publicKeys];
 
         $curve = (new EC('secp256k1'))->curve;
         $P     = $curve->jpoint(null, null, null);
