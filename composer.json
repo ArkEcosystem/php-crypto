@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^7.2|^7.4|^8.0",
+        "php": "^7.4|^8.0",
         "bitwasp/bitcoin": "^1.0",
         "kodekeep/binary": "^1.0",
         "kodekeep/bytebuffer": "^1.0",
