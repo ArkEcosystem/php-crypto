@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use KodeKeep\ByteBuffer\ByteBuffer;
+use Konceiver\ByteBuffer\ByteBuffer;
 
 /**
  * This is the serializer class.
