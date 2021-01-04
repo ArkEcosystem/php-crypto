@@ -19,8 +19,8 @@
     "require": {
         "php": "^7.4|^8.0",
         "bitwasp/bitcoin": "^1.0",
-        "konceiver/binary": "^2.0",
-        "konceiver/bytebuffer": "^2.0",
+        "konceiver/binary": "^3.0",
+        "konceiver/bytebuffer": "^3.0",
         "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {
