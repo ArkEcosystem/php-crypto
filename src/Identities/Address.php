@@ -22,7 +22,7 @@ use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
-use Konceiver\Binary\UnsignedInteger\Writer;
+use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
 
 /**
  * This is the address class.

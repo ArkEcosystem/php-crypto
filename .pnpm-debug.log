@@ -1,0 +1,14 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+    "err": {
+      "name": "Error",
+      "message": "No package.json (or package.yaml, or package.json5) was found in \"/home/brianfaust/PayvoHQ/php-crypto\".",
+      "code": "ERR_PNPM_NO_IMPORTER_MANIFEST_FOUND",
+      "stack": "Error: No package.json (or package.yaml, or package.json5) was found in \"/home/brianfaust/PayvoHQ/php-crypto\".\n    at readProjectManifest (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:40318:13)\n    at async Object.readProjectManifestOnly (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:40322:28)\n    at async Object.readProjectManifestOnly (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:40541:24)\n    at async Object.handler (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:129118:24)\n    at async /home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:133228:20\n    at async run (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:133203:34)\n    at async runPnpm (/home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:133413:5)\n    at async /home/brianfaust/.fnm/node-versions/v14.17.5/installation/pnpm-global/5/node_modules/.pnpm/pnpm@6.14.3/node_modules/pnpm/dist/pnpm.cjs:133405:7"
+    }
+  }
+}
