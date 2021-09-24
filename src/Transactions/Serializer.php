@@ -17,7 +17,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Buffertools\Buffer;
-use Konceiver\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
 /**
  * This is the serializer class.

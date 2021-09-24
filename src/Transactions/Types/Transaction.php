@@ -20,7 +20,7 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
-use Konceiver\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
 /**
  * This is the transaction class.
