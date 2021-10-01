@@ -24,7 +24,8 @@
     "require-dev": {
         "graham-campbell/analyzer": "^3.0",
         "illuminate/support": "^8.62",
-        "pestphp/pest": "^1.11"
+        "pestphp/pest": "^1.11",
+        "pestphp/pest-plugin-parallel": "^0.3.1"
     },
     "autoload": {
         "psr-4": {
