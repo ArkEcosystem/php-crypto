@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed3c3ea96bc5d5f9b8730fe2644ce7fc",
+    "content-hash": "39637b0c3ba59cca49a67976eabaf823",
     "packages": [
         {
             "name": "bitwasp/bech32",
@@ -1966,21 +1966,21 @@
         },
         {
             "name": "pestphp/pest-plugin-parallel",
-            "version": "v0.3.1",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest-plugin-parallel.git",
-                "reference": "67c0a49754e26cbe5ecd6965631351c0ede956fa"
+                "reference": "842592eba2439ba6477f6d6c7ee4a4e7bccdcd10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest-plugin-parallel/zipball/67c0a49754e26cbe5ecd6965631351c0ede956fa",
-                "reference": "67c0a49754e26cbe5ecd6965631351c0ede956fa",
+                "url": "https://api.github.com/repos/pestphp/pest-plugin-parallel/zipball/842592eba2439ba6477f6d6c7ee4a4e7bccdcd10",
+                "reference": "842592eba2439ba6477f6d6c7ee4a4e7bccdcd10",
                 "shasum": ""
             },
             "require": {
-                "brianium/paratest": "^6.3",
-                "pestphp/pest-plugin": "^1.0",
+                "brianium/paratest": "^6.8.1",
+                "pestphp/pest-plugin": "^1.1.0",
                 "php": "^7.3 || ^8.0"
             },
             "conflict": {
@@ -1989,8 +1989,8 @@
                 "pestphp/pest": "<1.16"
             },
             "require-dev": {
-                "pestphp/pest": "dev-master",
-                "pestphp/pest-dev-tools": "dev-master"
+                "pestphp/pest": "^1.22.3",
+                "pestphp/pest-dev-tools": "^1.0.0"
             },
             "type": "library",
             "extra": {
@@ -1998,9 +1998,6 @@
                     "plugins": [
                         "Pest\\Parallel\\Plugin"
                     ]
-                },
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
                 }
             },
             "autoload": {
@@ -2033,7 +2030,7 @@
                 "unit"
             ],
             "support": {
-                "source": "https://github.com/pestphp/pest-plugin-parallel/tree/v0.3.1"
+                "source": "https://github.com/pestphp/pest-plugin-parallel/tree/v1.2.1"
             },
             "funding": [
                 {
@@ -2065,7 +2062,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-06T20:21:59+00:00"
+            "time": "2023-02-03T13:01:17+00:00"
         },
         {
             "name": "phar-io/manifest",
