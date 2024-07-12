@@ -25,6 +25,8 @@ use ArkEcosystem\Crypto\Transactions\Types\Transaction;
  */
 abstract class AbstractTransactionBuilder
 {
+    public $transaction;
+
     /**
      * Create a new transaction instance.
      */

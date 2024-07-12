@@ -26,6 +26,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class Serializer
 {
+    public \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction;
+
     /**
      * Create a new serializer instance.
      *
