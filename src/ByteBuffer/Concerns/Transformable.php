@@ -26,7 +26,7 @@ trait Transformable
      * @param int $offset
      * @param int $length
      *
-     * @return array
+     * @return string
      */
     public function toBinary(int $offset = 0, int $length = 0): string
     {
