@@ -22,6 +22,7 @@
         "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.59",
         "graham-campbell/analyzer": "^3.1",
         "illuminate/support": "^8.8",
         "pestphp/pest": "^1.23",
