@@ -24,6 +24,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class Deserializer
 {
+    private ByteBuffer $buffer;
+
     /**
      * The transaction classes.
      *
