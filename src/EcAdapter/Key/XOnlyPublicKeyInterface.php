@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Crypto\EcAdapter\Key;
+namespace ArkEcosystem\Crypto\EcAdapter\Key;
 
-use App\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignatureInterface;
+use ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignatureInterface;
 use BitWasp\Bitcoin\SerializableInterface;
 use BitWasp\Buffertools\BufferInterface;
 

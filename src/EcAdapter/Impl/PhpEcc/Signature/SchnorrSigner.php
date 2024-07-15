@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Crypto\EcAdapter\Impl\PhpEcc\Signature;
+namespace ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Signature;
 
-use App\Crypto\EcAdapter\Impl\PhpEcc\Key\XOnlyPublicKey;
-use App\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignature;
+use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\XOnlyPublicKey;
+use ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Adapter\EcAdapter;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey;
 use BitWasp\Bitcoin\Exceptions\SquareRootException;
 use BitWasp\Buffertools\Buffer;

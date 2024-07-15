@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Crypto\EcAdapter\Impl\PhpEcc\Key;
+namespace ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key;
 
-use App\Crypto\EcAdapter\Impl\PhpEcc\Signature\SchnorrSigner;
-use App\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignatureInterface;
-use App\Crypto\EcAdapter\Key\XOnlyPublicKeyInterface;
+use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Signature\SchnorrSigner;
+use ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignatureInterface;
+use ArkEcosystem\Crypto\EcAdapter\Key\XOnlyPublicKeyInterface;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Adapter\EcAdapter;
 use BitWasp\Bitcoin\Serializable;
 use BitWasp\Buffertools\Buffer;

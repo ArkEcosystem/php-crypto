@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Crypto\EcAdapter\Impl\Secp256k1\Signature;
+namespace ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature;
 
 interface SchnorrSignatureInterface
 {
