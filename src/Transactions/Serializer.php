@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
 /**
  * This is the serializer class.
@@ -26,12 +26,12 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class Serializer
 {
-    public \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction;
+    public Transaction $transaction;
 
     /**
      * Create a new serializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction
+     * @param Transaction $transaction
      */
     private function __construct($transaction)
     {
@@ -41,7 +41,7 @@ class Serializer
     /**
      * Create a new deserializer instance.
      *
-     * @param \ArkEcosystem\Crypto\Transactions\Types\Transaction $transaction
+     * @param Transaction $transaction
      */
     public static function new($transaction)
     {
@@ -56,7 +56,7 @@ class Serializer
     /**
      * Perform AIP11 compliant serialization.
      *
-     * @return \BitWasp\Buffertools\Buffer
+     * @return Buffer
      */
     public function serialize(array $options = []): Buffer
     {
@@ -72,6 +72,34 @@ class Serializer
         $this->serializeSignatures($buffer, $options);
 
         return new Buffer($buffer->toString('binary'));
+    }
+
+    /**
+     * Handle the serialization of transaction data.
+     *
+     * @param ByteBuffer $buffer
+     *
+     * @return string
+     */
+    public function serializeSignatures(ByteBuffer $buffer, array $options): void
+    {
+        $skipSignature       = $options['skipSignature'] ?? false;
+        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
+        $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
+
+        if (! $skipSignature && isset($this->transaction->data['signature'])) {
+            $buffer->writeHex($this->transaction->data['signature']);
+        }
+
+        if (! $skipSecondSignature) {
+            if (isset($this->transaction->data['secondSignature'])) {
+                $buffer->writeHex($this->transaction->data['secondSignature']);
+            }
+        }
+
+        if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
+            $buffer->writeHex(implode('', $this->transaction->data['signatures']));
+        }
     }
 
     private function serializeCommon(ByteBuffer $buffer): void
@@ -116,34 +144,6 @@ class Serializer
             }
         } else {
             $buffer->writeUInt8(0x00);
-        }
-    }
-
-    /**
-     * Handle the serialization of transaction data.
-     *
-     * @param ByteBuffer $buffer
-     *
-     * @return string
-     */
-    public function serializeSignatures(ByteBuffer $buffer, array $options): void
-    {
-        $skipSignature       = $options['skipSignature'] ?? false;
-        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
-        $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
-
-        if (! $skipSignature && isset($this->transaction->data['signature'])) {
-            $buffer->writeHex($this->transaction->data['signature']);
-        }
-
-        if (! $skipSecondSignature) {
-            if (isset($this->transaction->data['secondSignature'])) {
-                $buffer->writeHex($this->transaction->data['secondSignature']);
-            }
-        }
-
-        if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
-            $buffer->writeHex(implode('', $this->transaction->data['signatures']));
         }
     }
 }
