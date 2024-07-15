@@ -40,7 +40,6 @@ class SchnorrSigner
         $publicKey = $privateKey->getPublicKey();
 
         $P = $this->getXOnlyPublicKey($publicKey);
-        // $P = $privateKey->getPublicKey()->asXOnlyPublicKey();
 
         if (! $P->hasSquareY()) {
             $d = gmp_sub($n, $d);
