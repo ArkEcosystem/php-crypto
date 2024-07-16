@@ -33,7 +33,7 @@ class PrivateKey
      *
      * @param string $passphrase
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
+     * @return EcPrivateKey
      */
     public static function fromPassphrase(string $passphrase): EcPrivateKey
     {
@@ -52,7 +52,7 @@ class PrivateKey
      *
      * @param \BitWasp\Buffertools\BufferInterface|string $privateKey
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
+     * @return EcPrivateKey
      */
     public static function fromHex($privateKey): EcPrivateKey
     {
@@ -68,9 +68,9 @@ class PrivateKey
      * Derive the private key for the given WIF.
      *
      * @param string                                             $wif
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
+     * @param AbstractNetwork|null $network
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey
+     * @return EcPrivateKey
      */
     public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
     {

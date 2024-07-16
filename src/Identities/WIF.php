@@ -26,7 +26,7 @@ class WIF
      * Derive the WIF from the given passphrase.
      *
      * @param string                                             $passphrase
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork|null $network
+     * @param AbstractNetwork|null $network
      *
      * @return string
      */

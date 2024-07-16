@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
@@ -20,7 +21,6 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
 /**
  * This is the transaction class.
@@ -52,7 +52,7 @@ abstract class Transaction
     /**
      * Sign the transaction using the given passphrase.
      *
-     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
+     * @param PrivateKey $keys
      *
      * @return Transaction
      */
@@ -71,7 +71,7 @@ abstract class Transaction
     /**
      * Sign the transaction using the given second passphrase.
      *
-     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $keys
+     * @param PrivateKey $keys
      *
      * @return Transaction
      */

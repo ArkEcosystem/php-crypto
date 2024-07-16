@@ -35,18 +35,6 @@ trait Deserialize
         return json_decode(json_encode($value), true);
     }
 
-    private function array_only(array $arr, array $keys): array
-    {
-        $returnArray = [];
-        foreach ($keys as $key) {
-            if (isset($arr[$key])) {
-                $returnArray[$key] = $arr[$key];
-            }
-        }
-
-        return $returnArray;
-    }
-
     protected function assertSameTransactions(array $expected, array $actual, array $keys = []): void
     {
         if (empty($keys)) {
@@ -74,5 +62,17 @@ trait Deserialize
         }
 
         $this->assertSame($expected, $actual);
+    }
+
+    private function array_only(array $arr, array $keys): array
+    {
+        $returnArray = [];
+        foreach ($keys as $key) {
+            if (isset($arr[$key])) {
+                $returnArray[$key] = $arr[$key];
+            }
+        }
+
+        return $returnArray;
     }
 }
