@@ -18,9 +18,9 @@ namespace ArkEcosystem\Crypto\ByteBuffer\Concerns;
  */
 trait Readable
 {
-    use Reads\Floats,
-        Reads\Hex,
-        Reads\Integer,
-        Reads\Strings,
-        Reads\UnsignedInteger;
+    use Reads\Floats;
+    use Reads\Hex;
+    use Reads\Integer;
+    use Reads\Strings;
+    use Reads\UnsignedInteger;
 }
