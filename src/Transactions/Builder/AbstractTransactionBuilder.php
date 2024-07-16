@@ -38,7 +38,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['nonce']     = '0';
         $this->transaction->data['amount']    = '0';
         $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 2;
+        $this->transaction->data['version']   = 1;
         $this->transaction->data['network']   = Network::get()->pubKeyHash();
     }
 
@@ -54,8 +54,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Create a new transaction instance.
-     *
-     * @return AbstractTransactionBuilder
      */
     public static function new(): self
     {
@@ -64,10 +62,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Set the transaction fee.
-     *
-     * @param string $fee
-     *
-     * @return AbstractTransactionBuilder
      */
     public function withFee(string $fee): self
     {
@@ -78,10 +72,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Set the transaction nonce.
-     *
-     * @param string $nonce
-     *
-     * @return AbstractTransactionBuilder
      */
     public function withNonce(string $nonce): self
     {
@@ -92,10 +82,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Set the transaction network.
-     *
-     * @param int $network
-     *
-     * @return AbstractTransactionBuilder
      */
     public function withNetwork(int $network): self
     {
@@ -106,14 +92,11 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Sign the transaction using the given passphrase.
-     *
-     * @param string $passphrase
-     *
-     * @return AbstractTransactionBuilder
      */
     public function sign(string $passphrase): self
     {
-        $keys                                       = PrivateKey::fromPassphrase($passphrase);
+        $keys = PrivateKey::fromPassphrase($passphrase);
+
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
         $this->transaction             = $this->transaction->sign($keys);
@@ -124,10 +107,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Sign the transaction using the given second passphrase.
-     *
-     * @param string $secondPassphrase
-     *
-     * @return AbstractTransactionBuilder
      */
     public function secondSign(string $secondPassphrase): self
     {
@@ -139,8 +118,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Verify the transaction validity.
-     *
-     * @return bool
      */
     public function verify(): bool
     {
@@ -149,8 +126,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Verify the transaction validity with a second signature.
-     *
-     * @return bool
      */
     public function secondVerify(string $secondPublicKey): bool
     {
@@ -159,8 +134,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Convert the transaction to its array representation.
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -169,8 +142,6 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Convert the transaction to its JSON representation.
-     *
-     * @return string
      */
     public function toJson(): string
     {
@@ -179,29 +150,21 @@ abstract class AbstractTransactionBuilder
 
     /**
      * Get the transaction type.
-     *
-     * @return int
      */
     abstract protected function getType(): int;
 
     /**
      * Get the transaction typeGroup.
-     *
-     * @return int
      */
     abstract protected function getTypeGroup(): int;
 
     /**
      * Get the transaction instance.
-     *
-     * @return object
      */
     abstract protected function getTransactionInstance(): object;
 
     /**
      * Get the transaction fee.
-     *
-     * @return string
      */
     protected function getFee(): string
     {
