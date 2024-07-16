@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use BitWasp\Buffertools\Buffer;
-use BitWasp\Bitcoin\Crypto\Hash;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use ArkEcosystem\Crypto\Transactions\Serializer;
+use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use BitWasp\Buffertools\Buffer;
 
 /**
  * This is the transaction class.
