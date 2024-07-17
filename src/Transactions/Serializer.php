@@ -31,7 +31,7 @@ class Serializer
     /**
      * Create a new serializer instance.
      *
-     * @param  Transaction  $transaction
+     * @param Transaction $transaction
      */
     private function __construct($transaction)
     {
@@ -41,7 +41,7 @@ class Serializer
     /**
      * Create a new deserializer instance.
      *
-     * @param  Transaction  $transaction
+     * @param Transaction $transaction
      */
     public static function new($transaction)
     {
@@ -55,6 +55,8 @@ class Serializer
 
     /**
      * Perform AIP11 compliant serialization.
+     *
+     * @return Buffer
      */
     public function serialize(array $options = []): Buffer
     {
@@ -65,7 +67,6 @@ class Serializer
         $this->serializeVendorField($buffer);
 
         $typeBuffer = $this->transaction->serialize($options);
-
         $buffer->append($typeBuffer);
 
         $this->serializeSignatures($buffer, $options);
@@ -76,16 +77,24 @@ class Serializer
     /**
      * Handle the serialization of transaction data.
      *
+     * @param ByteBuffer $buffer
      *
      * @return string
      */
     public function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
-        $skipSignature      = $options['skipSignature'] ?? false;
-        $skipMultiSignature = $options['skipMultiSignature'] ?? false;
+        $skipSignature       = $options['skipSignature'] ?? false;
+        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
+        $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
 
         if (! $skipSignature && isset($this->transaction->data['signature'])) {
             $buffer->writeHex($this->transaction->data['signature']);
+        }
+
+        if (! $skipSecondSignature) {
+            if (isset($this->transaction->data['secondSignature'])) {
+                $buffer->writeHex($this->transaction->data['secondSignature']);
+            }
         }
 
         if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
@@ -95,18 +104,23 @@ class Serializer
 
     private function serializeCommon(ByteBuffer $buffer): void
     {
-        $this->transaction->data['version'] = 0x01;
+        $this->transaction->data['version'] = $this->transaction->data['version'] ?? 0x01;
         if (! isset($this->transaction->data['typeGroup'])) {
             $this->transaction->data['typeGroup'] = TypeGroup::CORE;
         }
 
-        $buffer->writeUint8(0xFF);
-        $buffer->writeUInt8($this->transaction->data['version']);
-        $buffer->writeUint8($this->transaction->data['network'] ?? Network::version());
+        $buffer->writeByte(0xff);
+        $buffer->writeByte($this->transaction->data['version']);
+        $buffer->writeByte($this->transaction->data['network'] ?? Network::version());
 
-        $buffer->writeUint32($this->transaction->data['typeGroup']);
-        $buffer->writeUint16($this->transaction->data['type']);
-        $buffer->writeUint64(+$this->transaction->data['nonce']);
+        if ($this->transaction->data['version'] === 1) {
+            $buffer->writeByte($this->transaction->data['type']);
+            $buffer->writeUint32($this->transaction->data['timestamp']);
+        } else {
+            $buffer->writeUint32($this->transaction->data['typeGroup']);
+            $buffer->writeUint16($this->transaction->data['type']);
+            $buffer->writeUint64(+$this->transaction->data['nonce']);
+        }
 
         $buffer->writeHex($this->transaction->data['senderPublicKey']);
         $buffer->writeUint64(+$this->transaction->data['fee']);

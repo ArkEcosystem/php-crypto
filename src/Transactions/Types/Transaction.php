@@ -15,14 +15,11 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Adapter\EcAdapter;
-use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
-use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Signature\SchnorrSigner;
-use ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignatureInterface;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 
 /**
@@ -36,8 +33,6 @@ abstract class Transaction
      * @var object
      */
     public $data;
-
-    private SchnorrSignatureInterface $signature;
 
     /**
      * Convert the byte representation to a unique identifier.
@@ -65,12 +60,28 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
+            'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
+        $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
-        $this->signature = $signature = $keys->signSchnorr($transaction);
+        return $this;
+    }
 
-        $this->data['signature'] = $signature->getBuffer()->getHex();
+    /**
+     * Sign the transaction using the given second passphrase.
+     *
+     * @param PrivateKey $keys
+     *
+     * @return Transaction
+     */
+    public function secondSign(PrivateKey $keys): self
+    {
+        $options = [
+            'skipSecondSignature' => true,
+        ];
+        $transaction                   = Hash::sha256($this->getBytes($options));
+        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
     }
@@ -79,26 +90,54 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
+            'skipSecondSignature' => true,
         ];
 
         $bytes     = $this->getBytes($options);
         $publicKey = $this->data['senderPublicKey'];
+        $signature = $this->data['signature'];
 
+        return $this->verifySchnorrOrECDSA($bytes, $publicKey, $signature);
+    }
+
+    public function secondVerify(string $secondPublicKey): bool
+    {
+        $options = [
+            'skipSecondSignature' => true,
+        ];
+        $bytes     = $this->getBytes($options);
+        $signature = $this->data['secondSignature'];
+
+        return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
+    }
+
+    public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
+    {
+        return $this->isSchnorr($signature)
+            ? $this->verifySchnorr($bytes, $publicKey, $signature)
+            : $this->verifyECDSA($bytes, $publicKey, $signature);
+    }
+
+    public function isSchnorr(string $signature): bool
+    {
+        return ByteBuffer::fromHex($signature)->capacity() === 64;
+    }
+
+    public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
+    {
         $factory   = new PublicKeyFactory();
         $publicKey = $factory->fromHex($publicKey);
 
-        $signer = new SchnorrSigner(
-            new EcAdapter(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        );
-
-        return $signer->verify(
+        return $publicKey->verify(
             Hash::sha256($bytes),
-            $signer->getXOnlyPublicKey($publicKey),
-            $this->signature
+            SignatureFactory::fromHex($signature)
         );
+    }
+
+    public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
+    {
+        //TODO
+        return false;
     }
 
     /**
@@ -131,9 +170,11 @@ abstract class Transaction
             'id'                   => $this->data['id'],
             'network'              => $this->data['network'] ?? Network::get()->version(),
             'recipientId'          => $this->data['recipientId'] ?? null,
+            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
             'signatures'           => $this->data['signatures'] ?? null,
+            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
             'nonce'                => $this->data['nonce'],
