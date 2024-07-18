@@ -15,11 +15,13 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Signature\SchnorrSigner;
+use ArkEcosystem\Crypto\EcAdapter\Impl\Secp256k1\Signature\SchnorrSignature;
+use ArkEcosystem\Crypto\Identities\PrivateKey as IdentitiesPrivateKey;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 
 /**
@@ -33,6 +35,8 @@ abstract class Transaction
      * @var object
      */
     public $data;
+
+    public SchnorrSignature $signature;
 
     /**
      * Convert the byte representation to a unique identifier.
@@ -60,28 +64,12 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
-        $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
-        return $this;
-    }
+        $this->signature         = $keys->signSchnorr($transaction);
 
-    /**
-     * Sign the transaction using the given second passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
-     */
-    public function secondSign(PrivateKey $keys): self
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $transaction                   = Hash::sha256($this->getBytes($options));
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $this->data['signature'] = $this->signature->getBuffer()->getHex();
 
         return $this;
     }
@@ -90,54 +78,19 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
 
         $bytes     = $this->getBytes($options);
-        $publicKey = $this->data['senderPublicKey'];
-        $signature = $this->data['signature'];
 
-        return $this->verifySchnorrOrECDSA($bytes, $publicKey, $signature);
-    }
-
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $bytes     = $this->getBytes($options);
-        $signature = $this->data['secondSignature'];
-
-        return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
-    }
-
-    public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        return $this->isSchnorr($signature)
-            ? $this->verifySchnorr($bytes, $publicKey, $signature)
-            : $this->verifyECDSA($bytes, $publicKey, $signature);
-    }
-
-    public function isSchnorr(string $signature): bool
-    {
-        return ByteBuffer::fromHex($signature)->capacity() === 64;
-    }
-
-    public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
         $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($publicKey);
+        $publicKey = $factory->fromHex($this->data['senderPublicKey']);
+        $signer    = new SchnorrSigner(IdentitiesPrivateKey::ecAdapter());
 
-        return $publicKey->verify(
+        return $signer->verify(
             Hash::sha256($bytes),
-            SignatureFactory::fromHex($signature)
+            $signer->getXOnlyPublicKey($publicKey),
+            $this->signature
         );
-    }
-
-    public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        //TODO
-        return false;
     }
 
     /**

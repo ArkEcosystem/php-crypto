@@ -17,6 +17,8 @@ use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Adapter\EcAdapter;
 use ArkEcosystem\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Adapter\EcAdapterInterface;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\Secp256k1\Serializer\Key\PrivateKeySerializer;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
 use BitWasp\Buffertools\Buffer;
@@ -28,6 +30,14 @@ use BitWasp\Buffertools\Buffer;
  */
 class PrivateKey
 {
+    public static function ecAdapter(): EcAdapterInterface
+    {
+        return new EcAdapter(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+    }
+
     /**
      * Derive the private key for the given passphrase.
      *
@@ -39,12 +49,10 @@ class PrivateKey
     {
         $passphrase = Hash::sha256(new Buffer($passphrase));
 
-        return (new PrivateKeyFactory(
-            new EcAdapter(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        ))->fromHexCompressed($passphrase->getHex());
+        return self::serializer()->parse(
+            data: $passphrase,
+            compressed: true
+        );
     }
 
     /**
@@ -56,12 +64,10 @@ class PrivateKey
      */
     public static function fromHex($privateKey): EcPrivateKey
     {
-        return (new PrivateKeyFactory(
-            new EcAdapter(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        ))->fromHexCompressed($privateKey);
+        return self::serializer()->parse(
+            data: Buffer::hex($privateKey),
+            compressed: true
+        );
     }
 
     /**
@@ -75,10 +81,12 @@ class PrivateKey
     public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
     {
         return (new PrivateKeyFactory(
-            new EcAdapter(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
+            self::ecAdapter()
         ))->fromWif($wif, $network);
+    }
+
+    private static function serializer(): PrivateKeySerializer
+    {
+        return new PrivateKeySerializer(self::ecAdapter());
     }
 }
