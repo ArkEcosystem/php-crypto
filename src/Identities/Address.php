@@ -23,12 +23,9 @@ use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
+use kornrunner\Keccak;
+use Elliptic\EC;
 
-/**
- * This is the address class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class Address
 {
     /**
@@ -67,46 +64,82 @@ class Address
      */
     public static function fromPublicKey(string $publicKey, $network = null): string
     {
-        $network = $network ?? NetworkConfiguration::get();
+        // Convert the public key to a byte array
+        $publicKeyBytes = hex2bin($publicKey);
 
-        $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
-        $seed      = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
+        // Ensure the public key is uncompressed
+        $ec = new EC('secp256k1');
+        $key = $ec->keyFromPublic($publicKeyBytes);
+        $uncompressedPublicKey = $key->getPublic(false, 'hex'); // Get uncompressed public key
 
-        return Base58::encodeCheck(new Buffer($seed));
+        // Remove the prefix (0x04)
+        $uncompressedPublicKey = substr($uncompressedPublicKey, 2);
+
+        // Convert the public key to a byte array
+        $uncompressedPublicKeyBytes = hex2bin($uncompressedPublicKey);
+
+        // Hash the public key using Keccak-256
+        $keccakHash = Keccak::hash($uncompressedPublicKeyBytes, 256);
+
+        // Take the last 40 characters of the hash (20 bytes)
+        $address = substr($keccakHash, -40);
+
+        // Prefix with 0x
+        $address = '0x' . $address;
+
+        // Convert to checksum address
+        return self::toChecksumAddress($address);
     }
 
     /**
      * Derive the address from the given private key.
      *
      * @param EccPrivateKey $privateKey
-     * @param AbstractNetwork|null                                         $network
+     * @param AbstractNetwork|null $network
      *
      * @return string
      */
     public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
     {
-        $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
-
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
+        $publicKey = $privateKey->getPublicKey()->getHex();
+        return static::fromPublicKey($publicKey, $network);
     }
 
     /**
      * Validate the given address.
      *
-     * @param string                   $address
+     * @param string $address
      * @param AbstractNetwork|int|null $network
      *
      * @return bool
      */
     public static function validate(string $address, $network = null): bool
     {
-        try {
-            $addressCreator = new AddressCreator();
-            $addressCreator->fromString($address, $network);
+        // Simple validation to check if the address starts with 0x and is 42 characters long
+        return preg_match('/^0x[a-fA-F0-9]{40}$/', $address) === 1;
+    }
 
-            return true;
-        } catch (\Exception $e) {
-            return false;
+    /**
+     * Convert to checksum address.
+     *
+     * @param string $address
+     *
+     * @return string
+     */
+    private static function toChecksumAddress(string $address): string
+    {
+        $address = strtolower(substr($address, 2));
+        $hash = Keccak::hash($address, 256);
+        $checksumAddress = '0x';
+
+        for ($i = 0; $i < 40; $i++) {
+            if (intval($hash[$i], 16) >= 8) {
+                $checksumAddress .= strtoupper($address[$i]);
+            } else {
+                $checksumAddress .= $address[$i];
+            }
         }
+
+        return $checksumAddress;
     }
 }
