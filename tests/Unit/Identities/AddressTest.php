@@ -55,7 +55,7 @@ class AddressTest extends TestCase
             '03b050073621b9b5caec9461d44d6bcf21a858c47dd88230ce723e25c1bc75c219',
         ]);
 
-        $this->assertSame('DMNBBtYt1teAKxA2BpiTW9PA3gX3Ad5dyk', $actual);
+        $this->assertSame('0x8246206ef20b95D0a3C16704Ee971a605cb7E33E', $actual);
     }
 
     /** @test */
