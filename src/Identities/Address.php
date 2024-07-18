@@ -13,18 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
-use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use BitWasp\Bitcoin\Address\AddressCreator;
-use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
-use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
-use kornrunner\Keccak;
 use Elliptic\EC;
+use kornrunner\Keccak;
 
 class Address
 {
@@ -68,8 +61,8 @@ class Address
         $publicKeyBytes = hex2bin($publicKey);
 
         // Ensure the public key is uncompressed
-        $ec = new EC('secp256k1');
-        $key = $ec->keyFromPublic($publicKeyBytes);
+        $ec                    = new EC('secp256k1');
+        $key                   = $ec->keyFromPublic($publicKeyBytes);
         $uncompressedPublicKey = $key->getPublic(false, 'hex'); // Get uncompressed public key
 
         // Remove the prefix (0x04)
@@ -85,7 +78,7 @@ class Address
         $address = substr($keccakHash, -40);
 
         // Prefix with 0x
-        $address = '0x' . $address;
+        $address = '0x'.$address;
 
         // Convert to checksum address
         return self::toChecksumAddress($address);
@@ -102,6 +95,7 @@ class Address
     public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
     {
         $publicKey = $privateKey->getPublicKey()->getHex();
+
         return static::fromPublicKey($publicKey, $network);
     }
 
@@ -128,8 +122,8 @@ class Address
      */
     private static function toChecksumAddress(string $address): string
     {
-        $address = strtolower(substr($address, 2));
-        $hash = Keccak::hash($address, 256);
+        $address         = strtolower(substr($address, 2));
+        $hash            = Keccak::hash($address, 256);
         $checksumAddress = '0x';
 
         for ($i = 0; $i < 40; $i++) {
