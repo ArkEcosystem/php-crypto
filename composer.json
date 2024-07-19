@@ -18,6 +18,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "kornrunner/keccak": "^1.1",
         "protonlabs/bitcoin": "^1.0",
         "simplito/elliptic-php": "^1.0"
     },
