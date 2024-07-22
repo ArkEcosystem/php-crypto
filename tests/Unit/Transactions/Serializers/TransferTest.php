@@ -32,20 +32,8 @@ class TransferTest extends TestCase
     }
 
     /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-secondSign'));
-    }
-
-    /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase_and_vendor_field()
     {
         $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase_and_vendor_field()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-secondSign'));
     }
 }

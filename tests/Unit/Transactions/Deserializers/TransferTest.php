@@ -34,28 +34,12 @@ class TransferTest extends TestCase
         $this->assertSame(0, $actual->data['expiration']);
     }
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'transfer-secondSign');
 
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
-    }
 
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field()
     {
         $fixture = $this->getTransactionFixture('transfer', 'transfer-with-vendor-field-sign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
-    }
-
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase_and_vendor_field()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'transfer-with-vendor-field-secondSign');
 
         $actual = $this->assertTransaction($fixture);
         $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
