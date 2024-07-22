@@ -15,38 +15,37 @@ var _require = require("bcrypto"),
 
 // Function to sign a message using the provided private key
 var signMessage = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(privateKeyHex, publicKeyHex, messageHex) {
-    var privateKey, publicKey, message, signature, signatureHex;
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(privateKeyHex, messageHex) {
+    var privateKey, message, signature, signatureHex;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           privateKey = Buffer.from(privateKeyHex, "hex");
-          publicKey = Buffer.from(publicKeyHex, "hex");
           message = Buffer.from(messageHex, "hex");
-          _context.prev = 3;
-          _context.next = 6;
+          _context.prev = 2;
+          _context.next = 5;
           return secp256k1.schnorrSign(message, privateKey);
-        case 6:
+        case 5:
           signature = _context.sent;
           signatureHex = signature.toString("hex");
           return _context.abrupt("return", {
             status: "success",
             signature: signatureHex
           });
-        case 11:
-          _context.prev = 11;
-          _context.t0 = _context["catch"](3);
+        case 10:
+          _context.prev = 10;
+          _context.t0 = _context["catch"](2);
           return _context.abrupt("return", {
             status: "error",
             message: _context.t0.message
           });
-        case 14:
+        case 13:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[3, 11]]);
+    }, _callee, null, [[2, 10]]);
   }));
-  return function signMessage(_x, _x2, _x3) {
+  return function signMessage(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -83,7 +82,7 @@ var verifySignature = /*#__PURE__*/function () {
       }
     }, _callee2, null, [[3, 10]]);
   }));
-  return function verifySignature(_x4, _x5, _x6) {
+  return function verifySignature(_x3, _x4, _x5) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -91,12 +90,12 @@ var verifySignature = /*#__PURE__*/function () {
 // Function to parse command line arguments and call the appropriate function
 var main = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-    var args, mode, result, _args$slice, _args$slice2, privateKeyHex, publicKeyHex, messageHex, _args$slice3, _args$slice4, _publicKeyHex, _messageHex, signatureHex;
+    var args, mode, result, _args$slice, _args$slice2, privateKeyHex, messageHex, _args$slice3, _args$slice4, publicKeyHex, _messageHex, signatureHex;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           args = process.argv.slice(2);
-          if (args.length < 2) {
+          if (args.length < 3) {
             console.error(JSON.stringify({
               status: "error",
               message: "Usage: node schnorr-signer.js <mode> <parameters>"
@@ -104,13 +103,13 @@ var main = /*#__PURE__*/function () {
             process.exit(1);
           }
           mode = args[0];
-          if (!(mode === "sign" && args.length === 4)) {
+          if (!(mode === "sign" && args.length === 3)) {
             _context3.next = 10;
             break;
           }
-          _args$slice = args.slice(1), _args$slice2 = _slicedToArray(_args$slice, 3), privateKeyHex = _args$slice2[0], publicKeyHex = _args$slice2[1], messageHex = _args$slice2[2];
+          _args$slice = args.slice(1), _args$slice2 = _slicedToArray(_args$slice, 2), privateKeyHex = _args$slice2[0], messageHex = _args$slice2[1];
           _context3.next = 7;
-          return signMessage(privateKeyHex, publicKeyHex, messageHex);
+          return signMessage(privateKeyHex, messageHex);
         case 7:
           result = _context3.sent;
           _context3.next = 19;
@@ -120,9 +119,9 @@ var main = /*#__PURE__*/function () {
             _context3.next = 17;
             break;
           }
-          _args$slice3 = args.slice(1), _args$slice4 = _slicedToArray(_args$slice3, 3), _publicKeyHex = _args$slice4[0], _messageHex = _args$slice4[1], signatureHex = _args$slice4[2];
+          _args$slice3 = args.slice(1), _args$slice4 = _slicedToArray(_args$slice3, 3), publicKeyHex = _args$slice4[0], _messageHex = _args$slice4[1], signatureHex = _args$slice4[2];
           _context3.next = 14;
-          return verifySignature(_publicKeyHex, _messageHex, signatureHex);
+          return verifySignature(publicKeyHex, _messageHex, signatureHex);
         case 14:
           result = _context3.sent;
           _context3.next = 19;
@@ -130,7 +129,7 @@ var main = /*#__PURE__*/function () {
         case 17:
           console.error(JSON.stringify({
             status: "error",
-            message: mode === "sign" ? "Usage: node schnorr-signer.js sign <privateKeyHex> <publicKeyHex> <messageHex>" : "Usage: node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>"
+            message: "Usage: node schnorr-signer.js ".concat(mode, " <parameters>.\nFor 'sign': node schnorr-signer.js sign <privateKeyHex> <messageHex>.\nFor 'verify': node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>.")
           }));
           process.exit(1);
         case 19:

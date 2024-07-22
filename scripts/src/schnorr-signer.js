@@ -1,9 +1,8 @@
 const { secp256k1 } = require("bcrypto");
 
 // Function to sign a message using the provided private key
-const signMessage = async (privateKeyHex, publicKeyHex, messageHex) => {
+const signMessage = async (privateKeyHex, messageHex) => {
     const privateKey = Buffer.from(privateKeyHex, "hex");
-    const publicKey = Buffer.from(publicKeyHex, "hex");
     const message = Buffer.from(messageHex, "hex");
 
     try {
@@ -49,7 +48,7 @@ const verifySignature = async (publicKeyHex, messageHex, signatureHex) => {
 const main = async () => {
     const args = process.argv.slice(2);
 
-    if (args.length < 2) {
+    if (args.length < 3) {
         console.error(
             JSON.stringify({
                 status: "error",
@@ -62,9 +61,9 @@ const main = async () => {
     const mode = args[0];
     let result;
 
-    if (mode === "sign" && args.length === 4) {
-        const [privateKeyHex, publicKeyHex, messageHex] = args.slice(1);
-        result = await signMessage(privateKeyHex, publicKeyHex, messageHex);
+    if (mode === "sign" && args.length === 3) {
+        const [privateKeyHex, messageHex] = args.slice(1);
+        result = await signMessage(privateKeyHex, messageHex);
     } else if (mode === "verify" && args.length === 4) {
         const [publicKeyHex, messageHex, signatureHex] = args.slice(1);
         result = await verifySignature(publicKeyHex, messageHex, signatureHex);
@@ -72,10 +71,7 @@ const main = async () => {
         console.error(
             JSON.stringify({
                 status: "error",
-                message:
-                    mode === "sign"
-                        ? "Usage: node schnorr-signer.js sign <privateKeyHex> <publicKeyHex> <messageHex>"
-                        : "Usage: node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>",
+                message: `Usage: node schnorr-signer.js ${mode} <parameters>.\nFor 'sign': node schnorr-signer.js sign <privateKeyHex> <messageHex>.\nFor 'verify': node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>.`,
             })
         );
         process.exit(1);
