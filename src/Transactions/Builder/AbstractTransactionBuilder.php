@@ -38,7 +38,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['nonce']     = '0';
         $this->transaction->data['amount']    = '0';
         $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 2;
+        $this->transaction->data['version']   = 1;
         $this->transaction->data['network']   = Network::get()->pubKeyHash();
     }
 

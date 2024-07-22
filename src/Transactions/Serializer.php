@@ -84,17 +84,10 @@ class Serializer
     public function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
         $skipSignature       = $options['skipSignature'] ?? false;
-        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
         $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
 
         if (! $skipSignature && isset($this->transaction->data['signature'])) {
             $buffer->writeHex($this->transaction->data['signature']);
-        }
-
-        if (! $skipSecondSignature) {
-            if (isset($this->transaction->data['secondSignature'])) {
-                $buffer->writeHex($this->transaction->data['secondSignature']);
-            }
         }
 
         if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
@@ -109,19 +102,14 @@ class Serializer
             $this->transaction->data['typeGroup'] = TypeGroup::CORE;
         }
 
-        $buffer->writeByte(0xff);
-        $buffer->writeByte($this->transaction->data['version']);
-        $buffer->writeByte($this->transaction->data['network'] ?? Network::version());
+        $buffer->writeUInt8(0xff);
+        $buffer->writeUInt8($this->transaction->data['version']);
+        $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
 
-        if ($this->transaction->data['version'] === 1) {
-            $buffer->writeByte($this->transaction->data['type']);
-            $buffer->writeUint32($this->transaction->data['timestamp']);
-        } else {
-            $buffer->writeUint32($this->transaction->data['typeGroup']);
-            $buffer->writeUint16($this->transaction->data['type']);
-            $buffer->writeUint64(+$this->transaction->data['nonce']);
-        }
-
+        $buffer->writeUint32($this->transaction->data['typeGroup']);
+        $buffer->writeUint16($this->transaction->data['type']);
+        $buffer->writeUint64(+$this->transaction->data['nonce']);
+        
         $buffer->writeHex($this->transaction->data['senderPublicKey']);
         $buffer->writeUint64(+$this->transaction->data['fee']);
     }

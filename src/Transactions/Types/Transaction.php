@@ -60,7 +60,6 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
         $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
@@ -68,29 +67,11 @@ abstract class Transaction
         return $this;
     }
 
-    /**
-     * Sign the transaction using the given second passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
-     */
-    public function secondSign(PrivateKey $keys): self
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $transaction                   = Hash::sha256($this->getBytes($options));
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
-
-        return $this;
-    }
 
     public function verify(): bool
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
 
         $bytes     = $this->getBytes($options);
@@ -100,16 +81,6 @@ abstract class Transaction
         return $this->verifySchnorrOrECDSA($bytes, $publicKey, $signature);
     }
 
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $bytes     = $this->getBytes($options);
-        $signature = $this->data['secondSignature'];
-
-        return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
-    }
 
     public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
     {
@@ -170,11 +141,9 @@ abstract class Transaction
             'id'                   => $this->data['id'],
             'network'              => $this->data['network'] ?? Network::get()->version(),
             'recipientId'          => $this->data['recipientId'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
             'signatures'           => $this->data['signatures'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
             'nonce'                => $this->data['nonce'],
