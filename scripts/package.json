@@ -1,0 +1,14 @@
+{
+    "name": "schnorr-signer",
+    "version": "1.0.0",
+    "description": "node-schorr-signer",
+    "main": "schnorr-signer.js",
+    "scripts": {
+        "start": "node schnorr-signer.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypto": "^5.5.2"
+    }
+}
