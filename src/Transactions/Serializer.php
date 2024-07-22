@@ -109,7 +109,7 @@ class Serializer
         $buffer->writeUint32($this->transaction->data['typeGroup']);
         $buffer->writeUint16($this->transaction->data['type']);
         $buffer->writeUint64(+$this->transaction->data['nonce']);
-        
+
         $buffer->writeHex($this->transaction->data['senderPublicKey']);
         $buffer->writeUint64(+$this->transaction->data['fee']);
     }

@@ -68,46 +68,6 @@ abstract class Transaction
         return $this;
     }
 
-    private function temporarySignerHack(Buffer $transaction, PrivateKey $keys)
-    {
-        $publicKey = $keys->getPublicKey()->getHex();
-        $privateKey = $keys->getHex();
-        $message = $transaction->getHex();
-
-        $scriptPath = __DIR__ . '/../../../scripts';
-
-        $command = escapeshellcmd("npm start --prefix $scriptPath $privateKey $publicKey $message");
-
-        exec($command, $output, $returnVar);
-
-        if ($returnVar !== 0) {
-            $errorOutput = implode("\n", $output);
-            throw new \RuntimeException("Error running signer script: $errorOutput");
-        }
-
-        // Join the output lines
-        $jsonOutput = implode("\n", $output);
-
-        // Extract JSON part
-        if (preg_match('/\{.*\}/s', $jsonOutput, $matches)) {
-            $json = $matches[0];
-        } else {
-            throw new \RuntimeException("Error: Could not find JSON output in: $jsonOutput");
-        }
-
-        $result = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException("Error parsing JSON output: " . json_last_error_msg());
-        }
-
-        if ($result['status'] === 'success') {
-            return $result['signature'];
-        } else {
-            throw new \RuntimeException("Error signing message: " . $result['message']);
-        }
-    }
-
     public function verify(): bool
     {
         $options = [
@@ -120,7 +80,6 @@ abstract class Transaction
 
         return $this->verifySchnorrOrECDSA($bytes, $publicKey, $signature);
     }
-
 
     public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
     {
@@ -211,5 +170,46 @@ abstract class Transaction
     public function hasVendorField(): bool
     {
         return false;
+    }
+
+    private function temporarySignerHack(Buffer $transaction, PrivateKey $keys)
+    {
+        $publicKey  = $keys->getPublicKey()->getHex();
+        $privateKey = $keys->getHex();
+        $message    = $transaction->getHex();
+
+        $scriptPath = __DIR__.'/../../../scripts';
+
+        $command = escapeshellcmd("npm start --prefix $scriptPath $privateKey $publicKey $message");
+
+        exec($command, $output, $returnVar);
+
+        if ($returnVar !== 0) {
+            $errorOutput = implode("\n", $output);
+
+            throw new \RuntimeException("Error running signer script: $errorOutput");
+        }
+
+        // Join the output lines
+        $jsonOutput = implode("\n", $output);
+
+        // Extract JSON part
+        if (preg_match('/\{.*\}/s', $jsonOutput, $matches)) {
+            $json = $matches[0];
+        } else {
+            throw new \RuntimeException("Error: Could not find JSON output in: $jsonOutput");
+        }
+
+        $result = json_decode($json, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
+        }
+
+        if ($result['status'] === 'success') {
+            return $result['signature'];
+        }
+
+        throw new \RuntimeException('Error signing message: '.$result['message']);
     }
 }
