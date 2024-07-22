@@ -213,7 +213,7 @@ abstract class Transaction
 
     private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey): bool
     {
-        $messageHex = $transaction->getHex();
+        $messageHex = Hash::sha256($transaction)->getHex();
      
         $scriptPath = __DIR__ . '/../../../scripts';
 
