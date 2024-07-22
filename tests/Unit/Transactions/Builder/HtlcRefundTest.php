@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\HtlcRefundBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -35,7 +34,7 @@ class HtlcRefundTest extends TestCase
 
         $this->assertTrue($transaction->verify());
     }
-    
+
     /** @test */
     public function it_should_match_fixture_passphrase()
     {
