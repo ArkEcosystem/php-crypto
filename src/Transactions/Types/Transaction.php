@@ -175,11 +175,11 @@ abstract class Transaction
 
     private function temporarySignerHack(Buffer $transaction, PrivateKey $keys)
     {
-        $publicKey = $keys->getPublicKey()->getHex();
+        $publicKey  = $keys->getPublicKey()->getHex();
         $privateKey = $keys->getHex();
-        $message = $transaction->getHex();
+        $message    = $transaction->getHex();
 
-        $scriptPath = __DIR__ . '/../../../scripts';
+        $scriptPath = __DIR__.'/../../../scripts';
 
         $command = escapeshellcmd("npm start --prefix $scriptPath sign $privateKey $publicKey $message");
 
@@ -187,6 +187,7 @@ abstract class Transaction
 
         if ($returnVar !== 0) {
             $errorOutput = implode("\n", $output);
+
             throw new \RuntimeException("Error running signer script: $errorOutput");
         }
 
@@ -201,21 +202,21 @@ abstract class Transaction
         $result = json_decode($json, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Error parsing JSON output: ' . json_last_error_msg());
+            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
         }
 
         if ($result['status'] === 'success') {
             return $result['signature'];
         }
 
-        throw new \RuntimeException('Error signing message: ' . $result['message']);
+        throw new \RuntimeException('Error signing message: '.$result['message']);
     }
 
     private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey): bool
     {
         $messageHex = $transaction->getHex();
-     
-        $scriptPath = __DIR__ . '/../../../scripts';
+
+        $scriptPath = __DIR__.'/../../../scripts';
 
         $command = escapeshellcmd("npm start --prefix $scriptPath verify $publicKey $messageHex $signature");
 
@@ -223,6 +224,7 @@ abstract class Transaction
 
         if ($returnVar !== 0) {
             $errorOutput = implode("\n", $output);
+
             throw new \RuntimeException("Error running verifier script: $errorOutput");
         }
 
@@ -237,13 +239,13 @@ abstract class Transaction
         $result = json_decode($json, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Error parsing JSON output: ' . json_last_error_msg());
+            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
         }
 
         if ($result['status'] === 'success') {
             return boolval($result['isValid']);
         }
 
-        throw new \RuntimeException('Error verifying signature: ' . $result['message']);
+        throw new \RuntimeException('Error verifying signature: '.$result['message']);
     }
 }
