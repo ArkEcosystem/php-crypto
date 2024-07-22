@@ -21,22 +21,66 @@ const signMessage = async (privateKeyHex, publicKeyHex, messageHex) => {
     }
 };
 
-// Function to parse command line arguments and call signMessage
+// Function to verify a signature using the provided public key
+const verifySignature = async (publicKeyHex, messageHex, signatureHex) => {
+    const publicKey = Buffer.from(publicKeyHex, "hex");
+    const message = Buffer.from(messageHex, "hex");
+    const signature = Buffer.from(signatureHex, "hex");
+
+    try {
+        const isValid = await secp256k1.schnorrVerify(
+            message,
+            signature,
+            publicKey
+        );
+        return {
+            status: "success",
+            isValid: isValid,
+        };
+    } catch (error) {
+        return {
+            status: "error",
+            message: error.message,
+        };
+    }
+};
+
+// Function to parse command line arguments and call the appropriate function
 const main = async () => {
     const args = process.argv.slice(2);
-    if (args.length !== 3) {
+
+    if (args.length < 2) {
         console.error(
             JSON.stringify({
                 status: "error",
-                message:
-                    "Usage: node schnorr-signer.js <privateKeyHex> <publicKeyHex> <messageHex>",
+                message: "Usage: node schnorr-signer.js <mode> <parameters>",
             })
         );
         process.exit(1);
     }
 
-    const [privateKeyHex, publicKeyHex, messageHex] = args;
-    const result = await signMessage(privateKeyHex, publicKeyHex, messageHex);
+    const mode = args[0];
+    let result;
+
+    if (mode === "sign" && args.length === 4) {
+        const [privateKeyHex, publicKeyHex, messageHex] = args.slice(1);
+        result = await signMessage(privateKeyHex, publicKeyHex, messageHex);
+    } else if (mode === "verify" && args.length === 4) {
+        const [publicKeyHex, messageHex, signatureHex] = args.slice(1);
+        result = await verifySignature(publicKeyHex, messageHex, signatureHex);
+    } else {
+        console.error(
+            JSON.stringify({
+                status: "error",
+                message:
+                    mode === "sign"
+                        ? "Usage: node schnorr-signer.js sign <privateKeyHex> <publicKeyHex> <messageHex>"
+                        : "Usage: node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>",
+            })
+        );
+        process.exit(1);
+    }
+
     console.log(JSON.stringify(result));
 };
 

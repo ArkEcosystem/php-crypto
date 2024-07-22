@@ -51,35 +51,98 @@ var signMessage = /*#__PURE__*/function () {
   };
 }();
 
-// Function to parse command line arguments and call signMessage
-var main = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    var args, _args2, privateKeyHex, publicKeyHex, messageHex, result;
+// Function to verify a signature using the provided public key
+var verifySignature = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(publicKeyHex, messageHex, signatureHex) {
+    var publicKey, message, signature, isValid;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          args = process.argv.slice(2);
-          if (args.length !== 3) {
-            console.error(JSON.stringify({
-              status: "error",
-              message: "Usage: node schnorr-signer.js <privateKeyHex> <publicKeyHex> <messageHex>"
-            }));
-            process.exit(1);
-          }
-          _args2 = _slicedToArray(args, 3), privateKeyHex = _args2[0], publicKeyHex = _args2[1], messageHex = _args2[2];
-          _context2.next = 5;
-          return signMessage(privateKeyHex, publicKeyHex, messageHex);
-        case 5:
-          result = _context2.sent;
-          console.log(JSON.stringify(result));
-        case 7:
+          publicKey = Buffer.from(publicKeyHex, "hex");
+          message = Buffer.from(messageHex, "hex");
+          signature = Buffer.from(signatureHex, "hex");
+          _context2.prev = 3;
+          _context2.next = 6;
+          return secp256k1.schnorrVerify(message, signature, publicKey);
+        case 6:
+          isValid = _context2.sent;
+          return _context2.abrupt("return", {
+            status: "success",
+            isValid: isValid
+          });
+        case 10:
+          _context2.prev = 10;
+          _context2.t0 = _context2["catch"](3);
+          return _context2.abrupt("return", {
+            status: "error",
+            message: _context2.t0.message
+          });
+        case 13:
         case "end":
           return _context2.stop();
       }
-    }, _callee2);
+    }, _callee2, null, [[3, 10]]);
+  }));
+  return function verifySignature(_x4, _x5, _x6) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+// Function to parse command line arguments and call the appropriate function
+var main = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var args, mode, result, _args$slice, _args$slice2, privateKeyHex, publicKeyHex, messageHex, _args$slice3, _args$slice4, _publicKeyHex, _messageHex, signatureHex;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          args = process.argv.slice(2);
+          if (args.length < 2) {
+            console.error(JSON.stringify({
+              status: "error",
+              message: "Usage: node schnorr-signer.js <mode> <parameters>"
+            }));
+            process.exit(1);
+          }
+          mode = args[0];
+          if (!(mode === "sign" && args.length === 4)) {
+            _context3.next = 10;
+            break;
+          }
+          _args$slice = args.slice(1), _args$slice2 = _slicedToArray(_args$slice, 3), privateKeyHex = _args$slice2[0], publicKeyHex = _args$slice2[1], messageHex = _args$slice2[2];
+          _context3.next = 7;
+          return signMessage(privateKeyHex, publicKeyHex, messageHex);
+        case 7:
+          result = _context3.sent;
+          _context3.next = 19;
+          break;
+        case 10:
+          if (!(mode === "verify" && args.length === 4)) {
+            _context3.next = 17;
+            break;
+          }
+          _args$slice3 = args.slice(1), _args$slice4 = _slicedToArray(_args$slice3, 3), _publicKeyHex = _args$slice4[0], _messageHex = _args$slice4[1], signatureHex = _args$slice4[2];
+          _context3.next = 14;
+          return verifySignature(_publicKeyHex, _messageHex, signatureHex);
+        case 14:
+          result = _context3.sent;
+          _context3.next = 19;
+          break;
+        case 17:
+          console.error(JSON.stringify({
+            status: "error",
+            message: mode === "sign" ? "Usage: node schnorr-signer.js sign <privateKeyHex> <publicKeyHex> <messageHex>" : "Usage: node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>"
+          }));
+          process.exit(1);
+        case 19:
+          console.log(JSON.stringify(result));
+        case 20:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
   }));
   return function main() {
-    return _ref2.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 main();
