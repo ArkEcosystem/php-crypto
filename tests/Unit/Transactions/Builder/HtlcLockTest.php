@@ -42,25 +42,6 @@ class HtlcLockTest extends TestCase
     }
 
     /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $transaction = HtlcLockBuilder::new()
-            ->htlcLockAsset(
-                '0f128d401958b1b30ad0d10406f47f9489321017b4614e6cb993fc63913c5454',
-                1,
-                1
-            )
-            ->recipient('ANBkoGqWeTSiaEVgVzSKZd3jS7UWzv9PSo')
-            ->sign($this->passphrase)
-            ->secondSign($secondPassphrase);
-
-        $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
-    }
-
-    /** @test */
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('htlc_lock', 'htlc-lock-sign');

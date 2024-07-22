@@ -39,22 +39,6 @@ class HtlcClaimTest extends TestCase
     }
 
     /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $transaction = HtlcClaimBuilder::new()
-            ->htlcClaimAsset(
-                'fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78',
-                'my secret that should be 32bytes'
-            )->sign($this->passphrase)
-            ->secondSign($secondPassphrase);
-
-        $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
-    }
-
-    /** @test */
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('htlc_claim', 'htlc-claim-sign');

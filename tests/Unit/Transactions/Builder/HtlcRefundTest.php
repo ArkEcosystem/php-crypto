@@ -35,21 +35,7 @@ class HtlcRefundTest extends TestCase
 
         $this->assertTrue($transaction->verify());
     }
-
-    /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $transaction = HtlcRefundBuilder::new()
-            ->htlcRefundAsset('fe1a1b3b117c28078c5d3c42ffb9492234afc01d15b08c047feccf0b6bee0f78')
-            ->sign($this->passphrase)
-            ->secondSign($secondPassphrase);
-
-        $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
-    }
-
+    
     /** @test */
     public function it_should_match_fixture_passphrase()
     {

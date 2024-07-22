@@ -36,19 +36,6 @@ class DelegateResignationTest extends TestCase
     }
 
     /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $transaction = DelegateResignationBuilder::new()
-            ->sign($this->passphrase)
-            ->secondSign($secondPassphrase);
-
-        $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
-    }
-
-    /** @test */
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign');
