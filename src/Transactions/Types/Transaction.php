@@ -145,9 +145,7 @@ abstract class Transaction
 
     private function temporarySignerSign(Buffer $transaction, PrivateKey $keys)
     {
-        // $privateKey = $keys->getHex();
-
-        $privateKey = Hash::sha256(new Buffer('my super secret passphrase'))->getHex();
+        $privateKey = $keys->getHex();
 
         $message    = $transaction->getHex();
 
