@@ -15,8 +15,6 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Utils\Address;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
 
 /**
  * This is the serializer class.
@@ -38,7 +36,7 @@ class MultiPayment extends Transaction
         foreach ($this->data['asset']['payments'] as $payment) {
             $buffer->writeUInt64(+$payment['amount']);
             $buffer->writeHex(
-                Address::toBufferHexString($payment['recipientId'])    
+                Address::toBufferHexString($payment['recipientId'])
             );
         }
 
@@ -48,16 +46,16 @@ class MultiPayment extends Transaction
     public function deserialize(ByteBuffer $buffer): void
     {
         $this->data['asset'] = ['payments' => []];
-        
+
         $count = $buffer->readUInt16();
-        
+
         for ($i = 0; $i < $count; $i++) {
             $this->data['asset']['payments'][] = [
                 'amount'      => strval($buffer->readUInt64()),
                 'recipientId' => Address::fromByteBuffer($buffer),
             ];
         }
-        
+
         $this->data['amount'] = strval(array_sum(array_column($this->data['asset']['payments'], 'amount')));
     }
 

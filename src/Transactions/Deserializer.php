@@ -172,5 +172,4 @@ class Deserializer
             $buffer->remaining()
             && ($buffer->remaining() % 64 === 0 || $buffer->remaining() % 65 !== 0);
     }
-
 }

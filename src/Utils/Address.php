@@ -72,6 +72,7 @@ class Address
         }
 
         return $address;
+
         return strtolower($address);
     }
 

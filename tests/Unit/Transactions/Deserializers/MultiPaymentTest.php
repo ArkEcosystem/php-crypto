@@ -29,7 +29,7 @@ class MultiPaymentTest extends TestCase
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_xxxx()
     {
         $transaction = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
-        
+
         $this->assertTransaction($transaction);
     }
 
@@ -49,7 +49,6 @@ class MultiPaymentTest extends TestCase
             'amount',
             'id',
         ]);
-
 
         $this->assertTrue($actual->verify());
 

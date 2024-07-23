@@ -51,7 +51,6 @@ class MultiPaymentTest extends TestCase
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 
-
     /** @test */
     public function it_should_match_fixture_vendor_field_passphrase()
     {
