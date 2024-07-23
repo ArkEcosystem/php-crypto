@@ -1,4 +1,4 @@
-const { secp256k1 } = require("bcrypto");
+const { schnorr } = require("bcrypto");
 
 // Function to sign a message using the provided private key
 const signMessage = async (privateKeyHex, messageHex) => {
@@ -6,8 +6,9 @@ const signMessage = async (privateKeyHex, messageHex) => {
     const message = Buffer.from(messageHex, "hex");
 
     try {
-        const signature = await secp256k1.schnorrSign(message, privateKey);
+        const signature = await schnorr.sign(message, privateKey);
         const signatureHex = signature.toString("hex");
+
         return {
             status: "success",
             signature: signatureHex,
@@ -27,11 +28,12 @@ const verifySignature = async (publicKeyHex, messageHex, signatureHex) => {
     const signature = Buffer.from(signatureHex, "hex");
 
     try {
-        const isValid = await secp256k1.schnorrVerify(
-            message,
-            signature,
-            publicKey
-        );
+        // Remove leading byte ('02' / '03') from ECDSA key
+        if (publicKey.byteLength === 33) {
+            publicKey = publicKey.subarray(1);
+        }
+
+        const isValid = await schnorr.verify(message, signature, publicKey);
         return {
             status: "success",
             isValid: isValid,
@@ -52,7 +54,7 @@ const main = async () => {
         console.error(
             JSON.stringify({
                 status: "error",
-                message: "Usage: node schnorr-signer.js <mode> <parameters>",
+                message: "Usage: npm start <mode> <parameters>",
             })
         );
         process.exit(1);
@@ -71,7 +73,7 @@ const main = async () => {
         console.error(
             JSON.stringify({
                 status: "error",
-                message: `Usage: node schnorr-signer.js ${mode} <parameters>.\nFor 'sign': node schnorr-signer.js sign <privateKeyHex> <messageHex>.\nFor 'verify': node schnorr-signer.js verify <publicKeyHex> <messageHex> <signatureHex>.`,
+                message: `Usage: npm start ${mode} <parameters>.\nFor 'sign': npm start sign <privateKeyHex> <messageHex>.\nFor 'verify': npm start verify <publicKeyHex> <messageHex> <signatureHex>.`,
             })
         );
         process.exit(1);
