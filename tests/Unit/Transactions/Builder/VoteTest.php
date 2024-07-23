@@ -46,7 +46,7 @@ class VoteTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
