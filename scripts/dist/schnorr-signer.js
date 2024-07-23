@@ -59,28 +59,31 @@ var verifySignature = /*#__PURE__*/function () {
         case 0:
           publicKey = Buffer.from(publicKeyHex, "hex");
           message = Buffer.from(messageHex, "hex");
-          signature = Buffer.from(signatureHex, "hex");
-          _context2.prev = 3;
-          _context2.next = 6;
+          signature = Buffer.from(signatureHex, "hex"); // Remove leading byte ('02' / '03') from ECDSA key
+          if (publicKey.byteLength === 33) {
+            publicKey = publicKey.subarray(1);
+          }
+          _context2.prev = 4;
+          _context2.next = 7;
           return schnorr.verify(message, signature, publicKey);
-        case 6:
+        case 7:
           isValid = _context2.sent;
           return _context2.abrupt("return", {
             status: "success",
             isValid: isValid
           });
-        case 10:
-          _context2.prev = 10;
-          _context2.t0 = _context2["catch"](3);
+        case 11:
+          _context2.prev = 11;
+          _context2.t0 = _context2["catch"](4);
           return _context2.abrupt("return", {
             status: "error",
             message: _context2.t0.message
           });
-        case 13:
+        case 14:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[3, 10]]);
+    }, _callee2, null, [[4, 11]]);
   }));
   return function verifySignature(_x3, _x4, _x5) {
     return _ref2.apply(this, arguments);

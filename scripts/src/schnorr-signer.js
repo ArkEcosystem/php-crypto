@@ -23,12 +23,18 @@ const signMessage = async (privateKeyHex, messageHex) => {
 
 // Function to verify a signature using the provided public key
 const verifySignature = async (publicKeyHex, messageHex, signatureHex) => {
-    const publicKey = Buffer.from(publicKeyHex, "hex");
+    let publicKey = Buffer.from(publicKeyHex, "hex");
     const message = Buffer.from(messageHex, "hex");
     const signature = Buffer.from(signatureHex, "hex");
 
+    // Remove leading byte ('02' / '03') from ECDSA key
+    if (publicKey.byteLength === 33) {
+        publicKey = publicKey.subarray(1);
+    }
+
     try {
         const isValid = await schnorr.verify(message, signature, publicKey);
+
         return {
             status: "success",
             isValid: isValid,
