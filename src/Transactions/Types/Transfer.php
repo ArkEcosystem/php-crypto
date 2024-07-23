@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Identities\Address;
 use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
 
@@ -46,8 +47,11 @@ class Transfer extends Transaction
     {
         $this->data['amount']      = strval($buffer->readUInt64());
         $this->data['expiration']  = $buffer->readUInt32();
-        // @TODO: this is not correct check
-        $this->data['recipientId'] = Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2))));
+
+        $hexAddress = '0x' . (new Buffer(hex2bin($buffer->readHex(20 * 2))))->getHex();
+        $recipient = Address::toChecksumAddress($hexAddress);
+        
+        $this->data['recipientId'] = $recipient;
     }
 
     public function hasVendorField(): bool

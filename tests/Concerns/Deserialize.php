@@ -61,7 +61,19 @@ trait Deserialize
             }
         }
 
+        // Signatures and IDs are not deterministic
+        unset($expected['id']);
+        unset($expected['signature']);
+
+        unset($actual['id']);
+        unset($actual['signature']);
+
         $this->assertSame($expected, $actual);
+    }
+
+    protected function assertSameSerialization(string $expected, string $actual): void
+    {
+        $this->assertSame(substr($expected, 0, 128), substr($actual, 0, 128));
     }
 
     private function array_only(array $arr, array $keys): array

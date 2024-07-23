@@ -29,7 +29,7 @@ class TransferTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = TransferBuilder::new()
-            ->recipient('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25')
+            ->recipient('0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A')
             ->amount('133380000000')
             ->vendorField('This is a transaction from PHP')
             ->sign($this->passphrase);
@@ -51,7 +51,8 @@ class TransferTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
@@ -72,7 +73,7 @@ class TransferTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

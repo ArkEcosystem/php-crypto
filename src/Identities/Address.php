@@ -120,7 +120,7 @@ class Address
      *
      * @return string
      */
-    private static function toChecksumAddress(string $address): string
+    public static function toChecksumAddress(string $address): string
     {
         $address         = strtolower(substr($address, 2));
         $hash            = Keccak::hash($address, 256);
