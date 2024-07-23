@@ -15,8 +15,6 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Identities\Address;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
 
 /**
  * This is the serializer class.
@@ -30,15 +28,10 @@ class Transfer extends Transaction
         $buffer = ByteBuffer::new(24);
 
         $buffer->writeUInt64(+$this->data['amount']);
+
         $buffer->writeUInt32($this->data['expiration'] ?? 0);
 
-        $recipient = $this->data['recipientId'];
-
-        if (strpos($recipient, '0x') === 0) {
-            $recipient = substr($recipient, 2);
-        }
-
-        $buffer->writeHex($recipient);
+        $buffer->writeHex(Address::toBufferHexString($this->data['recipientId']));
 
         return $buffer;
     }
@@ -46,12 +39,10 @@ class Transfer extends Transaction
     public function deserialize(ByteBuffer $buffer): void
     {
         $this->data['amount']      = strval($buffer->readUInt64());
+
         $this->data['expiration']  = $buffer->readUInt32();
 
-        $hexAddress = '0x' . (new Buffer(hex2bin($buffer->readHex(20 * 2))))->getHex();
-        $recipient = Address::toChecksumAddress($hexAddress);
-        
-        $this->data['recipientId'] = $recipient;
+        $this->data['recipientId'] = Address::fromByteBuffer($buffer);
     }
 
     public function hasVendorField(): bool
