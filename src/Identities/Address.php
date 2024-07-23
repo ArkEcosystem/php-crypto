@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
+use ArkEcosystem\Crypto\Utils\Address as AddressUtils;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
@@ -81,7 +79,7 @@ class Address
         $address = '0x'.$address;
 
         // Convert to checksum address
-        return self::toChecksumAddress($address);
+        return AddressUtils::toChecksumAddress($address);
     }
 
     /**
@@ -110,59 +108,5 @@ class Address
     {
         // Simple validation to check if the address starts with 0x and is 42 characters long
         return preg_match('/^0x[a-fA-F0-9]{40}$/', $address) === 1;
-    }
-
-    /**
-     * Convert to checksum address.
-     *
-     * @param string $address
-     *
-     * @return string
-     */
-    public static function toChecksumAddress(string $address): string
-    {
-        $address         = strtolower(substr($address, 2));
-        $hash            = Keccak::hash($address, 256);
-        $checksumAddress = '0x';
-
-        for ($i = 0; $i < 40; $i++) {
-            if (intval($hash[$i], 16) >= 8) {
-                $checksumAddress .= strtoupper($address[$i]);
-            } else {
-                $checksumAddress .= $address[$i];
-            }
-        }
-
-        return $checksumAddress;
-    }
-
-    /**
-     * Convert to hex string without 0x prefix.
-     *
-     * @param string $address
-     *
-     * @return string
-     */
-    public static function toBufferHexString(string $address): string
-    {
-        if (strpos($address, '0x') === 0) {
-            $address = substr($address, 2);
-        }
-
-        return strtolower($address);
-    }
-
-    /**
-     * Extract the address from a byte buffer.
-     *
-     * @param ByteBuffer $buffer
-     *
-     * @return string
-     */
-    public static function fromByteBuffer(ByteBuffer $buffer): string
-    {
-        $hexAddress = '0x'.(new Buffer(hex2bin($buffer->readHex(20 * 2))))->getHex();
-
-        return self::toChecksumAddress($hexAddress);
     }
 }

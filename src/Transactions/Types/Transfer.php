@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Utils\Address;
 
 /**
  * This is the serializer class.

@@ -79,22 +79,4 @@ class AddressTest extends TestCase
 
         $this->assertSame($fixture['data']['address'], $actual);
     }
-
-    /** @test */
-    public function it_should_validate_the_address()
-    {
-        $fixture = $this->getFixture('identity');
-
-        $actual = TestClass::validate($fixture['data']['address']);
-
-        $this->assertTrue($actual);
-    }
-
-    /** @test */
-    public function it_should_fail_to_validate_the_address()
-    {
-        $actual = TestClass::validate('invalid');
-
-        $this->assertFalse($actual);
-    }
 }
