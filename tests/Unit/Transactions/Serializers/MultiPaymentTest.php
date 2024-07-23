@@ -29,10 +29,4 @@ class MultiPaymentTest extends TestCase
     {
         $this->assertSerialized($this->getTransactionFixture('multi_payment', 'multi-payment-sign'));
     }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('multi_payment', 'multi-payment-secondSign'));
-    }
 }

@@ -44,6 +44,8 @@ class MultiPaymentBuilder extends AbstractTransactionBuilder
     {
         $this->transaction->data['asset']['payments'][] = compact('recipientId', 'amount');
 
+        $this->transaction->data['amount'] = strval(+$this->transaction->data['amount'] + +$amount);
+
         return $this;
     }
 

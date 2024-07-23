@@ -71,6 +71,7 @@ class Address
             $address = substr($address, 2);
         }
 
+        return $address;
         return strtolower($address);
     }
 

@@ -24,6 +24,7 @@ trait Deserialize
         $actual = Deserializer::new($expected['serialized'])->deserialize();
         $data   = $actual->data;
 
+        
         $this->assertSame($expected['serialized'], Serializer::new($actual)->serialize()->getHex());
         $this->assertSameTransactions($expected, $data, $keys);
 
