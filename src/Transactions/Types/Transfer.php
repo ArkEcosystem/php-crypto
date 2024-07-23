@@ -30,7 +30,14 @@ class Transfer extends Transaction
 
         $buffer->writeUInt64(+$this->data['amount']);
         $buffer->writeUInt32($this->data['expiration'] ?? 0);
-        $buffer->writeHex(Base58::decodeCheck($this->data['recipientId'])->getHex());
+
+        $recipient = $this->data['recipientId'];
+
+        if (strpos($recipient, '0x') === 0) {
+            $recipient = substr($recipient, 2);
+        }
+
+        $buffer->writeHex($recipient);
 
         return $buffer;
     }
@@ -39,6 +46,7 @@ class Transfer extends Transaction
     {
         $this->data['amount']      = strval($buffer->readUInt64());
         $this->data['expiration']  = $buffer->readUInt32();
+        // @TODO: this is not correct check
         $this->data['recipientId'] = Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2))));
     }
 

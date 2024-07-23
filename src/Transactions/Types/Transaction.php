@@ -62,6 +62,7 @@ abstract class Transaction
             'skipSignature'       => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
+
         // $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
         $this->data['signature'] = $this->temporarySignerSign($transaction, $keys);
 
@@ -74,41 +75,12 @@ abstract class Transaction
             'skipSignature'       => true,
         ];
 
-        $bytes     = $this->getBytes($options);
         $publicKey = $this->data['senderPublicKey'];
         $signature = $this->data['signature'];
 
-        // return $this->verifySchnorr($bytes, $publicKey, $signature);
-        return $this->temporarySignerVerify($bytes, $signature, $publicKey);
-    }
+        $transaction = Hash::sha256($this->getBytes($options));
 
-    public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        return $this->isSchnorr($signature)
-            ? $this->verifySchnorr($bytes, $publicKey, $signature)
-            : $this->verifyECDSA($bytes, $publicKey, $signature);
-    }
-
-    public function isSchnorr(string $signature): bool
-    {
-        return ByteBuffer::fromHex($signature)->capacity() === 64;
-    }
-
-    public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($publicKey);
-
-        return $publicKey->verify(
-            Hash::sha256($bytes),
-            SignatureFactory::fromHex($signature)
-        );
-    }
-
-    public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        //TODO
-        return false;
+        return $this->temporarySignerVerify($transaction, $signature, $publicKey);
     }
 
     /**
@@ -175,7 +147,10 @@ abstract class Transaction
 
     private function temporarySignerSign(Buffer $transaction, PrivateKey $keys)
     {
-        $privateKey = $keys->getHex();
+        // $privateKey = $keys->getHex();
+
+        $privateKey = Hash::sha256(new Buffer('my super secret passphrase'))->getHex();
+
         $message    = $transaction->getHex();
 
         $scriptPath = __DIR__.'/../../../scripts';
@@ -213,11 +188,11 @@ abstract class Transaction
 
     private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey)
     {
-        $messageHex = Hash::sha256($transaction)->getHex();
+        $message = $transaction->getHex();
 
         $scriptPath = __DIR__.'/../../../scripts';
 
-        $command = escapeshellcmd("npm start --prefix $scriptPath verify $publicKey $messageHex $signature");
+        $command = escapeshellcmd("npm start --prefix $scriptPath verify $publicKey $message $signature");
 
         exec($command, $output, $returnVar);
 
