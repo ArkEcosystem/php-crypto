@@ -47,7 +47,7 @@ class VoteBuilder extends AbstractTransactionBuilder
 
         return $this;
     }
-    
+
     /**
      * Set the unvotes to cast.
      *

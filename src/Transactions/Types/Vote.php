@@ -26,7 +26,7 @@ class Vote extends Transaction
     {
         $buffer = ByteBuffer::new(24);
 
-        $votes = array_key_exists('votes', $this->data['asset']) ? $this->data['asset']['votes'] : [];
+        $votes   = array_key_exists('votes', $this->data['asset']) ? $this->data['asset']['votes'] : [];
         $unvotes = array_key_exists('unvotes', $this->data['asset']) ? $this->data['asset']['unvotes'] : [];
 
         $buffer->writeUInt8(count($votes));

@@ -34,8 +34,6 @@ class TransferTest extends TestCase
         $this->assertSame(0, $actual->data['expiration']);
     }
 
-
-
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field()
     {

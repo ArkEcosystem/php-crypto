@@ -44,7 +44,7 @@ class VoteTest extends TestCase
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
             ->sign($this->passphrase);
-            
+
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
 
