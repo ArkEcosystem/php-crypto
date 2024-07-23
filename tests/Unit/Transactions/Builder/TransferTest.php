@@ -52,7 +52,7 @@ class TransferTest extends TestCase
 
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
-        
+
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 
@@ -68,7 +68,7 @@ class TransferTest extends TestCase
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
             ->vendorField($fixture['data']['vendorField'])
-            
+
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
