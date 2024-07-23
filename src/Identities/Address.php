@@ -27,13 +27,12 @@ class Address
      * Derive the address from the given passphrase.
      *
      * @param string               $passphrase
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
+    public static function fromPassphrase(string $passphrase): string
     {
-        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
+        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase));
     }
 
     /**
@@ -53,11 +52,10 @@ class Address
      * Derive the address from the given public key.
      *
      * @param string               $publicKey
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPublicKey(string $publicKey, $network = null): string
+    public static function fromPublicKey(string $publicKey): string
     {
         // Convert the public key to a byte array
         $publicKeyBytes = hex2bin($publicKey);
@@ -90,15 +88,14 @@ class Address
      * Derive the address from the given private key.
      *
      * @param EccPrivateKey $privateKey
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
+    public static function fromPrivateKey(EccPrivateKey $privateKey): string
     {
         $publicKey = $privateKey->getPublicKey()->getHex();
 
-        return static::fromPublicKey($publicKey, $network);
+        return static::fromPublicKey($publicKey);
     }
 
     /**
@@ -109,7 +106,7 @@ class Address
      *
      * @return bool
      */
-    public static function validate(string $address, $network = null): bool
+    public static function validate(string $address): bool
     {
         // Simple validation to check if the address starts with 0x and is 42 characters long
         return preg_match('/^0x[a-fA-F0-9]{40}$/', $address) === 1;
