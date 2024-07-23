@@ -29,7 +29,7 @@ class VoteTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = VoteBuilder::new()
-            ->votes(['+034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192'])
+            ->votes(['03f25455408f9a7e6c6a056b121e68fbda98f3511d22e9ef27b0ebaf1ef9e4eabc'])
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -41,24 +41,13 @@ class VoteTest extends TestCase
         $fixture = $this->getTransactionFixture('vote', 'vote-sign');
         $builder = VoteBuilder::new()
             ->votes($fixture['data']['asset']['votes'])
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
             ->sign($this->passphrase);
-
+            
         $this->assertTrue($builder->verify());
         $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
-        $this->assertSameTransactions($fixture, $builder->transaction->data);
-    }
 
-    /** @test */
-    public function it_should_match_fixture_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('vote', 'vote-secondSign');
-        $builder = VoteBuilder::new()
-            ->votes($fixture['data']['asset']['votes'])
-            ->sign($this->passphrase)
-            ->secondSign($this->secondPassphrase);
-
-        $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

@@ -47,6 +47,20 @@ class VoteBuilder extends AbstractTransactionBuilder
 
         return $this;
     }
+    
+    /**
+     * Set the unvotes to cast.
+     *
+     * @param array $votes
+     *
+     * @return self
+     */
+    public function unvotes(array $unvotes): self
+    {
+        $this->transaction->data['asset']['unvotes'] = $unvotes;
+
+        return $this;
+    }
 
     /**
      * Sign the transaction using the given passphrase.

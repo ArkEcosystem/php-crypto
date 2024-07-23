@@ -26,16 +26,14 @@ class Vote extends Transaction
     {
         $buffer = ByteBuffer::new(24);
 
-        $voteBytes = [];
+        $votes = array_key_exists('votes', $this->data['asset']) ? $this->data['asset']['votes'] : [];
+        $unvotes = array_key_exists('unvotes', $this->data['asset']) ? $this->data['asset']['unvotes'] : [];
 
-        foreach ($this->data['asset']['votes'] as $vote) {
-            $voteBytes[] = '+' === substr($vote, 0, 1)
-                ? '01'.substr($vote, 1)
-                : '00'.substr($vote, 1);
-        }
+        $buffer->writeUInt8(count($votes));
+        $buffer->writeHex(implode('', $votes));
 
-        $buffer->writeUInt8(count($this->data['asset']['votes']));
-        $buffer->writeHex(implode('', $voteBytes));
+        $buffer->writeUInt8(count($unvotes));
+        $buffer->writeHex(implode('', $unvotes));
 
         return $buffer;
     }
@@ -44,13 +42,26 @@ class Vote extends Transaction
     {
         $voteLength = $buffer->readUInt8();
 
-        $this->data['asset'] = ['votes' => []];
+        if ($voteLength > 0) {
+            $this->data['asset']['votes'] = [];
 
-        $vote = null;
-        for ($i = 0; $i < $voteLength; $i++) {
-            $vote                           = $buffer->readHex(34 * 2);
-            $vote                           = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $this->data['asset']['votes'][] = $vote;
+            for ($i = 0; $i < $voteLength; $i++) {
+                $vote = $buffer->readHex(66);
+
+                $this->data['asset']['votes'][] = $vote;
+            }
+        }
+
+        $unvoteLength = $buffer->readUInt8();
+
+        if ($unvoteLength > 0) {
+            $this->data['asset']['unvotes'] = [];
+
+            for ($i = 0; $i < $unvoteLength; $i++) {
+                $unvote = $buffer->readHex(66);
+
+                $this->data['asset']['unvotes'][] = $unvote;
+            }
         }
     }
 }

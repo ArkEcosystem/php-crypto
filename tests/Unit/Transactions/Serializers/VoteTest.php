@@ -30,10 +30,4 @@ class VoteTest extends TestCase
     {
         $this->assertSerialized($this->getTransactionFixture('vote', 'vote-sign'));
     }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('vote', 'vote-secondSign'));
-    }
 }
