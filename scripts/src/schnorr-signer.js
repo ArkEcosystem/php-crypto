@@ -28,11 +28,6 @@ const verifySignature = async (publicKeyHex, messageHex, signatureHex) => {
     const signature = Buffer.from(signatureHex, "hex");
 
     try {
-        // Remove leading byte ('02' / '03') from ECDSA key
-        if (publicKey.byteLength === 33) {
-            publicKey = publicKey.subarray(1);
-        }
-
         const isValid = await schnorr.verify(message, signature, publicKey);
         return {
             status: "success",
