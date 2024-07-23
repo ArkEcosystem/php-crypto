@@ -15,7 +15,6 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Identities\Address;
-use BitWasp\Bitcoin\Base58;
 use BitWasp\Buffertools\Buffer;
 
 /**
@@ -48,9 +47,9 @@ class Transfer extends Transaction
         $this->data['amount']      = strval($buffer->readUInt64());
         $this->data['expiration']  = $buffer->readUInt32();
 
-        $hexAddress = '0x' . (new Buffer(hex2bin($buffer->readHex(20 * 2))))->getHex();
-        $recipient = Address::toChecksumAddress($hexAddress);
-        
+        $hexAddress = '0x'.(new Buffer(hex2bin($buffer->readHex(20 * 2))))->getHex();
+        $recipient  = Address::toChecksumAddress($hexAddress);
+
         $this->data['recipientId'] = $recipient;
     }
 

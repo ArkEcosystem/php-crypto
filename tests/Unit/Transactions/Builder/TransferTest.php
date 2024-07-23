@@ -51,7 +51,7 @@ class TransferTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        
+
         $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
