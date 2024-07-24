@@ -26,7 +26,7 @@ class ValidatorRegistration extends Transaction
     {
         $buffer = ByteBuffer::new(1);
         $buffer->writeHex($this->data['asset']['validatorPublicKey']);
-        
+
         return $buffer;
     }
 

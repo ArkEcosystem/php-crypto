@@ -39,7 +39,7 @@ class ValidatorRegistrationTest extends TestCase
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('validator_registration', 'validator-registration-sign');
-        
+
         $builder = ValidatorRegistrationBuilder::new()
             ->withFee($fixture['data']['fee'])
             ->withNonce($fixture['data']['nonce'])
