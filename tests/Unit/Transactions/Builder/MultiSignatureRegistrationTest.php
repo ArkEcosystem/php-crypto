@@ -29,13 +29,12 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
+        $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
+        
         $transaction = MultiSignatureRegistrationBuilder::new()
-            ->min(2)
-            ->lifetime(255)
-            ->keysgroup([
-                '03a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '13a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
+            ->multiSignatureAsset([
+                'min' => $fixture['data']['asset']['multiSignature']['min'],
+                'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
             ])
             ->sign('secret');
 
@@ -43,7 +42,7 @@ class MultiSignatureRegistrationTest extends TestCase
     }
 
     /** @test */
-    public function it_should_match_fixture_passphrase_xxx()
+    public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
 
