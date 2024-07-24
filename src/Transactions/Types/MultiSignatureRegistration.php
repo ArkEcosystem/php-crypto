@@ -25,7 +25,7 @@ class MultiSignatureRegistration extends Transaction
     public function serialize(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1);
-		
+
         $buffer->writeUInt8($this->data['asset']['multiSignature']['min']);
         $buffer->writeUInt8(count($this->data['asset']['multiSignature']['publicKeys']));
 
