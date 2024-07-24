@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Builder\ValidatorRegistrationBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -21,14 +21,14 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\DelegateRegistrationBuilder
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorRegistrationBuilder
  */
-class DelegateRegistrationTest extends TestCase
+class ValidatorRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = DelegateRegistrationBuilder::new()
+        $transaction = ValidatorRegistrationBuilder::new()
             ->username('polopolo')
             ->sign($this->passphrase);
 
@@ -39,7 +39,7 @@ class DelegateRegistrationTest extends TestCase
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
-        $builder = DelegateRegistrationBuilder::new()
+        $builder = ValidatorRegistrationBuilder::new()
             ->username($fixture['data']['asset']['delegate']['username'])
             ->sign($this->passphrase);
 
@@ -52,7 +52,7 @@ class DelegateRegistrationTest extends TestCase
     public function it_should_match_fixture_second_passphrase()
     {
         $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
-        $builder = DelegateRegistrationBuilder::new()
+        $builder = ValidatorRegistrationBuilder::new()
             ->username($fixture['data']['asset']['delegate']['username'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);

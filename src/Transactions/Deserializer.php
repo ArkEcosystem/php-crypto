@@ -34,7 +34,7 @@ class Deserializer
     private $transactionsClasses = [
         Types\Transfer::class,
         Types\SecondSignatureRegistration::class,
-        Types\DelegateRegistration::class,
+        Types\ValidatorRegistration::class,
         Types\Vote::class,
         Types\MultiSignatureRegistration::class,
         Types\IPFS::class,

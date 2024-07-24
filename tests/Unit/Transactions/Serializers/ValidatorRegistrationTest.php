@@ -20,9 +20,9 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate registration serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration
  */
-class DelegateRegistrationTest extends TestCase
+class ValidatorRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()

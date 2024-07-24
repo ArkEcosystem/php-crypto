@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
 /**
  * This is the delegate registration transaction class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateRegistrationBuilder extends AbstractTransactionBuilder
+class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**
      * Create a new delegate registration transaction instance.
@@ -35,10 +35,6 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
 
     /**
      * Set the username to assign.
-     *
-     * @param string $username
-     *
-     * @return self
      */
     public function username(string $username): self
     {
@@ -50,7 +46,6 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
     /**
      * Sign the transaction using the given passphrase.
      *
-     * @param string $passphrase
      *
      * @return self
      */
@@ -78,6 +73,6 @@ class DelegateRegistrationBuilder extends AbstractTransactionBuilder
 
     protected function getTransactionInstance(): object
     {
-        return new DelegateRegistration();
+        return new ValidatorRegistration();
     }
 }

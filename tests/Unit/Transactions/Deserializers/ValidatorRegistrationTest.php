@@ -14,16 +14,16 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate registration deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration
  */
-class DelegateRegistrationTest extends TestCase
+class ValidatorRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
@@ -42,7 +42,7 @@ class DelegateRegistrationTest extends TestCase
         $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
     }
 
-    private function assertTransaction(array $fixture): DelegateRegistration
+    private function assertTransaction(array $fixture): ValidatorRegistration
     {
         $actual = $this->assertDeserialized($fixture, [
             'version',
