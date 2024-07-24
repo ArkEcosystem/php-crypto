@@ -36,7 +36,7 @@ class MultiPaymentTest extends TestCase
     }
 
     /** @test */
-    public function it_should_match_fixture_passphrase_yyy()
+    public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
         $builder = MultiPaymentBuilder::new()
