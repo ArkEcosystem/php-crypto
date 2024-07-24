@@ -13,16 +13,16 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
-            
+            - uses: actions/checkout@v4
+
             # Used for running the js workaround for schnorr signatures
             - name: Set up Node.js
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v4
               with:
-                node-version: '20'
+                node-version: 20
 
-            - name: Install
+            - name: Install PHP dependencies
               run: composer update --no-interaction --no-suggest --ignore-platform-reqs
 
-            - name: Unit tests
+            - name: Run Unit tests
               run: composer test
