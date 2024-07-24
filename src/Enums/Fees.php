@@ -24,7 +24,7 @@ class Fees
 
     public const SECOND_SIGNATURE_REGISTRATION = '500000000';
 
-    public const DELEGATE_REGISTRATION = '2500000000';
+    public const VALIDATOR_REGISTRATION = '2500000000';
 
     public const VOTE = '100000000';
 

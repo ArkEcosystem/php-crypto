@@ -24,7 +24,7 @@ class Types
 
     public const SECOND_SIGNATURE_REGISTRATION = 1;
 
-    public const DELEGATE_REGISTRATION = 2;
+    public const VALIDATOR_REGISTRATION = 2;
 
     public const VOTE = 3;
 

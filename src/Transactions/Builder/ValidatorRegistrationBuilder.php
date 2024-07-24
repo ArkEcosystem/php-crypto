@@ -30,30 +30,21 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct();
 
-        $this->transaction->data['asset'] = ['delegate' => []];
+        $this->transaction->data['asset'] = [];
     }
 
     /**
      * Set the username to assign.
-     */
-    public function username(string $username): self
-    {
-        $this->transaction->data['asset']['delegate']['username'] = $username;
-
-        return $this;
-    }
-
-    /**
-     * Sign the transaction using the given passphrase.
      *
+     * @param string $username
      *
      * @return self
      */
-    public function sign(string $passphrase): AbstractTransactionBuilder
+    public function publicKeyAsset(string $publicKey): self
     {
-        $publicKey = PublicKey::fromPassphrase($passphrase);
-
-        parent::sign($passphrase);
+        if ($publicKey) {
+            $this->transaction->data['asset']['validatorPublicKey'] = $publicKey;
+        }
 
         return $this;
     }
@@ -63,7 +54,7 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::DELEGATE_REGISTRATION;
+        return \ArkEcosystem\Crypto\Enums\Types::VALIDATOR_REGISTRATION;
     }
 
     protected function getTypeGroup(): int

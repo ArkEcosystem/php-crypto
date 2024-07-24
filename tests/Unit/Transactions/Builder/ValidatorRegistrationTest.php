@@ -29,7 +29,7 @@ class ValidatorRegistrationTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = ValidatorRegistrationBuilder::new()
-            ->username('polopolo')
+            ->publicKeyAsset('a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -38,27 +38,17 @@ class ValidatorRegistrationTest extends TestCase
     /** @test */
     public function it_should_match_fixture_passphrase()
     {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
+        $fixture = $this->getTransactionFixture('validator_registration', 'validator-registration-sign');
+        
         $builder = ValidatorRegistrationBuilder::new()
-            ->username($fixture['data']['asset']['delegate']['username'])
+            ->withFee($fixture['data']['fee'])
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
+            ->publicKeyAsset($fixture['data']['asset']['validatorPublicKey'])
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
-        $this->assertSameTransactions($fixture, $builder->transaction->data);
-    }
-
-    /** @test */
-    public function it_should_match_fixture_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
-        $builder = ValidatorRegistrationBuilder::new()
-            ->username($fixture['data']['asset']['delegate']['username'])
-            ->sign($this->passphrase)
-            ->secondSign($this->secondPassphrase);
-
-        $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

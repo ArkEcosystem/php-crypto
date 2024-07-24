@@ -28,18 +28,9 @@ class ValidatorRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
+        $fixture = $this->getTransactionFixture('validator_registration', 'validator-registration-sign');
 
         $this->assertTransaction($fixture);
-    }
-
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
     }
 
     private function assertTransaction(array $fixture): ValidatorRegistration

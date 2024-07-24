@@ -31,7 +31,7 @@ class Fee
     private static $fees = [
         Types::TRANSFER                      => Fees::TRANSFER,
         Types::SECOND_SIGNATURE_REGISTRATION => Fees::SECOND_SIGNATURE_REGISTRATION,
-        Types::DELEGATE_REGISTRATION         => Fees::DELEGATE_REGISTRATION,
+        Types::VALIDATOR_REGISTRATION        => Fees::VALIDATOR_REGISTRATION,
         Types::VOTE                          => Fees::VOTE,
         Types::MULTI_SIGNATURE_REGISTRATION  => Fees::MULTI_SIGNATURE_REGISTRATION,
         Types::IPFS                          => Fees::IPFS,

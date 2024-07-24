@@ -51,6 +51,6 @@ trait Serialize
 
         $actual = Serializer::new($transaction)->serialize();
 
-        $this->assertSameSerialization($fixture['serialized'], $actual->getHex());
+        $this->assertSame($fixture['serialized'], $actual->getHex());
     }
 }

@@ -24,23 +24,16 @@ class ValidatorRegistration extends Transaction
 {
     public function serialize(array $options = []): ByteBuffer
     {
-        $usernameBuffer = ByteBuffer::fromUTF8($this->data['asset']['delegate']['username']);
-
         $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt8($usernameBuffer->capacity());
-        $buffer->append($usernameBuffer);
-
+        $buffer->writeHex($this->data['asset']['validatorPublicKey']);
+        
         return $buffer;
     }
 
     public function deserialize(ByteBuffer $buffer): void
     {
-        $usernameLength = $buffer->readUInt8();
-
         $this->data['asset'] = [
-            'delegate' => [
-                'username' => $buffer->readHexString($usernameLength * 2),
-            ],
+            'validatorPublicKey' => $buffer->readHex(48 * 2),
         ];
     }
 }
