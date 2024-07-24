@@ -123,6 +123,22 @@ abstract class AbstractTransactionBuilder
     }
 
     /**
+     * Sign the transaction using the given passphrase.
+     *
+     * @param string $passphrase
+     *
+     * @return AbstractTransactionBuilder
+     */
+    public function multiSign(string $passphrase, int $index = -1): self
+    {
+        $keys = PrivateKey::fromPassphrase($passphrase);
+
+        $this->transaction = $this->transaction->multiSign($keys, $index);
+
+        return $this;
+    }
+
+    /**
      * Verify the transaction validity.
      *
      * @return bool

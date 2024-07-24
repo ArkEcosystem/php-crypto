@@ -110,7 +110,10 @@ class Serializer
         $buffer->writeUint16($this->transaction->data['type']);
         $buffer->writeUint64(+$this->transaction->data['nonce']);
 
-        $buffer->writeHex($this->transaction->data['senderPublicKey']);
+        if (isset($this->transaction->data['senderPublicKey'])) {
+            $buffer->writeHex($this->transaction->data['senderPublicKey']);
+        }
+
         $buffer->writeUint64(+$this->transaction->data['fee']);
     }
 

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
-use ArkEcosystem\Crypto\Utils\Slot;
 use Illuminate\Support\Arr;
 
 /**
@@ -32,7 +31,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
         parent::__construct();
 
         $this->transaction->data['asset']     = ['multiSignature' => [
-            'min' => 0,
+            'min'        => 0,
             'publicKeys' => [],
         ]];
     }

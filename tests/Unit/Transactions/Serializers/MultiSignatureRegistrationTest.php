@@ -27,14 +27,6 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        //TODO fixture?
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-secondSign'));
+        $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign'));
     }
 }

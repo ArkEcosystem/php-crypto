@@ -28,20 +28,9 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        //TODO fail to verify : fixture is schnorr
-        $transaction = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration');
+        $transaction = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
 
         $this->assertTransaction($transaction);
-    }
-
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        //TODO fixture
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$transaction = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-secondSign');
-//
-        //$this->assertTransaction($transaction);
     }
 
     private function assertTransaction(array $fixture): MultiSignatureRegistration
@@ -61,7 +50,8 @@ class MultiSignatureRegistrationTest extends TestCase
             'id',
         ]);
 
-        // TODO $this->assertTrue($actual->verify()); when AIP-18 with Schnorr implemented
+        $this->assertTrue($actual->verify());
+
         return $actual;
     }
 }

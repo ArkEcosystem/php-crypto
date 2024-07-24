@@ -64,9 +64,11 @@ trait Deserialize
         // Signatures and IDs are not deterministic
         unset($expected['id']);
         unset($expected['signature']);
+        unset($expected['signatures']);
 
         unset($actual['id']);
         unset($actual['signature']);
+        unset($actual['signatures']);
 
         $this->assertSame($expected, $actual);
     }
@@ -75,6 +77,21 @@ trait Deserialize
     {
         // Signatures is not deterministic so we need to remove them from the comparison
         $this->assertSame(substr($expected, 0, -128), substr($actual, 0, -128));
+    }
+
+    protected function assertSameSerializationMultisignature(string $expected, string $actual, int $numberOfParticipants): void
+    {
+        $signaturesPartLength = 128 + ($numberOfParticipants * 130);
+
+        // Signatures is not deterministic so we need to remove them from the comparison
+        $this->assertSame(substr($expected, 0, -$signaturesPartLength), substr($actual, 0, -$signaturesPartLength));
+    }
+
+    protected function assertSignaturesAreSerialized(string $serialized, array $signatures): void
+    {
+        foreach ($signatures as $signature) {
+            $this->assertStringContainsString($signature, $serialized);
+        }
     }
 
     private function array_only(array $arr, array $keys): array

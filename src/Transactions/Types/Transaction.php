@@ -67,6 +67,36 @@ abstract class Transaction
         return $this;
     }
 
+    /**
+     * Sign the transaction using the given passphrase.
+     *
+     * @param PrivateKey $keys
+     * @param int        $index
+     *
+     * @return Transaction
+     */
+    public function multiSign(PrivateKey $keys, int $index = -1): self
+    {
+        if (! isset($this->data['signatures'])) {
+            $this->data['signatures'] = [];
+        }
+
+        $index = $index === -1 ? count($this->data['signatures']) : $index;
+
+        $transactionHash             = Hash::sha256($this->getBytes([
+            'skipSignature'       => true,
+            'skipMultiSignature'  => true,
+        ]));
+
+        $signature = $this->temporarySignerSign($transactionHash, $keys);
+
+        $indexedSignature = $this->numberToHex($index).$signature;
+
+        $this->data['signatures'][] = $indexedSignature;
+
+        return $this;
+    }
+
     public function verify(): bool
     {
         $options = [
@@ -141,6 +171,15 @@ abstract class Transaction
     public function hasVendorField(): bool
     {
         return false;
+    }
+
+    private function numberToHex(int $number, $padding = 2): string
+    {
+        // Convert the number to hexadecimal
+        $indexHex = dechex($number);
+
+        // Pad the hexadecimal string with leading zeros
+        return str_pad($indexHex, $padding, '0', STR_PAD_LEFT);
     }
 
     private function temporarySignerSign(Buffer $transaction, PrivateKey $keys)
