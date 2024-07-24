@@ -29,10 +29,10 @@ class MultiSignatureRegistrationTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
-        
+
         $transaction = MultiSignatureRegistrationBuilder::new()
             ->multiSignatureAsset([
-                'min' => $fixture['data']['asset']['multiSignature']['min'],
+                'min'        => $fixture['data']['asset']['multiSignature']['min'],
                 'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
             ])
             ->sign('secret');
