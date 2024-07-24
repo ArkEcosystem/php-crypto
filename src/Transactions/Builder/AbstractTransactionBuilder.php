@@ -148,16 +148,6 @@ abstract class AbstractTransactionBuilder
     }
 
     /**
-     * Verify the transaction validity with a second signature.
-     *
-     * @return bool
-     */
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        return $this->transaction->secondVerify($secondPublicKey);
-    }
-
-    /**
      * Convert the transaction to its array representation.
      *
      * @return array
