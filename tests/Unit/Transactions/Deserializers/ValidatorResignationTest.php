@@ -14,26 +14,26 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\DelegateResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * This is the delegate resignation deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateResignation
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
  */
-class DelegateResignationTest extends TestCase
+class ValidatorResignationTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $transaction = $this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign');
+        $transaction = $this->getTransactionFixture('validator_resignation', 'validator-resignation-sign');
 
         $this->assertTransaction($transaction);
     }
 
-    private function assertTransaction(array $fixture): DelegateResignation
+    private function assertTransaction(array $fixture): ValidatorResignation
     {
         $actual = $this->assertDeserialized($fixture, [
             'version',

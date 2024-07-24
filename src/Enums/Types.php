@@ -34,7 +34,7 @@ class Types
 
     public const MULTI_PAYMENT = 6;
 
-    public const DELEGATE_RESIGNATION = 7;
+    public const VALIDATOR_RESIGNATION = 7;
 
     public const HTLC_LOCK = 8;
 

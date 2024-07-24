@@ -26,7 +26,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class MultiPaymentTest extends TestCase
 {
     /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase_xxxx()
+    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
         $transaction = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
 

@@ -20,19 +20,13 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  * This is the delegate resignation serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateResignation
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
  */
-class DelegateResignationTest extends TestCase
+class ValidatorResignationTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-secondSign'));
+        $this->assertSerialized($this->getTransactionFixture('validator_resignation', 'validator-resignation-sign'));
     }
 }

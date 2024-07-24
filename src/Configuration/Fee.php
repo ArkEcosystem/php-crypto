@@ -36,7 +36,7 @@ class Fee
         Types::MULTI_SIGNATURE_REGISTRATION  => Fees::MULTI_SIGNATURE_REGISTRATION,
         Types::IPFS                          => Fees::IPFS,
         Types::MULTI_PAYMENT                 => Fees::MULTI_PAYMENT,
-        Types::DELEGATE_RESIGNATION          => Fees::DELEGATE_RESIGNATION,
+        Types::VALIDATOR_RESIGNATION         => Fees::VALIDATOR_RESIGNATION,
         Types::HTLC_LOCK                     => Fees::HTLC_LOCK,
         Types::HTLC_CLAIM                    => Fees::HTLC_CLAIM,
         Types::HTLC_REFUND                   => Fees::HTLC_REFUND,

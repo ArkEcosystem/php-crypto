@@ -39,7 +39,7 @@ class Deserializer
         Types\MultiSignatureRegistration::class,
         Types\IPFS::class,
         Types\MultiPayment::class,
-        Types\DelegateResignation::class,
+        Types\ValidatorResignation::class,
         Types\HtlcLock::class,
         Types\HtlcClaim::class,
         Types\HtlcRefund::class,
@@ -48,19 +48,17 @@ class Deserializer
     /**
      * Create a new deserializer instance.
      *
-     * @param object $serialized
+     * @param  object  $serialized
      */
     public function __construct(string $serialized)
     {
-        $this->buffer = false === strpos($serialized, "\0")
+        $this->buffer = strpos($serialized, "\0") === false
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
     }
 
     /**
      * Create a new deserializer instance.
-     *
-     * @param string $serialized
      */
     public static function new(string $serialized)
     {
@@ -69,8 +67,6 @@ class Deserializer
 
     /**
      * Perform AIP11 compliant deserialization.
-     *
-     * @return Transaction
      */
     public function deserialize(): Transaction
     {
@@ -78,8 +74,8 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        $transactionClass  = $this->transactionsClasses[$data['type']];
-        $transaction       = new $transactionClass();
+        $transactionClass = $this->transactionsClasses[$data['type']];
+        $transaction = new $transactionClass();
         $transaction->data = $data;
 
         $this->deserializeVendorField($transaction);
@@ -100,10 +96,6 @@ class Deserializer
 
     /**
      * Handle the deserialization of transaction data with a version of 2.0.
-     *
-     * @param Transaction $transaction
-     *
-     * @return Transaction
      */
     public function handleVersionTwo(Transaction $transaction): Transaction
     {
@@ -115,13 +107,13 @@ class Deserializer
     private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
-        $data['version']         = $this->buffer->readUInt8();
-        $data['network']         = $this->buffer->readUInt8();
-        $data['typeGroup']       = $this->buffer->readUInt32();
-        $data['type']            = $this->buffer->readUInt16();
-        $data['nonce']           = strval($this->buffer->readUInt64());
+        $data['version'] = $this->buffer->readUInt8();
+        $data['network'] = $this->buffer->readUInt8();
+        $data['typeGroup'] = $this->buffer->readUInt32();
+        $data['type'] = $this->buffer->readUInt16();
+        $data['nonce'] = strval($this->buffer->readUInt64());
         $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
-        $data['fee']             = strval($this->buffer->readUInt64());
+        $data['fee'] = strval($this->buffer->readUInt64());
     }
 
     private function deserializeVendorField(Transaction $transaction): void
@@ -146,11 +138,11 @@ class Deserializer
             if ($this->buffer->remaining() % 65 === 0) {
                 $data['signatures'] = [];
 
-                $count            = $this->buffer->remaining() / 65;
+                $count = $this->buffer->remaining() / 65;
                 $publicKeyIndexes = [];
                 for ($i = 0; $i < $count; $i++) {
                     $multiSignaturePart = $this->buffer->readHex(65 * 2);
-                    $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
+                    $publicKeyIndex = intval(substr($multiSignaturePart, 0, 2), 16);
 
                     if (! isset($publicKeyIndexes[$publicKeyIndex])) {
                         $publicKeyIndexes[$publicKeyIndex] = true;

@@ -20,7 +20,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  *
  * @author Brian Faust <brian@ark.io>
  */
-class DelegateResignation extends Transaction
+class ValidatorResignation extends Transaction
 {
     public function serialize(array $options = []): ByteBuffer
     {

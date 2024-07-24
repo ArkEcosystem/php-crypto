@@ -34,7 +34,7 @@ class Fees
 
     public const MULTI_PAYMENT = '10000000';
 
-    public const DELEGATE_RESIGNATION = '2500000000';
+    public const VALIDATOR_RESIGNATION = '2500000000';
 
     public const HTLC_LOCK = '10000000';
 

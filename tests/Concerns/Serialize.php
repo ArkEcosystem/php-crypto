@@ -15,7 +15,7 @@ namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
-use ArkEcosystem\Crypto\Transactions\Types\DelegateResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\HtlcClaim;
 use ArkEcosystem\Crypto\Transactions\Types\HtlcLock;
 use ArkEcosystem\Crypto\Transactions\Types\HtlcRefund;
@@ -36,7 +36,7 @@ trait Serialize
         MultiSignatureRegistration::class,
         IPFS::class,
         MultiPayment::class,
-        DelegateResignation::class,
+        ValidatorResignation::class,
         HtlcLock::class,
         HtlcClaim::class,
         HtlcRefund::class,

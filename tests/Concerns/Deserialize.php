@@ -73,7 +73,8 @@ trait Deserialize
 
     protected function assertSameSerialization(string $expected, string $actual): void
     {
-        $this->assertSame(substr($expected, 0, 128), substr($actual, 0, 128));
+        // Signatures is not deterministic so we need to remove them from the comparison
+        $this->assertSame(substr($expected, 0, -128), substr($actual, 0, -128));
     }
 
     private function array_only(array $arr, array $keys): array
