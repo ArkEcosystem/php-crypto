@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
