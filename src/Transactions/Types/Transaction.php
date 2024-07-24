@@ -188,9 +188,29 @@ abstract class Transaction
 
         $message    = $transaction->getHex();
 
+        $command = "sign $privateKey $message";
+
+        $result = $this->runTemporaryNodeCommand($command);
+
+        return $result['signature'];
+    }
+
+    private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey)
+    {
+        $message = $transaction->getHex();
+
+        $command = "verify $publicKey $message $signature";
+
+        $result = $this->runTemporaryNodeCommand($command);
+
+        return $result['isValid'];
+    }
+
+    private function runTemporaryNodeCommand(string $command): array
+    {
         $scriptPath = __DIR__.'/../../../scripts';
 
-        $command = escapeshellcmd("npm start --prefix $scriptPath sign $privateKey $message");
+        $command = escapeshellcmd("npm start --prefix $scriptPath $command");
 
         exec($command, $output, $returnVar);
 
@@ -214,47 +234,10 @@ abstract class Transaction
             throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
         }
 
-        if ($result['status'] === 'success') {
-            return $result['signature'];
+        if ($result['status'] !== 'success') {
+            throw new \RuntimeException('Error: '.$result['message']);
         }
 
-        throw new \RuntimeException('Error signing message: '.$result['message']);
-    }
-
-    private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey)
-    {
-        $message = $transaction->getHex();
-
-        $scriptPath = __DIR__.'/../../../scripts';
-
-        $command = escapeshellcmd("npm start --prefix $scriptPath verify $publicKey $message $signature");
-
-        exec($command, $output, $returnVar);
-
-        if ($returnVar !== 0) {
-            $errorOutput = implode("\n", $output);
-
-            throw new \RuntimeException("Error running verifier script: $errorOutput");
-        }
-
-        $jsonOutput = implode("\n", $output);
-
-        if (preg_match('/\{.*\}/s', $jsonOutput, $matches)) {
-            $json = $matches[0];
-        } else {
-            throw new \RuntimeException("Error: Could not find JSON output in: $jsonOutput");
-        }
-
-        $result = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
-        }
-
-        if ($result['status'] === 'success') {
-            return $result['isValid'];
-        }
-
-        throw new \RuntimeException('Error verifying signature: '.$result['message']);
+        return $result;
     }
 }
