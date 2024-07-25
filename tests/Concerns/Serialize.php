@@ -20,6 +20,7 @@ use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\SecondSignatureRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
@@ -36,6 +37,7 @@ trait Serialize
         MultiPayment::class,
         ValidatorResignation::class,
         UsernameRegistration::class,
+        UsernameResignation::class,
     ];
 
     protected function assertSerialized(array $fixture): void

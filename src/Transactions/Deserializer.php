@@ -41,6 +41,7 @@ class Deserializer
         Types\MultiPayment::class,
         Types\ValidatorResignation::class,
         Types\UsernameRegistration::class,
+        Types\UsernameResignation::class,
     ];
 
     /**

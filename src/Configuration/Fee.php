@@ -38,7 +38,7 @@ class Fee
         Types::MULTI_PAYMENT                 => Fees::MULTI_PAYMENT,
         Types::VALIDATOR_RESIGNATION         => Fees::VALIDATOR_RESIGNATION,
         Types::USERNAME_REGISTRATION         => Fees::USERNAME_REGISTRATION,
-        Types::HTLC_CLAIM                    => Fees::HTLC_CLAIM,
+        Types::USERNAME_RESIGNATION          => Fees::USERNAME_RESIGNATION,
         Types::HTLC_REFUND                   => Fees::HTLC_REFUND,
     ];
 
