@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
+use ArkEcosystem\Crypto\Utils\Address as AddressUtils;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
@@ -25,13 +25,12 @@ class Address
      * Derive the address from the given passphrase.
      *
      * @param string               $passphrase
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
+    public static function fromPassphrase(string $passphrase): string
     {
-        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
+        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase));
     }
 
     /**
@@ -51,11 +50,10 @@ class Address
      * Derive the address from the given public key.
      *
      * @param string               $publicKey
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPublicKey(string $publicKey, $network = null): string
+    public static function fromPublicKey(string $publicKey): string
     {
         // Convert the public key to a byte array
         $publicKeyBytes = hex2bin($publicKey);
@@ -81,22 +79,21 @@ class Address
         $address = '0x'.$address;
 
         // Convert to checksum address
-        return self::toChecksumAddress($address);
+        return AddressUtils::toChecksumAddress($address);
     }
 
     /**
      * Derive the address from the given private key.
      *
      * @param EccPrivateKey $privateKey
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
+    public static function fromPrivateKey(EccPrivateKey $privateKey): string
     {
         $publicKey = $privateKey->getPublicKey()->getHex();
 
-        return static::fromPublicKey($publicKey, $network);
+        return static::fromPublicKey($publicKey);
     }
 
     /**
@@ -107,33 +104,9 @@ class Address
      *
      * @return bool
      */
-    public static function validate(string $address, $network = null): bool
+    public static function validate(string $address): bool
     {
         // Simple validation to check if the address starts with 0x and is 42 characters long
         return preg_match('/^0x[a-fA-F0-9]{40}$/', $address) === 1;
-    }
-
-    /**
-     * Convert to checksum address.
-     *
-     * @param string $address
-     *
-     * @return string
-     */
-    private static function toChecksumAddress(string $address): string
-    {
-        $address         = strtolower(substr($address, 2));
-        $hash            = Keccak::hash($address, 256);
-        $checksumAddress = '0x';
-
-        for ($i = 0; $i < 40; $i++) {
-            if (intval($hash[$i], 16) >= 8) {
-                $checksumAddress .= strtoupper($address[$i]);
-            } else {
-                $checksumAddress .= $address[$i];
-            }
-        }
-
-        return $checksumAddress;
     }
 }

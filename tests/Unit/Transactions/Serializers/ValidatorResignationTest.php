@@ -14,20 +14,19 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote serializer test class.
+ * This is the delegate resignation serializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Vote
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
  */
-class VoteTest extends TestCase
+class ValidatorResignationTest extends TestCase
 {
     /** @test */
     public function it_should_serialize_the_transaction_with_a_passphrase()
     {
-        $this->assertSerialized($this->getTransactionFixture('vote', 'vote-sign'));
+        $this->assertSerialized($this->getTransactionFixture('validator_resignation', 'validator-resignation-sign'));
     }
 }

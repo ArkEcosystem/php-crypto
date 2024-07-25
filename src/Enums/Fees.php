@@ -24,7 +24,7 @@ class Fees
 
     public const SECOND_SIGNATURE_REGISTRATION = '500000000';
 
-    public const DELEGATE_REGISTRATION = '2500000000';
+    public const VALIDATOR_REGISTRATION = '2500000000';
 
     public const VOTE = '100000000';
 
@@ -34,7 +34,7 @@ class Fees
 
     public const MULTI_PAYMENT = '10000000';
 
-    public const DELEGATE_RESIGNATION = '2500000000';
+    public const VALIDATOR_RESIGNATION = '2500000000';
 
     public const HTLC_LOCK = '10000000';
 

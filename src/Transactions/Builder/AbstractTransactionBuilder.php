@@ -38,7 +38,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['nonce']     = '0';
         $this->transaction->data['amount']    = '0';
         $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 2;
+        $this->transaction->data['version']   = 1;
         $this->transaction->data['network']   = Network::get()->pubKeyHash();
     }
 
@@ -123,16 +123,17 @@ abstract class AbstractTransactionBuilder
     }
 
     /**
-     * Sign the transaction using the given second passphrase.
+     * Sign the transaction using the given passphrase.
      *
-     * @param string $secondPassphrase
+     * @param string $passphrase
      *
      * @return AbstractTransactionBuilder
      */
-    public function secondSign(string $secondPassphrase): self
+    public function multiSign(string $passphrase, int $index = -1): self
     {
-        $this->transaction             = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
-        $this->transaction->data['id'] = $this->transaction->getId();
+        $keys = PrivateKey::fromPassphrase($passphrase);
+
+        $this->transaction = $this->transaction->multiSign($keys, $index);
 
         return $this;
     }
@@ -145,16 +146,6 @@ abstract class AbstractTransactionBuilder
     public function verify(): bool
     {
         return $this->transaction->verify();
-    }
-
-    /**
-     * Verify the transaction validity with a second signature.
-     *
-     * @return bool
-     */
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        return $this->transaction->secondVerify($secondPublicKey);
     }
 
     /**

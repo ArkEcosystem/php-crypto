@@ -18,8 +18,6 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 
 /**
@@ -60,28 +58,41 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
-        $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
+
+        // $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $this->data['signature'] = $this->temporarySignerSign($transaction, $keys);
 
         return $this;
     }
 
     /**
-     * Sign the transaction using the given second passphrase.
+     * Sign the transaction using the given passphrase.
      *
      * @param PrivateKey $keys
+     * @param int        $index
      *
      * @return Transaction
      */
-    public function secondSign(PrivateKey $keys): self
+    public function multiSign(PrivateKey $keys, int $index = -1): self
     {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $transaction                   = Hash::sha256($this->getBytes($options));
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        if (! isset($this->data['signatures'])) {
+            $this->data['signatures'] = [];
+        }
+
+        $index = $index === -1 ? count($this->data['signatures']) : $index;
+
+        $transactionHash             = Hash::sha256($this->getBytes([
+            'skipSignature'       => true,
+            'skipMultiSignature'  => true,
+        ]));
+
+        $signature = $this->temporarySignerSign($transactionHash, $keys);
+
+        $indexedSignature = $this->numberToHex($index).$signature;
+
+        $this->data['signatures'][] = $indexedSignature;
 
         return $this;
     }
@@ -90,54 +101,14 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
-            'skipSecondSignature' => true,
         ];
 
-        $bytes     = $this->getBytes($options);
         $publicKey = $this->data['senderPublicKey'];
         $signature = $this->data['signature'];
 
-        return $this->verifySchnorrOrECDSA($bytes, $publicKey, $signature);
-    }
+        $transaction = Hash::sha256($this->getBytes($options));
 
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $bytes     = $this->getBytes($options);
-        $signature = $this->data['secondSignature'];
-
-        return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
-    }
-
-    public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        return $this->isSchnorr($signature)
-            ? $this->verifySchnorr($bytes, $publicKey, $signature)
-            : $this->verifyECDSA($bytes, $publicKey, $signature);
-    }
-
-    public function isSchnorr(string $signature): bool
-    {
-        return ByteBuffer::fromHex($signature)->capacity() === 64;
-    }
-
-    public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($publicKey);
-
-        return $publicKey->verify(
-            Hash::sha256($bytes),
-            SignatureFactory::fromHex($signature)
-        );
-    }
-
-    public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
-    {
-        //TODO
-        return false;
+        return $this->temporarySignerVerify($transaction, $signature, $publicKey);
     }
 
     /**
@@ -170,11 +141,9 @@ abstract class Transaction
             'id'                   => $this->data['id'],
             'network'              => $this->data['network'] ?? Network::get()->version(),
             'recipientId'          => $this->data['recipientId'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
             'signatures'           => $this->data['signatures'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
             'nonce'                => $this->data['nonce'],
@@ -202,5 +171,73 @@ abstract class Transaction
     public function hasVendorField(): bool
     {
         return false;
+    }
+
+    private function numberToHex(int $number, $padding = 2): string
+    {
+        // Convert the number to hexadecimal
+        $indexHex = dechex($number);
+
+        // Pad the hexadecimal string with leading zeros
+        return str_pad($indexHex, $padding, '0', STR_PAD_LEFT);
+    }
+
+    private function temporarySignerSign(Buffer $transaction, PrivateKey $keys)
+    {
+        $privateKey = $keys->getHex();
+
+        $message    = $transaction->getHex();
+
+        $command = "sign $privateKey $message";
+
+        $result = $this->runTemporaryNodeCommand($command);
+
+        return $result['signature'];
+    }
+
+    private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey)
+    {
+        $message = $transaction->getHex();
+
+        $command = "verify $publicKey $message $signature";
+
+        $result = $this->runTemporaryNodeCommand($command);
+
+        return $result['isValid'];
+    }
+
+    private function runTemporaryNodeCommand(string $command): array
+    {
+        $scriptPath = __DIR__.'/../../../scripts';
+
+        $command = escapeshellcmd("npm start --prefix $scriptPath $command");
+
+        exec($command, $output, $returnVar);
+
+        if ($returnVar !== 0) {
+            $errorOutput = implode("\n", $output);
+
+            throw new \RuntimeException("Error running signer script: $errorOutput");
+        }
+
+        $jsonOutput = implode("\n", $output);
+
+        if (preg_match('/\{.*\}/s', $jsonOutput, $matches)) {
+            $json = $matches[0];
+        } else {
+            throw new \RuntimeException("Error: Could not find JSON output in: $jsonOutput");
+        }
+
+        $result = json_decode($json, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
+        }
+
+        if ($result['status'] !== 'success') {
+            throw new \RuntimeException('Error: '.$result['message']);
+        }
+
+        return $result;
     }
 }

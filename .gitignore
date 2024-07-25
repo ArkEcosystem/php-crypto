@@ -5,3 +5,5 @@ clover.xml
 .phpunit.result.cache
 .coverage
 coverage.xml
+# Used for the schnorr signature hack, remove once a php version is implemented
+scripts/node_modules

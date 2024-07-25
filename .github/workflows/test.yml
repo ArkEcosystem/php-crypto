@@ -15,6 +15,9 @@ jobs:
         steps:
             - uses: actions/checkout@v1
 
+            - name: Install schnorr workaround script dependencies
+              run: npm --prefix ./scripts/ install
+
             - name: Install
               run: composer update --no-interaction --no-suggest --ignore-platform-reqs
 

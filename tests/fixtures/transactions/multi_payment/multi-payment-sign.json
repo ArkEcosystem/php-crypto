@@ -1,27 +1,27 @@
 {
     "data": {
-        "version": 2,
-        "network": 23,
+        "version": 1,
+        "network": 30,
         "typeGroup": 1,
         "type": 6,
         "nonce": "0",
-        "senderPublicKey": "034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192",
+        "senderPublicKey": "023efc1da7f315f3c533a4080e491f32cd4219731cef008976c3876539e1f192d3",
         "fee": "10000000",
-        "amount": "0",
+        "amount": "3",
         "asset": {
             "payments": [
                 {
                     "amount": "1",
-                    "recipientId": "AHXtmB84sTZ9Zd35h9Y1vfFvPE2Xzqj8ri"
+                    "recipientId": "0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A"
                 },
                 {
                     "amount": "2",
-                    "recipientId": "AZFEPTWnn2Sn8wDZgCRF8ohwKkrmk2AZi1"
+                    "recipientId": "0x27FA7CaFFaAE77dDb9AB232FDBDa56D5e5Af2393"
                 }
             ]
         },
-        "signature": "304502210097320b2f8097ce9aa9a9c8b34362d39a5cfe0c9c2b15061eafbd5283e84fb621022007b1b64123657761b867d874cbd7f3879e0acab0757544fe56dab1b6fffc5077",
-        "id": "3145552127171abf1fd63cf2afa0d0089911baf2544177f93c799515f4a78d02"
+        "signature": "e782cc5a7622ea23463aa3d6795850b7163abf6b02c29795f9230f4b0537404cbccf82de6a44ecf6e98391bff601f033524c8704f4081ada4f72e98aea5ae173",
+        "id": "c820af7342cde48a2d578e6324329fc557ffb4e40fa3208b348cf07fd2020e43"
     },
-    "serialized": "ff02170100000006000000000000000000034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed1928096980000000000000200010000000000000017134b5be4b327ddf9c2bb47fec8a1a44189e90f74020000000000000017bfa6aec83cf1bd03a0cab9f35c85ff51a3e9f041304502210097320b2f8097ce9aa9a9c8b34362d39a5cfe0c9c2b15061eafbd5283e84fb621022007b1b64123657761b867d874cbd7f3879e0acab0757544fe56dab1b6fffc5077"
+    "serialized": "ff011e0100000006000000000000000000023efc1da7f315f3c533a4080e491f32cd4219731cef008976c3876539e1f192d380969800000000000002000100000000000000b693449adda7efc015d87944eae8b7c37eb1690a020000000000000027fa7caffaae77ddb9ab232fdbda56d5e5af2393e782cc5a7622ea23463aa3d6795850b7163abf6b02c29795f9230f4b0537404cbccf82de6a44ecf6e98391bff601f033524c8704f4081ada4f72e98aea5ae173"
 }

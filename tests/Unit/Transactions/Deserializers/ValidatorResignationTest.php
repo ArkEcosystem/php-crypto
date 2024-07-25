@@ -14,36 +14,26 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the transfer deserializer test class.
+ * This is the delegate resignation deserializer test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transfer
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
  */
-class TransferTest extends TestCase
+class ValidatorResignationTest extends TestCase
 {
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
-        $fixture = $this->getTransactionFixture('transfer', 'transfer-sign');
+        $transaction = $this->getTransactionFixture('validator_resignation', 'validator-resignation-sign');
 
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame(0, $actual->data['expiration']);
+        $this->assertTransaction($transaction);
     }
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase_and_vendor_field()
-    {
-        $fixture = $this->getTransactionFixture('transfer', 'transfer-with-vendor-field-sign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['vendorField'], $actual->data['vendorField']);
-    }
-
-    private function assertTransaction(array $fixture): Transfer
+    private function assertTransaction(array $fixture): ValidatorResignation
     {
         $actual = $this->assertDeserialized($fixture, [
             'version',

@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Address;
 
 /**
  * This is the serializer class.
@@ -36,7 +35,9 @@ class MultiPayment extends Transaction
 
         foreach ($this->data['asset']['payments'] as $payment) {
             $buffer->writeUInt64(+$payment['amount']);
-            $buffer->append(Base58::decodeCheck($payment['recipientId'])->getBinary());
+            $buffer->writeHex(
+                Address::toBufferHexString($payment['recipientId'])
+            );
         }
 
         return $buffer;
@@ -51,11 +52,11 @@ class MultiPayment extends Transaction
         for ($i = 0; $i < $count; $i++) {
             $this->data['asset']['payments'][] = [
                 'amount'      => strval($buffer->readUInt64()),
-                'recipientId' => Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2)))),
+                'recipientId' => Address::fromByteBuffer($buffer),
             ];
         }
 
-        $this->data['amount'] = '0';
+        $this->data['amount'] = strval(array_sum(array_column($this->data['asset']['payments'], 'amount')));
     }
 
     public function hasVendorField(): bool

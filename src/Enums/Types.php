@@ -24,7 +24,7 @@ class Types
 
     public const SECOND_SIGNATURE_REGISTRATION = 1;
 
-    public const DELEGATE_REGISTRATION = 2;
+    public const VALIDATOR_REGISTRATION = 2;
 
     public const VOTE = 3;
 
@@ -34,7 +34,7 @@ class Types
 
     public const MULTI_PAYMENT = 6;
 
-    public const DELEGATE_RESIGNATION = 7;
+    public const VALIDATOR_RESIGNATION = 7;
 
     public const HTLC_LOCK = 8;
 

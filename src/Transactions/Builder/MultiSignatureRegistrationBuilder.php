@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
-use ArkEcosystem\Crypto\Utils\Slot;
+use Illuminate\Support\Arr;
 
 /**
  * This is the multisignature registration transaction class.
@@ -30,9 +30,10 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct();
 
-        $this->transaction->data['asset']     = ['multiSignatureLegacy' => []];
-        $this->transaction->data['version']   = 1; // legacy multisig until schnorr implementation (AIP 18)
-        $this->transaction->data['timestamp'] = Slot::time(); // legacy multisig until schnorr implementation (AIP 18)
+        $this->transaction->data['asset']     = ['multiSignature' => [
+            'min'        => 0,
+            'publicKeys' => [],
+        ]];
     }
 
     /**
@@ -44,37 +45,40 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      */
     public function min(int $min): self
     {
-        $this->transaction->data['asset']['multiSignatureLegacy']['min'] = $min;
+        $this->transaction->data['asset']['multiSignature']['min'] = $min;
 
         return $this;
     }
 
     /**
-     * Set the transaction lifetime.
+     * Add a participant to the multi signature registration.
      *
-     * @param int $lifetime
+     * @param string $publicKey
      *
      * @return self
      */
-    public function lifetime(int $lifetime): self
+    public function participant(string $publicKey): self
     {
-        $this->transaction->data['asset']['multiSignatureLegacy']['lifetime'] = $lifetime;
+        if (Arr::get($this->transaction->data, 'asset.multiSignature.publicKeys', []) <= 16) {
+            $this->transaction->data['asset']['multiSignature']['publicKeys'][] = $publicKey;
+        }
 
         return $this;
     }
 
     /**
-     * Set the keysgroup of signatures.
+     * Set the multiSignature asset for the transaction.
      *
-     * @param array $keysgroup
+     * @param array{
+     *     min: int,
+     *     publicKeys: string[]
+     * } $asset The multiSignature asset array containing 'min' and 'publicKeys'.
      *
      * @return self
      */
-    public function keysgroup(array $keysgroup): self
+    public function multiSignatureAsset(array $asset): self
     {
-        $this->transaction->data['asset']['multiSignatureLegacy']['keysgroup'] = $keysgroup;
-
-        $this->transaction->data['fee'] = strval((count($keysgroup) + 1) * intval($this->transaction->data['fee']));
+        Arr::set($this->transaction->data, 'asset.multiSignature', $asset);
 
         return $this;
     }

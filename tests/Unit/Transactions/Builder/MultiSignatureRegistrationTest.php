@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -28,44 +28,40 @@ class MultiSignatureRegistrationTest extends TestCase
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = MultiSignatureRegistrationBuilder::new()
-            ->min(2)
-            ->lifetime(255)
-            ->keysgroup([
-                '03a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '13a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-            ])
-            ->sign('secret')
-            ->secondSign('second secret');
-
-        $this->assertTrue($transaction->verify());
-    }
-
-    /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
+        $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
 
         $transaction = MultiSignatureRegistrationBuilder::new()
-            ->min(2)
-            ->lifetime(255)
-            ->keysgroup([
-                '03a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '13a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
-                '23a02b9d5fdd1307c2ee4652ba54d492d1fd11a7d1bb3f3a44c4a05e79f19de933',
+            ->multiSignatureAsset([
+                'min'        => $fixture['data']['asset']['multiSignature']['min'],
+                'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
             ])
-            ->sign('this is a top secret passphrase')
-            ->secondSign($secondPassphrase);
+            ->sign('secret');
 
         $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
     }
 
     /** @test */
     public function it_should_match_fixture_passphrase()
     {
-        // TODO with AIP 18 because fixture is schnorr
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
+
+        $builder = MultiSignatureRegistrationBuilder::new()
+            ->withFee($fixture['data']['fee'])
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
+            ->multiSignatureAsset([
+                'min'        => $fixture['data']['asset']['multiSignature']['min'],
+                'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
+            ])
+            ->multiSign('album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree', 0)
+            ->multiSign('hen slogan retire boss upset blame rocket slender area arch broom bring elder few milk bounce execute page evoke once inmate pear marine deliver', 1)
+            ->multiSign('top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category', 2)
+            ->sign($this->passphrase);
+
+        $serialized = Serializer::new($builder->transaction)->serialize()->getHex();
+        $this->assertTrue($builder->verify());
+        $this->assertSameSerializationMultisignature($fixture['serialized'], $serialized, 3);
+        $this->assertSignaturesAreSerialized($serialized, $builder->transaction->data['signatures']);
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

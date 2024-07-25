@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -30,24 +29,10 @@ class MultiPaymentTest extends TestCase
     public function it_should_sign_it_with_a_passphrase()
     {
         $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
+            ->add('0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A', '100000000')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
-    }
-
-    /** @test */
-    public function it_should_sign_it_with_a_second_passphrase()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $transaction = MultiPaymentBuilder::new()
-            ->add('AXoXnFi4z1Z6aFvjEYkDVCtBGW2PaRiM25', '100000000')
-            ->sign($this->passphrase)
-            ->secondSign($secondPassphrase);
-
-        $this->assertTrue($transaction->verify());
-        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($secondPassphrase)->getHex()));
     }
 
     /** @test */
@@ -55,27 +40,14 @@ class MultiPaymentTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
         $builder = MultiPaymentBuilder::new()
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
             ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
             ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
-        $this->assertSameTransactions($fixture, $builder->transaction->data);
-    }
-
-    /** @test */
-    public function it_should_match_fixture_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-secondSign');
-        $builder = MultiPaymentBuilder::new()
-            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
-            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
-            ->sign($this->passphrase)
-            ->secondSign($this->secondPassphrase);
-
-        $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 
@@ -85,30 +57,15 @@ class MultiPaymentTest extends TestCase
         $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-with-vendor-field-sign');
         unset($fixture['data']['vendorFieldHex']);
         $builder = MultiPaymentBuilder::new()
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
             ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
             ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
-        $this->assertSameTransactions($fixture, $builder->transaction->data);
-    }
-
-    /** @test */
-    public function it_should_match_fixture_vendor_field_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-with-vendor-field-secondSign');
-        unset($fixture['data']['vendorFieldHex']);
-        $builder = MultiPaymentBuilder::new()
-            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
-            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount'])
-            ->vendorField($fixture['data']['vendorField'])
-            ->sign($this->passphrase)
-            ->secondSign($this->secondPassphrase);
-
-        $this->assertTrue($builder->verify());
-        $this->assertSame($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }
