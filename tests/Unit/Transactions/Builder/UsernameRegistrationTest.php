@@ -45,11 +45,11 @@ class UsernameRegistrationTest extends TestCase
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
             ->usernameAsset($fixture['data']['asset']['username']);
-            
+
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
         }
-            
+
         $builder->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

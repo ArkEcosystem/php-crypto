@@ -42,11 +42,11 @@ class ValidatorResignationTest extends TestCase
             ->withFee($fixture['data']['fee'])
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network']);
-            
+
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
         }
-            
+
         $builder->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

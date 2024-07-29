@@ -45,11 +45,11 @@ class ValidatorRegistrationTest extends TestCase
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
             ->publicKeyAsset($fixture['data']['asset']['validatorPublicKey']);
-            
+
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
         }
-            
+
         $builder->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

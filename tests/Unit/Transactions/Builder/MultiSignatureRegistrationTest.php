@@ -57,7 +57,7 @@ class MultiSignatureRegistrationTest extends TestCase
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
         }
-            
+
         $builder->sign($this->passphrase);
 
         $serialized = Serializer::new($builder->transaction)->serialize()->getHex();

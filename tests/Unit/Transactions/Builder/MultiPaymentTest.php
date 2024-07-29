@@ -45,11 +45,11 @@ class MultiPaymentTest extends TestCase
             ->withNetwork($fixture['data']['network'])
             ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
             ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount']);
-            
+
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
         }
-            
+
         $builder->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
