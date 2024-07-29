@@ -81,7 +81,7 @@ abstract class Transaction
             'skipSecondSignature' => true,
         ];
         $transaction                   = Hash::sha256($this->getBytes($options));
-        
+
         $this->data['secondSignature'] = $this->temporarySignerSign($transaction, $keys);
 
         return $this;
@@ -120,7 +120,7 @@ abstract class Transaction
     public function verify(): bool
     {
         $options = [
-            'skipSignature'       => true,
+            'skipSignature'             => true,
             'skipSecondSignature'       => true,
         ];
 
@@ -137,9 +137,9 @@ abstract class Transaction
         $options = [
             'skipSecondSignature' => true,
         ];
-        
+
         $signature = $this->data['secondSignature'];
-        
+
         $transaction = Hash::sha256($this->getBytes($options));
 
         return $this->temporarySignerVerify($transaction, $signature, $secondPublicKey);
