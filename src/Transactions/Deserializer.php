@@ -27,7 +27,6 @@ class Deserializer
 {
     private ByteBuffer $buffer;
 
-
     /**
      * Create a new deserializer instance.
      *
