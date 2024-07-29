@@ -38,7 +38,7 @@ class TransferTest extends TestCase
     }
 
     /** @test */
-    public function it_should_sign_with_multisignature()
+    public function it_should_multi_sign()
     {
         $fixture = $this->getTransactionFixture('transfer', 'transfer-multi-sign');
 

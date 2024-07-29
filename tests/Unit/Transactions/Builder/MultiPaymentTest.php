@@ -36,6 +36,30 @@ class MultiPaymentTest extends TestCase
     }
 
     /** @test */
+    public function it_should_multi_sign()
+    {
+        $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-multi-sign');
+
+        $builder = MultiPaymentBuilder::new()
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network'])
+            ->add($fixture['data']['asset']['payments'][0]['recipientId'], $fixture['data']['asset']['payments'][0]['amount'])
+            ->add($fixture['data']['asset']['payments'][1]['recipientId'], $fixture['data']['asset']['payments'][1]['amount']);
+            
+        foreach ($this->passphrases as $index => $passphrase) {
+            $builder->multiSign($passphrase, $index);
+        }
+            
+        $builder->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+
+        $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
+
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('multi_payment', 'multi-payment-sign');
