@@ -38,7 +38,7 @@ class UsernameRegistrationTest extends TestCase
     /** @test */
     public function it_should_multi_sign()
     {
-        $fixture = $this->getTransactionFixture('username_registration', 'username-registration-sign');
+        $fixture = $this->getTransactionFixture('username_registration', 'username-registration-multi-sign');
 
         $builder = UsernameRegistrationBuilder::new()
             ->withFee($fixture['data']['fee'])
