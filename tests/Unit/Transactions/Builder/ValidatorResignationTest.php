@@ -35,6 +35,28 @@ class ValidatorResignationTest extends TestCase
     }
 
     /** @test */
+    public function it_should_multi_sign()
+    {
+        $fixture = $this->getTransactionFixture('validator_resignation', 'validator-resignation-multi-sign');
+        $builder = ValidatorResignationBuilder::new()
+            ->withFee($fixture['data']['fee'])
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network']);
+            
+        foreach ($this->passphrases as $index => $passphrase) {
+            $builder->multiSign($passphrase, $index);
+        }
+            
+        $builder->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+
+        $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
+
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
+    /** @test */
     public function it_should_match_fixture_passphrase()
     {
         $fixture = $this->getTransactionFixture('validator_resignation', 'validator-resignation-sign');
