@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
 
@@ -26,23 +27,6 @@ class Deserializer
 {
     private ByteBuffer $buffer;
 
-    /**
-     * The transaction classes.
-     *
-     * @var array
-     */
-    private $transactionsClasses = [
-        Types\Transfer::class,
-        Types\SecondSignatureRegistration::class,
-        Types\ValidatorRegistration::class,
-        Types\Vote::class,
-        Types\MultiSignatureRegistration::class,
-        Types\IPFS::class,
-        Types\MultiPayment::class,
-        Types\ValidatorResignation::class,
-        Types\UsernameRegistration::class,
-        Types\UsernameResignation::class,
-    ];
 
     /**
      * Create a new deserializer instance.
@@ -73,7 +57,7 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        $transactionClass  = $this->transactionsClasses[$data['type']];
+        $transactionClass  = Types::fromValue($data['type'])->transactionClass();
         $transaction       = new $transactionClass();
         $transaction->data = $data;
 

@@ -29,17 +29,14 @@ class Fee
      * @var array
      */
     private static $fees = [
-        Types::TRANSFER                      => Fees::TRANSFER,
-        Types::SECOND_SIGNATURE_REGISTRATION => Fees::SECOND_SIGNATURE_REGISTRATION,
-        Types::VALIDATOR_REGISTRATION        => Fees::VALIDATOR_REGISTRATION,
-        Types::VOTE                          => Fees::VOTE,
-        Types::MULTI_SIGNATURE_REGISTRATION  => Fees::MULTI_SIGNATURE_REGISTRATION,
-        Types::IPFS                          => Fees::IPFS,
-        Types::MULTI_PAYMENT                 => Fees::MULTI_PAYMENT,
-        Types::VALIDATOR_RESIGNATION         => Fees::VALIDATOR_RESIGNATION,
-        Types::USERNAME_REGISTRATION         => Fees::USERNAME_REGISTRATION,
-        Types::USERNAME_RESIGNATION          => Fees::USERNAME_RESIGNATION,
-        Types::HTLC_REFUND                   => Fees::HTLC_REFUND,
+        Types::TRANSFER->value                      => Fees::TRANSFER,
+        Types::VALIDATOR_REGISTRATION->value        => Fees::VALIDATOR_REGISTRATION,
+        Types::VOTE->value                          => Fees::VOTE,
+        Types::MULTI_SIGNATURE_REGISTRATION->value  => Fees::MULTI_SIGNATURE_REGISTRATION,
+        Types::MULTI_PAYMENT->value                 => Fees::MULTI_PAYMENT,
+        Types::VALIDATOR_RESIGNATION->value         => Fees::VALIDATOR_RESIGNATION,
+        Types::USERNAME_REGISTRATION->value         => Fees::USERNAME_REGISTRATION,
+        Types::USERNAME_RESIGNATION->value          => Fees::USERNAME_RESIGNATION,
     ];
 
     /**

@@ -13,32 +13,54 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Enums;
 
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
+use ReflectionEnum;
+
 /**
- * This is the transaction types class.
- *
- * @author Brian Faust <brian@ark.io>
+ * This is the transaction types enum.
  */
-class Types
+enum Types: int
 {
-    public const TRANSFER = 0;
+    case TRANSFER = 0;
+    case VALIDATOR_REGISTRATION = 2;
+    case VOTE = 3;
+    case MULTI_SIGNATURE_REGISTRATION = 4;
+    case MULTI_PAYMENT = 6;
+    case VALIDATOR_RESIGNATION = 7;
+    case USERNAME_REGISTRATION = 8;
+    case USERNAME_RESIGNATION = 9;
 
-    public const SECOND_SIGNATURE_REGISTRATION = 1;
+    public function transactionClass(): string
+    {
+        return match($this) {
+            Types::TRANSFER => Transfer::class,
+            Types::VALIDATOR_REGISTRATION => ValidatorRegistration::class,
+            Types::VOTE => Vote::class,
+            Types::MULTI_SIGNATURE_REGISTRATION => MultiSignatureRegistration::class,
+            Types::MULTI_PAYMENT => MultiPayment::class,
+            Types::VALIDATOR_RESIGNATION => ValidatorResignation::class,
+            Types::USERNAME_REGISTRATION => UsernameRegistration::class,
+            Types::USERNAME_RESIGNATION => UsernameResignation::class,
+        };
+    }
 
-    public const VALIDATOR_REGISTRATION = 2;
+    public static function fromValue(int $value): ?self
+    {
+        $enum = new ReflectionEnum(self::class);
 
-    public const VOTE = 3;
+        foreach ($enum->getCases() as $case) {
+            if ($case->getValue()->value === $value) {
+                return $case->getValue();
+            }
+        }
 
-    public const MULTI_SIGNATURE_REGISTRATION = 4;
-
-    public const IPFS = 5;
-
-    public const MULTI_PAYMENT = 6;
-
-    public const VALIDATOR_RESIGNATION = 7;
-
-    public const USERNAME_REGISTRATION = 8;
-
-    public const USERNAME_RESIGNATION = 9;
-
-    public const HTLC_REFUND = 10;
+        throw new \InvalidArgumentException("Invalid value: {$value}");
+    }
 }

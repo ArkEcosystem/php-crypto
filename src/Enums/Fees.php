@@ -22,15 +22,11 @@ class Fees
 {
     public const TRANSFER = '10000000';
 
-    public const SECOND_SIGNATURE_REGISTRATION = '500000000';
-
     public const VALIDATOR_REGISTRATION = '2500000000';
 
     public const VOTE = '100000000';
 
     public const MULTI_SIGNATURE_REGISTRATION = '500000000';
-
-    public const IPFS = '500000000';
 
     public const MULTI_PAYMENT = '10000000';
 
@@ -39,6 +35,4 @@ class Fees
     public const USERNAME_REGISTRATION = '2500000000';
 
     public const USERNAME_RESIGNATION = '2500000000';
-
-    public const HTLC_REFUND = '0';
 }
