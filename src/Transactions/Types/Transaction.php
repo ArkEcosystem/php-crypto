@@ -149,7 +149,6 @@ abstract class Transaction
     {
         return Serializer::new($this)->serialize($options);
     }
-    
 
     /**
      * Perform AIP11 compliant serialization.
