@@ -15,7 +15,6 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 use BitWasp\Buffertools\Buffer;
