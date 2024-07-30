@@ -14,21 +14,23 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder;
+use ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate resignation builder test class.
+ * This is the delegate registration builder test class.
  *
  * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder
  */
-class ValidatorResignationTest extends TestCase
+class UsernameRegistrationTest extends TestCase
 {
     /** @test */
     public function it_should_sign_it_with_a_passphrase()
     {
-        $transaction = ValidatorResignationBuilder::new()
+        $transaction = UsernameRegistrationBuilder::new()
+            ->usernameAsset('alfonsobries')
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
@@ -37,11 +39,13 @@ class ValidatorResignationTest extends TestCase
     /** @test */
     public function it_should_multi_sign()
     {
-        $fixture = $this->getTransactionFixture('validator_resignation', 'validator-resignation-multi-sign');
-        $builder = ValidatorResignationBuilder::new()
+        $fixture = $this->getTransactionFixture('username_registration', 'username-registration-multi-sign');
+
+        $builder = UsernameRegistrationBuilder::new()
             ->withFee($fixture['data']['fee'])
             ->withNonce($fixture['data']['nonce'])
-            ->withNetwork($fixture['data']['network']);
+            ->withNetwork($fixture['data']['network'])
+            ->usernameAsset($fixture['data']['asset']['username']);
 
         foreach ($this->passphrases as $index => $passphrase) {
             $builder->multiSign($passphrase, $index);
@@ -58,7 +62,8 @@ class ValidatorResignationTest extends TestCase
 
     public function it_should_sign_it_with_a_second_passphrase()
     {
-        $transaction = ValidatorResignationBuilder::new()
+        $transaction = UsernameRegistrationBuilder::new()
+            ->usernameAsset('alfonsobries')
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
 
@@ -69,15 +74,17 @@ class ValidatorResignationTest extends TestCase
     /** @test */
     public function it_should_match_fixture_passphrase()
     {
-        $fixture = $this->getTransactionFixture('validator_resignation', 'validator-resignation-sign');
-        $builder = ValidatorResignationBuilder::new()
+        $fixture = $this->getTransactionFixture('username_registration', 'username-registration-sign');
+
+        $builder = UsernameRegistrationBuilder::new()
             ->withFee($fixture['data']['fee'])
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
+            ->usernameAsset($fixture['data']['asset']['username'])
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSameSerialization($fixture['serialized'], $builder->transaction->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }
