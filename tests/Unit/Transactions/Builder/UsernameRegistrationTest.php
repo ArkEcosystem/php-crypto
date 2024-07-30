@@ -55,7 +55,7 @@ class UsernameRegistrationTest extends TestCase
 
         $this->assertTrue($builder->verify());
 
-        $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
+        $this->assertSameSerializationMultisignature($fixture['serialized'], $builder->transaction->serialize()->getHex(), 3);
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
@@ -84,7 +84,7 @@ class UsernameRegistrationTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], $builder->transaction->serialize()->getHex(), 3);
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }
