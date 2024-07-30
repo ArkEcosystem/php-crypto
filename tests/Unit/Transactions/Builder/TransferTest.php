@@ -39,6 +39,30 @@ class TransferTest extends TestCase
     }
 
     /** @test */
+    public function it_should_multi_sign()
+    {
+        $fixture = $this->getTransactionFixture('transfer', 'transfer-multi-sign');
+
+        $builder = TransferBuilder::new()
+            ->recipient($fixture['data']['recipientId'])
+            ->amount($fixture['data']['amount'])
+            ->withFee($fixture['data']['fee'])
+            ->withNonce($fixture['data']['nonce'])
+            ->withNetwork($fixture['data']['network']);
+
+        foreach ($this->passphrases as $index => $passphrase) {
+            $builder->multiSign($passphrase, $index);
+        }
+
+        $builder->sign($this->passphrase);
+
+        $this->assertTrue($builder->verify());
+
+        $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
+
+        $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+
     public function it_should_sign_it_with_a_second_passphrase()
     {
         $transaction = TransferBuilder::new()

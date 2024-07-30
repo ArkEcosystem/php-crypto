@@ -70,11 +70,13 @@ class MultiSignatureRegistrationTest extends TestCase
             ->multiSignatureAsset([
                 'min'        => $fixture['data']['asset']['multiSignature']['min'],
                 'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
-            ])
-            ->multiSign('album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree', 0)
-            ->multiSign('hen slogan retire boss upset blame rocket slender area arch broom bring elder few milk bounce execute page evoke once inmate pear marine deliver', 1)
-            ->multiSign('top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category', 2)
-            ->sign($this->passphrase);
+            ]);
+
+        foreach ($this->passphrases as $index => $passphrase) {
+            $builder->multiSign($passphrase, $index);
+        }
+
+        $builder->sign($this->passphrase);
 
         $serialized = Serializer::new($builder->transaction)->serialize()->getHex();
         $this->assertTrue($builder->verify());
