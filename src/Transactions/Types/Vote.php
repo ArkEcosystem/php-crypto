@@ -22,7 +22,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class Vote extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(24);
 
@@ -38,7 +38,7 @@ class Vote extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $voteLength = $buffer->readUInt8();
 

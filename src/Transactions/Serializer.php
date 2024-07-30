@@ -50,7 +50,7 @@ class Serializer
 
     public static function getBytes(Transaction $transaction, array $options = []): Buffer
     {
-        return self::new($transaction)->serialize($options);
+        return $transaction->serialize($options);
     }
 
     /**
@@ -66,7 +66,7 @@ class Serializer
 
         $this->serializeVendorField($buffer);
 
-        $typeBuffer = $this->transaction->serialize($options);
+        $typeBuffer = $this->transaction->serializeData($options);
         $buffer->append($typeBuffer);
 
         $this->serializeSignatures($buffer, $options);

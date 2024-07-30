@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 
 trait Serialize
 {
@@ -25,8 +24,6 @@ trait Serialize
         $transaction       = new $transactionClass();
         $transaction->data = $data;
 
-        $actual = Serializer::new($transaction)->serialize();
-
-        $this->assertSame($fixture['serialized'], $actual->getHex());
+        $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }
 }

@@ -22,12 +22,12 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class ValidatorResignation extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         return ByteBuffer::new(0);
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
     }
 }

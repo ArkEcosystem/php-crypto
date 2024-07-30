@@ -20,7 +20,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class UsernameRegistration extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1);
 
@@ -32,7 +32,7 @@ class UsernameRegistration extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $usernameLength = $buffer->readUint8();
 

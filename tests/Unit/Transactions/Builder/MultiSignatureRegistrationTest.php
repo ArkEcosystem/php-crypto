@@ -15,7 +15,6 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -78,7 +77,7 @@ class MultiSignatureRegistrationTest extends TestCase
 
         $builder->sign($this->passphrase);
 
-        $serialized = Serializer::new($builder->transaction)->serialize()->getHex();
+        $serialized = $builder->transaction->serialize()->getHex();
         $this->assertTrue($builder->verify());
         $this->assertSameSerializationMultisignature($fixture['serialized'], $serialized, 3);
         $this->assertSignaturesAreSerialized($serialized, $builder->transaction->data['signatures']);

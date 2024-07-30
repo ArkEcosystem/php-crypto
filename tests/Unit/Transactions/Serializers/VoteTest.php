@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**

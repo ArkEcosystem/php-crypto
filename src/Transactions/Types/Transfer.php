@@ -23,7 +23,7 @@ use ArkEcosystem\Crypto\Utils\Address;
  */
 class Transfer extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(24);
 
@@ -36,7 +36,7 @@ class Transfer extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $this->data['amount']      = strval($buffer->readUInt64());
 

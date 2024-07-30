@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use Illuminate\Support\Arr;
 
 trait Deserialize
@@ -24,7 +23,7 @@ trait Deserialize
         $actual = Deserializer::new($expected['serialized'])->deserialize();
         $data   = $actual->data;
 
-        $this->assertSame($expected['serialized'], Serializer::new($actual)->serialize()->getHex());
+        $this->assertSame($expected['serialized'], $actual->serialize()->getHex());
         $this->assertSameTransactions($expected, $data, $keys);
 
         return $actual;

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
-use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
