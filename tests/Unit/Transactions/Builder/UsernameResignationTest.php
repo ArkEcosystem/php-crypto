@@ -56,7 +56,7 @@ class UsernameResignationTest extends TestCase
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
-    
+
     public function it_should_sign_it_with_a_second_passphrase()
     {
         $transaction = UsernameResignationBuilder::new()
