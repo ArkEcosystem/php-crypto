@@ -71,16 +71,6 @@ class Deserializer
             $transaction->data['amount'] = '0';
         }
 
-        $transaction = $this->handleVersionTwo($transaction);
-
-        return $transaction;
-    }
-
-    /**
-     * Handle the deserialization of transaction data with a version of 2.0.
-     */
-    public function handleVersionTwo(Transaction $transaction): Transaction
-    {
         $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
 
         return $transaction;
