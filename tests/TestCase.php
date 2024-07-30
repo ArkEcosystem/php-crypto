@@ -25,6 +25,8 @@ abstract class TestCase extends BaseTestCase
 
     protected $passphrase = 'my super secret passphrase';
 
+    protected $secondPassphrase = 'this is a top secret second passphrase';
+
     protected function setUp(): void
     {
         Network::set(Mainnet::new());
