@@ -51,7 +51,7 @@ class UsernameRegistrationBuilder extends AbstractTransactionBuilder
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::USERNAME_REGISTRATION;
+        return \ArkEcosystem\Crypto\Enums\Types::USERNAME_REGISTRATION->value;
     }
 
     protected function getTypeGroup(): int

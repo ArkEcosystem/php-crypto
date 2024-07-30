@@ -55,7 +55,6 @@ class TransferTest extends TestCase
             'fee',
             'asset',
             'signature',
-            'secondSignature',
             'amount',
             'id',
         ]);

@@ -53,7 +53,7 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::VALIDATOR_REGISTRATION;
+        return \ArkEcosystem\Crypto\Enums\Types::VALIDATOR_REGISTRATION->value;
     }
 
     protected function getTypeGroup(): int

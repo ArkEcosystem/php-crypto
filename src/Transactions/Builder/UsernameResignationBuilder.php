@@ -33,7 +33,7 @@ class UsernameResignationBuilder extends AbstractTransactionBuilder
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::USERNAME_RESIGNATION;
+        return \ArkEcosystem\Crypto\Enums\Types::USERNAME_RESIGNATION->value;
     }
 
     protected function getTypeGroup(): int

@@ -15,6 +15,7 @@ namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
+use PHPUnit\Util\Type;
 
 /**
  * This is the fee configuration class.
@@ -24,23 +25,11 @@ use ArkEcosystem\Crypto\Enums\Types;
 class Fee
 {
     /**
-     * The default transaction fees.
+     * Custom transaction fees.
      *
      * @var array
      */
-    private static $fees = [
-        Types::TRANSFER                      => Fees::TRANSFER,
-        Types::SECOND_SIGNATURE_REGISTRATION => Fees::SECOND_SIGNATURE_REGISTRATION,
-        Types::VALIDATOR_REGISTRATION        => Fees::VALIDATOR_REGISTRATION,
-        Types::VOTE                          => Fees::VOTE,
-        Types::MULTI_SIGNATURE_REGISTRATION  => Fees::MULTI_SIGNATURE_REGISTRATION,
-        Types::IPFS                          => Fees::IPFS,
-        Types::MULTI_PAYMENT                 => Fees::MULTI_PAYMENT,
-        Types::VALIDATOR_RESIGNATION         => Fees::VALIDATOR_RESIGNATION,
-        Types::USERNAME_REGISTRATION         => Fees::USERNAME_REGISTRATION,
-        Types::USERNAME_RESIGNATION          => Fees::USERNAME_RESIGNATION,
-        Types::HTLC_REFUND                   => Fees::HTLC_REFUND,
-    ];
+    private static $customFees = [];
 
     /**
      * Get the transaction fee for the given type.
@@ -49,7 +38,7 @@ class Fee
      */
     public static function get(int $type): string
     {
-        return static::$fees[$type];
+        return isset(static::$customFees[$type]) ? static::$customFees[$type] : Types::fromValue($type)->defaultFee();
     }
 
     /**
@@ -60,6 +49,6 @@ class Fee
      */
     public static function set(int $type, string $fee): void
     {
-        static::$fees[$type] = $fee;
+        static::$customFees[$type] = $fee;
     }
 }
