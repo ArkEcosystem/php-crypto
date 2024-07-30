@@ -28,7 +28,7 @@ class MultiPayment extends Transaction
      *
      * @return string
      */
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1); // initialize with size 1, will expand as we add bytes
         $buffer->writeUInt16(count($this->data['asset']['payments']));
@@ -43,7 +43,7 @@ class MultiPayment extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $this->data['asset'] = ['payments' => []];
 

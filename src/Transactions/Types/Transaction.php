@@ -116,7 +116,7 @@ abstract class Transaction
      *
      * @return ByteBuffer $buffer
      */
-    abstract public function serialize(array $options = []): ByteBuffer;
+    abstract public function serializeData(array $options = []): ByteBuffer;
 
     /**
      * Perform AIP11 compliant deserialization.
@@ -125,7 +125,7 @@ abstract class Transaction
      *
      * @return void
      */
-    abstract public function deserialize(ByteBuffer $buffer): void;
+    abstract public function deserializeData(ByteBuffer $buffer): void;
 
     /**
      * Convert the transaction to its array representation.

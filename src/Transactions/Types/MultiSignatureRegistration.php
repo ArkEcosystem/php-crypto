@@ -22,7 +22,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class MultiSignatureRegistration extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1);
 
@@ -36,7 +36,7 @@ class MultiSignatureRegistration extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $asset = [
             'multiSignature' => [

@@ -22,7 +22,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class ValidatorRegistration extends Transaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function serializeData(array $options = []): ByteBuffer
     {
         $buffer = ByteBuffer::new(1);
         $buffer->writeHex($this->data['asset']['validatorPublicKey']);
@@ -30,7 +30,7 @@ class ValidatorRegistration extends Transaction
         return $buffer;
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function deserializeData(ByteBuffer $buffer): void
     {
         $this->data['asset'] = [
             'validatorPublicKey' => $buffer->readHex(48 * 2),

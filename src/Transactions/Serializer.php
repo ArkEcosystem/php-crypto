@@ -66,7 +66,7 @@ class Serializer
 
         $this->serializeVendorField($buffer);
 
-        $typeBuffer = $this->transaction->serialize($options);
+        $typeBuffer = $this->transaction->serializeData($options);
         $buffer->append($typeBuffer);
 
         $this->serializeSignatures($buffer, $options);

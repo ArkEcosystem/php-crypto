@@ -63,7 +63,7 @@ class Deserializer
         $this->deserializeVendorField($transaction);
 
         // Deserialize type specific parts
-        $transaction->deserialize($this->buffer);
+        $transaction->deserializeData($this->buffer);
 
         $this->deserializeSignatures($transaction->data);
 
