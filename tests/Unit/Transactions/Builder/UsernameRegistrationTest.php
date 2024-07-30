@@ -15,7 +15,6 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
