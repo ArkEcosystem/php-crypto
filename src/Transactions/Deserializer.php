@@ -40,9 +40,8 @@ class Deserializer
         Types\IPFS::class,
         Types\MultiPayment::class,
         Types\ValidatorResignation::class,
-        Types\HtlcLock::class,
-        Types\HtlcClaim::class,
-        Types\HtlcRefund::class,
+        Types\UsernameRegistration::class,
+        Types\UsernameResignation::class,
     ];
 
     /**

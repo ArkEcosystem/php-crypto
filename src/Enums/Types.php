@@ -36,9 +36,9 @@ class Types
 
     public const VALIDATOR_RESIGNATION = 7;
 
-    public const HTLC_LOCK = 8;
+    public const USERNAME_REGISTRATION = 8;
 
-    public const HTLC_CLAIM = 9;
+    public const USERNAME_RESIGNATION = 9;
 
     public const HTLC_REFUND = 10;
 }

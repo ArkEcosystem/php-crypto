@@ -36,9 +36,9 @@ class Fees
 
     public const VALIDATOR_RESIGNATION = '2500000000';
 
-    public const HTLC_LOCK = '10000000';
+    public const USERNAME_REGISTRATION = '2500000000';
 
-    public const HTLC_CLAIM = '0';
+    public const USERNAME_RESIGNATION = '2500000000';
 
     public const HTLC_REFUND = '0';
 }
