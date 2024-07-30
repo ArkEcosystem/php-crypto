@@ -116,6 +116,10 @@ class Deserializer
             $data['signature'] = $this->buffer->readHex(64 * 2);
         }
 
+        if ($this->canReadNonMultiSignature($this->buffer)) {
+            $data['secondSignature'] = $this->buffer->readHex(64 * 2);
+        }
+
         if ($this->buffer->remaining()) {
             if ($this->buffer->remaining() % 65 === 0) {
                 $data['signatures'] = [];

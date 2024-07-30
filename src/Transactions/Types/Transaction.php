@@ -58,11 +58,31 @@ abstract class Transaction
     {
         $options = [
             'skipSignature'       => true,
+            'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
 
         // $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
         $this->data['signature'] = $this->temporarySignerSign($transaction, $keys);
+
+        return $this;
+    }
+
+    /**
+     * Sign the transaction using the given second passphrase.
+     *
+     * @param PrivateKey $keys
+     *
+     * @return Transaction
+     */
+    public function secondSign(PrivateKey $keys): self
+    {
+        $options = [
+            'skipSecondSignature' => true,
+        ];
+        $transaction                   = Hash::sha256($this->getBytes($options));
+
+        $this->data['secondSignature'] = $this->temporarySignerSign($transaction, $keys);
 
         return $this;
     }
@@ -100,7 +120,8 @@ abstract class Transaction
     public function verify(): bool
     {
         $options = [
-            'skipSignature'       => true,
+            'skipSignature'             => true,
+            'skipSecondSignature'       => true,
         ];
 
         $publicKey = $this->data['senderPublicKey'];
@@ -111,10 +132,24 @@ abstract class Transaction
         return $this->temporarySignerVerify($transaction, $signature, $publicKey);
     }
 
+    public function secondVerify(string $secondPublicKey): bool
+    {
+        $options = [
+            'skipSecondSignature' => true,
+        ];
+
+        $signature = $this->data['secondSignature'];
+
+        $transaction = Hash::sha256($this->getBytes($options));
+
+        return $this->temporarySignerVerify($transaction, $signature, $secondPublicKey);
+    }
+
     public function serialize(array $options = []): Buffer
     {
         return Serializer::new($this)->serialize($options);
     }
+    
 
     /**
      * Perform AIP11 compliant serialization.
@@ -149,6 +184,7 @@ abstract class Transaction
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
             'signatures'           => $this->data['signatures'] ?? null,
+            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
             'nonce'                => $this->data['nonce'],

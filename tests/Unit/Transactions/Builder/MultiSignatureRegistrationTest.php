@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -37,6 +38,23 @@ class MultiSignatureRegistrationTest extends TestCase
             ->sign('secret');
 
         $this->assertTrue($transaction->verify());
+    }
+
+    /** @test */
+    public function it_should_sign_it_with_a_second_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-sign');
+
+        $transaction = MultiSignatureRegistrationBuilder::new()
+            ->multiSignatureAsset([
+                'min'        => $fixture['data']['asset']['multiSignature']['min'],
+                'publicKeys' => $fixture['data']['asset']['multiSignature']['publicKeys'],
+            ])
+            ->sign('secret')
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($this->secondPassphrase)->getHex()));
     }
 
     /** @test */

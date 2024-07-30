@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -32,6 +33,18 @@ class VoteTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($transaction->verify());
+    }
+
+    /** @test */
+    public function it_should_sign_it_with_a_second_passphrase()
+    {
+        $transaction = VoteBuilder::new()
+            ->votes(['03f25455408f9a7e6c6a056b121e68fbda98f3511d22e9ef27b0ebaf1ef9e4eabc'])
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($this->secondPassphrase)->getHex()));
     }
 
     /** @test */
