@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -61,6 +62,19 @@ class TransferTest extends TestCase
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
+    
+    public function it_should_sign_it_with_a_second_passphrase()
+    {
+        $transaction = TransferBuilder::new()
+            ->recipient('0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A')
+            ->amount('133380000000')
+            ->vendorField('This is a transaction from PHP')
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($this->secondPassphrase)->getHex()));
+    }
 
     /** @test */
     public function it_should_match_fixture_passphrase()
@@ -94,7 +108,6 @@ class TransferTest extends TestCase
             ->withNonce($fixture['data']['nonce'])
             ->withNetwork($fixture['data']['network'])
             ->vendorField($fixture['data']['vendorField'])
-
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

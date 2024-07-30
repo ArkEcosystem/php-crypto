@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorRegistrationBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -57,6 +58,17 @@ class ValidatorRegistrationTest extends TestCase
         $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+    
+    public function it_should_sign_it_with_a_second_passphrase()
+    {
+        $transaction = ValidatorRegistrationBuilder::new()
+            ->publicKeyAsset('a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118')
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($this->secondPassphrase)->getHex()));
     }
 
     /** @test */

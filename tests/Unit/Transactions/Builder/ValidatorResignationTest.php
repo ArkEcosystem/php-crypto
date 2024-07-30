@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
@@ -54,6 +55,16 @@ class ValidatorResignationTest extends TestCase
         $this->assertSameSerializationMultisignature($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex(), 3);
 
         $this->assertSameTransactions($fixture, $builder->transaction->data);
+    }
+    
+    public function it_should_sign_it_with_a_second_passphrase()
+    {
+        $transaction = ValidatorResignationBuilder::new()
+            ->sign($this->passphrase)
+            ->secondSign($this->secondPassphrase);
+
+        $this->assertTrue($transaction->verify());
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase($this->secondPassphrase)->getHex()));
     }
 
     /** @test */
