@@ -39,7 +39,7 @@ abstract class Transaction
      */
     public function getId(): string
     {
-        return Hash::sha256(Serializer::getBytes($this))->getHex();
+        return Hash::sha256($this->getBytes($this))->getHex();
     }
 
     public function getBytes($options = []): Buffer
