@@ -15,28 +15,9 @@ namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
-use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
-use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
-use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
-use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 trait Serialize
 {
-    private $transactionsClasses = [
-        Transfer::class,
-        ValidatorRegistration::class,
-        Vote::class,
-        MultiSignatureRegistration::class,
-        MultiPayment::class,
-        ValidatorResignation::class,
-        UsernameRegistration::class,
-        UsernameResignation::class,
-    ];
-
     protected function assertSerialized(array $fixture): void
     {
         $data              = $fixture['data'];
