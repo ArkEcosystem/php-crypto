@@ -139,6 +139,21 @@ abstract class AbstractTransactionBuilder
     }
 
     /**
+     * Sign the transaction using the given second passphrase.
+     *
+     * @param string $secondPassphrase
+     *
+     * @return AbstractTransactionBuilder
+     */
+    public function secondSign(string $secondPassphrase): self
+    {
+        $this->transaction             = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
+        $this->transaction->data['id'] = $this->transaction->getId();
+
+        return $this;
+    }
+
+    /**
      * Verify the transaction validity.
      *
      * @return bool
@@ -146,6 +161,16 @@ abstract class AbstractTransactionBuilder
     public function verify(): bool
     {
         return $this->transaction->verify();
+    }
+
+    /**
+     * Verify the transaction validity with a second signature.
+     *
+     * @return bool
+     */
+    public function secondVerify(string $secondPublicKey): bool
+    {
+        return $this->transaction->secondVerify($secondPublicKey);
     }
 
     /**

@@ -45,7 +45,6 @@ class MultiPaymentTest extends TestCase
             'fee',
             'asset',
             'signature',
-            'secondSignature',
             'amount',
             'id',
         ]);

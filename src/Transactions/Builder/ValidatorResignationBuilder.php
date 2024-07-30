@@ -24,7 +24,7 @@ class ValidatorResignationBuilder extends AbstractTransactionBuilder
 {
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::VALIDATOR_RESIGNATION;
+        return \ArkEcosystem\Crypto\Enums\Types::VALIDATOR_RESIGNATION->value;
     }
 
     protected function getTypeGroup(): int

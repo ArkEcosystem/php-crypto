@@ -88,7 +88,7 @@ class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
      */
     protected function getType(): int
     {
-        return \ArkEcosystem\Crypto\Enums\Types::MULTI_SIGNATURE_REGISTRATION;
+        return \ArkEcosystem\Crypto\Enums\Types::MULTI_SIGNATURE_REGISTRATION->value;
     }
 
     /**
