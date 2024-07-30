@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -45,7 +44,7 @@ class ValidatorResignationTest extends TestCase
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
-        $this->assertSameSerialization($fixture['serialized'], Serializer::new($builder->transaction)->serialize()->getHex());
+        $this->assertSameSerialization($fixture['serialized'], $builder->transaction->serialize()->getHex());
         $this->assertSameTransactions($fixture, $builder->transaction->data);
     }
 }

@@ -81,7 +81,7 @@ class Deserializer
      */
     public function handleVersionTwo(Transaction $transaction): Transaction
     {
-        $transaction->data['id'] = Hash::sha256(Serializer::new($transaction)->serialize())->getHex();
+        $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
 
         return $transaction;
     }

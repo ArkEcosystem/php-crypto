@@ -111,6 +111,11 @@ abstract class Transaction
         return $this->temporarySignerVerify($transaction, $signature, $publicKey);
     }
 
+    public function serialize(array $options = []): Buffer
+    {
+        return Serializer::new($this)->serialize($options);
+    }
+
     /**
      * Perform AIP11 compliant serialization.
      *

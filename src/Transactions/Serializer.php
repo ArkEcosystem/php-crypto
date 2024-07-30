@@ -50,7 +50,7 @@ class Serializer
 
     public static function getBytes(Transaction $transaction, array $options = []): Buffer
     {
-        return self::new($transaction)->serialize($options);
+        return $transaction->serialize($options);
     }
 
     /**

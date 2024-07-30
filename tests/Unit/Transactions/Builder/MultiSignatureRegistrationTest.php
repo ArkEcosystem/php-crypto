@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
-use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -58,7 +57,7 @@ class MultiSignatureRegistrationTest extends TestCase
             ->multiSign('top visa use bacon sun infant shrimp eye bridge fantasy chair sadness stable simple salad canoe raw hill target connect avoid promote spider category', 2)
             ->sign($this->passphrase);
 
-        $serialized = Serializer::new($builder->transaction)->serialize()->getHex();
+        $serialized = $builder->transaction->serialize()->getHex();
         $this->assertTrue($builder->verify());
         $this->assertSameSerializationMultisignature($fixture['serialized'], $serialized, 3);
         $this->assertSignaturesAreSerialized($serialized, $builder->transaction->data['signatures']);
