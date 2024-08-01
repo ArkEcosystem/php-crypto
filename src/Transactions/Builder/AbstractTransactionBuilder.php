@@ -11,11 +11,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 
-/**
- * This is the abstract transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 abstract class AbstractTransactionBuilder
 {
     public $transaction;

@@ -12,11 +12,7 @@ use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Buffertools\Buffer;
 
-/**
- * This is the serializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Serializer
 {
     public Transaction $transaction;

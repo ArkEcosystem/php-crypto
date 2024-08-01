@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 
-/**
- * This is the wif class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class WIF
 {
     /**

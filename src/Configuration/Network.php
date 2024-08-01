@@ -10,11 +10,7 @@ use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use BitWasp\Bitcoin\Bitcoin;
 
-/**
- * This is the network configuration class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Network
 {
     /**

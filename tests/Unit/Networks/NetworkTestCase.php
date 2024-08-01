@@ -8,12 +8,7 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * This is the devnet network test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @coversNothing
- */
+
 class NetworkTestCase extends TestCase
 {
     /** @test */

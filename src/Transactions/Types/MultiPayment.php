@@ -9,11 +9,7 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Utils\Address;
 
-/**
- * This is the serializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class MultiPayment extends Transaction
 {
     /**

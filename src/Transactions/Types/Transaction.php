@@ -13,11 +13,7 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 
-/**
- * This is the transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 abstract class Transaction
 {
     /**

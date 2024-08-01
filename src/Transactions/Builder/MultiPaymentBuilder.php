@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
 
-/**
- * This is the multi payment transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class MultiPaymentBuilder extends AbstractTransactionBuilder
 {
     /**

@@ -6,11 +6,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-/**
- * This is the mainnet network class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Mainnet extends AbstractNetwork
 {
     /**

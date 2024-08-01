@@ -14,11 +14,7 @@ use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
 use BitWasp\Buffertools\Buffer;
 
-/**
- * This is the private key class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class PrivateKey
 {
     /**

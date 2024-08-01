@@ -10,11 +10,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
-/**
- * This is the vote transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class VoteBuilder extends AbstractTransactionBuilder
 {
     /**

@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
-/**
- * This is the delegate registration transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**

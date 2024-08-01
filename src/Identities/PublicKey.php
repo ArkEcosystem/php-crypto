@@ -12,11 +12,7 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use Elliptic\EC;
 
-/**
- * This is the public key class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class PublicKey
 {
     /**

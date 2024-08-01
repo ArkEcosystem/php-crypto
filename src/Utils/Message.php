@@ -13,11 +13,7 @@ use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 use InvalidArgumentException;
 
-/**
- * This is the message class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Message
 {
     /**

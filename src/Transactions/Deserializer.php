@@ -11,11 +11,7 @@ use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
 
-/**
- * This is the deserializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Deserializer
 {
     private ByteBuffer $buffer;

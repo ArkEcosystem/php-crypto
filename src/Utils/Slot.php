@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 
-/**
- * This is the slot class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Slot
 {
     /**

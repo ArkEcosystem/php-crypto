@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 
-/**
- * This is the transfer transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class TransferBuilder extends AbstractTransactionBuilder
 {
     public function __construct()

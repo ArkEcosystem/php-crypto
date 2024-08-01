@@ -9,11 +9,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use Illuminate\Support\Arr;
 
-/**
- * This is the multisignature registration transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class MultiSignatureRegistrationBuilder extends AbstractTransactionBuilder
 {
     /**

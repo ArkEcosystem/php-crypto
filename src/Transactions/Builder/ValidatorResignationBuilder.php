@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 
-/**
- * This is the valiadator resignation transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class ValidatorResignationBuilder extends AbstractTransactionBuilder
 {
     protected function getType(): int

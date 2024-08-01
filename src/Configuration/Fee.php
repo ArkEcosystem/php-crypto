@@ -10,11 +10,7 @@ use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
 use PHPUnit\Util\Type;
 
-/**
- * This is the fee configuration class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Fee
 {
     /**

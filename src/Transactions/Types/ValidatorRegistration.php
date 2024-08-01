@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
-/**
- * This is the serializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class ValidatorRegistration extends Transaction
 {
     public function serializeData(array $options = []): ByteBuffer

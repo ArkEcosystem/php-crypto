@@ -6,11 +6,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-/**
- * This is the testnet network class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Testnet extends AbstractNetwork
 {
     /**

@@ -6,11 +6,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Enums;
 
-/**
- * This is the transaction fees class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Fees
 {
     public const TRANSFER = '10000000';

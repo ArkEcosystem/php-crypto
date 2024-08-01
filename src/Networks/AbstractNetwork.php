@@ -9,11 +9,7 @@ namespace ArkEcosystem\Crypto\Networks;
 use BitWasp\Bitcoin\Network\Network;
 use BitWasp\Bitcoin\Script\ScriptType;
 
-/**
- * This is the abstract network class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 abstract class AbstractNetwork extends Network
 {
     /**

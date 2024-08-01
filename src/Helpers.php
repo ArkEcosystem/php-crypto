@@ -8,11 +8,7 @@ namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 
-/**
- * This is the helpers class.
- *
- * @author Brian Faust <brian@ark.io>
- */
+
 class Helpers
 {
     /**
