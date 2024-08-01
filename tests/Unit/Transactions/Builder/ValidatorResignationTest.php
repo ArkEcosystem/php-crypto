@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate resignation builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder
+  */
 class ValidatorResignationTest extends TestCase
 {
     /** @test */

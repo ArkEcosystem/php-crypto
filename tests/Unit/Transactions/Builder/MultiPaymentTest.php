@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi payment builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder
+  */
 class MultiPaymentTest extends TestCase
 {
     /** @test */

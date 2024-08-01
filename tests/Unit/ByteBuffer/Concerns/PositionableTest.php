@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the positionable test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Positionable
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Positionable
+  */
 class PositionableTest extends TestCase
 {
     /** @test */

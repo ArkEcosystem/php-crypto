@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Utils\Message;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the message test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Utils\Message
- */
+  * @covers \ArkEcosystem\Crypto\Utils\Message
+  */
 class MessageTest extends TestCase
 {
     /** @test */

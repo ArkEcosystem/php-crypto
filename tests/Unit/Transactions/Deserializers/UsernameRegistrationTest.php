@@ -17,10 +17,8 @@ use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration deserializer test class.
- *
- * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration
+  */
 class UsernameRegistrationTest extends TestCase
 {
     /** @test */

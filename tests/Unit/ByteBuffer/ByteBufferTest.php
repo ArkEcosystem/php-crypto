@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the length map test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+  */
 class ByteBufferTest extends TestCase
 {
     /** @test */

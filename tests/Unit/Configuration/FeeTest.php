@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the fee configuration test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Configuration\Fee
- */
+  * @covers \ArkEcosystem\Crypto\Configuration\Fee
+  */
 class FeeTest extends TestCase
 {
     /** @test */

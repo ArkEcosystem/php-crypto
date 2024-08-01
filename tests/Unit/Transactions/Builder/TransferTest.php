@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the transfer builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder
+  */
 class TransferTest extends TestCase
 {
     /** @test */

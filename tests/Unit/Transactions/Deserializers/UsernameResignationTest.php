@@ -17,10 +17,8 @@ use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration deserializer test class.
- *
- * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameResignation
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameResignation
+  */
 class UsernameResignationTest extends TestCase
 {
     /** @test */

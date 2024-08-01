@@ -18,10 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\UsernameResignationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the username resignation builder test class.
- *
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameResignationBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameResignationBuilder
+  */
 class UsernameResignationTest extends TestCase
 {
     /** @test */

@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the string writer test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Strings
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Strings
+  */
 class StringsTest extends TestCase
 {
     /** @test */

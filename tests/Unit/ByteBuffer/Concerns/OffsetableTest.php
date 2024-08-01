@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the offsetable test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Offsetable
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Offsetable
+  */
 class OffsetableTest extends TestCase
 {
     /** @test */

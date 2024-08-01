@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the string reader test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\Strings
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\Strings
+  */
 class StringsTest extends TestCase
 {
     /** @test */

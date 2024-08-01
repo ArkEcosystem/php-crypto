@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Networks\Testnet;
 use BitWasp\Bitcoin\Network\Network;
 
 /**
- * This is the testnet network test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Networks\Testnet
- */
+  * @covers \ArkEcosystem\Crypto\Networks\Testnet
+  */
 class TestnetTest extends NetworkTestCase
 {
     protected $epoch = '2017-03-21T13:00:00.000Z';

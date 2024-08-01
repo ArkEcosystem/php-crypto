@@ -16,10 +16,8 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the username resignation serializer test class.
- *
- * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameResignation
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameResignation
+  */
 class UsernameResignationTest extends TestCase
 {
     /** @test */

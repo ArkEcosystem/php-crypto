@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Vote
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\Vote
+  */
 class VoteTest extends TestCase
 {
     /** @test */

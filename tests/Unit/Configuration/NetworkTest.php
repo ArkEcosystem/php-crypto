@@ -20,11 +20,8 @@ use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the network configuration test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Configuration\Network
- */
+  * @covers \ArkEcosystem\Crypto\Configuration\Network
+  */
 class NetworkTest extends TestCase
 {
     /** @test */

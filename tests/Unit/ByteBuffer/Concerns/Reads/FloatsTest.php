@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the integer reader test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\Floats
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\Floats
+  */
 class FloatsTest extends TestCase
 {
     /** @test */

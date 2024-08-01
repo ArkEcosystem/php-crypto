@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Utils\Slot;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the slot test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Utils\Slot
- */
+  * @covers \ArkEcosystem\Crypto\Utils\Slot
+  */
 class SlotTest extends TestCase
 {
     /** @test */

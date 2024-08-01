@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Identities\PrivateKey as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the address test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Identities\PrivateKey
- */
+  * @covers \ArkEcosystem\Crypto\Identities\PrivateKey
+  */
 class PrivateKeyTest extends TestCase
 {
     /** @test */

@@ -20,11 +20,8 @@ use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the address test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Identities\Address
- */
+  * @covers \ArkEcosystem\Crypto\Identities\Address
+  */
 class AddressTest extends TestCase
 {
     protected function setUp(): void

@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the vote builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder
+  */
 class VoteTest extends TestCase
 {
     /** @test */

@@ -16,11 +16,8 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the transfer serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transfer
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transfer
+  */
 class TransferTest extends TestCase
 {
     /** @test */

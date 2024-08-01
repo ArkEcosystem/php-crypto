@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Utils\Address as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the address test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Identities\Address
- */
+  * @covers \ArkEcosystem\Crypto\Identities\Address
+  */
 class AddressTest extends TestCase
 {
     /** @test */

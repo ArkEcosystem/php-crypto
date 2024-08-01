@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the sizeable test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Sizeable
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Sizeable
+  */
 class SizeableTest extends TestCase
 {
     /** @test */

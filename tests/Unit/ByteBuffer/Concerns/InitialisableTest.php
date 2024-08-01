@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the initialisable test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
+  */
 class InitialisableTest extends TestCase
 {
     private $expected = '48656c6c6f20576f726c6420f09f9884';

@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the hex writer test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Hex
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Hex
+  */
 class HexTest extends TestCase
 {
     /** @test */

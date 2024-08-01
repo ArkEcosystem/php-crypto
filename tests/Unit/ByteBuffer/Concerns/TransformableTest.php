@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the transformable test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Transformable
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Transformable
+  */
 class TransformableTest extends TestCase
 {
     /** @test */

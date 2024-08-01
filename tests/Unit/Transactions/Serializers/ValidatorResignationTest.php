@@ -16,11 +16,8 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate resignation serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
+  */
 class ValidatorResignationTest extends TestCase
 {
     /** @test */

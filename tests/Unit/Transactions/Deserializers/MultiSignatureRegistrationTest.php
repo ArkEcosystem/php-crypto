@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi signature registration deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
+  */
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */

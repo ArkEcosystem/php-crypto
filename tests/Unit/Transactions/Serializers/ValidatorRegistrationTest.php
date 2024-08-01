@@ -16,11 +16,8 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration
+  */
 class ValidatorRegistrationTest extends TestCase
 {
     /** @test */

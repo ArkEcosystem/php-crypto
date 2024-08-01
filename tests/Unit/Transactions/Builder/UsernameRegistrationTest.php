@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the delegate registration builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder
+  */
 class UsernameRegistrationTest extends TestCase
 {
     /** @test */

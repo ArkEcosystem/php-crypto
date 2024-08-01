@@ -20,11 +20,8 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use BitWasp\Buffertools\Buffer;
 
 /**
- * This is the transaction test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
+  */
 class TransactionTest extends TestCase
 {
     /** @test */

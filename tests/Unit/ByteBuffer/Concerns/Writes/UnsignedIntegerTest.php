@@ -17,9 +17,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * This is the unsigned integer writer test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\UnsignedInteger
- */
+  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\UnsignedInteger
+  */
 class UnsignedIntegerTest extends TestCase
 {
     /** @test */

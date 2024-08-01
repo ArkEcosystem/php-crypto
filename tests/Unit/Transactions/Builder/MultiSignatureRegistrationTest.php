@@ -18,11 +18,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi signature registration builder test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiSignatureRegistrationBuilder
+  */
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */

@@ -17,11 +17,8 @@ use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * This is the multi payment deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiPayment
- */
+  * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiPayment
+  */
 class MultiPaymentTest extends TestCase
 {
     /** @test */
