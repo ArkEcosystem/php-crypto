@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\ByteBuffer\LengthMap;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\LengthMap
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\LengthMap
+ */
 class LengthMapTest extends TestCase
 {
     /** @test */

@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-
 
 class ValidatorResignation extends Transaction
 {

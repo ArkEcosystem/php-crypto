@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+ */
 class ByteBufferTest extends TestCase
 {
     /** @test */

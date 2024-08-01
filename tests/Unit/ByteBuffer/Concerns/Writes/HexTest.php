@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Concerns\Writes;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Hex
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Hex
+ */
 class HexTest extends TestCase
 {
     /** @test */

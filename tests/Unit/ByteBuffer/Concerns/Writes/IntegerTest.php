@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Concerns\Writes;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Integer
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Integer
+ */
 class IntegerTest extends TestCase
 {
     /** @test */

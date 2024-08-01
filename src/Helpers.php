@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-
 
 class Helpers
 {

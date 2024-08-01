@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
@@ -12,7 +10,6 @@ use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 use InvalidArgumentException;
-
 
 class Message
 {

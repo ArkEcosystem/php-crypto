@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Utils;
 
 use ArkEcosystem\Crypto\Utils\Address as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Identities\Address
-  */
+ * @covers \ArkEcosystem\Crypto\Identities\Address
+ */
 class AddressTest extends TestCase
 {
     /** @test */

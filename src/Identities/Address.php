@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;

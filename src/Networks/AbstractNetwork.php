@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Networks;
 
 use BitWasp\Bitcoin\Network\Network;
 use BitWasp\Bitcoin\Script\ScriptType;
-
 
 abstract class AbstractNetwork extends Network
 {

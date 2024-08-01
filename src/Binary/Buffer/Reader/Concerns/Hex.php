@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Binary\Buffer\Reader\Concerns;
 
 use ArkEcosystem\Crypto\Binary\Hex\Reader;

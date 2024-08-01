@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
-  */
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation
+ */
 class ValidatorResignationTest extends TestCase
 {
     /** @test */

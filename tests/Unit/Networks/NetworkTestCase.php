@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 
-
+/**
+ * @coversNothing
+ */
 class NetworkTestCase extends TestCase
 {
     /** @test */

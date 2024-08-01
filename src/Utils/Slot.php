@@ -2,12 +2,9 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-
 
 class Slot
 {

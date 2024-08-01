@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Identities;
 
 use BitWasp\Bitcoin\Bitcoin;
@@ -11,7 +9,6 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use Elliptic\EC;
-
 
 class PublicKey
 {

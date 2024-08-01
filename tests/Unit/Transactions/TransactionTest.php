@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
@@ -13,8 +11,8 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 use BitWasp\Buffertools\Buffer;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
-  */
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
+ */
 class TransactionTest extends TestCase
 {
     /** @test */

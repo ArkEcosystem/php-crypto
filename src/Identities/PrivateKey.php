@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
@@ -13,7 +11,6 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
 use BitWasp\Buffertools\Buffer;
-
 
 class PrivateKey
 {

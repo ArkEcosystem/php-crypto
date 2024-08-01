@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
-  */
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
+ */
 class MultiSignatureRegistrationTest extends TestCase
 {
     /** @test */

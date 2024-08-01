@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Concerns\Reads;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
+ */
 class InitialisableTest extends TestCase
 {
     private $expected = '48656c6c6f20576f726c6420f09f9884';

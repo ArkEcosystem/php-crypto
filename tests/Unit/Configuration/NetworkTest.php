@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Managers;
 
 use ArkEcosystem\Crypto\Configuration\Network;
@@ -13,8 +11,8 @@ use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Configuration\Network
-  */
+ * @covers \ArkEcosystem\Crypto\Configuration\Network
+ */
 class NetworkTest extends TestCase
 {
     /** @test */

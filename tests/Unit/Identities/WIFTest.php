@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
 use ArkEcosystem\Crypto\Identities\WIF as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Identities\WIF
-  */
+ * @covers \ArkEcosystem\Crypto\Identities\WIF
+ */
 class WIFTest extends TestCase
 {
     /** @test */

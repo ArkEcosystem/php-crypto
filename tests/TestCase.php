@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;

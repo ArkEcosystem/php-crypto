@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Utils;
 
 use ArkEcosystem\Crypto\Utils\Slot;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Utils\Slot
-  */
+ * @covers \ArkEcosystem\Crypto\Utils\Slot
+ */
 class SlotTest extends TestCase
 {
     /** @test */

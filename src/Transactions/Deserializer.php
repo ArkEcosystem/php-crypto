@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
-
 
 class Deserializer
 {

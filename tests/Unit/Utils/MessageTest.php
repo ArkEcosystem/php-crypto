@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Utils;
 
 use ArkEcosystem\Crypto\Utils\Message;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Utils\Message
-  */
+ * @covers \ArkEcosystem\Crypto\Utils\Message
+ */
 class MessageTest extends TestCase
 {
     /** @test */

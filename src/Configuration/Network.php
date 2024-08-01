@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use BitWasp\Bitcoin\Bitcoin;
-
 
 class Network
 {

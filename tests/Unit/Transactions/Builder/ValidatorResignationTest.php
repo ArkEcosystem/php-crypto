@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Identities\PublicKey;
@@ -11,8 +9,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder
-  */
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\ValidatorResignationBuilder
+ */
 class ValidatorResignationTest extends TestCase
 {
     /** @test */

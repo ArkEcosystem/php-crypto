@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Identities\PrivateKey
-  */
+ * @covers \ArkEcosystem\Crypto\Identities\PrivateKey
+ */
 class PrivateKeyTest extends TestCase
 {
     /** @test */

@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
 use ArkEcosystem\Crypto\Configuration\Network;
@@ -13,8 +11,8 @@ use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Identities\Address
-  */
+ * @covers \ArkEcosystem\Crypto\Identities\Address
+ */
 class AddressTest extends TestCase
 {
     protected function setUp(): void

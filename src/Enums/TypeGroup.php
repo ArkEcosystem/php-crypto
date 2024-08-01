@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Enums;
-
 
 class TypeGroup
 {

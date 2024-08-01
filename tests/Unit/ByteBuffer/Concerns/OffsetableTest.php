@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Concerns\Reads;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use PHPUnit\Framework\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Offsetable
-  */
+ * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Offsetable
+ */
 class OffsetableTest extends TestCase
 {
     /** @test */

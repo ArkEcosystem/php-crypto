@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Binary\Buffer\Writer\Concerns;
 
 use ArkEcosystem\Crypto\Binary\Integer\Writer;

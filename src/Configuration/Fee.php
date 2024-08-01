@@ -2,14 +2,11 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Enums\Fees;
 use ArkEcosystem\Crypto\Enums\Types;
 use PHPUnit\Util\Type;
-
 
 class Fee
 {

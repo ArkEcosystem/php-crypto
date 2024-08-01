@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Crypto\Binary\Buffer\Writer;
 
 use ArkEcosystem\Crypto\Binary\Hex\Writer as Hex;

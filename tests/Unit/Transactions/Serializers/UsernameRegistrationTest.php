@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
-  * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration
-  */
+ * @covers \ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration
+ */
 class UsernameRegistrationTest extends TestCase
 {
     /** @test */
