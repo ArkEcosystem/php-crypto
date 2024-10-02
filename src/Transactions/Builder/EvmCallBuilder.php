@@ -31,7 +31,7 @@ class EvmCallBuilder extends AbstractTransactionBuilder
      */
     public function payload(string $payload): self
     {
-        $payload = ltrim($payload, '0x');
+        $payload                                                = ltrim($payload, '0x');
         $this->transaction->data['asset']['evmCall']['payload'] = $payload;
 
         return $this;

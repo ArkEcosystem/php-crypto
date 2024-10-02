@@ -36,7 +36,7 @@ class EvmCall extends Transaction
         $buffer->writeUInt32($this->data['asset']['evmCall']['gasLimit']);
 
         // Write payload length (uint32) and payload
-        $payloadHex = $this->data['asset']['evmCall']['payload'];
+        $payloadHex    = $this->data['asset']['evmCall']['payload'];
         $payloadLength = strlen($payloadHex) / 2; // Length in bytes
 
         $buffer->writeUInt32($payloadLength);
