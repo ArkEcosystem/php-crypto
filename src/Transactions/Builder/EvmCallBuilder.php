@@ -17,8 +17,8 @@ class EvmCallBuilder extends AbstractTransactionBuilder
 
         $this->transaction->data['asset'] = [
             'evmCall' => [
-                'gasLimit' => 1000000,
-                'payload'  => '',
+                'gasLimit' => 1000000,  // Default gas limit
+                'payload'  => '',       // EVM code in hex format
             ],
         ];
     }
@@ -31,10 +31,7 @@ class EvmCallBuilder extends AbstractTransactionBuilder
      */
     public function payload(string $payload): self
     {
-        if ($payload && !str_starts_with($payload, '0x')) {
-            $payload = '0x' . $payload;
-        }
-
+        $payload = ltrim($payload, '0x');
         $this->transaction->data['asset']['evmCall']['payload'] = $payload;
 
         return $this;
@@ -49,6 +46,19 @@ class EvmCallBuilder extends AbstractTransactionBuilder
     public function gasLimit(int $gasLimit): self
     {
         $this->transaction->data['asset']['evmCall']['gasLimit'] = $gasLimit;
+
+        return $this;
+    }
+
+    /**
+     * Set the recipient of the EVM call.
+     *
+     * @param string $recipientId
+     * @return self
+     */
+    public function recipient(string $recipientId): self
+    {
+        $this->transaction->data['recipientId'] = $recipientId;
 
         return $this;
     }

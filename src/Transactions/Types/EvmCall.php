@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Utils\Address;
 
 class EvmCall extends Transaction
 {
@@ -24,7 +25,9 @@ class EvmCall extends Transaction
         // Write recipient marker and recipientId (if present)
         if (isset($this->data['recipientId'])) {
             $buffer->writeUInt8(1); // Recipient marker
-            $buffer->writeHex($this->data['recipientId']);
+            $buffer->writeHex(
+                Address::toBufferHexString($this->data['recipientId'])
+            );
         } else {
             $buffer->writeUInt8(0); // No recipient
         }
@@ -34,11 +37,12 @@ class EvmCall extends Transaction
 
         // Write payload length (uint32) and payload
         $payloadHex = $this->data['asset']['evmCall']['payload'];
-        $payloadBytes = hex2bin($payloadHex);
-        $payloadLength = strlen($payloadBytes);
+        $payloadLength = strlen($payloadHex) / 2; // Length in bytes
 
         $buffer->writeUInt32($payloadLength);
-        $buffer->append($payloadBytes);
+
+        // Write payload as hex
+        $buffer->writeHex($payloadHex);
 
         return $buffer;
     }
@@ -51,22 +55,22 @@ class EvmCall extends Transaction
     public function deserializeData(ByteBuffer $buffer): void
     {
         // Read amount (uint64)
-        $this->data['amount'] = (string) $buffer->readUInt64();
+        $this->data['amount'] = strval($buffer->readUInt64());
 
         // Read recipient marker and recipientId
         $recipientMarker = $buffer->readUInt8();
         if ($recipientMarker === 1) {
-            // Adjust the size according to your address length (here assuming 21 bytes)
-            $this->data['recipientId'] = $buffer->readHex(21 * 2);
+            $this->data['recipientId'] = Address::fromByteBuffer($buffer);
         }
 
         // Read gasLimit (uint32)
         $gasLimit = $buffer->readUInt32();
 
-        // Read payload length (uint32) and payload
+        // Read payload length (uint32)
         $payloadLength = $buffer->readUInt32();
-        $payloadBytes = $buffer->read($payloadLength);
-        $payloadHex = bin2hex($payloadBytes);
+
+        // Read payload as hex
+        $payloadHex = $buffer->readHex($payloadLength * 2);
 
         $this->data['asset'] = [
             'evmCall' => [
@@ -83,6 +87,6 @@ class EvmCall extends Transaction
      */
     public function hasVendorField(): bool
     {
-        return true;
+        return false;
     }
 }
