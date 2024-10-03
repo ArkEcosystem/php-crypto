@@ -37,9 +37,9 @@ class EvmCall extends Transaction
 
         // Write payload length (uint32) and payload
         $payloadHex    = $this->data['asset']['evmCall']['payload'];
-        $payloadLength = strlen($payloadHex) / 2; // Length in bytes
+        $payloadLength = strlen($payloadHex);
 
-        $buffer->writeUInt32($payloadLength);
+        $buffer->writeUInt32($payloadLength / 2);
 
         // Write payload as hex
         $buffer->writeHex($payloadHex);
@@ -78,15 +78,5 @@ class EvmCall extends Transaction
                 'payload'  => $payloadHex,
             ],
         ];
-    }
-
-    /**
-     * Indicates whether the transaction supports vendor fields.
-     *
-     * @return bool
-     */
-    public function hasVendorField(): bool
-    {
-        return false;
     }
 }
