@@ -21,4 +21,7 @@ class Fees
     public const USERNAME_REGISTRATION = '2500000000';
 
     public const USERNAME_RESIGNATION = '2500000000';
+    
+    // @TODO: review this fee
+    public const EVM = '0';
 }
