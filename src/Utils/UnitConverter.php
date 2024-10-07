@@ -12,7 +12,9 @@ class UnitConverter
      * Unit multipliers.
      */
     private const WEI_MULTIPLIER = 1;
+
     private const GWEI_MULTIPLIER = 1000000000; // 1e9
+
     private const ARK_MULTIPLIER = 1000000000000000000; // 1e18
 
     /**
