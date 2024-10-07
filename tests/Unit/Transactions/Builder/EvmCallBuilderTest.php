@@ -22,11 +22,11 @@ class EvmCallBuilderTest extends TestCase
         $builder = EvmCallBuilder::new()
           ->withFee($fixture['data']['fee'])
           ->withNonce($fixture['data']['nonce'])
-          ->recipient($fixture['data']['contractId']) 
-          ->payload($fixture['data']['payload'])      
-          ->withGasLimit($fixture['data']['gasLimit'])
+          ->withNetwork($fixture['data']['network'])
+          ->payload($fixture['data']['asset']['evmCall']['payload'])      
+          ->withGasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
           ->sign($this->passphrase);
-
+          
         $this->assertTrue($builder->verify());
     }
 }
