@@ -19,6 +19,14 @@ class EvmCallBuilderTest extends TestCase
 
         $this->assertTransaction($fixture);
     }
+    
+    /** @test */
+    public function it_should_deserialize_the_transaction_signed_with_a_contract()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'evm-with-contract');
+
+        $this->assertTransaction($fixture);
+    }
 
     private function assertTransaction(array $fixture): EvmCall
     {

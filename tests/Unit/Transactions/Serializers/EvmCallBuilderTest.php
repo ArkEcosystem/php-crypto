@@ -16,4 +16,10 @@ class EvmCallBuilderTest extends TestCase
     {
         $this->assertSerialized($this->getTransactionFixture('evm_call', 'evm-sign'));
     }
+
+    /** @test */
+    public function it_should_serialize_the_transaction_with_a_passphrase_and_contract_id()
+    {
+        $this->assertSerialized($this->getTransactionFixture('evm_call', 'evm-with-contract'));
+    }
 }
