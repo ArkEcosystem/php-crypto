@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
-use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\EvmCall
