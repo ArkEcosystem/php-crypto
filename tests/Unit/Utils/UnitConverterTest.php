@@ -75,4 +75,11 @@ class UnitConverterTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         UnitConverter::formatUnits('1', 'unsupported');
     }
+
+    /** @test */
+    public function it_should_parse_units_into_ark_with_fraction()
+    {
+        $arkValue = UnitConverter::parseUnits(0.1, 'ark');
+        $this->assertSame('100000000000000000', $arkValue);
+    }
 }
