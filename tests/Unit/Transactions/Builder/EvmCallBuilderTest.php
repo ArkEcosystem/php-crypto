@@ -24,7 +24,7 @@ class EvmCallBuilderTest extends TestCase
           ->withNonce($fixture['data']['nonce'])
           ->recipient($fixture['data']['contractId']) 
           ->payload($fixture['data']['payload'])      
-          ->gasLimit($fixture['data']['gasLimit'])
+          ->withGasLimit($fixture['data']['gasLimit'])
           ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

@@ -43,7 +43,7 @@ class EvmCallBuilder extends AbstractTransactionBuilder
      * @param int $gasLimit
      * @return self
      */
-    public function gasLimit(int $gasLimit): self
+    public function withGasLimit(int $gasLimit): self
     {
         $this->transaction->data['asset']['evmCall']['gasLimit'] = $gasLimit;
 
