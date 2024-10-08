@@ -20,7 +20,7 @@ class EvmCallBuilderTest extends TestCase
         $builder = EvmCallBuilder::new()
           ->withFee($fixture['data']['fee'])
           ->withNonce($fixture['data']['nonce'])
-          ->withNetwork($fixture['data']['network'])
+          ->withNetwork(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])
           ->withGasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
           ->sign($this->passphrase);
@@ -36,7 +36,7 @@ class EvmCallBuilderTest extends TestCase
         $builder = EvmCallBuilder::new()
           ->withFee($fixture['data']['fee'])
           ->withNonce($fixture['data']['nonce'])
-          ->withNetwork($fixture['data']['network'])
+          ->withNetwork(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])
           ->withGasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
           // RecipientId is the contractId

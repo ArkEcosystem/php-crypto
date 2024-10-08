@@ -107,7 +107,7 @@ class Serializer
             $buffer->writeHex($this->transaction->data['senderPublicKey']);
         }
 
-        $buffer->writeUint64(+$this->transaction->data['fee']);
+        $buffer->writeUint256($this->transaction->data['fee']);
     }
 
     private function serializeVendorField(ByteBuffer $buffer): void

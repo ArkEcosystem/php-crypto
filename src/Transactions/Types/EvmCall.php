@@ -19,8 +19,8 @@ class EvmCall extends Transaction
     {
         $buffer = ByteBuffer::new(0);
 
-        // Write amount (uint64)
-        $buffer->writeUInt64((int) $this->data['amount']);
+        // Write amount (uint256)
+        $buffer->writeUint256($this->data['amount']);
 
         // Write recipient marker and recipientId (if present)
         if (isset($this->data['recipientId'])) {
@@ -55,7 +55,7 @@ class EvmCall extends Transaction
     public function deserializeData(ByteBuffer $buffer): void
     {
         // Read amount (uint64)
-        $this->data['amount'] = strval($buffer->readUInt64());
+        $this->data['amount'] = $buffer->readUInt256();
 
         // Read recipient marker and recipientId
         $recipientMarker = $buffer->readUInt8();
