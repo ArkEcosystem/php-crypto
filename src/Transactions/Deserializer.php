@@ -71,7 +71,12 @@ class Deserializer
         $data['type']            = $this->buffer->readUInt16();
         $data['nonce']           = strval($this->buffer->readUInt64());
         $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
-        $data['fee']             = $this->buffer->readUInt256();
+        
+        if ($data['type'] === Types::EVM_CALL) {
+            $data['fee']             = $this->buffer->readUInt256();
+        } else {
+            $data['fee']             = strval($this->buffer->readUInt64());
+        }
     }
 
     private function deserializeVendorField(Transaction $transaction): void
