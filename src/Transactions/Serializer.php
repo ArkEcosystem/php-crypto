@@ -111,7 +111,7 @@ class Serializer
         if ($this->transaction->data['type'] === Types::EVM_CALL) {
             $buffer->writeUint256($this->transaction->data['fee']);
         } else {
-            $buffer->writeUint64($this->transaction->data['fee']);
+            $buffer->writeUint64(+$this->transaction->data['fee']);
         }
     }
 
