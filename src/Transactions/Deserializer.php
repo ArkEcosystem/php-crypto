@@ -72,7 +72,7 @@ class Deserializer
         $data['nonce']           = strval($this->buffer->readUInt64());
         $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
 
-        if ($data['type'] === Types::EVM_CALL) {
+        if (intval($data['type']) === Types::EVM_CALL->value) {
             $data['fee']             = $this->buffer->readUInt256();
         } else {
             $data['fee']             = strval($this->buffer->readUInt64());

@@ -108,7 +108,7 @@ class Serializer
             $buffer->writeHex($this->transaction->data['senderPublicKey']);
         }
 
-        if ($this->transaction->data['type'] === Types::EVM_CALL) {
+        if (intval($this->transaction->data['type']) === Types::EVM_CALL->value) {
             $buffer->writeUint256($this->transaction->data['fee']);
         } else {
             $buffer->writeUint64(+$this->transaction->data['fee']);
