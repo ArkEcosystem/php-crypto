@@ -7,6 +7,7 @@ namespace ArkEcosystem\Crypto\Transactions;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
+use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Buffertools\Buffer;
 
@@ -107,7 +108,11 @@ class Serializer
             $buffer->writeHex($this->transaction->data['senderPublicKey']);
         }
 
-        $buffer->writeUint64(+$this->transaction->data['fee']);
+        if (intval($this->transaction->data['type']) === Types::EVM_CALL->value) {
+            $buffer->writeUint256($this->transaction->data['fee']);
+        } else {
+            $buffer->writeUint64(+$this->transaction->data['fee']);
+        }
     }
 
     private function serializeVendorField(ByteBuffer $buffer): void

@@ -58,6 +58,39 @@ trait UnsignedInteger
     }
 
     /**
+     * Reads a 256-bit unsigned integer (uint256) and returns it as a string.
+     *
+     * @param int $offset The offset from which to start reading the value.
+     *
+     * @return string The 256-bit unsigned integer as a string.
+     */
+    public function readUInt256(int $offset = 0): string
+    {
+        // Ensure we skip to the correct offset
+        $this->skip($offset);
+
+        // Collect the 32 bytes (256 bits)
+        $bytes = [];
+        for ($i = 0; $i < 32; $i++) {
+        // Read one byte from the buffer
+            $byte    = ord($this->buffer[$this->offset++]); // Move offset after reading
+            $bytes[] = $byte;
+        }
+
+        // Reverse the byte order for little-endian interpretation
+        $bytes = array_reverse($bytes);
+
+        // Convert bytes to GMP (big-endian after reversing)
+        $gmpValue = gmp_init(0);
+        for ($i = 0; $i < 32; $i++) {
+            $gmpValue = gmp_add($gmpValue, gmp_mul(gmp_init($bytes[$i]), gmp_pow(2, 8 * $i)));
+        }
+
+        // Return the GMP value as a string
+        return gmp_strval($gmpValue);
+    }
+
+    /**
      * Reads a 8bit unsigned integer. This is an alias of readUInt8.
      *
      * @param int $offset
