@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Configuration\Fee;
-use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Enums\TypeGroup;
+use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 
 class EvmCallBuilder
 {
@@ -20,20 +20,30 @@ class EvmCallBuilder
      */
     public function __construct()
     {
-        $this->transaction = new EvmCall();
-        $this->transaction->data['type']     = Types::EVM_CALL->value;
+        $this->transaction                        = new EvmCall();
+        $this->transaction->data['type']          = Types::EVM_CALL->value;
         $this->transaction->data['typeGroup']     = TypeGroup::CORE;
-        $this->transaction->data['nonce']     = '0';
-        $this->transaction->data['amount']    = '0';
-        $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 1;
-        $this->transaction->data['network']   = Network::get()->pubKeyHash();
-        $this->transaction->data['asset'] = [
+        $this->transaction->data['nonce']         = '0';
+        $this->transaction->data['amount']        = '0';
+        $this->transaction->data['fee']           = $this->getFee();
+        $this->transaction->data['version']       = 1;
+        $this->transaction->data['network']       = Network::get()->pubKeyHash();
+        $this->transaction->data['asset']         = [
             'evmCall' => [
                 'gasLimit' => 1000000,  // Default gas limit
                 'payload'  => '',       // EVM code in hex format
             ],
         ];
+    }
+
+    /**
+     * Convert the message to its string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->toJson();
     }
 
     /**
@@ -88,16 +98,6 @@ class EvmCallBuilder
         $this->transaction->data['amount'] = $amount;
 
         return $this;
-    }
-
-    /**
-     * Convert the message to its string representation.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->toJson();
     }
 
     /**
@@ -250,5 +250,4 @@ class EvmCallBuilder
     {
         return Fee::get($this->transaction->data['type']);
     }
-
 }
