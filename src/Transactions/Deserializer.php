@@ -46,8 +46,6 @@ class Deserializer
         $transaction       = new $transactionClass();
         $transaction->data = $data;
 
-        $this->deserializeVendorField($transaction);
-
         // Deserialize type specific parts
         $transaction->deserializeData($this->buffer);
 
@@ -65,25 +63,11 @@ class Deserializer
     private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
-        $data['version']         = $this->buffer->readUInt8();
-        $data['network']         = $this->buffer->readUInt8();
-        $data['typeGroup']       = $this->buffer->readUInt32();
-        $data['type']            = $this->buffer->readUInt16();
-        $data['nonce']           = strval($this->buffer->readUInt64());
-        $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
-        $data['fee']             = $this->buffer->readUInt256();
-    }
-
-    private function deserializeVendorField(Transaction $transaction): void
-    {
-        $vendorFieldLength = $this->buffer->readUInt8();
-        if ($vendorFieldLength > 0) {
-            if ($transaction->hasVendorField()) {
-                $transaction->data['vendorField'] = $this->buffer->readHexString($vendorFieldLength * 2);
-            } else {
-                $this->buffer->skip($vendorFieldLength);
-            }
-        }
+        $data['version']              = $this->buffer->readUInt8();
+        $data['network']              = $this->buffer->readUInt8();
+        $data['nonce']                = strval($this->buffer->readUInt64());
+        $data['senderPublicKey']      = $this->buffer->readHex(33 * 2);
+        $data['gasPrice']             = $this->buffer->readUInt256();
     }
 
     private function deserializeSignatures(array &$data): void

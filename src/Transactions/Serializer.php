@@ -89,7 +89,7 @@ class Serializer
     private function serializeCommon(ByteBuffer $buffer): void
     {
         $this->transaction->data['version'] = $this->transaction->data['version'] ?? 0x01;
-        
+
         if (! isset($this->transaction->data['typeGroup'])) {
             $this->transaction->data['typeGroup'] = TypeGroup::CORE;
         }

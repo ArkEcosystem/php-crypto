@@ -20,8 +20,6 @@ abstract class Transaction
 
     /**
      * Convert the byte representation to a unique identifier.
-     *
-     * @return string
      */
     public function getId(): string
     {
@@ -35,10 +33,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
      */
     public function sign(PrivateKey $keys): self
     {
@@ -56,10 +50,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given second passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
      */
     public function secondSign(PrivateKey $keys): self
     {
@@ -75,11 +65,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given passphrase.
-     *
-     * @param PrivateKey $keys
-     * @param int        $index
-     *
-     * @return Transaction
      */
     public function multiSign(PrivateKey $keys, int $index = -1): self
     {
@@ -145,36 +130,28 @@ abstract class Transaction
 
     /**
      * Perform AIP11 compliant deserialization.
-     *
-     * @param ByteBuffer $buffer
-     *
-     * @return void
      */
     abstract public function deserializeData(ByteBuffer $buffer): void;
 
     /**
      * Convert the transaction to its array representation.
-     *
-     * @return array
      */
     public function toArray(): array
     {
         return array_filter([
-            'amount'               => $this->data['amount'],
-            'asset'                => $this->data['asset'] ?? null,
             'fee'                  => $this->data['fee'],
             'id'                   => $this->data['id'],
             'network'              => $this->data['network'] ?? Network::get()->version(),
-            'recipientId'          => $this->data['recipientId'] ?? null,
+            'nonce'                => $this->data['nonce'],
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
-            'signatures'           => $this->data['signatures'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
-            'nonce'                => $this->data['nonce'],
-            'vendorField'          => $this->data['vendorField'] ?? null,
             'version'              => $this->data['version'] ?? 1,
+            'signatures'           => $this->data['signatures'] ?? null,
+            'recipientId'          => $this->data['recipientId'] ?? null,
+            'amount'               => $this->data['amount'],
+            'asset'                => $this->data['asset'],
         ], function ($element) {
             if (null !== $element) {
                 return true;
@@ -186,17 +163,10 @@ abstract class Transaction
 
     /**
      * Convert the transaction to its JSON representation.
-     *
-     * @return string
      */
     public function toJson(): string
     {
         return json_encode($this->toArray());
-    }
-
-    public function hasVendorField(): bool
-    {
-        return false;
     }
 
     private function numberToHex(int $number, $padding = 2): string

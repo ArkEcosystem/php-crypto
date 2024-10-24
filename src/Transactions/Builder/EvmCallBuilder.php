@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Enums\Types;
@@ -18,19 +17,28 @@ class EvmCallBuilder
     public function __construct()
     {
         $this->transaction                    = new EvmCall();
-        $this->transaction->data['type']      = Types::EVM_CALL->value;
-        $this->transaction->data['typeGroup'] = TypeGroup::CORE;
-        $this->transaction->data['nonce']     = '0';
-        $this->transaction->data['amount']    = '0';
-        $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 1;
-        $this->transaction->data['network']   = Network::get()->pubKeyHash();
-        $this->transaction->data['asset']     = [
-            'evmCall' => [
-                'gasLimit' => 1000000,  // Default gas limit
-                'payload'  => '',       // EVM code in hex format
+
+        $this->transaction->data = [
+            'type'            => Types::EVM_CALL->value,
+            'typeGroup'       => TypeGroup::CORE,
+            'amount'          => '0',
+            'senderPublicKey' => '',
+            'fee'             => '0',
+            'nonce'           => '1',
+            'version'         => 1,
+            'network'         => Network::get()->pubKeyHash(),
+            'asset'           => [
+                'evmCall' => [
+                    'gasLimit' => 1000000,  // Default gas limit
+                    'payload'  => '',       // EVM code in hex format
+                ],
             ],
         ];
+    }
+
+    public function __toString(): string
+    {
+        return $this->toJson();
     }
 
     public static function new(): self
@@ -40,7 +48,7 @@ class EvmCallBuilder
 
     public function payload(string $payload): self
     {
-        $payload = ltrim($payload, '0x');
+        $payload                                                = ltrim($payload, '0x');
         $this->transaction->data['asset']['evmCall']['payload'] = $payload;
 
         return $this;
@@ -77,7 +85,7 @@ class EvmCallBuilder
     /**
      * Alias for fee.
      */
-    public function gasPrice(string $gasPrice): self
+    public function getPrice(string $gasPrice): self
     {
         return $this->fee($gasPrice);
     }
@@ -98,7 +106,7 @@ class EvmCallBuilder
 
     public function sign(string $passphrase): self
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $keys                                       = PrivateKey::fromPassphrase($passphrase);
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
         $this->transaction             = $this->transaction->sign($keys);
@@ -109,7 +117,7 @@ class EvmCallBuilder
 
     public function multiSign(string $passphrase, int $index = -1): self
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $keys              = PrivateKey::fromPassphrase($passphrase);
         $this->transaction = $this->transaction->multiSign($keys, $index);
 
         return $this;
@@ -143,15 +151,5 @@ class EvmCallBuilder
     public function toJson(): string
     {
         return $this->transaction->toJson();
-    }
-
-    public function __toString(): string
-    {
-        return $this->toJson();
-    }
-
-    protected function getFee(): string
-    {
-        return Fee::get($this->transaction->data['type']);
     }
 }
