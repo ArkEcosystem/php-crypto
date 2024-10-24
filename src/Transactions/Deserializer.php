@@ -40,10 +40,13 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
+        // Vendor field length from previous transaction serialization
+        $this->buffer->skip(1);
+
         $transactionClass  = Types::fromValue($data['type'])->transactionClass();
         $transaction       = new $transactionClass();
         $transaction->data = $data;
-
+        
         // Deserialize type specific parts
         $transaction->deserializeData($this->buffer);
 

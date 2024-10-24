@@ -50,6 +50,10 @@ class Serializer
 
         $this->serializeCommon($buffer);
 
+        // Vendor field length from previous transaction serialization
+        // Added for compatibility
+        $buffer->writeUInt8(0);
+
         $typeBuffer = $this->transaction->serializeData($options);
         $buffer->append($typeBuffer);
 

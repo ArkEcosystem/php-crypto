@@ -85,7 +85,7 @@ class EvmCallBuilder
     /**
      * Alias for fee.
      */
-    public function getPrice(string $gasPrice): self
+    public function gasPrice(string $gasPrice): self
     {
         return $this->fee($gasPrice);
     }
