@@ -74,6 +74,14 @@ class EvmCallBuilder
         return $this;
     }
 
+    /**
+     * Alias for fee.
+     */
+    public function gasPrice(string $gasPrice): self
+    {
+        return $this->fee($gasPrice);
+    }
+
     public function nonce(string $nonce): self
     {
         $this->transaction->data['nonce'] = $nonce;
