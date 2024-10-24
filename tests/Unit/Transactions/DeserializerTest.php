@@ -8,14 +8,22 @@ use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * @covers \ArkEcosystem\Crypto\Deserializer\Deserializer
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializer
  */
 class DeserializerTest extends TestCase
 {
     /** @test */
-    public function it_should_deserialize_the_transfer_signed_with_a_passphrase()
+    public function it_should_deserialize_a_transfer_signed_with_a_passphrase()
     {
         $fixture = $this->getTransactionFixture('evm_call', 'transfer');
+
+        $this->assertTransaction($fixture);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_vote_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'vote');
 
         $this->assertTransaction($fixture);
     }

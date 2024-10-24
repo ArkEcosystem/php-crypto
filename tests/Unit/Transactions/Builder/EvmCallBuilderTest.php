@@ -8,7 +8,7 @@ use ArkEcosystem\Crypto\Transactions\Builder\EvmCallBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultiPaymentBuilder
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\EvmCallBuilder
  */
 class EvmCallBuilderTest extends TestCase
 {
