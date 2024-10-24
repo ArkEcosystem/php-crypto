@@ -50,8 +50,6 @@ class Serializer
 
         $this->serializeCommon($buffer);
 
-        $this->serializeVendorField($buffer);
-
         $typeBuffer = $this->transaction->serializeData($options);
         $buffer->append($typeBuffer);
 
@@ -91,6 +89,7 @@ class Serializer
     private function serializeCommon(ByteBuffer $buffer): void
     {
         $this->transaction->data['version'] = $this->transaction->data['version'] ?? 0x01;
+        
         if (! isset($this->transaction->data['typeGroup'])) {
             $this->transaction->data['typeGroup'] = TypeGroup::CORE;
         }
@@ -108,26 +107,5 @@ class Serializer
         }
 
         $buffer->writeUint256($this->transaction->data['fee']);
-    }
-
-    private function serializeVendorField(ByteBuffer $buffer): void
-    {
-        if ($this->transaction->hasVendorField()) {
-            $data = $this->transaction->data;
-
-            if (isset($data['vendorField'])) {
-                $vendorFieldLength = strlen($data['vendorField']);
-                $buffer->writeUInt8($vendorFieldLength);
-                $buffer->writeString($data['vendorField']);
-            } elseif (isset($data['vendorFieldHex'])) {
-                $vendorFieldHexLength = strlen($data['vendorFieldHex']);
-                $buffer->writeUInt8($vendorFieldHexLength / 2);
-                $buffer->writeHex($data['vendorFieldHex']);
-            } else {
-                $buffer->writeUInt8(0x00);
-            }
-        } else {
-            $buffer->writeUInt8(0x00);
-        }
     }
 }
