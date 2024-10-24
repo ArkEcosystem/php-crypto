@@ -27,7 +27,7 @@ class DeserializerTest extends TestCase
 
         $this->assertTransaction($fixture);
     }
-    
+
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_contract()
     {

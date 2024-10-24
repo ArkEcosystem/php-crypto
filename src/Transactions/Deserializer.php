@@ -46,7 +46,7 @@ class Deserializer
         $transactionClass  = Types::fromValue($data['type'])->transactionClass();
         $transaction       = new $transactionClass();
         $transaction->data = $data;
-        
+
         // Deserialize type specific parts
         $transaction->deserializeData($this->buffer);
 
