@@ -8,15 +8,15 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 
 class EvmCallBuilder
 {
-    public EvmCall $transaction;
+    public Transaction $transaction;
 
     public function __construct()
     {
-        $this->transaction                    = new EvmCall();
+        $this->transaction                    = new Transaction();
 
         $this->transaction->data = [
             'type'            => Types::EVM_CALL->value,

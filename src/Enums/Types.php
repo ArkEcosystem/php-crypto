@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Enums;
 
-use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Crypto\Transactions\Types\MultiPayment;
 use ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
@@ -41,7 +41,7 @@ enum Types: int
             Types::VALIDATOR_RESIGNATION        => ValidatorResignation::class,
             Types::USERNAME_REGISTRATION        => UsernameRegistration::class,
             Types::USERNAME_RESIGNATION         => UsernameResignation::class,
-            Types::EVM_CALL                     => EvmCall::class,
+            Types::EVM_CALL                     => Transaction::class,
         };
     }
 

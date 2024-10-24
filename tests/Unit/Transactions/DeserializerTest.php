@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
-use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 
 /**
  * @covers \ArkEcosystem\Crypto\Deserializer\Deserializer
@@ -36,7 +36,7 @@ class DeserializerTest extends TestCase
         $this->assertTransaction($fixture);
     }
 
-    private function assertTransaction(array $fixture): EvmCall
+    private function assertTransaction(array $fixture): Transaction
     {
         $actual = $this->assertDeserialized($fixture, [
             'nonce',

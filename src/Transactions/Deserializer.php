@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
 
 class Deserializer
@@ -43,8 +41,7 @@ class Deserializer
         // Vendor field length from previous transaction serialization
         $this->buffer->skip(1);
 
-        $transactionClass  = Types::fromValue($data['type'])->transactionClass();
-        $transaction       = new $transactionClass();
+        $transaction       = new Transaction();
         $transaction->data = $data;
 
         // Deserialize type specific parts
