@@ -18,7 +18,7 @@ class EvmCallBuilder
 
         $this->transaction->data = [
             // Type and type group are going to be removed, hardcoding for now
-            'type'            => 8, // 
+            'type'            => 8, //
             'typeGroup'       => 1,
             'amount'          => '0',
             'senderPublicKey' => '',
