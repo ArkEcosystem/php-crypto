@@ -2,16 +2,32 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
+namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
-use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Transaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\EvmCall
+ * @covers \ArkEcosystem\Crypto\Transactions\Deserializer
  */
-class EvmCallBuilderTest extends TestCase
+class DeserializerTest extends TestCase
 {
+    /** @test */
+    public function it_should_deserialize_a_transfer_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'transfer');
+
+        $this->assertTransaction($fixture);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_vote_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'vote');
+
+        $this->assertTransaction($fixture);
+    }
+
     /** @test */
     public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
     {
@@ -28,7 +44,7 @@ class EvmCallBuilderTest extends TestCase
         $this->assertTransaction($fixture);
     }
 
-    private function assertTransaction(array $fixture): EvmCall
+    private function assertTransaction(array $fixture): Transaction
     {
         $actual = $this->assertDeserialized($fixture, [
             'nonce',

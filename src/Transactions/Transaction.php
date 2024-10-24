@@ -2,26 +2,21 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Crypto\Transactions\Types;
+namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Crypto\Utils\Address;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 
-abstract class Transaction
+class Transaction
 {
-    /**
-     * @var object
-     */
-    public $data;
+    public array $data;
 
     /**
      * Convert the byte representation to a unique identifier.
-     *
-     * @return string
      */
     public function getId(): string
     {
@@ -35,10 +30,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
      */
     public function sign(PrivateKey $keys): self
     {
@@ -56,10 +47,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given second passphrase.
-     *
-     * @param PrivateKey $keys
-     *
-     * @return Transaction
      */
     public function secondSign(PrivateKey $keys): self
     {
@@ -75,11 +62,6 @@ abstract class Transaction
 
     /**
      * Sign the transaction using the given passphrase.
-     *
-     * @param PrivateKey $keys
-     * @param int        $index
-     *
-     * @return Transaction
      */
     public function multiSign(PrivateKey $keys, int $index = -1): self
     {
@@ -137,44 +119,95 @@ abstract class Transaction
     }
 
     /**
-     * Perform AIP11 compliant serialization.
+     * Serialize the EVM call transaction data.
      *
-     * @return ByteBuffer $buffer
+     * @param array $options
+     * @return ByteBuffer
      */
-    abstract public function serializeData(array $options = []): ByteBuffer;
+    public function serializeData(array $options = []): ByteBuffer
+    {
+        $buffer = ByteBuffer::new(0);
+
+        // Write amount (uint256)
+        $buffer->writeUint256($this->data['amount']);
+
+        // Write recipient marker and recipientId (if present)
+        if (isset($this->data['recipientId'])) {
+            $buffer->writeUInt8(1); // Recipient marker
+            $buffer->writeHex(
+                Address::toBufferHexString($this->data['recipientId'])
+            );
+        } else {
+            $buffer->writeUInt8(0); // No recipient
+        }
+
+        // Write gasLimit (uint32)
+        $buffer->writeUInt32($this->data['asset']['evmCall']['gasLimit']);
+
+        // Write payload length (uint32) and payload
+        $payloadHex    = $this->data['asset']['evmCall']['payload'];
+        $payloadLength = strlen($payloadHex);
+
+        $buffer->writeUInt32($payloadLength / 2);
+
+        // Write payload as hex
+        $buffer->writeHex($payloadHex);
+
+        return $buffer;
+    }
 
     /**
-     * Perform AIP11 compliant deserialization.
+     * Deserialize the EVM call transaction data.
      *
      * @param ByteBuffer $buffer
-     *
-     * @return void
      */
-    abstract public function deserializeData(ByteBuffer $buffer): void;
+    public function deserializeData(ByteBuffer $buffer): void
+    {
+        // Read amount (uint64)
+        $this->data['amount'] = $buffer->readUInt256();
+
+        // Read recipient marker and recipientId
+        $recipientMarker = $buffer->readUInt8();
+        if ($recipientMarker === 1) {
+            $this->data['recipientId'] = Address::fromByteBuffer($buffer);
+        }
+
+        // Read gasLimit (uint32)
+        $gasLimit = $buffer->readUInt32();
+
+        // Read payload length (uint32)
+        $payloadLength = $buffer->readUInt32();
+
+        // Read payload as hex
+        $payloadHex = $buffer->readHex($payloadLength * 2);
+
+        $this->data['asset'] = [
+            'evmCall' => [
+                'gasLimit' => $gasLimit,
+                'payload'  => $payloadHex,
+            ],
+        ];
+    }
 
     /**
      * Convert the transaction to its array representation.
-     *
-     * @return array
      */
     public function toArray(): array
     {
         return array_filter([
-            'amount'               => $this->data['amount'],
-            'asset'                => $this->data['asset'] ?? null,
             'fee'                  => $this->data['fee'],
             'id'                   => $this->data['id'],
             'network'              => $this->data['network'] ?? Network::get()->version(),
-            'recipientId'          => $this->data['recipientId'] ?? null,
+            'nonce'                => $this->data['nonce'],
             'senderPublicKey'      => $this->data['senderPublicKey'],
             'signature'            => $this->data['signature'],
-            'signatures'           => $this->data['signatures'] ?? null,
-            'secondSignature'      => $this->data['secondSignature'] ?? null,
             'type'                 => $this->data['type'],
             'typeGroup'            => $this->data['typeGroup'],
-            'nonce'                => $this->data['nonce'],
-            'vendorField'          => $this->data['vendorField'] ?? null,
             'version'              => $this->data['version'] ?? 1,
+            'signatures'           => $this->data['signatures'] ?? null,
+            'recipientId'          => $this->data['recipientId'] ?? null,
+            'amount'               => $this->data['amount'],
+            'asset'                => $this->data['asset'],
         ], function ($element) {
             if (null !== $element) {
                 return true;
@@ -186,17 +219,10 @@ abstract class Transaction
 
     /**
      * Convert the transaction to its JSON representation.
-     *
-     * @return string
      */
     public function toJson(): string
     {
         return json_encode($this->toArray());
-    }
-
-    public function hasVendorField(): bool
-    {
-        return false;
     }
 
     private function numberToHex(int $number, $padding = 2): string
@@ -234,7 +260,7 @@ abstract class Transaction
 
     private function runTemporaryNodeCommand(string $command): array
     {
-        $scriptPath = __DIR__.'/../../../scripts';
+        $scriptPath = __DIR__.'/../../scripts';
 
         $command = escapeshellcmd("npm start --prefix $scriptPath $command");
 

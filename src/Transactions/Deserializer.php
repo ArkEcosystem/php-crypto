@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
 
 class Deserializer
@@ -15,8 +13,6 @@ class Deserializer
 
     /**
      * Create a new deserializer instance.
-     *
-     * @param  object  $serialized
      */
     public function __construct(string $serialized)
     {
@@ -42,20 +38,16 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        $transactionClass  = Types::fromValue($data['type'])->transactionClass();
-        $transaction       = new $transactionClass();
-        $transaction->data = $data;
+        // Vendor field length from previous transaction serialization
+        $this->buffer->skip(1);
 
-        $this->deserializeVendorField($transaction);
+        $transaction       = new Transaction();
+        $transaction->data = $data;
 
         // Deserialize type specific parts
         $transaction->deserializeData($this->buffer);
 
         $this->deserializeSignatures($transaction->data);
-
-        if (! isset($transaction->data['amount'])) {
-            $transaction->data['amount'] = '0';
-        }
 
         $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
 
@@ -65,30 +57,15 @@ class Deserializer
     private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
-        $data['version']         = $this->buffer->readUInt8();
-        $data['network']         = $this->buffer->readUInt8();
-        $data['typeGroup']       = $this->buffer->readUInt32();
-        $data['type']            = $this->buffer->readUInt16();
-        $data['nonce']           = strval($this->buffer->readUInt64());
-        $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
 
-        if (intval($data['type']) === Types::EVM_CALL->value) {
-            $data['fee']             = $this->buffer->readUInt256();
-        } else {
-            $data['fee']             = strval($this->buffer->readUInt64());
-        }
-    }
-
-    private function deserializeVendorField(Transaction $transaction): void
-    {
-        $vendorFieldLength = $this->buffer->readUInt8();
-        if ($vendorFieldLength > 0) {
-            if ($transaction->hasVendorField()) {
-                $transaction->data['vendorField'] = $this->buffer->readHexString($vendorFieldLength * 2);
-            } else {
-                $this->buffer->skip($vendorFieldLength);
-            }
-        }
+        $data['version']              = $this->buffer->readUInt8();
+        $data['network']              = $this->buffer->readUInt8();
+        $data['typeGroup']            = $this->buffer->readUInt32();
+        $data['type']                 = $this->buffer->readUInt16();
+        $data['nonce']                = strval($this->buffer->readUInt64());
+        $data['senderPublicKey']      = $this->buffer->readHex(33 * 2);
+        $data['fee']                  = $this->buffer->readUInt256();
+        $data['amount']               = '0';
     }
 
     private function deserializeSignatures(array &$data): void
