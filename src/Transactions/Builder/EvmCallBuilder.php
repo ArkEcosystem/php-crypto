@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\TypeGroup;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Transaction;
 
@@ -19,8 +17,9 @@ class EvmCallBuilder
         $this->transaction                    = new Transaction();
 
         $this->transaction->data = [
-            'type'            => Types::EVM_CALL->value,
-            'typeGroup'       => TypeGroup::CORE,
+            // Type and type group are going to be removed, hardcoding for now
+            'type'            => 8, // 
+            'typeGroup'       => 1,
             'amount'          => '0',
             'senderPublicKey' => '',
             'fee'             => '0',
