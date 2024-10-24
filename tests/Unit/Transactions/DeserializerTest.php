@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
 use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\Deserializer\Deserializer

@@ -22,6 +22,5 @@ class Fees
 
     public const USERNAME_RESIGNATION = '2500000000';
 
-    // @TODO: review this fee
     public const EVM = '0';
 }
