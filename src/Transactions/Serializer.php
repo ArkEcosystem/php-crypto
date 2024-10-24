@@ -88,21 +88,15 @@ class Serializer
 
     private function serializeCommon(ByteBuffer $buffer): void
     {
-        $this->transaction->data['version'] = $this->transaction->data['version'] ?? 0x01;
-
-        if (! isset($this->transaction->data['typeGroup'])) {
-            $this->transaction->data['typeGroup'] = TypeGroup::CORE;
-        }
-
         $buffer->writeUInt8(0xff);
-        $buffer->writeUInt8($this->transaction->data['version']);
+        $buffer->writeUInt8($this->transaction->data['version'] ?? 0x01);
         $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
 
-        $buffer->writeUint32($this->transaction->data['typeGroup']);
+        $buffer->writeUint32($this->transaction->data['typeGroup'] ?? TypeGroup::CORE);
         $buffer->writeUint16($this->transaction->data['type']);
         $buffer->writeUint64(+$this->transaction->data['nonce']);
 
-        if (isset($this->transaction->data['senderPublicKey'])) {
+        if ($this->transaction->data['senderPublicKey']) {
             $buffer->writeHex($this->transaction->data['senderPublicKey']);
         }
 

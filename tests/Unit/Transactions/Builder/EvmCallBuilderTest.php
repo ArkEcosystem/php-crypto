@@ -18,11 +18,11 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-sign');
 
         $builder = EvmCallBuilder::new()
-          ->withFee($fixture['data']['fee'])
-          ->withNonce($fixture['data']['nonce'])
-          ->withNetwork(30)
+          ->fee($fixture['data']['fee'])
+          ->nonce($fixture['data']['nonce'])
+          ->network(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])
-          ->withGasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
+          ->gasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
           ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
@@ -34,11 +34,11 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-with-contract');
 
         $builder = EvmCallBuilder::new()
-          ->withFee($fixture['data']['fee'])
-          ->withNonce($fixture['data']['nonce'])
-          ->withNetwork(30)
+          ->fee($fixture['data']['fee'])
+          ->nonce($fixture['data']['nonce'])
+          ->network(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])
-          ->withGasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
+          ->gasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
           // RecipientId is the contractId
           ->recipient($fixture['data']['recipientId'])
           ->sign($this->passphrase);

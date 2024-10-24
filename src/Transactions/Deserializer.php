@@ -15,8 +15,6 @@ class Deserializer
 
     /**
      * Create a new deserializer instance.
-     *
-     * @param  object  $serialized
      */
     public function __construct(string $serialized)
     {
@@ -51,10 +49,6 @@ class Deserializer
 
         $this->deserializeSignatures($transaction->data);
 
-        if (! isset($transaction->data['amount'])) {
-            $transaction->data['amount'] = '0';
-        }
-
         $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
 
         return $transaction;
@@ -63,11 +57,15 @@ class Deserializer
     private function deserializeCommon(array &$data): void
     {
         $this->buffer->skip(1);
+
         $data['version']              = $this->buffer->readUInt8();
         $data['network']              = $this->buffer->readUInt8();
+        $data['typeGroup']            = $this->buffer->readUInt32();
+        $data['type']                 = $this->buffer->readUInt16();
         $data['nonce']                = strval($this->buffer->readUInt64());
         $data['senderPublicKey']      = $this->buffer->readHex(33 * 2);
-        $data['gasPrice']             = $this->buffer->readUInt256();
+        $data['fee']                  = $this->buffer->readUInt256();
+        $data['amount']               = '0';
     }
 
     private function deserializeSignatures(array &$data): void
