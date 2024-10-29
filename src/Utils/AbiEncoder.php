@@ -5,21 +5,9 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use Exception;
-use kornrunner\Keccak;
 
-class AbiEncoder
+class AbiEncoder extends AbiBase
 {
-    private array $abi;
-
-    public function __construct()
-    {
-        $abiFilePath = __DIR__.'/AbiEncoder.Consensus.json';
-
-        $abiJson = file_get_contents($abiFilePath);
-
-        $this->abi = json_decode($abiJson, true)['abi'];
-    }
-
     public function encodeFunctionCall(string $functionName, array $args): string
     {
         $parameters = [
@@ -105,26 +93,6 @@ class AbiEncoder
         throw new Exception("Function with matching arguments not found in ABI: $name");
     }
 
-    private function toFunctionSelector(array $abiItem): string
-    {
-        $name   = $abiItem['name'];
-        $inputs = $abiItem['inputs'];
-        $types  = array_map(function ($input) {
-            return $input['type'];
-        }, $inputs);
-
-        $signature = $name.'('.implode(',', $types).')';
-        $hash      = $this->keccak256($signature);
-        $selector  = '0x'.substr($hash, 2, 8);
-
-        return $selector;
-    }
-
-    private function keccak256(string $input): string
-    {
-        return '0x'.Keccak::hash($input, 256);
-    }
-
     private function encodeAbiParameters(array $params, array $values): string
     {
         if (count($params) !== count($values)) {
@@ -178,19 +146,6 @@ class AbiEncoder
         }
 
         throw new Exception('Invalid ABI type: '.$param['type']);
-    }
-
-    private function getArrayComponents(string $type): ?array
-    {
-        if (preg_match('/^(.*)\[(\d*)\]$/', $type, $matches)) {
-            $innerType = $matches[1];
-            $lengthStr = $matches[2];
-            $length    = $lengthStr !== '' ? intval($lengthStr) : null;
-
-            return [$length, $innerType];
-        }
-
-        return null;
     }
 
     private function encodeArray($value, ?int $length, array $param): array
@@ -279,14 +234,6 @@ class AbiEncoder
             'dynamic' => false,
             'encoded' => '0x'.str_pad($value, 64, '0', STR_PAD_LEFT),
         ];
-    }
-
-    private function isValidAddress($address): bool
-    {
-        return is_string($address)
-            && str_starts_with($address, '0x')
-            && strlen($address) === 42
-            && ctype_xdigit(substr($address, 2));
     }
 
     private function encodeBool(bool $value): array
@@ -411,14 +358,5 @@ class AbiEncoder
         }
 
         return $result;
-    }
-
-    private function stripHexPrefix(string $hex): string
-    {
-        if (substr($hex, 0, 2) === '0x') {
-            return substr($hex, 2);
-        }
-
-        return $hex;
     }
 }
