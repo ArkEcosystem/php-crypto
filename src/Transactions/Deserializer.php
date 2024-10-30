@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
-use ArkEcosystem\Crypto\Transactions\Builder\UnvoteBuilder;
-use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
@@ -38,11 +36,6 @@ class Deserializer
         return new static($serialized);
     }
 
-    // private function getTransaction(): Transaction
-    // {
-    //     return new AbiDecoder();
-    // }
-
     /**
      * Perform AIP11 compliant deserialization.
      */
@@ -69,7 +62,7 @@ class Deserializer
     private function guessTransactionFromData(array $data): AbstractTransaction
     {
         if ($data['amount'] !== '0') {
-            return TransferBuilder::new($data)->transaction;
+            return new Transfer($data);
         }
 
         $payloadData = $this->decodePayload($data);
