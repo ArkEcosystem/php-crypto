@@ -10,6 +10,8 @@ use ArkEcosystem\Crypto\Transactions\Builder\UnvoteBuilder;
 use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\Address;
 use BitWasp\Bitcoin\Crypto\Hash;
@@ -55,7 +57,7 @@ class Deserializer
 
         $this->deserializeData($data);
 
-        $transaction = $this->getTransactionFromData($data);
+        $transaction = $this->guessTransactionFromData($data);
 
         $this->deserializeSignatures($transaction->data);
 
@@ -64,7 +66,7 @@ class Deserializer
         return $transaction;
     }
 
-    private function getTransactionFromData(array $data): AbstractTransaction
+    private function guessTransactionFromData(array $data): AbstractTransaction
     {
         if ($data['amount'] !== '0') {
             return TransferBuilder::new($data)->transaction;
@@ -79,12 +81,11 @@ class Deserializer
         $functionName = $payloadData['functionName'];
 
         if ($functionName === 'vote') {
-            return VoteBuilder::new($data)
-                ->vote($payloadData['args'][0])->transaction;
+            return new Vote($data);
         }
 
         if ($functionName === 'unvote') {
-            return UnvoteBuilder::new($data)->transaction;
+            return new Unvote($data);
         }
 
         return new EvmCall();
