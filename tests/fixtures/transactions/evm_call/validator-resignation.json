@@ -1,0 +1,22 @@
+{
+    "data": {
+        "version": 1,
+        "network": 30,
+        "typeGroup": 1,
+        "type": 10,
+        "nonce": "0",
+        "senderPublicKey": "03a34b99f22c790c4e36b2b3c2c35a36db06226e41c692fc82b8b56ac1c540c5bd",
+        "fee": "5",
+        "amount": "0",
+        "recipientId": "0x522B3294E6d06aA25Ad0f1B8891242E335D3B459",
+        "asset": {
+            "evmCall": {
+                "gasLimit": 150000,
+                "payload": "b85f5da2"
+            }
+        },
+        "signature": "c84e7269d8f45364bd9da8bcbb2ae843bcc3e0f49a044832855e86c024c6ff6617cc090acb67551a21537dda0e78c903fbc7c72a0cbb575e0edfbff388547967",
+        "id": "a521da35fc32122f3d95c63eb500a8c96a5b8ac3139aa5b94ed2f068cf8ed708"
+    },
+    "serialized": "ff011e010000000a00000000000000000003a34b99f22c790c4e36b2b3c2c35a36db06226e41c692fc82b8b56ac1c540c5bd000000000000000000000000000000000000000000000000000000000000000500000000000000000000000000000000000000000000000000000000000000000001522b3294e6d06aa25ad0f1b8891242e335d3b459f049020004000000b85f5da2c84e7269d8f45364bd9da8bcbb2ae843bcc3e0f49a044832855e86c024c6ff6617cc090acb67551a21537dda0e78c903fbc7c72a0cbb575e0edfbff388547967"
+}

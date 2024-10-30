@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
+use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class ValidatorRegistration extends AbstractTransaction
@@ -21,6 +22,6 @@ class ValidatorRegistration extends AbstractTransaction
 
     public function getPayload(): string
     {
-        return (new AbiEncoder())->encodeFunctionCall('registerValidator', [$this->data['asset']['validatorPublicKey']]);
+        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VALIDATOR_REGISTRATION->value, [$this->data['asset']['validatorPublicKey']]);
     }
 }

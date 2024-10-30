@@ -7,6 +7,7 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -51,6 +52,16 @@ class SerializerTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'validator-registration');
 
         $transaction = new ValidatorRegistration($fixture['data']);
+
+        $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
+    }
+
+    /** @test */
+    public function it_should_serialize_a_validator_resignation_transaction()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'validator-resignation');
+
+        $transaction = new ValidatorResignation($fixture['data']);
 
         $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }

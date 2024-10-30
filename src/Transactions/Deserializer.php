@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\Address;
@@ -74,16 +76,21 @@ class Deserializer
 
         $functionName = $payloadData['functionName'];
 
-        if ($functionName === 'vote') {
+        
+        if ($functionName === AbiFunction::VOTE->value) {
             return new Vote($data);
         }
 
-        if ($functionName === 'unvote') {
+        if ($functionName === AbiFunction::UNVOTE->value) {
             return new Unvote($data);
         }
 
-        if ($functionName === 'registerValidator') {
+        if ($functionName === AbiFunction::VALIDATOR_REGISTRATION->value) {
             return new ValidatorRegistration($data);
+        }
+
+        if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
+            return new ValidatorResignation($data);
         }
 
         return new EvmCall();

@@ -8,6 +8,7 @@ use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -58,6 +59,16 @@ class DeserializerTest extends TestCase
         $transaction = $this->assertTransaction($fixture);
 
         expect($transaction)->toBeInstanceOf(ValidatorRegistration::class);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_validator_resignation_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'validator-resignation');
+
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction)->toBeInstanceOf(ValidatorResignation::class);
     }
 
     private function assertTransaction(array $fixture): AbstractTransaction
