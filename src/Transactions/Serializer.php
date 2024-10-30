@@ -18,7 +18,7 @@ class Serializer
     /**
      * Create a new serializer instance.
      *
-     * @param Transaction $transaction
+     * @param AbstractTransaction $transaction
      */
     private function __construct($transaction)
     {
@@ -28,7 +28,7 @@ class Serializer
     /**
      * Create a new deserializer instance.
      *
-     * @param Transaction $transaction
+     * @param AbstractTransaction $transaction
      */
     public static function new($transaction)
     {
