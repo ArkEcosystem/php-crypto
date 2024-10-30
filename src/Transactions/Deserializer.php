@@ -4,8 +4,17 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use BitWasp\Bitcoin\Crypto\Hash;
+use ArkEcosystem\Crypto\Enums\Types;
+use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
+use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 class Deserializer
 {
@@ -29,10 +38,15 @@ class Deserializer
         return new static($serialized);
     }
 
+    // private function getTransaction(): AbstractTransaction
+    // {
+    //     return new AbiDecoder();
+    // }
+
     /**
      * Perform AIP11 compliant deserialization.
      */
-    public function deserialize(): Transaction
+    public function deserialize(): AbstractTransaction
     {
         $data = [];
 
@@ -41,17 +55,75 @@ class Deserializer
         // Vendor field length from previous transaction serialization
         $this->buffer->skip(1);
 
-        $transaction       = new Transaction();
-        $transaction->data = $data;
-
-        // Deserialize type specific parts
-        $transaction->deserializeData($this->buffer);
+        $this->deserializeData($data);
+        
+        $transaction = $this->getTransactionFromData($data);
 
         $this->deserializeSignatures($transaction->data);
 
         $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
 
         return $transaction;
+    }
+
+    private function getTransactionFromData(array $data): AbstractTransaction
+    {
+        if ($data['amount'] !== '0') {
+            return TransferBuilder::new($data)->transaction;
+        }
+
+        $payloadData = $this->decodePayload($data);
+
+        if ($payloadData === null) {
+            return new EvmCall();        
+        }
+
+        $functionName = $payloadData['functionName'];
+
+        if ($functionName === 'vote') {
+            return VoteBuilder::new($data)->vote($payloadData['args'][0])->transaction;
+        }
+
+        return new EvmCall();        
+    }
+
+    private function decodePayload(array $data): ?array
+    {
+        $payload = $data['asset']['evmCall']['payload'];
+
+        if ($payload === "") {
+            return null;
+        }
+
+        return (new AbiDecoder())->decodeFunctionData($payload);
+    }
+
+    private function deserializeData(array &$data): void
+    {
+        // Read amount (uint64)
+        $data['amount'] = $this->buffer->readUInt256();
+
+        // Read recipient marker and recipientId
+        $recipientMarker = $this->buffer->readUInt8();
+        if ($recipientMarker === 1) {
+            $data['recipientId'] = Address::fromByteBuffer($this->buffer);
+        }
+
+        // Read gasLimit (uint32)
+        $gasLimit = $this->buffer->readUInt32();
+
+        // Read payload length (uint32)
+        $payloadLength = $this->buffer->readUInt32();
+
+        // Read payload as hex
+        $payloadHex = $this->buffer->readHex($payloadLength * 2);
+
+        $data['asset'] = [
+            'evmCall' => [
+                'gasLimit' => $gasLimit,
+                'payload'  => $payloadHex,
+            ],
+        ];
     }
 
     private function deserializeCommon(array &$data): void

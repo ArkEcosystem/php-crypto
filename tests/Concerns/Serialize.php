@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 
 trait Serialize
 {

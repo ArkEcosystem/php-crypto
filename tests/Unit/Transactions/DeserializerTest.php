@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
-use ArkEcosystem\Crypto\Transactions\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -17,7 +17,9 @@ class DeserializerTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('evm_call', 'transfer');
 
-        $this->assertTransaction($fixture);
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction->data['amount'])->toEqual('100000000');
     }
 
     /** @test */
@@ -25,7 +27,9 @@ class DeserializerTest extends TestCase
     {
         $fixture = $this->getTransactionFixture('evm_call', 'vote');
 
-        $this->assertTransaction($fixture);
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction->data['asset']['vote'])->toEqual('0x512F366D524157BcF734546eB29a6d687B762255');
     }
 
     /** @test */
@@ -44,7 +48,7 @@ class DeserializerTest extends TestCase
         $this->assertTransaction($fixture);
     }
 
-    private function assertTransaction(array $fixture): Transaction
+    private function assertTransaction(array $fixture): AbstractTransaction
     {
         $actual = $this->assertDeserialized($fixture, [
             'nonce',

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ArkEcosystem\Crypto\Transactions\Builder;
+
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+
+class TransferBuilder extends AbstractTransactionBuilder
+{
+    public function amount(string $amount): self
+    {
+        $this->transaction->data['amount'] = $amount;
+
+        return $this;
+    }
+
+    protected function getTransactionInstance(): AbstractTransaction
+    {
+        return new Transfer();
+    }
+}

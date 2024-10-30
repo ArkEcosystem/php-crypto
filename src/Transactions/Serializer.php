@@ -7,16 +7,17 @@ namespace ArkEcosystem\Crypto\Transactions;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use BitWasp\Buffertools\Buffer;
 
 class Serializer
 {
-    public Transaction $transaction;
+    public AbstractTransaction $transaction;
 
     /**
      * Create a new serializer instance.
      *
-     * @param Transaction $transaction
+     * @param AbstractTransaction $transaction
      */
     private function __construct($transaction)
     {
@@ -33,7 +34,7 @@ class Serializer
         return new static($transaction);
     }
 
-    public static function getBytes(Transaction $transaction, array $options = []): Buffer
+    public static function getBytes(AbstractTransaction $transaction, array $options = []): Buffer
     {
         return $transaction->serialize($options);
     }

@@ -12,7 +12,7 @@ abstract class AbiBase
 
     public function __construct()
     {
-        $abiFilePath = __DIR__.'/AbiEncoder.Consensus.json';
+        $abiFilePath = __DIR__.'/Abi.Consensus.json';
 
         $abiJson = file_get_contents($abiFilePath);
 

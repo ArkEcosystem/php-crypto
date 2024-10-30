@@ -2,18 +2,21 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Crypto\Transactions;
+namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\Address;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 
-class Transaction
+abstract class AbstractTransaction
 {
     public array $data;
+
+    abstract public function getPayload(): string;
 
     /**
      * Convert the byte representation to a unique identifier.
@@ -31,7 +34,7 @@ class Transaction
     /**
      * Sign the transaction using the given passphrase.
      */
-    public function sign(PrivateKey $keys): self
+    public function sign(PrivateKey $keys): static
     {
         $options = [
             'skipSignature'       => true,
@@ -48,7 +51,7 @@ class Transaction
     /**
      * Sign the transaction using the given second passphrase.
      */
-    public function secondSign(PrivateKey $keys): self
+    public function secondSign(PrivateKey $keys): static
     {
         $options = [
             'skipSecondSignature' => true,
@@ -63,7 +66,7 @@ class Transaction
     /**
      * Sign the transaction using the given passphrase.
      */
-    public function multiSign(PrivateKey $keys, int $index = -1): self
+    public function multiSign(PrivateKey $keys, int $index = -1): static
     {
         if (! isset($this->data['signatures'])) {
             $this->data['signatures'] = [];
@@ -145,7 +148,8 @@ class Transaction
         $buffer->writeUInt32($this->data['asset']['evmCall']['gasLimit']);
 
         // Write payload length (uint32) and payload
-        $payloadHex    = $this->data['asset']['evmCall']['payload'];
+        $payloadHex    = ltrim($this->getPayload(), '0x');
+
         $payloadLength = strlen($payloadHex);
 
         $buffer->writeUInt32($payloadLength / 2);
@@ -154,39 +158,6 @@ class Transaction
         $buffer->writeHex($payloadHex);
 
         return $buffer;
-    }
-
-    /**
-     * Deserialize the EVM call transaction data.
-     *
-     * @param ByteBuffer $buffer
-     */
-    public function deserializeData(ByteBuffer $buffer): void
-    {
-        // Read amount (uint64)
-        $this->data['amount'] = $buffer->readUInt256();
-
-        // Read recipient marker and recipientId
-        $recipientMarker = $buffer->readUInt8();
-        if ($recipientMarker === 1) {
-            $this->data['recipientId'] = Address::fromByteBuffer($buffer);
-        }
-
-        // Read gasLimit (uint32)
-        $gasLimit = $buffer->readUInt32();
-
-        // Read payload length (uint32)
-        $payloadLength = $buffer->readUInt32();
-
-        // Read payload as hex
-        $payloadHex = $buffer->readHex($payloadLength * 2);
-
-        $this->data['asset'] = [
-            'evmCall' => [
-                'gasLimit' => $gasLimit,
-                'payload'  => $payloadHex,
-            ],
-        ];
     }
 
     /**
@@ -260,7 +231,7 @@ class Transaction
 
     private function runTemporaryNodeCommand(string $command): array
     {
-        $scriptPath = __DIR__.'/../../scripts';
+        $scriptPath = __DIR__.'/../../../scripts';
 
         $command = escapeshellcmd("npm start --prefix $scriptPath $command");
 
