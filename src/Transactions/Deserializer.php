@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\Enums\Types;
-use ArkEcosystem\Crypto\Utils\Address;
-use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
 use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\Utils\Address;
+use BitWasp\Bitcoin\Crypto\Hash;
 
 class Deserializer
 {
@@ -56,7 +53,7 @@ class Deserializer
         $this->buffer->skip(1);
 
         $this->deserializeData($data);
-        
+
         $transaction = $this->getTransactionFromData($data);
 
         $this->deserializeSignatures($transaction->data);
@@ -75,7 +72,7 @@ class Deserializer
         $payloadData = $this->decodePayload($data);
 
         if ($payloadData === null) {
-            return new EvmCall();        
+            return new EvmCall();
         }
 
         $functionName = $payloadData['functionName'];
@@ -84,14 +81,14 @@ class Deserializer
             return VoteBuilder::new($data)->vote($payloadData['args'][0])->transaction;
         }
 
-        return new EvmCall();        
+        return new EvmCall();
     }
 
     private function decodePayload(array $data): ?array
     {
         $payload = $data['asset']['evmCall']['payload'];
 
-        if ($payload === "") {
+        if ($payload === '') {
             return null;
         }
 
