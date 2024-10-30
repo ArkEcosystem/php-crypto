@@ -76,7 +76,6 @@ class Deserializer
 
         $functionName = $payloadData['functionName'];
 
-        
         if ($functionName === AbiFunction::VOTE->value) {
             return new Vote($data);
         }
