@@ -8,6 +8,7 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Utils\Address;
 use BitWasp\Buffertools\Buffer;
 
 class Serializer
@@ -17,7 +18,7 @@ class Serializer
     /**
      * Create a new serializer instance.
      *
-     * @param AbstractTransaction $transaction
+     * @param Transaction $transaction
      */
     private function __construct($transaction)
     {
@@ -54,8 +55,7 @@ class Serializer
         // Added for compatibility
         $buffer->writeUInt8(0);
 
-        $typeBuffer = $this->transaction->serializeData($options);
-        $buffer->append($typeBuffer);
+        $this->serializeData($buffer, $options);
 
         $this->serializeSignatures($buffer, $options);
 
@@ -88,6 +88,35 @@ class Serializer
         if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
             $buffer->writeHex(implode('', $this->transaction->data['signatures']));
         }
+    }
+
+    private function serializeData(ByteBuffer $buffer, array $options = []): void
+    {
+        // Write amount (uint256)
+        $buffer->writeUint256($this->transaction->data['amount']);
+
+        // Write recipient marker and recipientId (if present)
+        if (isset($this->transaction->data['recipientId'])) {
+            $buffer->writeUInt8(1); // Recipient marker
+            $buffer->writeHex(
+                Address::toBufferHexString($this->transaction->data['recipientId'])
+            );
+        } else {
+            $buffer->writeUInt8(0); // No recipient
+        }
+
+        // Write gasLimit (uint32)
+        $buffer->writeUInt32($this->transaction->data['asset']['evmCall']['gasLimit']);
+
+        // Write payload length (uint32) and payload
+        $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
+
+        $payloadLength = strlen($payloadHex);
+
+        $buffer->writeUInt32($payloadLength / 2);
+
+        // Write payload as hex
+        $buffer->writeHex($payloadHex);
     }
 
     private function serializeCommon(ByteBuffer $buffer): void

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -12,26 +15,32 @@ use ArkEcosystem\Tests\Crypto\TestCase;
 class SerializerTest extends TestCase
 {
     /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
+    public function it_should_serialize_a_transfer_transaction()
     {
-        $this->assertSerialized($this->getTransactionFixture('evm_call', 'evm-sign'));
+        $fixture = $this->getTransactionFixture('evm_call', 'transfer');
+
+        $transaction = new Transfer($fixture['data']);
+
+        $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }
 
     /** @test */
-    public function it_should_serialize_a_transfer_transaction_with_a_passphrase()
+    public function it_should_serialize_a_vote_transaction()
     {
-        $this->assertSerialized($this->getTransactionFixture('evm_call', 'transfer'));
+        $fixture = $this->getTransactionFixture('evm_call', 'vote');
+
+        $transaction = new Vote($fixture['data']);
+
+        $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }
 
     /** @test */
-    public function it_should_serialize_a_vote_transaction_with_a_passphrase()
+    public function it_should_serialize_a_unvote_transaction()
     {
-        $this->assertSerialized($this->getTransactionFixture('evm_call', 'vote'));
-    }
+        $fixture = $this->getTransactionFixture('evm_call', 'unvote');
 
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase_and_contract_id()
-    {
-        $this->assertSerialized($this->getTransactionFixture('evm_call', 'evm-with-contract'));
+        $transaction = new Unvote($fixture['data']);
+
+        $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }
 }

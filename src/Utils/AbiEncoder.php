@@ -8,7 +8,7 @@ use Exception;
 
 class AbiEncoder extends AbiBase
 {
-    public function encodeFunctionCall(string $functionName, array $args): string
+    public function encodeFunctionCall(string $functionName, array $args = []): string
     {
         $parameters = [
             'abi'          => $this->abi,

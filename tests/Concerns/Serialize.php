@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Concerns;
 
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 
 trait Serialize
 {
-    protected function assertSerialized(array $fixture): void
+    protected function assertSerialized(AbstractTransaction $transaction, array $fixture): void
     {
-        $data              = $fixture['data'];
-        $transaction       = new Transaction();
-        $transaction->data = $data;
+        $transaction->data = $fixture['data'];
 
         $this->assertSame($fixture['serialized'], $transaction->serialize()->getHex());
     }

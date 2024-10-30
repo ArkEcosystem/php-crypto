@@ -17,8 +17,8 @@ class EvmCallBuilder extends AbstractTransactionBuilder
         return $this;
     }
 
-    protected function getTransactionInstance(): AbstractTransaction
+    protected function getTransactionInstance(?array $data = []): AbstractTransaction
     {
-        return new EvmCall();
+        return new EvmCall($data);
     }
 }

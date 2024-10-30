@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 class TransferBuilder extends AbstractTransactionBuilder
 {
@@ -16,8 +16,8 @@ class TransferBuilder extends AbstractTransactionBuilder
         return $this;
     }
 
-    protected function getTransactionInstance(): AbstractTransaction
+    protected function getTransactionInstance(?array $data = []): AbstractTransaction
     {
-        return new Transfer();
+        return new Vote($data);
     }
 }

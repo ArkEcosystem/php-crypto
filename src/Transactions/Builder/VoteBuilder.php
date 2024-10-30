@@ -16,8 +16,8 @@ class VoteBuilder extends AbstractTransactionBuilder
         return $this;
     }
 
-    protected function getTransactionInstance(): AbstractTransaction
+    protected function getTransactionInstance(?array $data = []): AbstractTransaction
     {
-        return new Vote();
+        return new Vote($data);
     }
 }

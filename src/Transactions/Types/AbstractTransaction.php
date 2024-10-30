@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
@@ -16,7 +15,27 @@ abstract class AbstractTransaction
 {
     public array $data;
 
+    public function __construct(?array $data = null)
+    {
+        $this->data = $data ?? [];
+    }
+
     abstract public function getPayload(): string;
+
+    public function decodePayload(array $data): ?array
+    {
+        if (! isset($data['asset']['evmCall']['payload'])) {
+            return null;
+        }
+
+        $payload = $data['asset']['evmCall']['payload'];
+
+        if ($payload === '') {
+            return null;
+        }
+
+        return (new AbiDecoder())->decodeFunctionData($payload);
+    }
 
     /**
      * Convert the byte representation to a unique identifier.
@@ -119,45 +138,6 @@ abstract class AbstractTransaction
     public function serialize(array $options = []): Buffer
     {
         return Serializer::new($this)->serialize($options);
-    }
-
-    /**
-     * Serialize the EVM call transaction data.
-     *
-     * @param array $options
-     * @return ByteBuffer
-     */
-    public function serializeData(array $options = []): ByteBuffer
-    {
-        $buffer = ByteBuffer::new(0);
-
-        // Write amount (uint256)
-        $buffer->writeUint256($this->data['amount']);
-
-        // Write recipient marker and recipientId (if present)
-        if (isset($this->data['recipientId'])) {
-            $buffer->writeUInt8(1); // Recipient marker
-            $buffer->writeHex(
-                Address::toBufferHexString($this->data['recipientId'])
-            );
-        } else {
-            $buffer->writeUInt8(0); // No recipient
-        }
-
-        // Write gasLimit (uint32)
-        $buffer->writeUInt32($this->data['asset']['evmCall']['gasLimit']);
-
-        // Write payload length (uint32) and payload
-        $payloadHex    = ltrim($this->getPayload(), '0x');
-
-        $payloadLength = strlen($payloadHex);
-
-        $buffer->writeUInt32($payloadLength / 2);
-
-        // Write payload as hex
-        $buffer->writeHex($payloadHex);
-
-        return $buffer;
     }
 
     /**

@@ -9,8 +9,8 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 
 class ValidatorResignationBuilder extends AbstractTransactionBuilder
 {
-    protected function getTransactionInstance(): AbstractTransaction
+    protected function getTransactionInstance(?array $data = []): AbstractTransaction
     {
-        return new ValidatorResignation();
+        return new ValidatorResignation($data);
     }
 }
