@@ -8,10 +8,19 @@ use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class ValidatorRegistration extends AbstractTransaction
 {
+    public function __construct(?array $data = [])
+    {
+        $payload = $this->decodePayload($data);
+
+        if ($payload !== null) {
+            $data['asset']['validatorPublicKey'] = $payload['args'][0];
+        }
+
+        parent::__construct($data);
+    }
+
     public function getPayload(): string
     {
-        return (new AbiEncoder())->encodeFunctionCall('registerValidator', [
-            'votes' => [$this->data['asset']['validatorPublicKey']],
-        ]);
+        return (new AbiEncoder())->encodeFunctionCall('registerValidator', [$this->data['asset']['validatorPublicKey']]);
     }
 }

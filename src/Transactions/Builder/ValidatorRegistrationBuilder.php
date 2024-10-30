@@ -9,6 +9,13 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
 class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
+    public function validatorPublicKey(string $validatorPublicKey): self
+    {
+        $this->transaction->data['asset']['validatorPublicKey'] = $validatorPublicKey;
+
+        return $this;
+    }
+
     protected function getTransactionInstance(?array $data = []): AbstractTransaction
     {
         return new ValidatorRegistration($data);

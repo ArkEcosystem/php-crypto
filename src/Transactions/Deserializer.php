@@ -9,6 +9,7 @@ use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\Address;
@@ -79,6 +80,10 @@ class Deserializer
 
         if ($functionName === 'unvote') {
             return new Unvote($data);
+        }
+
+        if ($functionName === 'registerValidator') {
+            return new ValidatorRegistration($data);
         }
 
         return new EvmCall();
