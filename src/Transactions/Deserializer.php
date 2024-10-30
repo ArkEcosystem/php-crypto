@@ -6,8 +6,6 @@ namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
-use ArkEcosystem\Crypto\Transactions\Builder\UnvoteBuilder;
-use ArkEcosystem\Crypto\Transactions\Builder\VoteBuilder;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;

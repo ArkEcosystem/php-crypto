@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
-use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Deserializer
