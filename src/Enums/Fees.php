@@ -22,5 +22,5 @@ class Fees
 
     public const USERNAME_RESIGNATION = '2500000000';
 
-    public const EVM = '0';
+    public const EVM = '5';
 }

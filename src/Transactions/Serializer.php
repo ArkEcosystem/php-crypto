@@ -9,6 +9,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use BitWasp\Buffertools\Buffer;
 
 class Serializer
@@ -47,15 +48,29 @@ class Serializer
      */
     public function serialize(array $options = []): Buffer
     {
-        $buffer = ByteBuffer::new(1); // initialize with size 1, size will expand as we add bytes
+        $buffer = ByteBuffer::new(0); // initialize with size 0, size will expand as we add bytes
+        
+        $buffer->writeUint256($this->transaction->data['amount']);
+        
+        if (isset($this->transaction->data['recipientId'])) {
+            $buffer->writeUInt8(1); // Recipient marker
+            
+            $buffer->writeHex(
+                Address::toBufferHexString($this->transaction->data['recipientId'])
+            );
 
-        $this->serializeCommon($buffer);
+        } else {
+            $buffer->writeUInt8(0); // No recipient
+        }
 
-        // Vendor field length from previous transaction serialization
-        // Added for compatibility
-        $buffer->writeUInt8(0);
+        $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
 
-        $this->serializeData($buffer, $options);
+        $payloadLength = strlen($payloadHex);
+
+        $buffer->writeUInt32($payloadLength / 2);
+
+        // Write payload as hex
+        $buffer->writeHex($payloadHex);
 
         $this->serializeSignatures($buffer, $options);
 
@@ -90,49 +105,43 @@ class Serializer
         }
     }
 
-    private function serializeData(ByteBuffer $buffer, array $options = []): void
-    {
-        // Write amount (uint256)
-        $buffer->writeUint256($this->transaction->data['amount']);
+    // private function serializeData(ByteBuffer $buffer, array $options = []): void
+    // {
+    //     // // Write gasLimit (uint32)
+    //     // $buffer->writeUInt32($this->transaction->data['asset']['evmCall']['gasLimit']);
 
-        // Write recipient marker and recipientId (if present)
-        if (isset($this->transaction->data['recipientId'])) {
-            $buffer->writeUInt8(1); // Recipient marker
-            $buffer->writeHex(
-                Address::toBufferHexString($this->transaction->data['recipientId'])
-            );
-        } else {
-            $buffer->writeUInt8(0); // No recipient
-        }
+    //     // Write payload length (uint32) and payload
+    //     $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
 
-        // Write gasLimit (uint32)
-        $buffer->writeUInt32($this->transaction->data['asset']['evmCall']['gasLimit']);
+    //     $payloadLength = strlen($payloadHex);
 
-        // Write payload length (uint32) and payload
-        $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
+    //     $buffer->writeUInt32($payloadLength / 2);
 
-        $payloadLength = strlen($payloadHex);
+    //     // Write payload as hex
+    //     $buffer->writeHex($payloadHex);
+    // }
 
-        $buffer->writeUInt32($payloadLength / 2);
+    // private function serializeCommon(ByteBuffer $buffer): void
+    // {
+    //     // Write amount (uint256)
+        
 
-        // Write payload as hex
-        $buffer->writeHex($payloadHex);
-    }
+    //     // Write recipient marker and recipientId (if present)
+        
 
-    private function serializeCommon(ByteBuffer $buffer): void
-    {
-        $buffer->writeUInt8(0xff);
-        $buffer->writeUInt8($this->transaction->data['version'] ?? 0x01);
-        $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
 
-        $buffer->writeUint32($this->transaction->data['typeGroup'] ?? TypeGroup::CORE);
-        $buffer->writeUint16($this->transaction->data['type']);
-        $buffer->writeUint64(+$this->transaction->data['nonce']);
+    //     // $buffer->writeUInt8(0xff);
+    //     // $buffer->writeUInt8($this->transaction->data['version'] ?? 0x01);
+    //     // $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
 
-        if ($this->transaction->data['senderPublicKey']) {
-            $buffer->writeHex($this->transaction->data['senderPublicKey']);
-        }
+    //     // $buffer->writeUint32($this->transaction->data['typeGroup'] ?? TypeGroup::CORE);
+    //     // $buffer->writeUint16($this->transaction->data['type']);
+    //     // $buffer->writeUint64(+$this->transaction->data['nonce']);
 
-        $buffer->writeUint256($this->transaction->data['fee']);
-    }
+    //     // if ($this->transaction->data['senderPublicKey']) {
+    //     //     $buffer->writeHex($this->transaction->data['senderPublicKey']);
+    //     // }
+
+    //     // $buffer->writeUint256($this->transaction->data['fee']);
+    // }
 }

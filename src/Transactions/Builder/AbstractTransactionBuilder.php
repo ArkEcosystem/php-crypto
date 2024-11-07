@@ -30,7 +30,7 @@ abstract class AbstractTransactionBuilder
             'network'         => Network::get()->pubKeyHash(),
             'asset'           => [
                 'evmCall' => [
-                    'gasLimit' => 1000000,  // Default gas limit
+                    'gasLimit' => 1_000_000,  // Default gas limit
                     'payload'  => '',       // EVM code in hex format
                 ],
             ],
@@ -96,6 +96,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
         $this->transaction             = $this->transaction->sign($keys);
+        
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;

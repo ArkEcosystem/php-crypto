@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
+use FurqanSiddiqui\ECDSA\ECDSA;
+use BitWasp\Bitcoin\Crypto\Hash;
+use FurqanSiddiqui\ECDSA\KeyPair;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Identities\Address;
+use BitWasp\Bitcoin\Signature\SignatureFactory;
+use ArkEcosystem\Crypto\Transactions\Serializer;
+use ArkEcosystem\Crypto\Utils\TransactionHasher;
+use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 
 abstract class AbstractTransaction
 {
@@ -50,6 +56,21 @@ abstract class AbstractTransaction
         return Serializer::getBytes($this, $options);
     }
 
+    private function getHashData(): array
+    {
+        return [
+            'gasPrice' => $this->data['fee'],
+            'network' =>  $this->data['network'] ?? Network::get()->version(),
+            'nonce' => $this->data['nonce'],
+            'value' => $this->data['amount'],
+            'senderAddress' => Address::fromPublicKey($this->data['senderPublicKey']),
+            'gasLimit' => $this->data['asset']['evmCall']['gasLimit'],
+            'data' => $this->data['asset']['evmCall']['payload'],
+            'recipientAddress' => $this->data['recipientId'] ?? null,
+            'senderPublicKey' => $this->data['senderPublicKey'],
+        ];
+    }
+
     /**
      * Sign the transaction using the given passphrase.
      */
@@ -59,10 +80,33 @@ abstract class AbstractTransaction
             'skipSignature'       => true,
             'skipSecondSignature' => true,
         ];
-        $transaction             = Hash::sha256($this->getBytes($options));
+        
+        $hash = TransactionHasher::toHash($this->getHashData(), $options);
 
-        // $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
-        $this->data['signature'] = $this->temporarySignerSign($transaction, $keys);
+        $signature = $keys->signCompact($hash);
+
+        // Extract the recovery ID (an integer between 0 and 3) from the signature
+        $recoveryId = $signature->getRecoveryId();
+
+        // Get the full signature buffer, which includes the adjusted recovery ID at the start
+        $signatureHexWithRecoveryId = $signature->getBuffer()->getHex();
+
+        // Apparently, the compact signature returned by signCompact() includes an adjusted recovery ID
+        // as the first byte of the signature buffer. This adjusted recovery ID is specific to the compact
+        // signature format used by the library and is calculated by adding a constant (typically 27 or 31)
+        // to the actual recovery ID. This adjustment is done internally by the library for its own purposes.
+        
+        // However, in our context, and to match the expected signature format (as per the JavaScript
+        // implementation), we need the raw signature consisting of only the 'r' and 's' values.
+        // Therefore, we remove the first byte (two hex characters) from the signature buffer to exclude the adjusted recovery ID.
+        $signatureHex = substr($signatureHexWithRecoveryId, 2);
+
+        // Append the unadjusted recovery ID at the end of the signature
+        // The unadjusted recovery ID is appended to match the expected signature format
+        // This aligns with how the JavaScript implementation handles the recovery ID
+        $signatureHex .= str_pad(dechex($recoveryId), 2, '0', STR_PAD_LEFT);
+        
+        $this->data['signature'] = $signatureHex;
 
         return $this;
     }
@@ -77,7 +121,7 @@ abstract class AbstractTransaction
         ];
         $transaction                   = Hash::sha256($this->getBytes($options));
 
-        $this->data['secondSignature'] = $this->temporarySignerSign($transaction, $keys);
+        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
 
         return $this;
     }
@@ -98,7 +142,7 @@ abstract class AbstractTransaction
             'skipMultiSignature'  => true,
         ]));
 
-        $signature = $this->temporarySignerSign($transactionHash, $keys);
+        $signature = $keys->sign($transactionHash)->getBuffer()->getHex();
 
         $indexedSignature = $this->numberToHex($index).$signature;
 
@@ -119,7 +163,13 @@ abstract class AbstractTransaction
 
         $transaction = Hash::sha256($this->getBytes($options));
 
-        return $this->temporarySignerVerify($transaction, $signature, $publicKey);
+        $factory   = new PublicKeyFactory();
+        $publicKey = $factory->fromHex($publicKey);
+
+        return $publicKey->verify(
+            $transaction,
+            SignatureFactory::fromHex($signature)
+        );
     }
 
     public function secondVerify(string $secondPublicKey): bool
@@ -132,7 +182,13 @@ abstract class AbstractTransaction
 
         $transaction = Hash::sha256($this->getBytes($options));
 
-        return $this->temporarySignerVerify($transaction, $signature, $secondPublicKey);
+        $factory   = new PublicKeyFactory();
+        $publicKey = $factory->fromHex($secondPublicKey);
+
+        return $publicKey->verify(
+            $transaction,
+            SignatureFactory::fromHex($signature)
+        );
     }
 
     public function serialize(array $options = []): Buffer
@@ -183,64 +239,5 @@ abstract class AbstractTransaction
 
         // Pad the hexadecimal string with leading zeros
         return str_pad($indexHex, $padding, '0', STR_PAD_LEFT);
-    }
-
-    private function temporarySignerSign(Buffer $transaction, PrivateKey $keys)
-    {
-        $privateKey = $keys->getHex();
-
-        $message    = $transaction->getHex();
-
-        $command = "sign $privateKey $message";
-
-        $result = $this->runTemporaryNodeCommand($command);
-
-        return $result['signature'];
-    }
-
-    private function temporarySignerVerify(Buffer $transaction, string $signature, string $publicKey)
-    {
-        $message = $transaction->getHex();
-
-        $command = "verify $publicKey $message $signature";
-
-        $result = $this->runTemporaryNodeCommand($command);
-
-        return $result['isValid'];
-    }
-
-    private function runTemporaryNodeCommand(string $command): array
-    {
-        $scriptPath = __DIR__.'/../../../scripts';
-
-        $command = escapeshellcmd("npm start --prefix $scriptPath $command");
-
-        exec($command, $output, $returnVar);
-
-        if ($returnVar !== 0) {
-            $errorOutput = implode("\n", $output);
-
-            throw new \RuntimeException("Error running signer script: $errorOutput");
-        }
-
-        $jsonOutput = implode("\n", $output);
-
-        if (preg_match('/\{.*\}/s', $jsonOutput, $matches)) {
-            $json = $matches[0];
-        } else {
-            throw new \RuntimeException("Error: Could not find JSON output in: $jsonOutput");
-        }
-
-        $result = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('Error parsing JSON output: '.json_last_error_msg());
-        }
-
-        if ($result['status'] !== 'success') {
-            throw new \RuntimeException('Error: '.$result['message']);
-        }
-
-        return $result;
     }
 }
