@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Utils\Address;
 use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\Configuration\Network;
 
 class Serializer
 {
@@ -70,19 +70,10 @@ class Serializer
 
         // Write payload as hex
         $buffer->writeHex($payloadHex);
-        
+
         $this->serializeSignatures($buffer, $options);
 
         return new Buffer($buffer->toString('binary'));
-    }
-
-    private function serializeCommon(ByteBuffer $buffer): void
-    {
-        $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
-        $buffer->writeUint64(+$this->transaction->data['nonce']);
-        // @TODO: rename to gas price
-        $buffer->writeUint32(+$this->transaction->data['fee']);
-        $buffer->writeUint32(+$this->transaction->data['asset']['evmCall']['gasLimit']);        
     }
 
     /**
@@ -111,5 +102,14 @@ class Serializer
         if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
             $buffer->writeHex(implode('', $this->transaction->data['signatures']));
         }
+    }
+
+    private function serializeCommon(ByteBuffer $buffer): void
+    {
+        $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
+        $buffer->writeUint64(+$this->transaction->data['nonce']);
+        // @TODO: rename to gas price
+        $buffer->writeUint32(+$this->transaction->data['fee']);
+        $buffer->writeUint32(+$this->transaction->data['asset']['evmCall']['gasLimit']);
     }
 }
