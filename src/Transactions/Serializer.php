@@ -9,7 +9,6 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Utils\Address;
-use ArkEcosystem\Crypto\Utils\UnitConverter;
 use BitWasp\Buffertools\Buffer;
 
 class Serializer
@@ -49,16 +48,15 @@ class Serializer
     public function serialize(array $options = []): Buffer
     {
         $buffer = ByteBuffer::new(0); // initialize with size 0, size will expand as we add bytes
-        
+
         $buffer->writeUint256($this->transaction->data['amount']);
-        
+
         if (isset($this->transaction->data['recipientId'])) {
             $buffer->writeUInt8(1); // Recipient marker
-            
+
             $buffer->writeHex(
                 Address::toBufferHexString($this->transaction->data['recipientId'])
             );
-
         } else {
             $buffer->writeUInt8(0); // No recipient
         }
@@ -124,11 +122,8 @@ class Serializer
     // private function serializeCommon(ByteBuffer $buffer): void
     // {
     //     // Write amount (uint256)
-        
 
     //     // Write recipient marker and recipientId (if present)
-        
-
 
     //     // $buffer->writeUInt8(0xff);
     //     // $buffer->writeUInt8($this->transaction->data['version'] ?? 0x01);

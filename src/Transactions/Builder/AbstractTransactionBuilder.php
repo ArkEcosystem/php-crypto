@@ -96,7 +96,7 @@ abstract class AbstractTransactionBuilder
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
         $this->transaction             = $this->transaction->sign($keys);
-        
+
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;
