@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Utils\Address;
-use ArkEcosystem\Crypto\Utils\UnitConverter;
 use BitWasp\Buffertools\Buffer;
 
 class Serializer
@@ -104,44 +101,4 @@ class Serializer
             $buffer->writeHex(implode('', $this->transaction->data['signatures']));
         }
     }
-
-    // private function serializeData(ByteBuffer $buffer, array $options = []): void
-    // {
-    //     // // Write gasLimit (uint32)
-    //     // $buffer->writeUInt32($this->transaction->data['asset']['evmCall']['gasLimit']);
-
-    //     // Write payload length (uint32) and payload
-    //     $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
-
-    //     $payloadLength = strlen($payloadHex);
-
-    //     $buffer->writeUInt32($payloadLength / 2);
-
-    //     // Write payload as hex
-    //     $buffer->writeHex($payloadHex);
-    // }
-
-    // private function serializeCommon(ByteBuffer $buffer): void
-    // {
-    //     // Write amount (uint256)
-        
-
-    //     // Write recipient marker and recipientId (if present)
-        
-
-
-    //     // $buffer->writeUInt8(0xff);
-    //     // $buffer->writeUInt8($this->transaction->data['version'] ?? 0x01);
-    //     // $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
-
-    //     // $buffer->writeUint32($this->transaction->data['typeGroup'] ?? TypeGroup::CORE);
-    //     // $buffer->writeUint16($this->transaction->data['type']);
-    //     // $buffer->writeUint64(+$this->transaction->data['nonce']);
-
-    //     // if ($this->transaction->data['senderPublicKey']) {
-    //     //     $buffer->writeHex($this->transaction->data['senderPublicKey']);
-    //     // }
-
-    //     // $buffer->writeUint256($this->transaction->data['fee']);
-    // }
 }
