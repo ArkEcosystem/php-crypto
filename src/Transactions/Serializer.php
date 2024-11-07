@@ -46,16 +46,15 @@ class Serializer
     public function serialize(array $options = []): Buffer
     {
         $buffer = ByteBuffer::new(0); // initialize with size 0, size will expand as we add bytes
-        
+
         $buffer->writeUint256($this->transaction->data['amount']);
-        
+
         if (isset($this->transaction->data['recipientId'])) {
             $buffer->writeUInt8(1); // Recipient marker
-            
+
             $buffer->writeHex(
                 Address::toBufferHexString($this->transaction->data['recipientId'])
             );
-
         } else {
             $buffer->writeUInt8(0); // No recipient
         }
