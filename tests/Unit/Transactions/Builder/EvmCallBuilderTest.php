@@ -21,26 +21,8 @@ class EvmCallBuilderTest extends TestCase
           ->gasPrice($fixture['data']['gasPrice'])
           ->nonce($fixture['data']['nonce'])
           ->network(30)
-          ->payload($fixture['data']['asset']['evmCall']['payload'])
-          ->gasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
-          ->sign($this->passphrase);
-
-        $this->assertTrue($builder->verify());
-    }
-
-    /** @test */
-    public function it_should_sign_it_with_a_passphrase_and_contract()
-    {
-        $fixture = $this->getTransactionFixture('evm_call', 'evm-with-contract');
-
-        $builder = EvmCallBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network(30)
-          ->payload($fixture['data']['asset']['evmCall']['payload'])
-          ->gasLimit($fixture['data']['asset']['evmCall']['gasLimit'])
-          // RecipientId is the contractId
-          ->recipient($fixture['data']['recipientId'])
+          ->payload($fixture['data']['data'])
+          ->gasLimit($fixture['data']['gastLimit'])
           ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());

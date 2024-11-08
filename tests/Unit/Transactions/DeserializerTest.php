@@ -36,7 +36,7 @@ class DeserializerTest extends TestCase
 
         $transaction = $this->assertTransaction($fixture);
 
-        expect($transaction->data['asset']['vote'])->toEqual('0x512F366D524157BcF734546eB29a6d687B762255');
+        expect($transaction->data['vote'])->toEqual('0x512F366D524157BcF734546eB29a6d687B762255');
 
         expect($transaction)->toBeInstanceOf(Vote::class);
     }
