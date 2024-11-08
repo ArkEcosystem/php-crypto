@@ -13,10 +13,13 @@ use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Serializer\Signature\CompactSignatureSerializer;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PublicKeyInterface;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
+use BitWasp\Buffertools\BufferInterface;
 
 abstract class AbstractTransaction
 {
@@ -62,12 +65,9 @@ abstract class AbstractTransaction
      */
     public function sign(PrivateKey $keys): static
     {
-        $options = [
-            'skipSignature'       => true,
-            'skipSecondSignature' => true,
-        ];
-
-        $hash = TransactionHasher::toHash($this->getHashData(), $options);
+        $hash = $this->hash([
+            'skipSignature' => true,
+        ]);
 
         $signature = $keys->signCompact($hash);
 
@@ -137,29 +137,41 @@ abstract class AbstractTransaction
         return $this;
     }
 
-    public function verify(): bool
+    public function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
     {
         $ecAdapter = EcAdapterFactory::getPhpEcc(
             Bitcoin::getMath(),
             Bitcoin::getGenerator()
         );
 
-        $recoverId = intval(substr($this->data['signature'], -2));
+        return $ecAdapter->recover($this->hash([
+            'skipSignature' => true,
+        ]), $compactSignature);
+    }
 
-        $signature = substr($this->data['signature'], 0, -2);
+    public function recoverSender(): void
+    {
+        $compactSignature = $this->getSignature();
 
-        $serializer = new CompactSignatureSerializer($ecAdapter);
+        $publicKey = $this->getPublicKey($compactSignature);
 
-        $compactSignature = $serializer->parse(Buffer::hex($this->numberToHex($recoverId + 27 + 4).$signature));
+        $this->data['senderPublicKey'] = $publicKey->getHex();
+
+        $this->data['senderAddress'] = Address::fromPublicKey($this->data['senderPublicKey']);
+    }
+
+    public function verify(): bool
+    {
+        $compactSignature = $this->getSignature();
 
         $options = [
             'skipSignature'             => true,
             'skipSecondSignature'       => true,
         ];
 
-        $transaction = Hash::sha256($this->getBytes($options));
+        $publicKey = $this->getPublicKey($compactSignature);
 
-        $publicKey = $ecAdapter->recover($transaction, $compactSignature);
+        $transaction = Hash::sha256($this->getBytes($options));
 
         return $publicKey->verify($transaction, $compactSignature);
     }
@@ -221,22 +233,36 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
-    /**
-     * @TODO: see if I can replace this with the `toArray` method
-     */
-    private function getHashData(): array
+    public function hash(array $options = []): BufferInterface
     {
-        return [
+        $hashData = [
             'gasPrice'         => $this->data['gasPrice'],
             'network'          => $this->data['network'] ?? Network::get()->version(),
             'nonce'            => $this->data['nonce'],
             'value'            => $this->data['value'],
-            'senderAddress'    => Address::fromPublicKey($this->data['senderPublicKey']),
             'gasLimit'         => $this->data['gasLimit'],
             'data'             => $this->data['data'],
             'recipientAddress' => $this->data['recipientAddress'] ?? null,
-            'senderPublicKey'  => $this->data['senderPublicKey'],
+            'signature'        => $this->data['signature'] ?? null,
         ];
+
+        return TransactionHasher::toHash($hashData, $options);
+    }
+
+    private function getSignature(): CompactSignatureInterface
+    {
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        $recoverId = intval(substr($this->data['signature'], -2));
+
+        $signature = substr($this->data['signature'], 0, -2);
+
+        $serializer = new CompactSignatureSerializer($ecAdapter);
+
+        return $serializer->parse(Buffer::hex($this->numberToHex($recoverId + 27 + 4).$signature));
     }
 
     private function numberToHex(int $number, $padding = 2): string

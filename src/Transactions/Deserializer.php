@@ -15,7 +15,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\Address;
-use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Buffertools\Buffer;
 
 class Deserializer
 {
@@ -58,7 +58,11 @@ class Deserializer
 
         $this->deserializeSignatures($transaction->data);
 
-        $transaction->data['id'] = Hash::sha256($transaction->serialize())->getHex();
+        $transaction->recoverSender();
+
+        $transaction->data['id'] = $transaction->hash([
+            'skipSignature' => false,
+        ])->getHex();
 
         return $transaction;
     }

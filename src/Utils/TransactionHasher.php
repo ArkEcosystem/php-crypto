@@ -18,6 +18,10 @@ class TransactionHasher
      */
     public static function toHash(array $transaction, array $options = []): BufferInterface
     {
+        $hex              = ltrim($transaction['recipientAddress'], '0x');
+        $hex              = str_pad($hex, strlen($hex) + (strlen($hex) % 2), '0', STR_PAD_LEFT);
+        $recipientAddress = hex2bin($hex);
+
         // Build the fields array
         $fields = [
             self::toBeArray($transaction['network']),
@@ -25,14 +29,14 @@ class TransactionHasher
             self::toBeArray($transaction['gasPrice']), // maxPriorityFeePerGas
             self::toBeArray($transaction['gasPrice']), // maxFeePerGas
             self::toBeArray($transaction['gasLimit']),
-            isset($transaction['recipientAddress']) ? hex2bin(ltrim($transaction['recipientAddress'], '0x')) : '',
+            $recipientAddress,
             self::toBeArray($transaction['value']),
             isset($transaction['data']) ? hex2bin(ltrim($transaction['data'], '0x')) : '',
             [], // accessList is unused
         ];
 
-        // If options excludeSignature is not set and signature is defined
-        if (! isset($options['excludeSignature']) && isset($transaction['signature'])) {
+        // If options skipSignature is not set and signature is defined
+        if (isset($options['skipSignature']) && $options['skipSignature'] === false) {
             $signatureBuffer = hex2bin($transaction['signature']);
 
             $r = substr($signatureBuffer, 0, 32);
