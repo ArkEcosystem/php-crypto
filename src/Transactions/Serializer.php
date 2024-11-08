@@ -113,7 +113,7 @@ class Serializer
     {
         $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
         $buffer->writeUint64(+$this->transaction->data['nonce']);
-        $buffer->writeUint32(+$this->transaction->data['gasPrice']);
-        $buffer->writeUint32(+$this->transaction->data['gasLimit']);
+        $buffer->writeUint32($this->transaction->data['gasPrice']);
+        $buffer->writeUint32($this->transaction->data['gasLimit']);
     }
 }

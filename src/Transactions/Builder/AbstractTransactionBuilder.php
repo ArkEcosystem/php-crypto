@@ -51,7 +51,7 @@ abstract class AbstractTransactionBuilder
         return $this;
     }
 
-    public function gasPrice(string $gasPrice): static
+    public function gasPrice(int $gasPrice): static
     {
         $this->transaction->data['gasPrice'] = $gasPrice;
 
