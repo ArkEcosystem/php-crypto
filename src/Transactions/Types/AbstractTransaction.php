@@ -164,16 +164,11 @@ abstract class AbstractTransaction
     {
         $compactSignature = $this->getSignature();
 
-        $options = [
-            'skipSignature'             => true,
-            'skipSecondSignature'       => true,
-        ];
-
         $publicKey = $this->getPublicKey($compactSignature);
 
-        $transaction = Hash::sha256($this->getBytes($options));
-
-        return $publicKey->verify($transaction, $compactSignature);
+        return $publicKey->verify($this->hash([
+            'skipSignature' => true,
+        ]), $compactSignature);
     }
 
     public function secondVerify(string $secondPublicKey): bool
