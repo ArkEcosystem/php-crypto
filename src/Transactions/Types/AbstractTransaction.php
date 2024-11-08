@@ -28,11 +28,11 @@ abstract class AbstractTransaction
 
     public function decodePayload(array $data): ?array
     {
-        if (! isset($data['asset']['evmCall']['payload'])) {
+        if (! isset($data['data'])) {
             return null;
         }
 
-        $payload = $data['asset']['evmCall']['payload'];
+        $payload = $data['data'];
 
         if ($payload === '') {
             return null;
@@ -185,19 +185,16 @@ abstract class AbstractTransaction
     public function toArray(): array
     {
         return array_filter([
-            'fee'                  => $this->data['fee'],
-            'id'                   => $this->data['id'],
-            'network'              => $this->data['network'] ?? Network::get()->version(),
-            'nonce'                => $this->data['nonce'],
-            'senderPublicKey'      => $this->data['senderPublicKey'],
-            'signature'            => $this->data['signature'],
-            'type'                 => $this->data['type'],
-            'typeGroup'            => $this->data['typeGroup'],
-            'version'              => $this->data['version'] ?? 1,
-            'signatures'           => $this->data['signatures'] ?? null,
-            'recipientId'          => $this->data['recipientId'] ?? null,
-            'amount'               => $this->data['amount'],
-            'asset'                => $this->data['asset'],
+            'gasPrice'                   => $this->data['gasPrice'],
+            'network'                    => $this->data['network'] ?? Network::get()->version(),
+            'id'                         => $this->data['id'],
+            'gasLimit'                   => $this->data['gasLimit'],
+            'nonce'                      => $this->data['nonce'],
+            'senderPublicKey'            => $this->data['senderPublicKey'],
+            'signature'                  => $this->data['signature'],
+            'recipientAddress'           => $this->data['recipientAddress'] ?? null,
+            'value'                      => $this->data['value'],
+            'data'                       => $this->data['data'],
         ], function ($element) {
             if (null !== $element) {
                 return true;
@@ -215,17 +212,20 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
+    /**
+     * @TODO: see if I can replace this with the `toArray` method
+     */
     private function getHashData(): array
     {
         return [
-            'gasPrice'         => $this->data['fee'],
+            'gasPrice'         => $this->data['gasPrice'],
             'network'          => $this->data['network'] ?? Network::get()->version(),
             'nonce'            => $this->data['nonce'],
-            'value'            => $this->data['amount'],
+            'value'            => $this->data['value'],
             'senderAddress'    => Address::fromPublicKey($this->data['senderPublicKey']),
-            'gasLimit'         => $this->data['asset']['evmCall']['gasLimit'],
-            'data'             => $this->data['asset']['evmCall']['payload'],
-            'recipientAddress' => $this->data['recipientId'] ?? null,
+            'gasLimit'         => $this->data['gasLimit'],
+            'data'             => $this->data['data'],
+            'recipientAddress' => $this->data['recipientAddress'] ?? null,
             'senderPublicKey'  => $this->data['senderPublicKey'],
         ];
     }

@@ -14,7 +14,7 @@ class Vote extends AbstractTransaction
         $payload = $this->decodePayload($data);
 
         if ($payload !== null) {
-            $data['asset']['vote'] = $payload['args'][0];
+            $data['vote'] = $payload['args'][0];
         }
 
         parent::__construct($data);
@@ -22,6 +22,6 @@ class Vote extends AbstractTransaction
 
     public function getPayload(): string
     {
-        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VOTE->value, [$this->data['asset']['vote']]);
+        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VOTE->value, [$this->data['vote']]);
     }
 }

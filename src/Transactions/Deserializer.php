@@ -48,9 +48,6 @@ class Deserializer
 
         $this->deserializeCommon($data);
 
-        // Vendor field length from previous transaction serialization
-        $this->buffer->skip(1);
-
         $this->deserializeData($data);
 
         $transaction = $this->guessTransactionFromData($data);
@@ -64,7 +61,7 @@ class Deserializer
 
     private function guessTransactionFromData(array $data): AbstractTransaction
     {
-        if ($data['amount'] !== '0') {
+        if ($data['value'] !== '0') {
             return new Transfer($data);
         }
 
@@ -97,7 +94,7 @@ class Deserializer
 
     private function decodePayload(array $data): ?array
     {
-        $payload = $data['asset']['evmCall']['payload'];
+        $payload = $data['data'];
 
         if ($payload === '') {
             return null;
@@ -108,17 +105,15 @@ class Deserializer
 
     private function deserializeData(array &$data): void
     {
-        // Read amount (uint64)
-        $data['amount'] = $this->buffer->readUInt256();
+        // Read value (uint64)
+        $data['value'] = $this->buffer->readUInt256();
 
         // Read recipient marker and recipientId
         $recipientMarker = $this->buffer->readUInt8();
-        if ($recipientMarker === 1) {
-            $data['recipientId'] = Address::fromByteBuffer($this->buffer);
-        }
 
-        // Read gasLimit (uint32)
-        $gasLimit = $this->buffer->readUInt32();
+        if ($recipientMarker === 1) {
+            $data['recipientAddress'] = Address::fromByteBuffer($this->buffer);
+        }
 
         // Read payload length (uint32)
         $payloadLength = $this->buffer->readUInt32();
@@ -126,26 +121,15 @@ class Deserializer
         // Read payload as hex
         $payloadHex = $this->buffer->readHex($payloadLength * 2);
 
-        $data['asset'] = [
-            'evmCall' => [
-                'gasLimit' => $gasLimit,
-                'payload'  => $payloadHex,
-            ],
-        ];
+        $data['data'] = $payloadHex;
     }
 
     private function deserializeCommon(array &$data): void
     {
-        $this->buffer->skip(1);
-
-        $data['version']              = $this->buffer->readUInt8();
-        $data['network']              = $this->buffer->readUInt8();
-        $data['typeGroup']            = $this->buffer->readUInt32();
-        $data['type']                 = $this->buffer->readUInt16();
-        $data['nonce']                = strval($this->buffer->readUInt64());
-        $data['senderPublicKey']      = $this->buffer->readHex(33 * 2);
-        $data['fee']                  = $this->buffer->readUInt256();
-        $data['amount']               = '0';
+        $data['network']                   = $this->buffer->readUInt8();
+        $data['nonce']                     = strval($this->buffer->readUInt64());
+        $data['gasPrice']                  = $this->buffer->readUint32();
+        $data['gasLimit']                  = $this->buffer->readUint32();
     }
 
     private function deserializeSignatures(array &$data): void

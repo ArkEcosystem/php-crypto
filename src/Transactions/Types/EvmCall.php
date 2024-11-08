@@ -8,6 +8,6 @@ class EvmCall extends AbstractTransaction
 {
     public function getPayload(): string
     {
-        return $this->data['asset']['evmCall']['payload'];
+        return $this->data['data'];
     }
 }

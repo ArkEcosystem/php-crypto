@@ -50,13 +50,22 @@ class Serializer
 
         $this->serializeCommon($buffer);
 
-        $buffer->writeUint256($this->transaction->data['amount']);
+        $this->serializeData($buffer);
 
-        if (isset($this->transaction->data['recipientId'])) {
+        $this->serializeSignatures($buffer, $options);
+
+        return new Buffer($buffer->toString('binary'));
+    }
+
+    private function serializeData(ByteBuffer $buffer): void
+    {
+        $buffer->writeUint256($this->transaction->data['value']);
+
+        if (isset($this->transaction->data['recipientAddress'])) {
             $buffer->writeUInt8(1); // Recipient marker
 
             $buffer->writeHex(
-                Address::toBufferHexString($this->transaction->data['recipientId'])
+                Address::toBufferHexString($this->transaction->data['recipientAddress'])
             );
         } else {
             $buffer->writeUInt8(0); // No recipient
@@ -70,10 +79,6 @@ class Serializer
 
         // Write payload as hex
         $buffer->writeHex($payloadHex);
-
-        $this->serializeSignatures($buffer, $options);
-
-        return new Buffer($buffer->toString('binary'));
     }
 
     /**
@@ -83,7 +88,7 @@ class Serializer
      *
      * @return string
      */
-    public function serializeSignatures(ByteBuffer $buffer, array $options): void
+    private function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
         $skipSignature       = $options['skipSignature'] ?? false;
         $skipSecondSignature = $options['skipSecondSignature'] ?? false;
@@ -108,8 +113,7 @@ class Serializer
     {
         $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
         $buffer->writeUint64(+$this->transaction->data['nonce']);
-        // @TODO: rename to gas price
-        $buffer->writeUint32(+$this->transaction->data['fee']);
-        $buffer->writeUint32(+$this->transaction->data['asset']['evmCall']['gasLimit']);
+        $buffer->writeUint32(+$this->transaction->data['gasPrice']);
+        $buffer->writeUint32(+$this->transaction->data['gasLimit']);
     }
 }
