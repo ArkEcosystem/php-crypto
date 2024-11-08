@@ -80,8 +80,7 @@ class DeserializerTest extends TestCase
             'contractId',
         ]);
 
-        // @TODO: Rollback this assertion once we have a way to get the sender public key
-        // $this->assertTrue($actual->verify());
+        $this->assertTrue($actual->verify());
 
         return $actual;
     }

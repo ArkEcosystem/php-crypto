@@ -9,7 +9,10 @@ use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\TransactionHasher;
+use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Serializer\Signature\CompactSignatureSerializer;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Bitcoin\Signature\SignatureFactory;
@@ -136,23 +139,29 @@ abstract class AbstractTransaction
 
     public function verify(): bool
     {
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        $recoverId = intval(substr($this->data['signature'], -2));
+
+        $signature = substr($this->data['signature'], 0, -2);
+
+        $serializer = new CompactSignatureSerializer($ecAdapter);
+
+        $compactSignature = $serializer->parse(Buffer::hex($this->numberToHex($recoverId + 27 + 4).$signature));
+
         $options = [
             'skipSignature'             => true,
             'skipSecondSignature'       => true,
         ];
 
-        $publicKey = $this->data['senderPublicKey'];
-        $signature = $this->data['signature'];
-
         $transaction = Hash::sha256($this->getBytes($options));
 
-        $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($publicKey);
+        $publicKey = $ecAdapter->recover($transaction, $compactSignature);
 
-        return $publicKey->verify(
-            $transaction,
-            SignatureFactory::fromHex($signature)
-        );
+        return $publicKey->verify($transaction, $compactSignature);
     }
 
     public function secondVerify(string $secondPublicKey): bool

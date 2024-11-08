@@ -44,7 +44,7 @@ abstract class AbstractTransactionBuilder
         return $this;
     }
 
-    public function recipient(string $recipientAddress): static
+    public function recipientAddress(string $recipientAddress): static
     {
         $this->transaction->data['recipientAddress'] = $recipientAddress;
 

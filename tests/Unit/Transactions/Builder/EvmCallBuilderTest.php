@@ -22,7 +22,7 @@ class EvmCallBuilderTest extends TestCase
           ->nonce($fixture['data']['nonce'])
           ->network(30)
           ->payload($fixture['data']['data'])
-          ->gasLimit($fixture['data']['gastLimit'])
+          ->gasLimit($fixture['data']['gasLimit'])
           ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
