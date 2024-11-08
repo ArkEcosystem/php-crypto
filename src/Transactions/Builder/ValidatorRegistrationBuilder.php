@@ -11,7 +11,7 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
     public function validatorPublicKey(string $validatorPublicKey): self
     {
-        $this->transaction->data['asset']['validatorPublicKey'] = $validatorPublicKey;
+        $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;
 
         return $this;
     }

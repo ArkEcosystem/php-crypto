@@ -24,7 +24,7 @@ class DeserializerTest extends TestCase
 
         $transaction = $this->assertTransaction($fixture);
 
-        expect($transaction->data['amount'])->toEqual('100000000');
+        expect($transaction->data['value'])->toEqual('100000000');
 
         expect($transaction)->toBeInstanceOf(Transfer::class);
     }
@@ -75,7 +75,7 @@ class DeserializerTest extends TestCase
     {
         $actual = $this->assertDeserialized($fixture, [
             'nonce',
-            'fee',
+            'gasPrice',
             'gasLimit',
             'contractId',
         ]);

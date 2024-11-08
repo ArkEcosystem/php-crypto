@@ -19,6 +19,10 @@ use BitWasp\Bitcoin\Crypto\Hash;
 
 class Deserializer
 {
+    public const SIGNATURE_SIZE = 64;
+
+    public const RECOVERY_SIZE  = 1;
+
     private ByteBuffer $buffer;
 
     /**
@@ -130,46 +134,47 @@ class Deserializer
         $data['nonce']                     = strval($this->buffer->readUInt64());
         $data['gasPrice']                  = $this->buffer->readUint32();
         $data['gasLimit']                  = $this->buffer->readUint32();
+        $data['value']                     = '0';
     }
 
     private function deserializeSignatures(array &$data): void
     {
         if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data['signature'] = $this->buffer->readHex(64 * 2);
+            $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
         }
 
-        if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data['secondSignature'] = $this->buffer->readHex(64 * 2);
-        }
+        // if ($this->canReadNonMultiSignature($this->buffer)) {
+        //     $data['secondSignature'] = $this->buffer->readHex(64 * 2);
+        // }
 
-        if ($this->buffer->remaining()) {
-            if ($this->buffer->remaining() % 65 === 0) {
-                $data['signatures'] = [];
+        // if ($this->buffer->remaining()) {
+        //     if ($this->buffer->remaining() % 65 === 0) {
+        //         $data['signatures'] = [];
 
-                $count            = $this->buffer->remaining() / 65;
-                $publicKeyIndexes = [];
-                for ($i = 0; $i < $count; $i++) {
-                    $multiSignaturePart = $this->buffer->readHex(65 * 2);
-                    $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
+        //         $count            = $this->buffer->remaining() / 65;
+        //         $publicKeyIndexes = [];
+        //         for ($i = 0; $i < $count; $i++) {
+        //             $multiSignaturePart = $this->buffer->readHex(65 * 2);
+        //             $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
 
-                    if (! isset($publicKeyIndexes[$publicKeyIndex])) {
-                        $publicKeyIndexes[$publicKeyIndex] = true;
-                    } else {
-                        throw new \Exception('Duplicate participant in multisignature');
-                    }
+        //             if (! isset($publicKeyIndexes[$publicKeyIndex])) {
+        //                 $publicKeyIndexes[$publicKeyIndex] = true;
+        //             } else {
+        //                 throw new \Exception('Duplicate participant in multisignature');
+        //             }
 
-                    $data['signatures'][] = $multiSignaturePart;
-                }
-            } else {
-                throw new \Exception('signature buffer not exhausted');
-            }
-        }
+        //             $data['signatures'][] = $multiSignaturePart;
+        //         }
+        //     } else {
+        //         throw new \Exception('signature buffer not exhausted');
+        //     }
+        // }
     }
 
     private function canReadNonMultiSignature(ByteBuffer $buffer)
     {
         return
             $buffer->remaining()
-            && ($buffer->remaining() % 64 === 0 || $buffer->remaining() % 65 !== 0);
+            && ($buffer->remaining() % (self::SIGNATURE_SIZE + self::RECOVERY_SIZE) === 0 || $buffer->remaining() % (self::SIGNATURE_SIZE + self::RECOVERY_SIZE + 1) !== 0);
     }
 }

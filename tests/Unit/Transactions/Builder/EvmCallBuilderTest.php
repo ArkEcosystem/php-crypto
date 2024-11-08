@@ -18,7 +18,7 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-sign');
 
         $builder = EvmCallBuilder::new()
-          ->fee($fixture['data']['fee'])
+          ->gasPrice($fixture['data']['gasPrice'])
           ->nonce($fixture['data']['nonce'])
           ->network(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])
@@ -34,7 +34,7 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-with-contract');
 
         $builder = EvmCallBuilder::new()
-          ->fee($fixture['data']['fee'])
+          ->gasPrice($fixture['data']['gasPrice'])
           ->nonce($fixture['data']['nonce'])
           ->network(30)
           ->payload($fixture['data']['asset']['evmCall']['payload'])

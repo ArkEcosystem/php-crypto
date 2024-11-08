@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Fee;
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\TypeGroup;
-use ArkEcosystem\Crypto\Enums\Types;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 
@@ -20,20 +17,13 @@ abstract class AbstractTransactionBuilder
         $this->transaction = $this->getTransactionInstance();
 
         $this->transaction->data = $data ?? [
-            'type'            => Types::EVM_CALL->value,
-            'typeGroup'       => TypeGroup::CORE,
-            'amount'          => '0',
-            'senderPublicKey' => '',
-            'fee'             => Fee::get(Types::EVM_CALL->value),
-            'nonce'           => '1',
-            'version'         => 1,
-            'network'         => Network::get()->pubKeyHash(),
-            'asset'           => [
-                'evmCall' => [
-                    'gasLimit' => 1_000_000,  // Default gas limit
-                    'payload'  => '',       // EVM code in hex format
-                ],
-            ],
+            'value'             => '0',
+            'senderPublicKey'   => '',
+            'gasPrice'          => '5',
+            'nonce'             => '1',
+            'network'           => Network::get()->pubKeyHash(),
+            'gasLimit'          => 1_000_000,
+            'data'              => '',
         ];
     }
 
@@ -49,31 +39,23 @@ abstract class AbstractTransactionBuilder
 
     public function gasLimit(int $gasLimit): static
     {
-        $this->transaction->data['asset']['evmCall']['gasLimit'] = $gasLimit;
+        $this->transaction->data['gasLimit'] = $gasLimit;
 
         return $this;
     }
 
-    public function recipient(string $recipientId): static
+    public function recipient(string $recipientAddress): static
     {
-        $this->transaction->data['recipientId'] = $recipientId;
+        $this->transaction->data['recipientAddress'] = $recipientAddress;
 
         return $this;
     }
 
-    public function fee(string $fee): static
-    {
-        $this->transaction->data['fee'] = $fee;
-
-        return $this;
-    }
-
-    /**
-     * Alias for fee.
-     */
     public function gasPrice(string $gasPrice): static
     {
-        return $this->fee($gasPrice);
+        $this->transaction->data['gasPrice'] = $gasPrice;
+
+        return $this;
     }
 
     public function nonce(string $nonce): static
@@ -93,6 +75,7 @@ abstract class AbstractTransactionBuilder
     public function sign(string $passphrase): static
     {
         $keys                                       = PrivateKey::fromPassphrase($passphrase);
+
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
 
         $this->transaction             = $this->transaction->sign($keys);

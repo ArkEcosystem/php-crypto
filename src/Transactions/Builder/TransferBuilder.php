@@ -9,9 +9,9 @@ use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 
 class TransferBuilder extends AbstractTransactionBuilder
 {
-    public function amount(string $amount): self
+    public function value(string $value): self
     {
-        $this->transaction->data['amount'] = $amount;
+        $this->transaction->data['value'] = $value;
 
         return $this;
     }

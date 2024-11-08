@@ -91,22 +91,22 @@ class Serializer
     private function serializeSignatures(ByteBuffer $buffer, array $options): void
     {
         $skipSignature       = $options['skipSignature'] ?? false;
-        $skipSecondSignature = $options['skipSecondSignature'] ?? false;
-        $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
+        // $skipSecondSignature = $options['skipSecondSignature'] ?? false;
+        // $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
 
         if (! $skipSignature && isset($this->transaction->data['signature'])) {
             $buffer->writeHex($this->transaction->data['signature']);
         }
 
-        if (! $skipSecondSignature) {
-            if (isset($this->transaction->data['secondSignature'])) {
-                $buffer->writeHex($this->transaction->data['secondSignature']);
-            }
-        }
+        // if (! $skipSecondSignature) {
+        //     if (isset($this->transaction->data['secondSignature'])) {
+        //         $buffer->writeHex($this->transaction->data['secondSignature']);
+        //     }
+        // }
 
-        if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
-            $buffer->writeHex(implode('', $this->transaction->data['signatures']));
-        }
+        // if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
+        //     $buffer->writeHex(implode('', $this->transaction->data['signatures']));
+        // }
     }
 
     private function serializeCommon(ByteBuffer $buffer): void

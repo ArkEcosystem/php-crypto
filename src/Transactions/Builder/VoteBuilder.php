@@ -11,7 +11,7 @@ class VoteBuilder extends AbstractTransactionBuilder
 {
     public function vote(string $vote): self
     {
-        $this->transaction->data['asset']['vote'] = $vote;
+        $this->transaction->data['vote'] = $vote;
 
         return $this;
     }
