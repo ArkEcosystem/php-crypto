@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 
 trait Deserialize
 {
-    protected function assertDeserialized(array $expected, array $keys, int $network = 30): object
+    protected function assertDeserialized(array $expected, array $keys): object
     {
         $actual = Deserializer::new($expected['serialized'])->deserialize();
         $data   = $actual->data;
@@ -50,15 +50,6 @@ trait Deserialize
                 ksort($actual['asset']['payments'][$i]);
             }
         }
-
-        // Signatures and IDs are not deterministic
-        unset($expected['id']);
-        unset($expected['signature']);
-        unset($expected['signatures']);
-
-        unset($actual['id']);
-        unset($actual['signature']);
-        unset($actual['signatures']);
 
         $this->assertSame($expected, $actual);
     }

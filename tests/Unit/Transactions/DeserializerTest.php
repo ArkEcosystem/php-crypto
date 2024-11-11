@@ -74,10 +74,12 @@ class DeserializerTest extends TestCase
     private function assertTransaction(array $fixture): AbstractTransaction
     {
         $actual = $this->assertDeserialized($fixture, [
+            'id',
             'nonce',
             'gasPrice',
             'gasLimit',
             'contractId',
+            'signature',
         ]);
 
         $this->assertTrue($actual->verify());
