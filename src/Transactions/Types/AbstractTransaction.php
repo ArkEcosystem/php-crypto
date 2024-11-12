@@ -65,7 +65,7 @@ abstract class AbstractTransaction
      */
     public function sign(PrivateKey $keys): static
     {
-        $hash = $this->hash(skipSignature: false);
+        $hash = $this->hash(skipSignature: true);
 
         $signature = $keys->signCompact($hash);
 

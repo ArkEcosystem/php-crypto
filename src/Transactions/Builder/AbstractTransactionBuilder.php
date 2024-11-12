@@ -77,27 +77,9 @@ abstract class AbstractTransactionBuilder
         $keys                                       = PrivateKey::fromPassphrase($passphrase);
 
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
-
+        
         $this->transaction             = $this->transaction->sign($keys);
-
-        $this->transaction->data['id'] = $this->transaction->getId();
-
-        return $this;
-    }
-
-    public function multiSign(string $passphrase, int $index = -1): static
-    {
-        $keys              = PrivateKey::fromPassphrase($passphrase);
-        $this->transaction = $this->transaction->multiSign($keys, $index);
-
-        return $this;
-    }
-
-    public function secondSign(string $secondPassphrase): static
-    {
-        $this->transaction = $this->transaction->secondSign(
-            PrivateKey::fromPassphrase($secondPassphrase)
-        );
+        
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;
@@ -106,11 +88,6 @@ abstract class AbstractTransactionBuilder
     public function verify(): bool
     {
         return $this->transaction->verify();
-    }
-
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        return $this->transaction->secondVerify($secondPublicKey);
     }
 
     public function toArray(): array
