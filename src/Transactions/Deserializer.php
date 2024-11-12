@@ -60,9 +60,7 @@ class Deserializer
 
         $transaction->recoverSender();
 
-        $transaction->data['id'] = $transaction->hash([
-            'skipSignature' => false,
-        ])->getHex();
+        $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
 
         return $transaction;
     }
@@ -143,42 +141,6 @@ class Deserializer
 
     private function deserializeSignatures(array &$data): void
     {
-        if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
-        }
-
-        // if ($this->canReadNonMultiSignature($this->buffer)) {
-        //     $data['secondSignature'] = $this->buffer->readHex(64 * 2);
-        // }
-
-        // if ($this->buffer->remaining()) {
-        //     if ($this->buffer->remaining() % 65 === 0) {
-        //         $data['signatures'] = [];
-
-        //         $count            = $this->buffer->remaining() / 65;
-        //         $publicKeyIndexes = [];
-        //         for ($i = 0; $i < $count; $i++) {
-        //             $multiSignaturePart = $this->buffer->readHex(65 * 2);
-        //             $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
-
-        //             if (! isset($publicKeyIndexes[$publicKeyIndex])) {
-        //                 $publicKeyIndexes[$publicKeyIndex] = true;
-        //             } else {
-        //                 throw new \Exception('Duplicate participant in multisignature');
-        //             }
-
-        //             $data['signatures'][] = $multiSignaturePart;
-        //         }
-        //     } else {
-        //         throw new \Exception('signature buffer not exhausted');
-        //     }
-        // }
-    }
-
-    private function canReadNonMultiSignature(ByteBuffer $buffer)
-    {
-        return
-            $buffer->remaining()
-            && ($buffer->remaining() % (self::SIGNATURE_SIZE + self::RECOVERY_SIZE) === 0 || $buffer->remaining() % (self::SIGNATURE_SIZE + self::RECOVERY_SIZE + 1) !== 0);
+        $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
     }
 }

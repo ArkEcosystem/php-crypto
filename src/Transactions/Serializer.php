@@ -34,9 +34,9 @@ class Serializer
         return new static($transaction);
     }
 
-    public static function getBytes(AbstractTransaction $transaction, array $options = []): Buffer
+    public static function getBytes(AbstractTransaction $transaction, bool $skipSignature = false): Buffer
     {
-        return $transaction->serialize($options);
+        return $transaction->serialize($skipSignature);
     }
 
     /**
@@ -44,7 +44,7 @@ class Serializer
      *
      * @return Buffer
      */
-    public function serialize(array $options = []): Buffer
+    public function serialize(bool $skipSignature = false): Buffer
     {
         $buffer = ByteBuffer::new(0); // initialize with size 0, size will expand as we add bytes
 
@@ -52,7 +52,7 @@ class Serializer
 
         $this->serializeData($buffer);
 
-        $this->serializeSignatures($buffer, $options);
+        $this->serializeSignatures($buffer, $skipSignature);
 
         return new Buffer($buffer->toString('binary'));
     }
@@ -84,29 +84,13 @@ class Serializer
     /**
      * Handle the serialization of transaction data.
      *
-     * @param ByteBuffer $buffer
-     *
      * @return string
      */
-    private function serializeSignatures(ByteBuffer $buffer, array $options): void
+    private function serializeSignatures(ByteBuffer $buffer, bool $skipSignature = false): void
     {
-        $skipSignature       = $options['skipSignature'] ?? false;
-        // $skipSecondSignature = $options['skipSecondSignature'] ?? false;
-        // $skipMultiSignature  = $options['skipMultiSignature'] ?? false;
-
         if (! $skipSignature && isset($this->transaction->data['signature'])) {
             $buffer->writeHex($this->transaction->data['signature']);
         }
-
-        // if (! $skipSecondSignature) {
-        //     if (isset($this->transaction->data['secondSignature'])) {
-        //         $buffer->writeHex($this->transaction->data['secondSignature']);
-        //     }
-        // }
-
-        // if (! $skipMultiSignature && isset($this->transaction->data['signatures'])) {
-        //     $buffer->writeHex(implode('', $this->transaction->data['signatures']));
-        // }
     }
 
     private function serializeCommon(ByteBuffer $buffer): void

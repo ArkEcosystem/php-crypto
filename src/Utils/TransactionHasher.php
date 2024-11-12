@@ -14,9 +14,9 @@ class TransactionHasher
      * Generates the transaction hash.
      *
      * @param array $transaction The transaction data.
-     * @param array $options Optional serialization options.
+     * @param bool $skipSignature
      */
-    public static function toHash(array $transaction, array $options = []): BufferInterface
+    public static function toHash(array $transaction, bool $skipSignature = false): BufferInterface
     {
         $hex              = ltrim($transaction['recipientAddress'], '0x');
         $hex              = str_pad($hex, strlen($hex) + (strlen($hex) % 2), '0', STR_PAD_LEFT);
@@ -35,8 +35,7 @@ class TransactionHasher
             [], // accessList is unused
         ];
 
-        // If options skipSignature is not set and signature is defined
-        if (isset($options['skipSignature']) && $options['skipSignature'] === false) {
+        if (!$skipSignature && isset($transaction['signature'])) {
             $signatureBuffer = hex2bin($transaction['signature']);
 
             $r = substr($signatureBuffer, 0, 32);

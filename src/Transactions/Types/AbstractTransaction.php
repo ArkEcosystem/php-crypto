@@ -55,9 +55,9 @@ abstract class AbstractTransaction
         return Hash::sha256(Serializer::getBytes($this))->getHex();
     }
 
-    public function getBytes($options = []): Buffer
+    public function getBytes(bool $skipSignature = false): Buffer
     {
-        return Serializer::getBytes($this, $options);
+        return Serializer::getBytes($this, $skipSignature);
     }
 
     /**
@@ -65,9 +65,7 @@ abstract class AbstractTransaction
      */
     public function sign(PrivateKey $keys): static
     {
-        $hash = $this->hash([
-            'skipSignature' => true,
-        ]);
+        $hash = $this->hash(skipSignature: false);
 
         $signature = $keys->signCompact($hash);
 
@@ -97,46 +95,6 @@ abstract class AbstractTransaction
         return $this;
     }
 
-    /**
-     * Sign the transaction using the given second passphrase.
-     */
-    public function secondSign(PrivateKey $keys): static
-    {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-        $transaction                   = Hash::sha256($this->getBytes($options));
-
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
-
-        return $this;
-    }
-
-    /**
-     * Sign the transaction using the given passphrase.
-     */
-    public function multiSign(PrivateKey $keys, int $index = -1): static
-    {
-        if (! isset($this->data['signatures'])) {
-            $this->data['signatures'] = [];
-        }
-
-        $index = $index === -1 ? count($this->data['signatures']) : $index;
-
-        $transactionHash             = Hash::sha256($this->getBytes([
-            'skipSignature'       => true,
-            'skipMultiSignature'  => true,
-        ]));
-
-        $signature = $keys->sign($transactionHash)->getBuffer()->getHex();
-
-        $indexedSignature = $this->numberToHex($index).$signature;
-
-        $this->data['signatures'][] = $indexedSignature;
-
-        return $this;
-    }
-
     public function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
     {
         $ecAdapter = EcAdapterFactory::getPhpEcc(
@@ -144,9 +102,7 @@ abstract class AbstractTransaction
             Bitcoin::getGenerator()
         );
 
-        return $ecAdapter->recover($this->hash([
-            'skipSignature' => true,
-        ]), $compactSignature);
+        return $ecAdapter->recover($this->hash(skipSignature: true), $compactSignature);
     }
 
     public function recoverSender(): void
@@ -166,33 +122,12 @@ abstract class AbstractTransaction
 
         $publicKey = $this->getPublicKey($compactSignature);
 
-        return $publicKey->verify($this->hash([
-            'skipSignature' => true,
-        ]), $compactSignature);
+        return $publicKey->verify($this->hash(skipSignature: true), $compactSignature);
     }
 
-    public function secondVerify(string $secondPublicKey): bool
+    public function serialize(bool $skipSignature = false): Buffer
     {
-        $options = [
-            'skipSecondSignature' => true,
-        ];
-
-        $signature = $this->data['secondSignature'];
-
-        $transaction = Hash::sha256($this->getBytes($options));
-
-        $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($secondPublicKey);
-
-        return $publicKey->verify(
-            $transaction,
-            SignatureFactory::fromHex($signature)
-        );
-    }
-
-    public function serialize(array $options = []): Buffer
-    {
-        return Serializer::new($this)->serialize($options);
+        return Serializer::new($this)->serialize($skipSignature);
     }
 
     /**
@@ -228,7 +163,7 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
-    public function hash(array $options = []): BufferInterface
+    public function hash(bool $skipSignature): BufferInterface
     {
         $hashData = [
             'gasPrice'         => $this->data['gasPrice'],
@@ -241,7 +176,7 @@ abstract class AbstractTransaction
             'signature'        => $this->data['signature'] ?? null,
         ];
 
-        return TransactionHasher::toHash($hashData, $options);
+        return TransactionHasher::toHash($hashData, $skipSignature);
     }
 
     private function getSignature(): CompactSignatureInterface
