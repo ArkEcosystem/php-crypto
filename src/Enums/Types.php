@@ -21,21 +21,6 @@ enum Types: int
     case USERNAME_RESIGNATION         = 9;
     case EVM_CALL                     = 10;
 
-    public function defaultFee(): string
-    {
-        return match ($this) {
-            Types::TRANSFER                     => Fees::TRANSFER,
-            Types::VALIDATOR_REGISTRATION       => Fees::VALIDATOR_REGISTRATION,
-            Types::VOTE                         => Fees::VOTE,
-            // Types::MULTI_SIGNATURE_REGISTRATION => Fees::MULTI_SIGNATURE_REGISTRATION,
-            // Types::MULTI_PAYMENT                => Fees::MULTI_PAYMENT,
-            Types::VALIDATOR_RESIGNATION        => Fees::VALIDATOR_RESIGNATION,
-            // Types::USERNAME_REGISTRATION        => Fees::USERNAME_REGISTRATION,
-            // Types::USERNAME_RESIGNATION         => Fees::USERNAME_RESIGNATION,
-            Types::EVM_CALL                     => Fees::EVM,
-        };
-    }
-
     public static function fromValue(int $value): ?self
     {
         $enum = new ReflectionEnum(self::class);
