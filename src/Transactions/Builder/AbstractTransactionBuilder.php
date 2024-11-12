@@ -77,9 +77,9 @@ abstract class AbstractTransactionBuilder
         $keys                                       = PrivateKey::fromPassphrase($passphrase);
 
         $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
-        
+
         $this->transaction             = $this->transaction->sign($keys);
-        
+
         $this->transaction->data['id'] = $this->transaction->getId();
 
         return $this;

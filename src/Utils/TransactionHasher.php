@@ -35,7 +35,7 @@ class TransactionHasher
             [], // accessList is unused
         ];
 
-        if (!$skipSignature) {
+        if (! $skipSignature) {
             $signatureBuffer = hex2bin($transaction['signature']);
 
             $r = substr($signatureBuffer, 0, 32);
