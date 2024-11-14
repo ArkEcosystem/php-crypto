@@ -26,6 +26,6 @@ class ValidatorRegistration extends AbstractTransaction
             return '';
         }
 
-        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VALIDATOR_REGISTRATION->value, ['0x' . $this->data['validatorPublicKey']]);
+        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VALIDATOR_REGISTRATION->value, ['0x'.$this->data['validatorPublicKey']]);
     }
 }
