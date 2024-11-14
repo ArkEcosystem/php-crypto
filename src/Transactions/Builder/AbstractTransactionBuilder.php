@@ -25,7 +25,6 @@ abstract class AbstractTransactionBuilder
         ]);
     }
 
-
     public function __toString(): string
     {
         return $this->toJson();
@@ -35,7 +34,6 @@ abstract class AbstractTransactionBuilder
     {
         return new static($data);
     }
-
 
     public function gasLimit(int $gasLimit): static
     {

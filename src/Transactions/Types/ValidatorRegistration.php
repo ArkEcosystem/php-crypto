@@ -22,7 +22,7 @@ class ValidatorRegistration extends AbstractTransaction
 
     public function getPayload(): string
     {
-        if (!array_key_exists('validatorPublicKey', $this->data)) {
+        if (! array_key_exists('validatorPublicKey', $this->data)) {
             return '';
         }
 
