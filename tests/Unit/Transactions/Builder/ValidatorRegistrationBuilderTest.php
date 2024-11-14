@@ -27,9 +27,9 @@ class ValidatorRegistrationBuilderTest extends TestCase
           ->sign($this->passphrase);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
-        
+
         $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
-        
+
         $this->assertTrue($builder->verify());
     }
 }
