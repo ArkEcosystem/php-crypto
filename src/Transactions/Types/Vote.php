@@ -22,6 +22,10 @@ class Vote extends AbstractTransaction
 
     public function getPayload(): string
     {
+        if (!array_key_exists('vote', $this->data)) {
+            return '';
+        }
+        
         return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VOTE->value, [$this->data['vote']]);
     }
 }

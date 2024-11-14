@@ -26,6 +26,8 @@ abstract class AbstractTransaction
     public function __construct(?array $data = null)
     {
         $this->data = $data ?? [];
+
+        $this->refreshPayloadData();
     }
 
     abstract public function getPayload(): string;
@@ -43,6 +45,13 @@ abstract class AbstractTransaction
         }
 
         return (new AbiDecoder())->decodeFunctionData($payload);
+    }
+
+    public function refreshPayloadData(): static
+    {
+        $this->data['data'] = ltrim($this->getPayload(), '0x');
+
+        return $this;
     }
 
     /**

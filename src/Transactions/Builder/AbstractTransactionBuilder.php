@@ -14,9 +14,7 @@ abstract class AbstractTransactionBuilder
 
     public function __construct(?array $data = null)
     {
-        $this->transaction = $this->getTransactionInstance();
-
-        $this->transaction->data = $data ?? [
+        $this->transaction = $this->getTransactionInstance($data ?? [
             'value'             => '0',
             'senderPublicKey'   => '',
             'gasPrice'          => '5',
@@ -24,8 +22,9 @@ abstract class AbstractTransactionBuilder
             'network'           => Network::get()->pubKeyHash(),
             'gasLimit'          => 1_000_000,
             'data'              => '',
-        ];
+        ]);
     }
+
 
     public function __toString(): string
     {
@@ -36,6 +35,7 @@ abstract class AbstractTransactionBuilder
     {
         return new static($data);
     }
+
 
     public function gasLimit(int $gasLimit): static
     {

@@ -71,7 +71,7 @@ class Serializer
             $buffer->writeUInt8(0); // No recipient
         }
 
-        $payloadHex    = ltrim($this->transaction->getPayload(), '0x');
+        $payloadHex    = $this->transaction->data['data'] ?? '';
 
         $payloadLength = strlen($payloadHex);
 

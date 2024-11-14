@@ -13,6 +13,8 @@ class VoteBuilder extends AbstractTransactionBuilder
     {
         $this->transaction->data['vote'] = $vote;
 
+        $this->transaction->refreshPayloadData();
+       
         return $this;
     }
 

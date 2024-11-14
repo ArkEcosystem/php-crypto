@@ -13,6 +13,8 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
     {
         $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;
 
+        $this->transaction->refreshPayloadData();
+
         return $this;
     }
 

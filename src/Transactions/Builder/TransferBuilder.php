@@ -13,6 +13,8 @@ class TransferBuilder extends AbstractTransactionBuilder
     {
         $this->transaction->data['value'] = $value;
 
+        $this->transaction->refreshPayloadData();
+
         return $this;
     }
 

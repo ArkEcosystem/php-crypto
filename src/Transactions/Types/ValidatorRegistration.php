@@ -22,6 +22,10 @@ class ValidatorRegistration extends AbstractTransaction
 
     public function getPayload(): string
     {
+        if (!array_key_exists('validatorPublicKey', $this->data)) {
+            return '';
+        }
+
         return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VALIDATOR_REGISTRATION->value, [$this->data['validatorPublicKey']]);
     }
 }
