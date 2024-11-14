@@ -59,7 +59,7 @@ abstract class AbstractTransaction
      */
     public function getId(): string
     {
-        return Hash::sha256(Serializer::getBytes($this))->getHex();
+        return $this->hash(skipSignature: false)->getHex();
     }
 
     public function getBytes(bool $skipSignature = false): Buffer
