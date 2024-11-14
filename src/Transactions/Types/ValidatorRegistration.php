@@ -14,7 +14,7 @@ class ValidatorRegistration extends AbstractTransaction
         $payload = $this->decodePayload($data);
 
         if ($payload !== null) {
-            $data['validatorPublicKey'] = $payload['args'][0];
+            $data['validatorPublicKey'] = ltrim($payload['args'][0], '0x');
         }
 
         parent::__construct($data);
