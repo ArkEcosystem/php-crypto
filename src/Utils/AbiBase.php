@@ -19,7 +19,7 @@ abstract class AbiBase
         $this->abi = json_decode($abiJson, true)['abi'];
     }
 
-    protected function getArrayComponents(string $type): ?array
+    protected static function getArrayComponents(string $type): ?array
     {
         if (preg_match('/^(.*)\[(\d*)\]$/', $type, $matches)) {
             $innerType = $matches[1];
