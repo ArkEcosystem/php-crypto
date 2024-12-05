@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use Brick\Math\BigDecimal;
 use InvalidArgumentException;
 
 class UnitConverter
@@ -57,5 +58,43 @@ class UnitConverter
             default:
                 throw new InvalidArgumentException("Unsupported unit: {$unit}. Supported units are 'wei', 'gwei', and 'ark'.");
         }
+    }
+
+    /**
+     * Convert wei to ARK.
+     *
+     * @param string|int|float $value
+     * @param string|null $suffix
+     * @return string
+     */
+    public static function weiToArk(string | int | float $value, ?string $suffix = null): string
+    {
+        $convertedValue = (string) BigDecimal::of(UnitConverter::formatUnits(UnitConverter::parseUnits($value, 'wei'), 'ark'))
+            ->stripTrailingZeros();
+
+        if ($suffix !== null) {
+            return $convertedValue.' '.$suffix;
+        }
+
+        return $convertedValue;
+    }
+
+    /**
+     * Convert gwei to ARK.
+     *
+     * @param string|int|float $value
+     * @param string|null $suffix
+     * @return string
+     */
+    public static function gweiToArk(string | int | float $value, ?string $suffix = null): string
+    {
+        $convertedValue = (string) BigDecimal::of(UnitConverter::formatUnits(UnitConverter::parseUnits($value, 'gwei'), 'ark'))
+            ->stripTrailingZeros();
+
+        if ($suffix !== null) {
+            return $convertedValue.' '.$suffix;
+        }
+
+        return $convertedValue;
     }
 }
