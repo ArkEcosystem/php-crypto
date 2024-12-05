@@ -28,78 +28,6 @@ class AbiDecoder extends AbiBase
         ];
     }
 
-    private function findFunctionBySelector(string $selector): ?array
-    {
-        foreach ($this->abi as $item) {
-            if ($item['type'] === 'function') {
-                $functionSignature = $this->getFunctionSignature($item);
-                $functionSelector  = substr($this->keccak256($functionSignature), 2, 8);
-                if ($functionSelector === $selector) {
-                    return $item;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private function decodeAbiParameters(array $params, string $data): array
-    {
-        if (empty($data) && count($params) > 0) {
-            throw new Exception('No data to decode');
-        }
-
-        $bytes  = hex2bin($data);
-        $cursor = 0;
-
-        $values = [];
-        foreach ($params as $param) {
-            list($value, $consumed) = $this->decodeParameter($bytes, $cursor, $param);
-            $cursor += $consumed;
-            $values[] = $value;
-        }
-
-        return $values;
-    }
-
-    private function decodeParameter(string $bytes, int $offset, array $param): array
-    {
-        $type            = $param['type'];
-        $arrayComponents = self::getArrayComponents($type);
-        if ($arrayComponents) {
-            list($length, $baseType) = $arrayComponents;
-            $param['type']           = $baseType;
-
-            return self::decodeArray($bytes, $offset, $param, $length);
-        }
-
-        switch ($type) {
-            case 'address':
-                return self::decodeAddress($bytes, $offset);
-            case 'bool':
-                return self::decodeBool($bytes, $offset);
-            case 'string':
-                return self::decodeString($bytes, $offset);
-            case 'bytes':
-                return self::decodeDynamicBytes($bytes, $offset);
-            default:
-                if (preg_match('/^bytes(\d+)$/', $type, $matches)) {
-                    $size = intval($matches[1]);
-
-                    return self::decodeFixedBytes($bytes, $offset, $size);
-                } elseif (preg_match('/^(u?int)(\d+)$/', $type, $matches)) {
-                    $signed = $matches[1] === 'int';
-                    $bits   = intval($matches[2]);
-
-                    return self::decodeNumber($bytes, $offset, $bits, $signed);
-                } elseif ($type === 'tuple') {
-                    return self::decodeTuple($bytes, $offset, $param);
-                }
-
-                throw new Exception('Unsupported type: '.$type);
-        }
-    }
-
     public static function decodeAddress(string $bytes, int $offset): array
     {
         $data         = substr($bytes, $offset, 32);
@@ -205,5 +133,77 @@ class AbiDecoder extends AbiBase
         $data = substr($bytes, $offset, 32);
 
         return hexdec(bin2hex($data));
+    }
+
+    private function findFunctionBySelector(string $selector): ?array
+    {
+        foreach ($this->abi as $item) {
+            if ($item['type'] === 'function') {
+                $functionSignature = $this->getFunctionSignature($item);
+                $functionSelector  = substr($this->keccak256($functionSignature), 2, 8);
+                if ($functionSelector === $selector) {
+                    return $item;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function decodeAbiParameters(array $params, string $data): array
+    {
+        if (empty($data) && count($params) > 0) {
+            throw new Exception('No data to decode');
+        }
+
+        $bytes  = hex2bin($data);
+        $cursor = 0;
+
+        $values = [];
+        foreach ($params as $param) {
+            list($value, $consumed) = $this->decodeParameter($bytes, $cursor, $param);
+            $cursor += $consumed;
+            $values[] = $value;
+        }
+
+        return $values;
+    }
+
+    private function decodeParameter(string $bytes, int $offset, array $param): array
+    {
+        $type            = $param['type'];
+        $arrayComponents = self::getArrayComponents($type);
+        if ($arrayComponents) {
+            list($length, $baseType) = $arrayComponents;
+            $param['type']           = $baseType;
+
+            return self::decodeArray($bytes, $offset, $param, $length);
+        }
+
+        switch ($type) {
+            case 'address':
+                return self::decodeAddress($bytes, $offset);
+            case 'bool':
+                return self::decodeBool($bytes, $offset);
+            case 'string':
+                return self::decodeString($bytes, $offset);
+            case 'bytes':
+                return self::decodeDynamicBytes($bytes, $offset);
+            default:
+                if (preg_match('/^bytes(\d+)$/', $type, $matches)) {
+                    $size = intval($matches[1]);
+
+                    return self::decodeFixedBytes($bytes, $offset, $size);
+                } elseif (preg_match('/^(u?int)(\d+)$/', $type, $matches)) {
+                    $signed = $matches[1] === 'int';
+                    $bits   = intval($matches[2]);
+
+                    return self::decodeNumber($bytes, $offset, $bits, $signed);
+                } elseif ($type === 'tuple') {
+                    return self::decodeTuple($bytes, $offset, $param);
+                }
+
+                throw new Exception('Unsupported type: '.$type);
+        }
     }
 }
