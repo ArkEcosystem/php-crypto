@@ -46,7 +46,7 @@ class ArgumentDecoderTest extends TestCase
     }
 
     /** @test */
-    public function it_should_decode_true_bool()
+    public function it_should_decode_bool_as_true()
     {
         $payload  = '0000000000000000000000000000000000000000000000000000000000000001';
         $expected = true;
@@ -57,7 +57,7 @@ class ArgumentDecoderTest extends TestCase
     }
 
     /** @test */
-    public function it_should_decode_false_bool()
+    public function it_should_decode_bool_as_false()
     {
         $payload  = '0000000000000000000000000000000000000000000000000000000000000000';
         $expected = false;
