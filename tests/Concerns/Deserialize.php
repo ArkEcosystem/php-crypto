@@ -37,53 +37,6 @@ trait Deserialize
         ksort($expected);
         ksort($actual);
 
-        if (isset($actual['asset']['multiSignature'])) {
-            ksort($expected['asset']['multiSignature']);
-            ksort($actual['asset']['multiSignature']);
-        } elseif (isset($actual['asset']['multiSignatureLegacy'])) {
-            ksort($expected['asset']['multiSignatureLegacy']);
-            ksort($actual['asset']['multiSignatureLegacy']);
-        }
-
-        if (isset($actual['asset']['payments'])) {
-            for ($i = 0; $i < count($actual['asset']['payments']); $i++) {
-                ksort($actual['asset']['payments'][$i]);
-            }
-        }
-
         $this->assertSame($expected, $actual);
-    }
-
-    protected function assertSameSerialization(string $expected, string $actual): void
-    {
-        // Signatures is not deterministic so we need to remove them from the comparison
-        $this->assertSame(substr($expected, 0, -128), substr($actual, 0, -128));
-    }
-
-    protected function assertSameSerializationMultisignature(string $expected, string $actual, int $numberOfParticipants): void
-    {
-        $signaturesPartLength = 128 + ($numberOfParticipants * 130);
-
-        // Signatures is not deterministic so we need to remove them from the comparison
-        $this->assertSame(substr($expected, 0, -$signaturesPartLength), substr($actual, 0, -$signaturesPartLength));
-    }
-
-    protected function assertSignaturesAreSerialized(string $serialized, array $signatures): void
-    {
-        foreach ($signatures as $signature) {
-            $this->assertStringContainsString($signature, $serialized);
-        }
-    }
-
-    private function array_only(array $arr, array $keys): array
-    {
-        $returnArray = [];
-        foreach ($keys as $key) {
-            if (isset($arr[$key])) {
-                $returnArray[$key] = $arr[$key];
-            }
-        }
-
-        return $returnArray;
     }
 }
