@@ -69,7 +69,7 @@ class UnitConverter
      */
     public static function weiToArk(string | int | float $value, ?string $suffix = null): string
     {
-        $convertedValue = (string) BigDecimal::of(UnitConverter::formatUnits(UnitConverter::parseUnits($value, 'wei'), 'ark'))
+        $convertedValue = (string) BigDecimal::of(self::formatUnits(self::parseUnits($value, 'wei'), 'ark'))
             ->stripTrailingZeros();
 
         if ($suffix !== null) {
@@ -88,7 +88,7 @@ class UnitConverter
      */
     public static function gweiToArk(string | int | float $value, ?string $suffix = null): string
     {
-        $convertedValue = (string) BigDecimal::of(UnitConverter::formatUnits(UnitConverter::parseUnits($value, 'gwei'), 'ark'))
+        $convertedValue = (string) BigDecimal::of(self::formatUnits(self::parseUnits($value, 'gwei'), 'ark'))
             ->stripTrailingZeros();
 
         if ($suffix !== null) {
