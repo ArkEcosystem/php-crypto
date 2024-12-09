@@ -20,6 +20,13 @@ final class ArgumentDecoder
         $this->bytes = $bytes;
     }
 
+    public function decodeString(): string
+    {
+        [$value] = AbiDecoder::decodeString($this->bytes, 0);
+
+        return $value;
+    }
+
     public function decodeAddress(): string
     {
         [$value] = AbiDecoder::decodeAddress($this->bytes, 0);
