@@ -82,4 +82,22 @@ class UnitConverterTest extends TestCase
         $arkValue = UnitConverter::parseUnits(0.1, 'ark');
         $this->assertSame('100000000000000000', $arkValue);
     }
+
+    /** @test */
+    public function it_should_convert_wei_to_ark()
+    {
+        $this->assertSame('0.000000000000000001 DARK', UnitConverter::weiToArk(1, 'DARK'));
+        $this->assertSame('0.000000000000000001', UnitConverter::weiToArk(1));
+        $this->assertSame('1 DARK', UnitConverter::weiToArk('1000000000000000000', 'DARK'));
+        $this->assertSame('1', UnitConverter::weiToArk('1000000000000000000'));
+    }
+
+    /** @test */
+    public function it_should_convert_gwei_to_ark()
+    {
+        $this->assertSame('0.000000001 DARK', UnitConverter::gweiToArk(1, 'DARK'));
+        $this->assertSame('0.000000001', UnitConverter::gweiToArk(1));
+        $this->assertSame('1 DARK', UnitConverter::gweiToArk('1000000000', 'DARK'));
+        $this->assertSame('1', UnitConverter::gweiToArk('1000000000'));
+    }
 }
