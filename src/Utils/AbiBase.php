@@ -80,16 +80,10 @@ abstract class AbiBase
         switch ($type) {
             case ContractAbiType::CONSENSUS:
                 return __DIR__.'/Abi/json/Abi.Consensus.json';
-
-                break;
             case ContractAbiType::MULTIPAYMENT:
                 return __DIR__.'/Abi/json/Abi.MultiPayment.json';
-
-                break;
             case ContractAbiType::USERNAMES:
                 return __DIR__.'/Abi/json/Abi.Usernames.json';
-
-                break;
             case ContractAbiType::CUSTOM:
                 return $path;
         }
