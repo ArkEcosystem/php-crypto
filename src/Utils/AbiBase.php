@@ -10,9 +10,13 @@ abstract class AbiBase
 {
     protected array $abi;
 
-    public function __construct()
+    public function __construct(string $path = null)
     {
-        $abiFilePath = __DIR__.'/Abi.Consensus.json';
+        if ($path) {
+            $abiFilePath = $path;
+        } else {
+            $abiFilePath = __DIR__.'/Abi.Consensus.json';
+        }
 
         $abiJson = file_get_contents($abiFilePath);
 
