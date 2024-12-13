@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use kornrunner\Keccak;
 
 abstract class AbiBase
 {
     protected array $abi;
 
-    public function __construct(string $path = null)
+    public function __construct(ContractAbiType $type = ContractAbiType::CONSENSUS, string $path = null)
     {
-        if ($path) {
-            $abiFilePath = $path;
-        } else {
-            $abiFilePath = __DIR__.'/Abi.Consensus.json';
-        }
+        $abiFilePath = $this->contractAbiPath($type, $path);
 
         $abiJson = file_get_contents($abiFilePath);
 
@@ -76,5 +73,19 @@ abstract class AbiBase
         $selector  = '0x'.substr($hash, 2, 8);
 
         return $selector;
+    }
+
+    private function contractAbiPath(ContractAbiType $type, string $path = null): ?string
+    {
+        switch ($type) {
+            case ContractAbiType::CONSENSUS:
+                return __DIR__.'/Abi/json/Abi.Consensus.json';
+            case ContractAbiType::MULTIPAYMENT:
+                return __DIR__.'/Abi/json/Abi.MultiPayment.json';
+            case ContractAbiType::USERNAMES:
+                return __DIR__.'/Abi/json/Abi.Usernames.json';
+            case ContractAbiType::CUSTOM:
+                return $path;
+        }
     }
 }
