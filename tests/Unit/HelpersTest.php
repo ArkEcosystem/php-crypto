@@ -23,7 +23,7 @@ class HelpersTest extends TestCase
             Helpers::isValidUsername($username);
             $this->assertTrue(true); // If we get here, no exception was thrown
         } catch (InvalidUsernameException $e) {
-            $this->fail('Valid username threw an exception: ' . $e->getMessage());
+            $this->fail('Valid username threw an exception: '.$e->getMessage());
         }
     }
 
@@ -78,12 +78,12 @@ class HelpersTest extends TestCase
     public function validUsernamesProvider(): array
     {
         return [
-            'simple username' => ['john'],
-            'username with numbers' => ['john123'],
+            'simple username'                 => ['john'],
+            'username with numbers'           => ['john123'],
             'username with single underscore' => ['john_doe'],
-            'minimum length' => ['a'],
-            'maximum length' => ['abcdefghijklmnopqrst'], // 20 characters
-            'mixed characters' => ['user_123_name'],
+            'minimum length'                  => ['a'],
+            'maximum length'                  => ['abcdefghijklmnopqrst'], // 20 characters
+            'mixed characters'                => ['user_123_name'],
         ];
     }
 
@@ -91,16 +91,16 @@ class HelpersTest extends TestCase
     {
         return [
             'empty string' => [''],
-            'too long' => ['abcdefghijklmnopqrstu'], // 21 characters
+            'too long'     => ['abcdefghijklmnopqrstu'], // 21 characters
         ];
     }
 
     public function invalidCharacterUsernamesProvider(): array
     {
         return [
-            'uppercase letters' => ['John'],
-            'special characters' => ['john@doe'],
-            'spaces' => ['john doe'],
+            'uppercase letters'    => ['John'],
+            'special characters'   => ['john@doe'],
+            'spaces'               => ['john doe'],
             'non-ASCII characters' => ['jöhn'],
         ];
     }
@@ -109,16 +109,16 @@ class HelpersTest extends TestCase
     {
         return [
             'starting underscore' => ['_john'],
-            'ending underscore' => ['john_'],
-            'both underscores' => ['_john_'],
+            'ending underscore'   => ['john_'],
+            'both underscores'    => ['_john_'],
         ];
     }
 
     public function usernamesWithConsecutiveUnderscoresProvider(): array
     {
         return [
-            'double underscore' => ['john__doe'],
-            'triple underscore' => ['john___doe'],
+            'double underscore'           => ['john__doe'],
+            'triple underscore'           => ['john___doe'],
             'multiple double underscores' => ['john__doe__smith'],
         ];
     }

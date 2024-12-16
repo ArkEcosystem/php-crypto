@@ -38,7 +38,7 @@ class UsernameRegistrationBuilderTest extends TestCase
     public function it_should_throw_exception_for_invalid_username()
     {
         $this->expectException(InvalidUsernameException::class);
-          $this->expectExceptionMessage('Username must be between 1 and 20 characters long');
+        $this->expectExceptionMessage('Username must be between 1 and 20 characters long');
 
         $fixture = $this->getTransactionFixture('evm_call', 'username-registration');
 
