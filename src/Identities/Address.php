@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Utils\Address as AddressUtils;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use Elliptic\EC;
@@ -91,7 +90,6 @@ class Address
      * Validate the given address.
      *
      * @param string $address
-     * @param AbstractNetwork|int|null $network
      *
      * @return bool
      */

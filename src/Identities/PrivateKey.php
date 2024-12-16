@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
@@ -53,18 +52,17 @@ class PrivateKey
     /**
      * Derive the private key for the given WIF.
      *
-     * @param string                                             $wif
-     * @param AbstractNetwork|null $network
+     * @param string $wif
      *
      * @return EcPrivateKey
      */
-    public static function fromWif(string $wif, AbstractNetwork $network = null): EcPrivateKey
+    public static function fromWif(string $wif, ): EcPrivateKey
     {
         return (new PrivateKeyFactory(
             EcAdapterFactory::getPhpEcc(
                 Bitcoin::getMath(),
                 Bitcoin::getGenerator()
             )
-        ))->fromWif($wif, $network);
+        ))->fromWif($wif);
     }
 }
