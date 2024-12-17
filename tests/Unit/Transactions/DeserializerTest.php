@@ -17,6 +17,7 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  */
 class DeserializerTest extends TestCase
 {
+
     /** @test */
     public function it_should_deserialize_a_transfer_signed_with_a_passphrase()
     {
@@ -25,6 +26,18 @@ class DeserializerTest extends TestCase
         $transaction = $this->assertTransaction($fixture);
 
         expect($transaction->data['value'])->toEqual('10000000000000000000');
+
+        expect($transaction)->toBeInstanceOf(Transfer::class);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_transfer_signed_with_a_passphrase_with_0_value()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'transfer-0');
+
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction->data['value'])->toEqual('0');
 
         expect($transaction)->toBeInstanceOf(Transfer::class);
     }
@@ -77,6 +90,7 @@ class DeserializerTest extends TestCase
     {
         $actual = $this->assertDeserialized($fixture, [
             'id',
+            'value',
             'nonce',
             'gasPrice',
             'gasLimit',
