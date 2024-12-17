@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
@@ -31,21 +30,6 @@ abstract class AbstractTransaction
     }
 
     abstract public function getPayload(): string;
-
-    protected function decodePayload(array $data): ?array
-    {
-        if (! isset($data['data'])) {
-            return null;
-        }
-
-        $payload = $data['data'];
-
-        if ($payload === '') {
-            return null;
-        }
-
-        return (new AbiDecoder())->decodeFunctionData($payload);
-    }
 
     public function refreshPayloadData(): static
     {
@@ -184,6 +168,21 @@ abstract class AbstractTransaction
         ];
 
         return TransactionHasher::toHash($hashData, $skipSignature);
+    }
+
+    protected function decodePayload(array $data): ?array
+    {
+        if (! isset($data['data'])) {
+            return null;
+        }
+
+        $payload = $data['data'];
+
+        if ($payload === '') {
+            return null;
+        }
+
+        return (new AbiDecoder())->decodeFunctionData($payload);
     }
 
     private function getSignature(): CompactSignatureInterface
