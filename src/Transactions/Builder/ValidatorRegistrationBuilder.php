@@ -10,7 +10,6 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
 class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
-
     public function __construct(?array $data = null)
     {
         parent::__construct($data);

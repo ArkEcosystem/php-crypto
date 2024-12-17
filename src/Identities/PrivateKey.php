@@ -56,7 +56,7 @@ class PrivateKey
      *
      * @return EcPrivateKey
      */
-    public static function fromWif(string $wif, ): EcPrivateKey
+    public static function fromWif(string $wif): EcPrivateKey
     {
         return (new PrivateKeyFactory(
             EcAdapterFactory::getPhpEcc(
