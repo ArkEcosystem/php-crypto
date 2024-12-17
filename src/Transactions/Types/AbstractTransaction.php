@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
@@ -31,7 +32,7 @@ abstract class AbstractTransaction
 
     abstract public function getPayload(): string;
 
-    public function decodePayload(array $data): ?array
+    protected function decodePayload(array $data): ?array
     {
         if (! isset($data['data'])) {
             return null;

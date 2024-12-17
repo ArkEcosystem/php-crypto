@@ -66,6 +66,7 @@ class Deserializer
 
     private function guessTransactionFromData(array $data): AbstractTransaction
     {
+        // TODO: change to check for payload
         if ($data['value'] !== '0') {
             return new Transfer($data);
         }
