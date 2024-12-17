@@ -17,7 +17,6 @@ use ArkEcosystem\Tests\Crypto\TestCase;
  */
 class DeserializerTest extends TestCase
 {
-
     /** @test */
     public function it_should_deserialize_a_transfer_signed_with_a_passphrase()
     {
