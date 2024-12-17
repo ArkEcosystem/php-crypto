@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Enums\ContractAddresses;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
 class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+
+        $this->recipientAddress(ContractAddresses::CONSENSUS->value);
+    }
+
     public function validatorPublicKey(string $validatorPublicKey): self
     {
         $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;

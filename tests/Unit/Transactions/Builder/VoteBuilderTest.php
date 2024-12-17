@@ -21,9 +21,8 @@ class VoteBuilderTest extends TestCase
           ->gasPrice($fixture['data']['gasPrice'])
           ->nonce($fixture['data']['nonce'])
           ->network($fixture['data']['network'])
-          ->vote('0x512F366D524157BcF734546eB29a6d687B762255')
+          ->vote('0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763')
           ->gasLimit($fixture['data']['gasLimit'])
-          ->recipientAddress($fixture['data']['recipientAddress'])
           ->sign($this->passphrase);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());

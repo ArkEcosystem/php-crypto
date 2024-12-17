@@ -73,7 +73,7 @@ class Deserializer
         $payloadData = $this->decodePayload($data);
 
         if ($payloadData === null) {
-            return new EvmCall();
+            return new Transfer($data);
         }
 
         $functionName = $payloadData['functionName'];

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use BitWasp\Buffertools\Buffer;
 use kornrunner\Keccak;
 
@@ -15,7 +14,6 @@ class Address
      * Validate the given address.
      *
      * @param string $address
-     * @param AbstractNetwork|int|null $network
      *
      * @return bool
      */

@@ -31,21 +31,6 @@ abstract class AbstractTransaction
 
     abstract public function getPayload(): string;
 
-    public function decodePayload(array $data): ?array
-    {
-        if (! isset($data['data'])) {
-            return null;
-        }
-
-        $payload = $data['data'];
-
-        if ($payload === '') {
-            return null;
-        }
-
-        return (new AbiDecoder())->decodeFunctionData($payload);
-    }
-
     public function refreshPayloadData(): static
     {
         $this->data['data'] = ltrim($this->getPayload(), '0x');
@@ -183,6 +168,21 @@ abstract class AbstractTransaction
         ];
 
         return TransactionHasher::toHash($hashData, $skipSignature);
+    }
+
+    protected function decodePayload(array $data): ?array
+    {
+        if (! isset($data['data'])) {
+            return null;
+        }
+
+        $payload = $data['data'];
+
+        if ($payload === '') {
+            return null;
+        }
+
+        return (new AbiDecoder())->decodeFunctionData($payload);
     }
 
     private function getSignature(): CompactSignatureInterface
