@@ -23,7 +23,6 @@ class UsernameRegistrationBuilderTest extends TestCase
           ->nonce($fixture['data']['nonce'])
           ->network($fixture['data']['network'])
           ->gasLimit($fixture['data']['gasLimit'])
-          ->recipientAddress($fixture['data']['recipientAddress'])
           ->username('php')
           ->sign($this->passphrase);
 
@@ -47,7 +46,6 @@ class UsernameRegistrationBuilderTest extends TestCase
           ->nonce($fixture['data']['nonce'])
           ->network($fixture['data']['network'])
           ->gasLimit($fixture['data']['gasLimit'])
-          ->recipientAddress($fixture['data']['recipientAddress'])
           ->username('this_is_a_very_long_username_that_is_invalid')
           ->sign($this->passphrase);
     }

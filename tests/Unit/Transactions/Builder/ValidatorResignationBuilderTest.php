@@ -22,7 +22,6 @@ class ValidatorResignationBuilderTest extends TestCase
           ->nonce($fixture['data']['nonce'])
           ->network($fixture['data']['network'])
           ->gasLimit($fixture['data']['gasLimit'])
-          ->recipientAddress($fixture['data']['recipientAddress'])
           ->sign($this->passphrase);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());

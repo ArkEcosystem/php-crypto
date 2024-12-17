@@ -22,8 +22,7 @@ class ValidatorRegistrationBuilderTest extends TestCase
           ->nonce($fixture['data']['nonce'])
           ->network($fixture['data']['network'])
           ->gasLimit($fixture['data']['gasLimit'])
-          ->validatorPublicKey('a08058db53e2665c84a40f5152e76dd2b652125a6079130d4c315e728bcf4dd1dfb44ac26e82302331d61977d3141118')
-          ->recipientAddress($fixture['data']['recipientAddress'])
+          ->validatorPublicKey('954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624bd')
           ->sign($this->passphrase);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
