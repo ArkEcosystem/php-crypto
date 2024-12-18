@@ -27,6 +27,6 @@ class Multipayment extends AbstractTransaction
             return '';
         }
 
-        return (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall(AbiFunction::MULTIPAYMENT->value, [$this->data['pay']]);
+        return (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall(AbiFunction::MULTIPAYMENT->value, $this->data['pay']);
     }
 }
