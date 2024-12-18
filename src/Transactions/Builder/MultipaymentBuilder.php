@@ -7,7 +7,6 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Enums\ContractAddresses;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
-use Exception;
 
 class MultipaymentBuilder extends AbstractTransactionBuilder
 {
@@ -29,7 +28,7 @@ class MultipaymentBuilder extends AbstractTransactionBuilder
 
         $this->transaction->refreshPayloadData();
 
-        $this->transaction->data['value']+= $amount;
+        $this->transaction->data['value'] += $amount;
 
         return $this;
     }

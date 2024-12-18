@@ -90,8 +90,6 @@ class AbiEncoder extends AbiBase
             }
         }
 
-
-
         throw new Exception("Function with matching arguments not found in ABI: $name");
     }
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Exceptions\InvalidUsernameException;
 use ArkEcosystem\Crypto\Transactions\Builder\MultipaymentBuilder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
@@ -59,7 +58,7 @@ class MultipaymentBuilderTest extends TestCase
 
     // }
 
-    /** @test */
+    /* @test */
     // public function it_should_handle_empty_payment()
     // {
     //     $fixture = $this->getTransactionFixture('evm_call', 'multipayment-0');
