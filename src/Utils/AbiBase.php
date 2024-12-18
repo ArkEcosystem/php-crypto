@@ -81,7 +81,7 @@ abstract class AbiBase
             case ContractAbiType::CONSENSUS:
                 return __DIR__.'/Abi/json/Abi.Consensus.json';
             case ContractAbiType::MULTIPAYMENT:
-                return __DIR__.'/Abi/json/Abi.MultiPayment.json';
+                return __DIR__.'/Abi/json/Abi.Multipayment.json';
             case ContractAbiType::USERNAMES:
                 return __DIR__.'/Abi/json/Abi.Usernames.json';
             case ContractAbiType::CUSTOM:
