@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class ValidatorRegistration extends AbstractTransaction
@@ -14,7 +15,7 @@ class ValidatorRegistration extends AbstractTransaction
         $payload = $this->decodePayload($data);
 
         if ($payload !== null) {
-            $data['validatorPublicKey'] = ltrim($payload['args'][0], '0x');
+            $data['validatorPublicKey'] = Helpers::removeLeadingHexZero($payload['args'][0]);
         }
 
         parent::__construct($data);

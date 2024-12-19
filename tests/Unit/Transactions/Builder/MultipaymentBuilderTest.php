@@ -1,0 +1,95 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
+
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Transactions\Builder\MultipaymentBuilder;
+use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
+use ArkEcosystem\Crypto\Utils\AbiEncoder;
+use ArkEcosystem\Tests\Crypto\TestCase;
+
+/**
+ * @covers \ArkEcosystem\Crypto\Transactions\Builder\MultipaymentBuilder
+ */
+class MultipaymentBuilderTest extends TestCase
+{
+    /** @test */
+    public function it_should_sign_it_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment');
+
+        $builder = MultipaymentBuilder::new()
+          ->gasPrice($fixture['data']['gasPrice'])
+          ->nonce($fixture['data']['nonce'])
+          ->network($fixture['data']['network'])
+          ->gasLimit($fixture['data']['gasLimit'])
+          ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '1000000000000000000')
+          ->pay('0x6F0182a0cc707b055322CcF6d4CB6a5Aff1aEb22', '2000000000000000000')
+          ->sign($this->passphrase);
+
+        $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
+
+        $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+
+        $this->assertTrue($builder->verify());
+    }
+
+    /** @test */
+    public function it_should_handle_single_recipient()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-1');
+
+        $builder = MultipaymentBuilder::new()
+          ->gasPrice($fixture['data']['gasPrice'])
+          ->nonce($fixture['data']['nonce'])
+          ->network($fixture['data']['network'])
+          ->gasLimit($fixture['data']['gasLimit'])
+          ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '1000000000000000000')
+          ->sign($this->passphrase);
+
+        $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
+
+        $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+
+        $this->assertTrue($builder->verify());
+    }
+
+    /** @test */
+    public function it_should_handle_empty_payment()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-0');
+
+        $builder = MultipaymentBuilder::new()
+          ->gasPrice($fixture['data']['gasPrice'])
+          ->nonce($fixture['data']['nonce'])
+          ->network($fixture['data']['network'])
+          ->gasLimit($fixture['data']['gasLimit'])
+          ->sign($this->passphrase);
+
+        $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
+
+        $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+
+        $this->assertTrue($builder->verify());
+    }
+
+    // TODO: fix decoder issue first
+    // /** @test */
+    // public function it_should_be_possible_to_create_manual_multipayment()
+    // {
+    //     $fixture = $this->getTransactionFixture('evm_call', 'multipayment-1');
+
+    //     $payload = (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall('pay', [['0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5'], ['1000000000000000000']]);
+    //     $tx = (new Multipayment(['data' => $payload]));
+    //     $tx->data['nonce'] = $fixture['data']['nonce'];
+    //     $tx->data['network'] = $fixture['data']['network'];
+    //     $tx->data['gasLimit'] = $fixture['data']['gasLimit'];
+    //     $tx->data['gasPrice'] = $fixture['data']['gasPrice'];
+    //     $tx->sign(PrivateKey::fromPassphrase($this->passphrase));
+
+    //     $this->assertTrue($tx->verify());
+    // }
+}
