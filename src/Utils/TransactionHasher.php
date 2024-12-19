@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\Helpers;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
@@ -31,7 +32,7 @@ class TransactionHasher
             self::toBeArray($transaction['gasLimit']),
             $recipientAddress,
             self::toBeArray($transaction['value']),
-            isset($transaction['data']) ? hex2bin(ltrim($transaction['data'], '0x')) : '',
+            isset($transaction['data']) ? hex2bin(Helpers::removeLeadingHexZero($transaction['data'])) : '',
             [], // accessList is unused
         ];
 

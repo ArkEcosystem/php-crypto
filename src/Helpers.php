@@ -56,4 +56,9 @@ class Helpers
 
         return true;
     }
+
+    public static function removeLeadingHexZero(string $hex): string
+    {
+        return preg_replace('/^0x/', '', $hex); // using ltrim($hex, '0x') also removes leading 0s which is not desired, e.g. 0x0123 -> 123
+    }
 }

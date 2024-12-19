@@ -6,6 +6,7 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
@@ -34,7 +35,7 @@ abstract class AbstractTransaction
 
     public function refreshPayloadData(): static
     {
-        $this->data['data'] = ltrim($this->getPayload(), '0x');
+        $this->data['data'] = Helpers::removeLeadingHexZero($this->getPayload());
 
         return $this;
     }
