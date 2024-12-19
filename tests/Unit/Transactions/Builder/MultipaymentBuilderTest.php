@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultipaymentBuilder;
+use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
+use ArkEcosystem\Crypto\Utils\AbiEncoder;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -71,4 +75,21 @@ class MultipaymentBuilderTest extends TestCase
 
         $this->assertTrue($builder->verify());
     }
+
+    // TODO: fix decoder issue first
+    // /** @test */
+    // public function it_should_be_possible_to_create_manual_multipayment()
+    // {
+    //     $fixture = $this->getTransactionFixture('evm_call', 'multipayment-1');
+
+    //     $payload = (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall('pay', [['0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5'], ['1000000000000000000']]);
+    //     $tx = (new Multipayment(['data' => $payload]));
+    //     $tx->data['nonce'] = $fixture['data']['nonce'];
+    //     $tx->data['network'] = $fixture['data']['network'];
+    //     $tx->data['gasLimit'] = $fixture['data']['gasLimit'];
+    //     $tx->data['gasPrice'] = $fixture['data']['gasPrice'];
+    //     $tx->sign(PrivateKey::fromPassphrase($this->passphrase));
+
+    //     $this->assertTrue($tx->verify());
+    // }
 }

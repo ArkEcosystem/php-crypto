@@ -14,9 +14,8 @@ class Multipayment extends AbstractTransaction
     {
         $payload = $this->decodePayload($data, ContractAbiType::MULTIPAYMENT);
 
-        // TODO: test this approach
         if ($payload !== null) {
-            $data['pay'] = $payload['args'][0];
+            $data['pay'] = $payload['args'];
         }
 
         parent::__construct($data);
