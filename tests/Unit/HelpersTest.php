@@ -16,10 +16,10 @@ class HelpersTest extends TestCase
     /** @test */
     public function it_should_trim_hex_values_properly(): void
     {
-        $this->assertEquals('0123', Helpers::removeLeadingHexZero('0x0123'));
-        $this->assertEquals('0123', Helpers::removeLeadingHexZero('0123'));
-        $this->assertEquals('1234', Helpers::removeLeadingHexZero('0x1234'));
-        $this->assertEquals('0000', Helpers::removeLeadingHexZero('0x0000'));
+        $this->assertSame('0123', Helpers::removeLeadingHexZero('0x0123'));
+        $this->assertSame('0123', Helpers::removeLeadingHexZero('0123'));
+        $this->assertSame('1234', Helpers::removeLeadingHexZero('0x1234'));
+        $this->assertSame('0000', Helpers::removeLeadingHexZero('0x0000'));
     }
 
     /**
