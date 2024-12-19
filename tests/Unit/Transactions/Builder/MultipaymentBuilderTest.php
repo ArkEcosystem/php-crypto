@@ -53,12 +53,6 @@ class MultipaymentBuilderTest extends TestCase
         $this->assertTrue($builder->verify());
     }
 
-    // /** @test */
-    // public function it_should_handle_sending_to_self()
-    // {
-
-    // }
-
     /** @test */
     public function it_should_handle_empty_payment()
     {

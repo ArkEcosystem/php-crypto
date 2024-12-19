@@ -22,7 +22,6 @@ class MultipaymentBuilder extends AbstractTransactionBuilder
 
     public function pay(string $address, string $amount): self
     {
-        // TODO: validate amount and address?
         $this->transaction->data['pay'][0][] = $address;
         $this->transaction->data['pay'][1][] = $amount;
 
