@@ -88,7 +88,7 @@ abstract class AbstractTransaction
         return $this;
     }
 
-    public function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
+    protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
     {
         $ecAdapter = EcAdapterFactory::getPhpEcc(
             Bitcoin::getMath(),
