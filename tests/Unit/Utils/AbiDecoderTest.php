@@ -36,7 +36,7 @@ class AbiDecoderTest extends TestCase
         $decoder = new AbiDecoder(ContractAbiType::MULTIPAYMENT);
 
         $functionName = 'pay';
-        $args = [
+        $args         = [
             ['0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A', '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A'],
             ['100000000', '200000000'],
         ];

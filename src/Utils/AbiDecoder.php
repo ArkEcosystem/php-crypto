@@ -93,14 +93,13 @@ class AbiDecoder extends AbiBase
         $elementType         = $param;
         $elementType['type'] = $baseType;
 
-        
         if ($length === null) {
             // Read the offset to the dynamic data
             $dataOffset = self::readUInt($bytes, $offset);
 
             // Read the array length
             $arrayLength = self::readUInt($bytes, $dataOffset);
-            
+
             $cursor = $dataOffset + 32;
         } else {
             $arrayLength = $length;

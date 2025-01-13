@@ -88,16 +88,6 @@ abstract class AbstractTransaction
         return $this;
     }
 
-    protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
-    {
-        $ecAdapter = EcAdapterFactory::getPhpEcc(
-            Bitcoin::getMath(),
-            Bitcoin::getGenerator()
-        );
-
-        return $ecAdapter->recover($this->hash(skipSignature: true), $compactSignature);
-    }
-
     public function recoverSender(): void
     {
         $compactSignature = $this->getSignature();
@@ -170,6 +160,16 @@ abstract class AbstractTransaction
         ];
 
         return TransactionHasher::toHash($hashData, $skipSignature);
+    }
+
+    protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
+    {
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        return $ecAdapter->recover($this->hash(skipSignature: true), $compactSignature);
     }
 
     protected function decodePayload(array $data, ContractAbiType $type = ContractAbiType::CONSENSUS): ?array
