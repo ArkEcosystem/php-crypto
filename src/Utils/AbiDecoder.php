@@ -94,10 +94,13 @@ class AbiDecoder extends AbiBase
         $elementType['type'] = $baseType;
 
         if ($length === null) {
-            $dataOffset  = self::readUInt($bytes, $offset);
-            $arrayOffset = $offset + $dataOffset;
-            $arrayLength = self::readUInt($bytes, $arrayOffset);
-            $cursor      = $arrayOffset + 32;
+            // Read the offset to the dynamic data
+            $dataOffset = self::readUInt($bytes, $offset);
+
+            // Read the array length
+            $arrayLength = self::readUInt($bytes, $dataOffset);
+
+            $cursor = $dataOffset + 32;
         } else {
             $arrayLength = $length;
             $cursor      = $offset;
@@ -161,7 +164,7 @@ class AbiDecoder extends AbiBase
 
         $values = [];
         foreach ($params as $param) {
-            list($value, $consumed) = $this->decodeParameter($bytes, $cursor, $param);
+            list($value, $consumed) = self::decodeParameter($bytes, $cursor, $param);
             $cursor += $consumed;
             $values[] = $value;
         }
@@ -169,7 +172,7 @@ class AbiDecoder extends AbiBase
         return $values;
     }
 
-    private function decodeParameter(string $bytes, int $offset, array $param): array
+    private static function decodeParameter(string $bytes, int $offset, array $param): array
     {
         $type            = $param['type'];
         $arrayComponents = self::getArrayComponents($type);
