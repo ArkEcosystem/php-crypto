@@ -141,8 +141,8 @@ class Deserializer
         var_dump($this->decodedRlp);
         exit();
 
-        $data['network'] = $this->decodedRlp[''];
-        $data['nonce'] = $this->decodedRlp[''];
+        $data['network']  = $this->decodedRlp[''];
+        $data['nonce']    = $this->decodedRlp[''];
         $data['gasPrice'] = $this->decodedRlp[''];
         $data['gasLimit'] = $this->decodedRlp[''];
 

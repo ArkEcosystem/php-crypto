@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ArkEcosystem\Crypto\Utils;
 
 class RlpEncoder
@@ -8,7 +10,7 @@ class RlpEncoder
     {
         $decoded = self::_decode($data, 0);
 
-        assert($decoded['consumed'] === strlen($data), "unexpected junk after rlp payload");
+        assert($decoded['consumed'] === strlen($data), 'unexpected junk after rlp payload');
 
         return $decoded['result'];
     }
@@ -17,10 +19,10 @@ class RlpEncoder
     {
         $result = dechex($value);
         while (strlen($result) < 2) {
-            $result = "0" . $result;
+            $result = '0'.$result;
         }
 
-        return "0x" . $result;
+        return '0x'.$result;
     }
 
     private static function _decodeChildren(string $data, int $offset, int $childOffset, int $length): array
@@ -33,7 +35,7 @@ class RlpEncoder
             $result[] = $decoded['result'];
 
             $childOffset += $decoded['consumed'];
-            assert($childOffset <= $offset + 1 + $length, "child data too short");
+            assert($childOffset <= $offset + 1 + $length, 'child data too short');
         }
 
         var_dump($result);
@@ -43,7 +45,7 @@ class RlpEncoder
 
     private static function hexlify(string $data): string
     {
-        return '0x' . bin2hex($data);
+        return '0x'.bin2hex($data);
     }
 
     private static function unarrayifyInteger(string $data, int $offset, int $length): int
@@ -58,10 +60,10 @@ class RlpEncoder
 
     private static function _decode(string $data, int $offset): string|array
     {
-        assert(strlen($data) !== 0, "data too short");
+        assert(strlen($data) !== 0, 'data too short');
 
         $checkOffset = function ($offset) use ($data) {
-            assert($offset <= strlen($data), "data short segment too short");
+            assert($offset <= strlen($data), 'data short segment too short');
         };
 
         var_dump($data[$offset], ord($data[$offset]), '', 0xf8, 0xc0, 0xb8, 0x80);
@@ -74,13 +76,11 @@ class RlpEncoder
             $checkOffset($offset + 1 + $lengthLength + $length);
 
             return self::_decodeChildren($data, $offset, $offset + 1 + $lengthLength, $lengthLength + $length);
-
         } elseif (ord($data[$offset]) >= 0xc0) {
             $length = ord($data[$offset]) - 0xc0;
             $checkOffset($offset + 1 + $length);
 
             return self::_decodeChildren($data, $offset, $offset + 1, $length);
-
         } elseif (ord($data[$offset]) >= 0xb8) {
             $lengthLength = ord($data[$offset]) - 0xb7;
             $checkOffset($offset + 1 + $lengthLength);
@@ -93,7 +93,6 @@ class RlpEncoder
             var_dump($result);
 
             return ['consumed' => (1 + $lengthLength + $length), 'result' => $result];
-
         } elseif (ord($data[$offset]) >= 0x80) {
             $length = ord($data[$offset]) - 0x80;
             $checkOffset($offset + 1 + $length);
@@ -107,5 +106,4 @@ class RlpEncoder
 
         return ['consumed' => 1, 'result' => self::hexlifyByte(ord($data[$offset]))];
     }
-
 }

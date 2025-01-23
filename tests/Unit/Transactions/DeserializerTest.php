@@ -24,7 +24,7 @@ class DeserializerTest extends TestCase
 
         $transaction = $this->assertTransaction($fixture);
 
-        expect($transaction->data['value'])->toEqual('10000000000000000000' );
+        expect($transaction->data['value'])->toEqual('10000000000000000000');
 
         expect($transaction)->toBeInstanceOf(Transfer::class);
     }
