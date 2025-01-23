@@ -138,19 +138,19 @@ class Deserializer
 
     private function deserializeCommon(array &$data): void
     {
-        var_dump($this->decodedRlp);
+        print_r($this->decodedRlp);
         exit();
 
-        $data['network']  = $this->decodedRlp[''];
-        $data['nonce']    = $this->decodedRlp[''];
-        $data['gasPrice'] = $this->decodedRlp[''];
-        $data['gasLimit'] = $this->decodedRlp[''];
+        $data['network']  = $this->decodedRlp[0];
+        $data['nonce']    = $this->decodedRlp[1];
+        $data['gasPrice'] = $this->decodedRlp[3];
+        $data['gasLimit'] = $this->decodedRlp[4];
 
         // $data['network']  = $this->buffer->readUInt8();
         // $data['nonce']    = strval($this->buffer->readUInt64());
         // $data['gasPrice'] = $this->buffer->readUint32();
         // $data['gasLimit'] = $this->buffer->readUint32();
-        $data['value']    = '0';
+        $data['value']    = $this->decodedRlp[6];
     }
 
     private function deserializeSignatures(array &$data): void
