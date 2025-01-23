@@ -138,19 +138,23 @@ class Deserializer
 
     private function deserializeCommon(array &$data): void
     {
-        print_r($this->decodedRlp);
-        exit();
+        $array = $this->decodedRlp;
 
-        $data['network']  = $this->decodedRlp[0];
-        $data['nonce']    = $this->decodedRlp[1];
-        $data['gasPrice'] = $this->decodedRlp[3];
-        $data['gasLimit'] = $this->decodedRlp[4];
+        $data['network']  = intval($array[0], 16); // Convert network (uint8) from hex to decimal
+        $data['nonce']    = gmp_strval(gmp_init($array[1], 16)); // Convert nonce (uint64) from hex to decimal string
+        $data['gasPrice'] = intval($array[3], 16); // Convert gasPrice (uint32) from hex to decimal
+        $data['gasLimit'] = intval($array[4], 16); // Convert gasLimit (uint32) from hex to decimal
+        $data['value']    = gmp_strval(gmp_init($array[6], 16)); // Convert value (large number) from hex to decimal string
 
         // $data['network']  = $this->buffer->readUInt8();
         // $data['nonce']    = strval($this->buffer->readUInt64());
         // $data['gasPrice'] = $this->buffer->readUint32();
         // $data['gasLimit'] = $this->buffer->readUint32();
-        $data['value']    = $this->decodedRlp[6];
+        // $data['value']    = $this->decodedRlp[6];
+
+        print_r($data);
+
+        exit();
     }
 
     private function deserializeSignatures(array &$data): void
