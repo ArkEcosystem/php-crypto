@@ -10,7 +10,7 @@ class RlpEncoder
 {
     public static function decode(string $data): mixed
     {
-        $bytes = self::getBytes($data, 'data');
+        $bytes   = self::getBytes($data, 'data');
         $decoded = self::_decode($bytes, 0);
 
         if ($decoded['consumed'] !== count($bytes)) {
@@ -19,18 +19,19 @@ class RlpEncoder
 
         return $decoded['result'];
     }
-    
+
     private static function getBytes(string $value, string $name = 'value'): array
     {
         if (preg_match('/^0x(?:[0-9a-fA-F]{2})*$/', $value)) {
-            $hex = substr($value, 2);
+            $hex    = substr($value, 2);
             $length = strlen($hex) / 2;
-            $bytes = [];
+            $bytes  = [];
 
             for ($i = 0; $i < $length; $i++) {
-                $pair = substr($hex, $i * 2, 2);
+                $pair    = substr($hex, $i * 2, 2);
                 $bytes[] = hexdec($pair);
             }
+
             return $bytes;
         }
 
@@ -45,12 +46,13 @@ class RlpEncoder
         foreach ($data as $byte) {
             $hex .= sprintf('%02x', $byte);
         }
-        return '0x' . $hex;
+
+        return '0x'.$hex;
     }
 
     private static function hexlifyByte(int $value): string
     {
-        return '0x' . sprintf('%02x', $value & 0xff);
+        return '0x'.sprintf('%02x', $value & 0xff);
     }
 
     private static function unarrayifyInteger(array $data, int $offset, int $length): int
@@ -59,6 +61,7 @@ class RlpEncoder
         for ($i = 0; $i < $length; $i++) {
             $result = ($result << 8) + $data[$offset + $i];
         }
+
         return $result;
     }
 
@@ -68,10 +71,10 @@ class RlpEncoder
     private static function _decodeChildren(array $data, int $offset, int $childOffset, int $length): array
     {
         $result = [];
-        $end = $offset + 1 + $length;
+        $end    = $offset + 1 + $length;
 
         while ($childOffset < $end) {
-            $decoded = self::_decode($data, $childOffset);
+            $decoded  = self::_decode($data, $childOffset);
             $result[] = $decoded['result'];
             $childOffset += $decoded['consumed'];
 
@@ -82,7 +85,7 @@ class RlpEncoder
 
         return [
             'consumed' => 1 + $length,
-            'result'   => $result
+            'result'   => $result,
         ];
     }
 
@@ -105,6 +108,7 @@ class RlpEncoder
             if ($length > 0) {
                 self::checkOffset($offset + 1 + $length - 1, $data);
             }
+
             return self::_decodeChildren($data, $offset, $offset + 1, $length);
         } elseif ($prefix >= 0xb8) {
             $lengthLength = $prefix - 0xb7;
@@ -118,7 +122,7 @@ class RlpEncoder
 
             return [
                 'consumed' => 1 + $lengthLength + $length,
-                'result'   => self::hexlify($slice)
+                'result'   => self::hexlify($slice),
             ];
         } elseif ($prefix >= 0x80) {
             $length = $prefix - 0x80;
@@ -129,13 +133,13 @@ class RlpEncoder
 
             return [
                 'consumed' => 1 + $length,
-                'result'   => self::hexlify($slice)
+                'result'   => self::hexlify($slice),
             ];
         }
 
         return [
             'consumed' => 1,
-            'result'   => self::hexlifyByte($prefix)
+            'result'   => self::hexlifyByte($prefix),
         ];
     }
 
