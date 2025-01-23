@@ -14,7 +14,6 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\Address;
 use ArkEcosystem\Crypto\Utils\RlpEncoder;
 
 class Deserializer
@@ -73,15 +72,15 @@ class Deserializer
         }
 
         $transaction = $this->guessTransactionFromData($data);
-        
+
         // print_r($transaction); die();
         // $this->deserializeSignatures($transaction->data);
 
         // $transaction->recoverSender();
-        print_r($transaction->data); die();
+        print_r($transaction->data);
+        die();
 
         $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
-
 
         return $transaction;
     }
@@ -129,7 +128,7 @@ class Deserializer
 
         return (new AbiDecoder())->decodeFunctionData($payload);
     }
-   
+
     private function parseNumber(string $value): int
     {
         return intval($value, 16);
