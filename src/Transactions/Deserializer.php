@@ -56,17 +56,32 @@ class Deserializer
     {
         $data = [];
 
-        $this->deserializeCommon($data);
+        $decoded = $this->decodedRlp;
 
-        $this->deserializeData($data);
+        $data['network']          = $this->parseNumber($decoded[0]); // Convert network (uint8) from hex to decimal
+        $data['nonce']            = $this->parseBigNumber($decoded[1]); // Convert nonce (uint64) from hex to decimal string
+        $data['gasPrice']         = $this->parseNumber($decoded[3]); // Convert gasPrice (uint32) from hex to decimal
+        $data['gasLimit']         = $this->parseNumber($decoded[4]); // Convert gasLimit (uint32) from hex to decimal
+        $data['recipientAddress'] = $this->parseAddress($decoded[5]); // Convert gasLimit (uint32) from hex to decimal
+        $data['value']            = $this->parseBigNumber($decoded[6]); // Convert value (large number) from hex to decimal string
+        $data['data']             = $this->parseHex($decoded[7]);
+
+        if (count($decoded) === 12) {
+            $data['v'] = $this->parseNumber($decoded[9]) + 27;
+            $data['r'] = $this->parseHex($decoded[10]);
+            $data['s'] = $this->parseHex($decoded[11]);
+        }
 
         $transaction = $this->guessTransactionFromData($data);
+        
+        // print_r($transaction); die();
+        // $this->deserializeSignatures($transaction->data);
 
-        $this->deserializeSignatures($transaction->data);
-
-        $transaction->recoverSender();
+        // $transaction->recoverSender();
+        print_r($transaction->data); die();
 
         $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
+
 
         return $transaction;
     }
@@ -114,51 +129,29 @@ class Deserializer
 
         return (new AbiDecoder())->decodeFunctionData($payload);
     }
-
-    private function deserializeData(array &$data): void
+   
+    private function parseNumber(string $value): int
     {
-        // Read value (uint64)
-        $data['value'] = $this->buffer->readUInt256();
-
-        // Read recipient marker and recipientId
-        $recipientMarker = $this->buffer->readUInt8();
-
-        if ($recipientMarker === 1) {
-            $data['recipientAddress'] = Address::fromByteBuffer($this->buffer);
-        }
-
-        // Read payload length (uint32)
-        $payloadLength = $this->buffer->readUInt32();
-
-        // Read payload as hex
-        $payloadHex = $this->buffer->readHex($payloadLength * 2);
-
-        $data['data'] = $payloadHex;
+        return intval($value, 16);
     }
 
-    private function deserializeCommon(array &$data): void
+    private function parseBigNumber(string $value): string
     {
-        $array = $this->decodedRlp;
-
-        $data['network']  = intval($array[0], 16); // Convert network (uint8) from hex to decimal
-        $data['nonce']    = gmp_strval(gmp_init($array[1], 16)); // Convert nonce (uint64) from hex to decimal string
-        $data['gasPrice'] = intval($array[3], 16); // Convert gasPrice (uint32) from hex to decimal
-        $data['gasLimit'] = intval($array[4], 16); // Convert gasLimit (uint32) from hex to decimal
-        $data['value']    = gmp_strval(gmp_init($array[6], 16)); // Convert value (large number) from hex to decimal string
-
-        // $data['network']  = $this->buffer->readUInt8();
-        // $data['nonce']    = strval($this->buffer->readUInt64());
-        // $data['gasPrice'] = $this->buffer->readUint32();
-        // $data['gasLimit'] = $this->buffer->readUint32();
-        // $data['value']    = $this->decodedRlp[6];
-
-        print_r($data);
-
-        exit();
+        return gmp_strval(gmp_init($value, 16));
     }
 
-    private function deserializeSignatures(array &$data): void
+    private function parseHex(string $value): string
     {
-        $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
+        return preg_replace('/^0x/', '', $value);
     }
+
+    private function parseAddress(string $value): string
+    {
+        return $value;
+    }
+
+    // private function deserializeSignatures(array &$data): void
+    // {
+    //     $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
+    // }
 }
