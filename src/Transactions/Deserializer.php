@@ -15,6 +15,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\RlpEncoder;
 
 class Deserializer
 {
@@ -24,6 +25,8 @@ class Deserializer
 
     private ByteBuffer $buffer;
 
+    private string|array $decodedRlp;
+
     /**
      * Create a new deserializer instance.
      */
@@ -32,6 +35,10 @@ class Deserializer
         $this->buffer = strpos($serialized, "\0") === false
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
+
+        $encodedRlp = '0x'.mb_substr($this->buffer->toString('hex'), 2);
+
+        $this->decodedRlp = RlpEncoder::decode($encodedRlp);
     }
 
     /**
@@ -131,11 +138,19 @@ class Deserializer
 
     private function deserializeCommon(array &$data): void
     {
-        $data['network']                   = $this->buffer->readUInt8();
-        $data['nonce']                     = strval($this->buffer->readUInt64());
-        $data['gasPrice']                  = $this->buffer->readUint32();
-        $data['gasLimit']                  = $this->buffer->readUint32();
-        $data['value']                     = '0';
+        var_dump($this->decodedRlp);
+        exit();
+
+        $data['network'] = $this->decodedRlp[''];
+        $data['nonce'] = $this->decodedRlp[''];
+        $data['gasPrice'] = $this->decodedRlp[''];
+        $data['gasLimit'] = $this->decodedRlp[''];
+
+        // $data['network']  = $this->buffer->readUInt8();
+        // $data['nonce']    = strval($this->buffer->readUInt64());
+        // $data['gasPrice'] = $this->buffer->readUint32();
+        // $data['gasLimit'] = $this->buffer->readUint32();
+        $data['value']    = '0';
     }
 
     private function deserializeSignatures(array &$data): void
