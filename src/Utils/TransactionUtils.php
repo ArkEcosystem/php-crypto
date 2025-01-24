@@ -82,6 +82,10 @@ class TransactionUtils
         }
 
         if (is_string($value)) {
+            if ($value === '0') {
+                return '0x';
+            }
+
             if (str_starts_with($value, '0x')) {
                 return $value;
             }

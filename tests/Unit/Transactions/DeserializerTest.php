@@ -27,17 +27,15 @@ class DeserializerTest extends TestCase
         expect($transaction)->toBeInstanceOf(Transfer::class);
     }
 
-    // /** @test */
-    // public function it_should_deserialize_a_transfer_signed_with_a_passphrase_with_0_value()
-    // {
-    //     $fixture = $this->getTransactionFixture('evm_call', 'transfer-0');
+    /** @test */
+    public function it_should_deserialize_a_transfer_signed_with_a_passphrase_with_0_value()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'transfer-0');
 
-    //     $transaction = $this->assertTransaction($fixture);
+        $transaction = $this->assertTransaction($fixture);
 
-    //     expect($transaction->data['value'])->toEqual('0');
-
-    //     expect($transaction)->toBeInstanceOf(Transfer::class);
-    // }
+        expect($transaction)->toBeInstanceOf(Transfer::class);
+    }
 
     // /** @test */
     // public function it_should_deserialize_a_vote_signed_with_a_passphrase()

@@ -82,26 +82,6 @@ class Deserializer
 
         $transaction->data['id'] = TransactionUtils::getId($data);
 
-        // @TODO: Implement signature recovery
-        // packages/crypto-transaction/source/factory.ts
-        // const hash = await this.utils.toHash(transaction.data, {
-        //     excludeSignature: true,
-        // });
-
-        // transaction.data.senderPublicKey = this.signatureSerializer.recoverPublicKey(hash, {
-        //     r: transaction.data.r,
-        //     s: transaction.data.s,
-        //     v: transaction.data.v,
-        // });
-        // transaction.data.senderAddress = await this.addressFactory.fromPublicKey(transaction.data.senderPublicKey);
-
-        // packages/crypto-signature-ecdsa/source/signature.ts
-        // public recoverPublicKey(message: Buffer, signature: Contracts.Crypto.EcdsaSignature): string {
-        // 	const v = signature.v - 27;
-        // 	const signatureRS = Buffer.from(signature.r + signature.s, "hex");
-        // 	return secp256k1.recover(message, signatureRS, v, true).toString("hex");
-        // }
-
         $transaction->recoverSender();
 
         return $transaction;
@@ -153,12 +133,12 @@ class Deserializer
 
     private function parseNumber(string $value): int
     {
-        return intval($value, 16);
+        return $value === '0x' ? 0 : intval($value, 16);
     }
 
     private function parseBigNumber(string $value): string
     {
-        return gmp_strval(gmp_init($value, 16));
+        return $value === '0x' ? '0' : gmp_strval(gmp_init($value, 16));
     }
 
     private function parseHex(string $value): string
@@ -166,13 +146,8 @@ class Deserializer
         return Helpers::removeLeadingHexZero($value);
     }
 
-    private function parseAddress(string $value): string
+    private function parseAddress(string $value): string|null
     {
-        return $value;
+        return $value === '0x' ? null : $value;
     }
-
-    // private function deserializeSignatures(array &$data): void
-    // {
-    //     $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
-    // }
 }
