@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\Helpers;
-use ArkEcosystem\Crypto\Utils\Address;
-use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\RlpEncoder;
-use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
-use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
-use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\Utils\RlpEncoder;
 
 class Deserializer
 {
@@ -73,8 +72,8 @@ class Deserializer
 
         $transaction = $this->guessTransactionFromData($data);
 
-        $eip1559Prefix = "02"; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
-        
+        $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
+
         $transaction->serialized = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
 
         // @TODO: Implement this
@@ -126,7 +125,7 @@ class Deserializer
 
         return (new AbiDecoder())->decodeFunctionData($payload);
     }
-   
+
     private function parseNumber(string $value): int
     {
         return intval($value, 16);
