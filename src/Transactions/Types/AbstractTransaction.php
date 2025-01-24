@@ -26,8 +26,6 @@ abstract class AbstractTransaction
 
     public Buffer $serialized;
     
-    public string $id;
-
     public function __construct(?array $data = null)
     {
         $this->data = $data ?? [];
@@ -125,7 +123,7 @@ abstract class AbstractTransaction
         return array_filter([
             'gasPrice'                   => $this->data['gasPrice'],
             'network'                    => $this->data['network'] ?? Network::get()->version(),
-            'id'                         => $this->data['id'],
+            'id'                         => $this->id,
             'gasLimit'                   => $this->data['gasLimit'],
             'nonce'                      => $this->data['nonce'],
             'senderPublicKey'            => $this->data['senderPublicKey'],

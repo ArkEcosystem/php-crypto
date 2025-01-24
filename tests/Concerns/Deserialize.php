@@ -12,6 +12,7 @@ trait Deserialize
     protected function assertDeserialized(array $expected, array $keys): object
     {
         $actual = Deserializer::new($expected['serialized'])->deserialize();
+
         $data   = $actual->data;
 
         $this->assertSame($expected['serialized'], $actual->serialize()->getHex());
