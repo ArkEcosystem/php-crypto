@@ -58,12 +58,12 @@ class Deserializer
 
         $data = [];
 
-        $data['network']          = $this->parseNumber($decodedRlp[0]); // Convert network (uint8) from hex to decimal
-        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]); // Convert nonce (uint64) from hex to decimal string
-        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]); // Convert gasPrice (uint32) from hex to decimal
-        $data['gasLimit']         = $this->parseNumber($decodedRlp[4]); // Convert gasLimit (uint32) from hex to decimal
-        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]); // Convert gasLimit (uint32) from hex to decimal
-        $data['value']            = $this->parseBigNumber($decodedRlp[6]); // Convert value (large number) from hex to decimal string
+        $data['network']          = $this->parseNumber($decodedRlp[0]);
+        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]);
+        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]);
+        $data['gasLimit']         = $this->parseNumber($decodedRlp[4]);
+        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]);
+        $data['value']            = $this->parseBigNumber($decodedRlp[6]);
         $data['data']             = $this->parseHex($decodedRlp[7]);
 
         if (count($decodedRlp) === 12) {
@@ -81,6 +81,28 @@ class Deserializer
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
         $transaction->data['id'] = TransactionUtils::getId($data);
+
+        // @TODO: Implement signature recovery
+        // packages/crypto-transaction/source/factory.ts
+        // const hash = await this.utils.toHash(transaction.data, {
+        //     excludeSignature: true,
+        // });
+
+        // transaction.data.senderPublicKey = this.signatureSerializer.recoverPublicKey(hash, {
+        //     r: transaction.data.r,
+        //     s: transaction.data.s,
+        //     v: transaction.data.v,
+        // });
+        // transaction.data.senderAddress = await this.addressFactory.fromPublicKey(transaction.data.senderPublicKey);
+
+        // packages/crypto-signature-ecdsa/source/signature.ts
+        // public recoverPublicKey(message: Buffer, signature: Contracts.Crypto.EcdsaSignature): string {
+        // 	const v = signature.v - 27;
+        // 	const signatureRS = Buffer.from(signature.r + signature.s, "hex");
+        // 	return secp256k1.recover(message, signatureRS, v, true).toString("hex");
+        // }
+
+        $transaction->recoverSender();
 
         return $transaction;
     }

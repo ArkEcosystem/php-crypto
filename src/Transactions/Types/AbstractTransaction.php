@@ -14,7 +14,7 @@ use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Serializer\Signature\CompactSignatureSerializer;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PublicKeyInterface;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
 use BitWasp\Buffertools\Buffer;
@@ -110,6 +110,11 @@ abstract class AbstractTransaction
         return $publicKey->verify($this->hash(skipSignature: true), $compactSignature);
     }
 
+    public function hash(bool $skipSignature = false): BufferInterface
+    {
+        return TransactionUtils::toHash($this->data, $skipSignature);
+    }
+
     public function serialize(bool $skipSignature = false): Buffer
     {
         return Serializer::new($this)->serialize($skipSignature);
@@ -148,22 +153,6 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
-    public function hash(bool $skipSignature): BufferInterface
-    {
-        $hashData = [
-            'gasPrice'         => $this->data['gasPrice'],
-            'network'          => $this->data['network'] ?? Network::get()->version(),
-            'nonce'            => $this->data['nonce'],
-            'value'            => $this->data['value'],
-            'gasLimit'         => $this->data['gasLimit'],
-            'data'             => $this->data['data'],
-            'recipientAddress' => $this->data['recipientAddress'] ?? null,
-            'signature'        => $this->data['signature'] ?? null,
-        ];
-
-        return TransactionUtils::toHash($hashData, $skipSignature);
-    }
-
     protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
     {
         $ecAdapter = EcAdapterFactory::getPhpEcc(
@@ -196,21 +185,16 @@ abstract class AbstractTransaction
             Bitcoin::getGenerator()
         );
 
-        $recoverId = intval(substr($this->data['signature'], -2));
+        $recoverId = $this->data['v'] - 27;
+        $r         = gmp_init($this->data['r'], 16);
+        $s         = gmp_init($this->data['s'], 16);
 
-        $signature = substr($this->data['signature'], 0, -2);
-
-        $serializer = new CompactSignatureSerializer($ecAdapter);
-
-        return $serializer->parse(Buffer::hex($this->numberToHex($recoverId + 27 + 4).$signature));
-    }
-
-    private function numberToHex(int $number, $padding = 2): string
-    {
-        // Convert the number to hexadecimal
-        $indexHex = dechex($number);
-
-        // Pad the hexadecimal string with leading zeros
-        return str_pad($indexHex, $padding, '0', STR_PAD_LEFT);
+        return new CompactSignature(
+            adapter: $ecAdapter,
+            r: $r,
+            s: $s,
+            recid: $recoverId,
+            compressed: true
+        );
     }
 }
