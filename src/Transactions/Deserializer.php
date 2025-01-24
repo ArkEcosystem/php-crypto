@@ -16,6 +16,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
+use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Buffertools\Buffer;
 
 class Deserializer
@@ -73,12 +74,13 @@ class Deserializer
 
         $transaction = $this->guessTransactionFromData($data);
 
-        $eip1559Prefix           = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
-        $serializedHex           = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
+        $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
+        
+        $serializedHex = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
+        
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
-        // @TODO: Implement this
-        // $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
+        $transaction->id = TransactionUtils::getId($data);
 
         return $transaction;
     }

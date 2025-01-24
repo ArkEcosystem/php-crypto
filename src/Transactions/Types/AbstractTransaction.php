@@ -10,7 +10,7 @@ use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\TransactionHasher;
+use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
@@ -25,6 +25,8 @@ abstract class AbstractTransaction
     public array $data;
 
     public Buffer $serialized;
+    
+    public string $id;
 
     public function __construct(?array $data = null)
     {
@@ -161,7 +163,7 @@ abstract class AbstractTransaction
             'signature'        => $this->data['signature'] ?? null,
         ];
 
-        return TransactionHasher::toHash($hashData, $skipSignature);
+        return TransactionUtils::toHash($hashData, $skipSignature);
     }
 
     protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
