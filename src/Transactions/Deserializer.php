@@ -75,9 +75,9 @@ class Deserializer
         $transaction = $this->guessTransactionFromData($data);
 
         $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
-        
+
         $serializedHex = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
-        
+
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
         $transaction->data['id'] = TransactionUtils::getId($data);

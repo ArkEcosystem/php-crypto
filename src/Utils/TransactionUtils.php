@@ -28,15 +28,15 @@ class TransactionUtils
             self::toBeArray(isset($transaction['value']) ? $transaction['value'] : 0),
             isset($transaction['data']) && str_starts_with($transaction['data'], '0x')
                 ? $transaction['data']
-                : ('0x' . ($transaction['data'] ?? '')),
+                : ('0x'.($transaction['data'] ?? '')),
             [],
         ];
 
         if (! $skipSignature) {
             if (isset($transaction['v'], $transaction['r'], $transaction['s'])) {
                 $fields[] = self::toBeArray($transaction['v'] - 27);
-                $fields[] = '0x' . $transaction['r'];
-                $fields[] = '0x' . $transaction['s'];
+                $fields[] = '0x'.$transaction['r'];
+                $fields[] = '0x'.$transaction['s'];
             }
         }
 
@@ -44,7 +44,7 @@ class TransactionUtils
 
         $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
 
-        $payload = $eip1559Prefix . substr($encoded, 2);
+        $payload = $eip1559Prefix.substr($encoded, 2);
 
         return new Buffer(hex2bin($payload));
     }
