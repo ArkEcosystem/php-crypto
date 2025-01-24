@@ -95,47 +95,15 @@ class Serializer
         return '0x';
     }
 
-    private function serializeData(ByteBuffer $buffer): void
-    {
-        $buffer->writeUint256($this->transaction->data['value']);
-
-        if (isset($this->transaction->data['recipientAddress'])) {
-            $buffer->writeUInt8(1); // Recipient marker
-
-            $buffer->writeHex(
-                Address::toBufferHexString($this->transaction->data['recipientAddress'])
-            );
-        } else {
-            $buffer->writeUInt8(0); // No recipient
-        }
-
-        $payloadHex    = $this->transaction->data['data'] ?? '';
-
-        $payloadLength = strlen($payloadHex);
-
-        $buffer->writeUInt32($payloadLength / 2);
-
-        // Write payload as hex
-        $buffer->writeHex($payloadHex);
-    }
-
     /**
      * Handle the serialization of transaction data.
      *
      * @return string
      */
-    private function serializeSignatures(ByteBuffer $buffer, bool $skipSignature = false): void
-    {
-        if (! $skipSignature && isset($this->transaction->data['signature'])) {
-            $buffer->writeHex($this->transaction->data['signature']);
-        }
-    }
-
-    private function serializeCommon(ByteBuffer $buffer): void
-    {
-        $buffer->writeUInt8($this->transaction->data['network'] ?? Network::version());
-        $buffer->writeUint64(+$this->transaction->data['nonce']);
-        $buffer->writeUint32($this->transaction->data['gasPrice']);
-        $buffer->writeUint32($this->transaction->data['gasLimit']);
-    }
+    // private function serializeSignatures(ByteBuffer $buffer, bool $skipSignature = false): void
+    // {
+    //     if (! $skipSignature && isset($this->transaction->data['signature'])) {
+    //         $buffer->writeHex($this->transaction->data['signature']);
+    //     }
+    // }
 }
