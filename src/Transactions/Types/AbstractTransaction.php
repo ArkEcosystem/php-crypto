@@ -23,6 +23,8 @@ use BitWasp\Buffertools\BufferInterface;
 abstract class AbstractTransaction
 {
     public array $data;
+    
+    public string $serialized;
 
     public function __construct(?array $data = null)
     {

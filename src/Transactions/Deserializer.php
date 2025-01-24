@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\Utils\RlpEncoder;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
-use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Crypto\Transactions\Types\Unvote;
-use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
-use ArkEcosystem\Crypto\Transactions\Types\Vote;
-use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\Address;
-use ArkEcosystem\Crypto\Utils\RlpEncoder;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 
 class Deserializer
 {
@@ -25,7 +26,7 @@ class Deserializer
 
     private ByteBuffer $buffer;
 
-    private string|array $decodedRlp;
+    private string $encodedRlp;
 
     /**
      * Create a new deserializer instance.
@@ -36,9 +37,7 @@ class Deserializer
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
 
-        $encodedRlp = '0x'.mb_substr($this->buffer->toString('hex'), 2);
-
-        $this->decodedRlp = RlpEncoder::decode($encodedRlp);
+        $this->encodedRlp = '0x'.mb_substr($this->buffer->toString('hex'), 2);
     }
 
     /**
@@ -54,34 +53,32 @@ class Deserializer
      */
     public function deserialize(): AbstractTransaction
     {
+        $decodedRlp = RlpEncoder::decode($this->encodedRlp);
+
         $data = [];
 
-        $decoded = $this->decodedRlp;
+        $data['network']          = $this->parseNumber($decodedRlp[0]); // Convert network (uint8) from hex to decimal
+        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]); // Convert nonce (uint64) from hex to decimal string
+        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]); // Convert gasPrice (uint32) from hex to decimal
+        $data['gasLimit']         = $this->parseNumber($decodedRlp[4]); // Convert gasLimit (uint32) from hex to decimal
+        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]); // Convert gasLimit (uint32) from hex to decimal
+        $data['value']            = $this->parseBigNumber($decodedRlp[6]); // Convert value (large number) from hex to decimal string
+        $data['data']             = $this->parseHex($decodedRlp[7]);
 
-        $data['network']          = $this->parseNumber($decoded[0]); // Convert network (uint8) from hex to decimal
-        $data['nonce']            = $this->parseBigNumber($decoded[1]); // Convert nonce (uint64) from hex to decimal string
-        $data['gasPrice']         = $this->parseNumber($decoded[3]); // Convert gasPrice (uint32) from hex to decimal
-        $data['gasLimit']         = $this->parseNumber($decoded[4]); // Convert gasLimit (uint32) from hex to decimal
-        $data['recipientAddress'] = $this->parseAddress($decoded[5]); // Convert gasLimit (uint32) from hex to decimal
-        $data['value']            = $this->parseBigNumber($decoded[6]); // Convert value (large number) from hex to decimal string
-        $data['data']             = $this->parseHex($decoded[7]);
-
-        if (count($decoded) === 12) {
-            $data['v'] = $this->parseNumber($decoded[9]) + 27;
-            $data['r'] = $this->parseHex($decoded[10]);
-            $data['s'] = $this->parseHex($decoded[11]);
+        if (count($decodedRlp) === 12) {
+            $data['v'] = $this->parseNumber($decodedRlp[9]) + 27;
+            $data['r'] = $this->parseHex($decodedRlp[10]);
+            $data['s'] = $this->parseHex($decodedRlp[11]);
         }
 
         $transaction = $this->guessTransactionFromData($data);
+
+        $eip1559Prefix = "02"; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
         
-        // print_r($transaction); die();
-        // $this->deserializeSignatures($transaction->data);
+        $transaction->serialized = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
 
-        // $transaction->recoverSender();
-        print_r($transaction->data); die();
-
-        $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
-
+        // @TODO: Implement this
+        // $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
 
         return $transaction;
     }
@@ -142,7 +139,7 @@ class Deserializer
 
     private function parseHex(string $value): string
     {
-        return preg_replace('/^0x/', '', $value);
+        return Helpers::removeLeadingHexZero($value);
     }
 
     private function parseAddress(string $value): string
