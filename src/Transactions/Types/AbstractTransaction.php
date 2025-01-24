@@ -57,6 +57,7 @@ abstract class AbstractTransaction
 
     /**
      * Sign the transaction using the given passphrase.
+     * @TODO: Update this method
      */
     public function sign(PrivateKey $keys): static
     {
@@ -128,7 +129,7 @@ abstract class AbstractTransaction
         return array_filter([
             'gasPrice'                   => $this->data['gasPrice'],
             'network'                    => $this->data['network'] ?? Network::get()->version(),
-            'id'                         => $this->id,
+            'id'                         => $this->data['id'],
             'gasLimit'                   => $this->data['gasLimit'],
             'nonce'                      => $this->data['nonce'],
             'senderPublicKey'            => $this->data['senderPublicKey'],
