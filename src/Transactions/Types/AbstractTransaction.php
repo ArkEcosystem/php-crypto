@@ -24,6 +24,7 @@ abstract class AbstractTransaction
 {
     public array $data;
 
+    // @TODO: convert this into a BufferInterface or maybe a ByteBuffer?
     public string $serialized;
 
     public function __construct(?array $data = null)

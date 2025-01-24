@@ -15,7 +15,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\RlpEncoder;
+use ArkEcosystem\Crypto\Utils\RlpDecoder;
 
 class Deserializer
 {
@@ -52,7 +52,7 @@ class Deserializer
      */
     public function deserialize(): AbstractTransaction
     {
-        $decodedRlp = RlpEncoder::decode($this->encodedRlp);
+        $decodedRlp = RlpDecoder::decode($this->encodedRlp);
 
         $data = [];
 
