@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
-use ArkEcosystem\Crypto\Utils\Address;
 use ArkEcosystem\Crypto\Utils\RlpEncoder;
 use BitWasp\Buffertools\Buffer;
 
@@ -95,7 +93,7 @@ class Serializer
         return '0x';
     }
 
-    /**
+    /*
      * Handle the serialization of transaction data.
      *
      * @return string
