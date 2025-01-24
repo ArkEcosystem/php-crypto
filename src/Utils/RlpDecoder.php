@@ -6,7 +6,7 @@ namespace ArkEcosystem\Crypto\Utils;
 
 use InvalidArgumentException;
 
-class RlpEncoder
+class RlpDecoder
 {
     public static function decode(string $data): mixed
     {
