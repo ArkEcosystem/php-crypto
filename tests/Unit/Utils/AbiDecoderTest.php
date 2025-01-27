@@ -50,4 +50,15 @@ class AbiDecoderTest extends TestCase
             'args'         => $args,
         ], $decodedData);
     }
+
+    /** @test */
+    public function it_should_decode_function_with_abi()
+    {
+        $functionSignature = 'function name() view returns (string)';
+        $payload = '0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000064441524b32300000000000000000000000000000000000000000000000000000';
+
+        $decoded = AbiDecoder::decodeFunctionWithAbi($functionSignature, $payload);
+
+        $this->assertSame(['DARK20'], $decoded);
+    }
 }
