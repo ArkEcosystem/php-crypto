@@ -138,6 +138,17 @@ class AbiDecoder extends AbiBase
         return hexdec(bin2hex($data));
     }
 
+    /**
+     * Decodes the output of a function call using a compact function signature
+     * like "function name() view returns (string)" and the hex payload from eth_call.
+     */
+    public static function decodeFunctionWithAbi(string $functionSignature, string $payload): array
+    {
+        $abiItem = self::parseFunctionSignature($functionSignature);
+
+        return self::decodeFunctionOutput($abiItem, $payload);
+    }
+
     private function findFunctionBySelector(string $selector): ?array
     {
         foreach ($this->abi as $item) {
@@ -210,20 +221,10 @@ class AbiDecoder extends AbiBase
         }
     }
 
-    /**
-     * Decodes the output of a function call using a compact function signature 
-     * like "function name() view returns (string)" and the hex payload from eth_call.
-     */
-    public static function decodeFunctionWithAbi(string $functionSignature, string $payload): array
-    {
-        $abiItem = self::parseFunctionSignature($functionSignature);
-        return self::decodeFunctionOutput($abiItem, $payload);
-    }
-
     private static function parseFunctionSignature(string $signature): array
     {
         $pattern = '/function\s+(\w+)\s*\(([^)]*)\)\s*(?:\w*\s*)*returns\s*\(([^)]*)\)/';
-        if (!preg_match($pattern, $signature, $matches)) {
+        if (! preg_match($pattern, $signature, $matches)) {
             throw new \InvalidArgumentException("Invalid function signature: $signature");
         }
 
@@ -231,7 +232,7 @@ class AbiDecoder extends AbiBase
         $rawInputs    = trim($matches[2]);
         $rawOutputs   = trim($matches[3]);
 
-        $inputs = [];
+        $inputs  = [];
         $outputs = [];
 
         if ($rawInputs !== '') {
@@ -277,6 +278,7 @@ class AbiDecoder extends AbiBase
         if (substr($hex, 0, 2) === '0x') {
             return substr($hex, 2);
         }
+
         return $hex;
     }
 }
