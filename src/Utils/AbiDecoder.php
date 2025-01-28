@@ -138,6 +138,17 @@ class AbiDecoder extends AbiBase
         return hexdec(bin2hex($data));
     }
 
+    /**
+     * Decodes the output of a function call using a compact function signature
+     * like "function name() view returns (string)" and the hex payload from eth_call.
+     */
+    public static function decodeFunctionWithAbi(string $functionSignature, string $payload): array
+    {
+        $abiItem = self::parseFunctionSignature($functionSignature);
+
+        return self::decodeFunctionOutput($abiItem, $payload);
+    }
+
     private function findFunctionBySelector(string $selector): ?array
     {
         foreach ($this->abi as $item) {
@@ -208,5 +219,66 @@ class AbiDecoder extends AbiBase
 
                 throw new Exception('Unsupported type: '.$type);
         }
+    }
+
+    private static function parseFunctionSignature(string $signature): array
+    {
+        $pattern = '/function\s+(\w+)\s*\(([^)]*)\)\s*(?:\w*\s*)*returns\s*\(([^)]*)\)/';
+        if (! preg_match($pattern, $signature, $matches)) {
+            throw new \InvalidArgumentException("Invalid function signature: $signature");
+        }
+
+        $functionName = $matches[1];
+        $rawInputs    = trim($matches[2]);
+        $rawOutputs   = trim($matches[3]);
+
+        $inputs  = [];
+        $outputs = [];
+
+        if ($rawInputs !== '') {
+            foreach (explode(',', $rawInputs) as $inputPart) {
+                $inputs[] = ['type' => trim($inputPart)];
+            }
+        }
+
+        if ($rawOutputs !== '') {
+            foreach (explode(',', $rawOutputs) as $outputPart) {
+                $outputs[] = ['type' => trim($outputPart)];
+            }
+        }
+
+        return [
+            'type'    => 'function',
+            'name'    => $functionName,
+            'inputs'  => $inputs,
+            'outputs' => $outputs,
+        ];
+    }
+
+    private static function decodeFunctionOutput(array $abiItem, string $payload): array
+    {
+        $hex   = self::stripHexPrefixStatic($payload);
+        $bytes = hex2bin($hex);
+
+        $cursor  = 0;
+        $outputs = $abiItem['outputs'] ?? [];
+        $decoded = [];
+
+        foreach ($outputs as $param) {
+            list($value, $consumed) = self::decodeParameter($bytes, $cursor, $param);
+            $cursor += $consumed;
+            $decoded[] = $value;
+        }
+
+        return $decoded;
+    }
+
+    private static function stripHexPrefixStatic(string $hex): string
+    {
+        if (substr($hex, 0, 2) === '0x') {
+            return substr($hex, 2);
+        }
+
+        return $hex;
     }
 }
