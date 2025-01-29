@@ -18,13 +18,13 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-sign');
 
         $builder = EvmCallBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network($fixture['data']['network'])
-          ->payload($fixture['data']['data'])
-          ->gasLimit($fixture['data']['gasLimit'])
-          ->recipientAddress('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
-          ->sign($this->passphrase);
+            ->gasPrice($fixture['data']['gasPrice'])
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->payload($fixture['data']['data'])
+            ->gasLimit($fixture['data']['gasLimit'])
+            ->recipientAddress('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
+            ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
     }
