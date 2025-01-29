@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\Enums\Constants;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
@@ -42,9 +43,7 @@ class TransactionUtils
 
         $encoded = RlpEncoder::encode($fields);
 
-        $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
-
-        $payload = $eip1559Prefix.substr($encoded, 2);
+        $payload = Constants::EIP_1559_PREFIX.substr($encoded, 2);
 
         return new Buffer(hex2bin($payload));
     }

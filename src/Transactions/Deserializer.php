@@ -6,6 +6,7 @@ namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Enums\Constants;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
@@ -74,9 +75,7 @@ class Deserializer
 
         $transaction = $this->guessTransactionFromData($data);
 
-        $eip1559Prefix = '02'; // marker for Type 2 (EIP1559) transaction which is the standard nowadays
-
-        $serializedHex = sprintf('%s%s', $eip1559Prefix, mb_substr($this->encodedRlp, 2));
+        $serializedHex = sprintf('%s%s', Constants::EIP_1559_PREFIX, mb_substr($this->encodedRlp, 2));
 
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
