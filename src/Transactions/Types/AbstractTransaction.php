@@ -63,30 +63,15 @@ abstract class AbstractTransaction
     {
         $hash = $this->hash(skipSignature: true);
 
+        /** @var CompactSignature $signature */
         $signature = $keys->signCompact($hash);
 
         // Extract the recovery ID (an integer between 0 and 3) from the signature
         $recoveryId = $signature->getRecoveryId();
 
-        // Get the full signature buffer, which includes the adjusted recovery ID at the start
-        $signatureHexWithRecoveryId = $signature->getBuffer()->getHex();
-
-        // Apparently, the compact signature returned by signCompact() includes an adjusted recovery ID
-        // as the first byte of the signature buffer. This adjusted recovery ID is specific to the compact
-        // signature format used by the library and is calculated by adding a constant (typically 27 or 31)
-        // to the actual recovery ID. This adjustment is done internally by the library for its own purposes.
-
-        // However, in our context, and to match the expected signature format (as per the JavaScript
-        // implementation), we need the raw signature consisting of only the 'r' and 's' values.
-        // Therefore, we remove the first byte (two hex characters) from the signature buffer to exclude the adjusted recovery ID.
-        $signatureHex = substr($signatureHexWithRecoveryId, 2);
-
-        // Append the unadjusted recovery ID at the end of the signature
-        // The unadjusted recovery ID is appended to match the expected signature format
-        // This aligns with how the JavaScript implementation handles the recovery ID
-        $signatureHex .= str_pad(dechex($recoveryId), 2, '0', STR_PAD_LEFT);
-
-        $this->data['signature'] = $signatureHex;
+        $this->data['v'] = $recoveryId + 27;
+        $this->data['r'] = $this->gmpToHex($signature->getR());
+        $this->data['s'] = $this->gmpToHex($signature->getS());
 
         return $this;
     }
@@ -127,16 +112,18 @@ abstract class AbstractTransaction
     public function toArray(): array
     {
         return array_filter([
-            'gasPrice'                   => $this->data['gasPrice'],
-            'network'                    => $this->data['network'] ?? Network::get()->version(),
-            'id'                         => $this->data['id'],
-            'gasLimit'                   => $this->data['gasLimit'],
-            'nonce'                      => $this->data['nonce'],
-            'senderPublicKey'            => $this->data['senderPublicKey'],
-            'signature'                  => $this->data['signature'],
-            'recipientAddress'           => $this->data['recipientAddress'] ?? null,
-            'value'                      => $this->data['value'],
-            'data'                       => $this->data['data'],
+            'gasPrice'         => $this->data['gasPrice'],
+            'network'          => $this->data['network'] ?? Network::get()->version(),
+            'id'               => $this->data['id'],
+            'gasLimit'         => $this->data['gasLimit'],
+            'nonce'            => $this->data['nonce'],
+            'senderPublicKey'  => $this->data['senderPublicKey'],
+            'recipientAddress' => $this->data['recipientAddress'] ?? null,
+            'value'            => $this->data['value'],
+            'data'             => $this->data['data'],
+            'r'                => $this->data['r'],
+            's'                => $this->data['s'],
+            'v'                => $this->data['v'],
         ], function ($element) {
             if (null !== $element) {
                 return true;
@@ -197,5 +184,12 @@ abstract class AbstractTransaction
             recid: $recoverId,
             compressed: true
         );
+    }
+
+    private function gmpToHex(\GMP $gmp): string
+    {
+        $hex = gmp_strval($gmp, 16);
+
+        return str_pad($hex, 64, "0", STR_PAD_LEFT);
     }
 }
