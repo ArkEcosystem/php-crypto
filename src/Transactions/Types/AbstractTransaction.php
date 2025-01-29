@@ -190,6 +190,6 @@ abstract class AbstractTransaction
     {
         $hex = gmp_strval($gmp, 16);
 
-        return str_pad($hex, 64, "0", STR_PAD_LEFT);
+        return str_pad($hex, 64, '0', STR_PAD_LEFT);
     }
 }
