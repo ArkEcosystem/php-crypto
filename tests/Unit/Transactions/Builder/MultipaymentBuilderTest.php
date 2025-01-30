@@ -22,13 +22,21 @@ class MultipaymentBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'multipayment');
 
         $builder = MultipaymentBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network($fixture['data']['network'])
-          ->gasLimit($fixture['data']['gasLimit'])
-          ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '1000000000000000000')
-          ->pay('0x6F0182a0cc707b055322CcF6d4CB6a5Aff1aEb22', '2000000000000000000')
-          ->sign($this->passphrase);
+            ->gasPrice($fixture['data']['gasPrice'])
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->gasLimit($fixture['data']['gasLimit'])
+            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '100000000')
+            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '200000000')
+            ->sign($this->passphrase);
+
+        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
+        $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
+        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
+        $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
+        $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
 
@@ -40,15 +48,23 @@ class MultipaymentBuilderTest extends TestCase
     /** @test */
     public function it_should_handle_single_recipient()
     {
-        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-1');
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-single');
 
         $builder = MultipaymentBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network($fixture['data']['network'])
-          ->gasLimit($fixture['data']['gasLimit'])
-          ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '1000000000000000000')
-          ->sign($this->passphrase);
+            ->gasPrice($fixture['data']['gasPrice'])
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->gasLimit($fixture['data']['gasLimit'])
+            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '100000000')
+            ->sign($this->passphrase);
+
+        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
+        $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
+        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
+        $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
+        $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
 
@@ -60,14 +76,22 @@ class MultipaymentBuilderTest extends TestCase
     /** @test */
     public function it_should_handle_empty_payment()
     {
-        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-0');
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment-empty');
 
         $builder = MultipaymentBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network($fixture['data']['network'])
-          ->gasLimit($fixture['data']['gasLimit'])
-          ->sign($this->passphrase);
+            ->gasPrice($fixture['data']['gasPrice'])
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->gasLimit($fixture['data']['gasLimit'])
+            ->sign($this->passphrase);
+
+        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
+        $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
+        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
+        $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
+        $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
 
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
 

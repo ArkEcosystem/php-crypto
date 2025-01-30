@@ -10,11 +10,11 @@ use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\TransactionHasher;
+use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Serializer\Signature\CompactSignatureSerializer;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PublicKeyInterface;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
 use BitWasp\Buffertools\Buffer;
@@ -23,6 +23,8 @@ use BitWasp\Buffertools\BufferInterface;
 abstract class AbstractTransaction
 {
     public array $data;
+
+    public Buffer $serialized;
 
     public function __construct(?array $data = null)
     {
@@ -55,35 +57,21 @@ abstract class AbstractTransaction
 
     /**
      * Sign the transaction using the given passphrase.
+     * @TODO: Update this method
      */
     public function sign(PrivateKey $keys): static
     {
         $hash = $this->hash(skipSignature: true);
 
+        /** @var CompactSignature $signature */
         $signature = $keys->signCompact($hash);
 
         // Extract the recovery ID (an integer between 0 and 3) from the signature
         $recoveryId = $signature->getRecoveryId();
 
-        // Get the full signature buffer, which includes the adjusted recovery ID at the start
-        $signatureHexWithRecoveryId = $signature->getBuffer()->getHex();
-
-        // Apparently, the compact signature returned by signCompact() includes an adjusted recovery ID
-        // as the first byte of the signature buffer. This adjusted recovery ID is specific to the compact
-        // signature format used by the library and is calculated by adding a constant (typically 27 or 31)
-        // to the actual recovery ID. This adjustment is done internally by the library for its own purposes.
-
-        // However, in our context, and to match the expected signature format (as per the JavaScript
-        // implementation), we need the raw signature consisting of only the 'r' and 's' values.
-        // Therefore, we remove the first byte (two hex characters) from the signature buffer to exclude the adjusted recovery ID.
-        $signatureHex = substr($signatureHexWithRecoveryId, 2);
-
-        // Append the unadjusted recovery ID at the end of the signature
-        // The unadjusted recovery ID is appended to match the expected signature format
-        // This aligns with how the JavaScript implementation handles the recovery ID
-        $signatureHex .= str_pad(dechex($recoveryId), 2, '0', STR_PAD_LEFT);
-
-        $this->data['signature'] = $signatureHex;
+        $this->data['v'] = $recoveryId + 27;
+        $this->data['r'] = $this->gmpToHex($signature->getR());
+        $this->data['s'] = $this->gmpToHex($signature->getS());
 
         return $this;
     }
@@ -108,6 +96,11 @@ abstract class AbstractTransaction
         return $publicKey->verify($this->hash(skipSignature: true), $compactSignature);
     }
 
+    public function hash(bool $skipSignature = false): BufferInterface
+    {
+        return TransactionUtils::toHash($this->data, $skipSignature);
+    }
+
     public function serialize(bool $skipSignature = false): Buffer
     {
         return Serializer::new($this)->serialize($skipSignature);
@@ -119,16 +112,18 @@ abstract class AbstractTransaction
     public function toArray(): array
     {
         return array_filter([
-            'gasPrice'                   => $this->data['gasPrice'],
-            'network'                    => $this->data['network'] ?? Network::get()->version(),
-            'id'                         => $this->data['id'],
-            'gasLimit'                   => $this->data['gasLimit'],
-            'nonce'                      => $this->data['nonce'],
-            'senderPublicKey'            => $this->data['senderPublicKey'],
-            'signature'                  => $this->data['signature'],
-            'recipientAddress'           => $this->data['recipientAddress'] ?? null,
-            'value'                      => $this->data['value'],
-            'data'                       => $this->data['data'],
+            'gasPrice'         => $this->data['gasPrice'],
+            'network'          => $this->data['network'] ?? Network::get()->version(),
+            'id'               => $this->data['id'],
+            'gasLimit'         => $this->data['gasLimit'],
+            'nonce'            => $this->data['nonce'],
+            'senderPublicKey'  => $this->data['senderPublicKey'],
+            'recipientAddress' => $this->data['recipientAddress'] ?? null,
+            'value'            => $this->data['value'],
+            'data'             => $this->data['data'],
+            'r'                => $this->data['r'],
+            's'                => $this->data['s'],
+            'v'                => $this->data['v'],
         ], function ($element) {
             if (null !== $element) {
                 return true;
@@ -144,22 +139,6 @@ abstract class AbstractTransaction
     public function toJson(): string
     {
         return json_encode($this->toArray());
-    }
-
-    public function hash(bool $skipSignature): BufferInterface
-    {
-        $hashData = [
-            'gasPrice'         => $this->data['gasPrice'],
-            'network'          => $this->data['network'] ?? Network::get()->version(),
-            'nonce'            => $this->data['nonce'],
-            'value'            => $this->data['value'],
-            'gasLimit'         => $this->data['gasLimit'],
-            'data'             => $this->data['data'],
-            'recipientAddress' => $this->data['recipientAddress'] ?? null,
-            'signature'        => $this->data['signature'] ?? null,
-        ];
-
-        return TransactionHasher::toHash($hashData, $skipSignature);
     }
 
     protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
@@ -194,21 +173,23 @@ abstract class AbstractTransaction
             Bitcoin::getGenerator()
         );
 
-        $recoverId = intval(substr($this->data['signature'], -2));
+        $recoverId = $this->data['v'] - 27;
+        $r         = gmp_init($this->data['r'], 16);
+        $s         = gmp_init($this->data['s'], 16);
 
-        $signature = substr($this->data['signature'], 0, -2);
-
-        $serializer = new CompactSignatureSerializer($ecAdapter);
-
-        return $serializer->parse(Buffer::hex($this->numberToHex($recoverId + 27 + 4).$signature));
+        return new CompactSignature(
+            adapter: $ecAdapter,
+            r: $r,
+            s: $s,
+            recid: $recoverId,
+            compressed: true
+        );
     }
 
-    private function numberToHex(int $number, $padding = 2): string
+    private function gmpToHex(\GMP $gmp): string
     {
-        // Convert the number to hexadecimal
-        $indexHex = dechex($number);
+        $hex = gmp_strval($gmp, 16);
 
-        // Pad the hexadecimal string with leading zeros
-        return str_pad($indexHex, $padding, '0', STR_PAD_LEFT);
+        return str_pad($hex, 64, '0', STR_PAD_LEFT);
     }
 }

@@ -33,7 +33,9 @@ class TransactionTest extends TestCase
 
         $this->assertEmpty($transaction->data['signature']);
         $transaction->sign($privateKey);
-        $this->assertNotEmpty($transaction->data['signature']);
+        $this->assertNotEmpty($transaction->data['r']);
+        $this->assertNotEmpty($transaction->data['s']);
+        $this->assertNotEmpty($transaction->data['v']);
     }
 
     /** @test */

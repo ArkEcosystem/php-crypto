@@ -6,6 +6,8 @@ namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Enums\Constants;
+use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
@@ -14,7 +16,9 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
-use ArkEcosystem\Crypto\Utils\Address;
+use ArkEcosystem\Crypto\Utils\RlpDecoder;
+use ArkEcosystem\Crypto\Utils\TransactionUtils;
+use BitWasp\Buffertools\Buffer;
 
 class Deserializer
 {
@@ -24,6 +28,8 @@ class Deserializer
 
     private ByteBuffer $buffer;
 
+    private string $encodedRlp;
+
     /**
      * Create a new deserializer instance.
      */
@@ -32,6 +38,8 @@ class Deserializer
         $this->buffer = strpos($serialized, "\0") === false
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
+
+        $this->encodedRlp = '0x'.mb_substr($this->buffer->toString('hex'), 2);
     }
 
     /**
@@ -47,19 +55,33 @@ class Deserializer
      */
     public function deserialize(): AbstractTransaction
     {
+        $decodedRlp = RlpDecoder::decode($this->encodedRlp);
+
         $data = [];
 
-        $this->deserializeCommon($data);
+        $data['network']          = $this->parseNumber($decodedRlp[0]);
+        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]);
+        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]);
+        $data['gasLimit']         = $this->parseNumber($decodedRlp[4]);
+        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]);
+        $data['value']            = $this->parseBigNumber($decodedRlp[6]);
+        $data['data']             = $this->parseHex($decodedRlp[7]);
 
-        $this->deserializeData($data);
+        if (count($decodedRlp) === 12) {
+            $data['v'] = $this->parseNumber($decodedRlp[9]) + 27;
+            $data['r'] = $this->parseHex($decodedRlp[10]);
+            $data['s'] = $this->parseHex($decodedRlp[11]);
+        }
 
         $transaction = $this->guessTransactionFromData($data);
 
-        $this->deserializeSignatures($transaction->data);
+        $serializedHex = sprintf('%s%s', Constants::EIP_1559_PREFIX, mb_substr($this->encodedRlp, 2));
+
+        $transaction->serialized = new Buffer(hex2bin($serializedHex));
+
+        $transaction->data['id'] = TransactionUtils::getId($data);
 
         $transaction->recoverSender();
-
-        $transaction->data['id'] = $transaction->hash(skipSignature: false)->getHex();
 
         return $transaction;
     }
@@ -108,38 +130,23 @@ class Deserializer
         return (new AbiDecoder())->decodeFunctionData($payload);
     }
 
-    private function deserializeData(array &$data): void
+    private function parseNumber(string $value): int
     {
-        // Read value (uint64)
-        $data['value'] = $this->buffer->readUInt256();
-
-        // Read recipient marker and recipientId
-        $recipientMarker = $this->buffer->readUInt8();
-
-        if ($recipientMarker === 1) {
-            $data['recipientAddress'] = Address::fromByteBuffer($this->buffer);
-        }
-
-        // Read payload length (uint32)
-        $payloadLength = $this->buffer->readUInt32();
-
-        // Read payload as hex
-        $payloadHex = $this->buffer->readHex($payloadLength * 2);
-
-        $data['data'] = $payloadHex;
+        return $value === '0x' ? 0 : intval($value, 16);
     }
 
-    private function deserializeCommon(array &$data): void
+    private function parseBigNumber(string $value): string
     {
-        $data['network']                   = $this->buffer->readUInt8();
-        $data['nonce']                     = strval($this->buffer->readUInt64());
-        $data['gasPrice']                  = $this->buffer->readUint32();
-        $data['gasLimit']                  = $this->buffer->readUint32();
-        $data['value']                     = '0';
+        return $value === '0x' ? '0' : gmp_strval(gmp_init($value, 16));
     }
 
-    private function deserializeSignatures(array &$data): void
+    private function parseHex(string $value): string
     {
-        $data['signature'] = $this->buffer->readHex((self::SIGNATURE_SIZE + self::RECOVERY_SIZE) * 2);
+        return Helpers::removeLeadingHexZero($value);
+    }
+
+    private function parseAddress(string $value): string|null
+    {
+        return $value === '0x' ? null : $value;
     }
 }
