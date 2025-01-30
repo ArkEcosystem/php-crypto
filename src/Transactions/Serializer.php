@@ -53,10 +53,4 @@ class Serializer
      *
      * @return string
      */
-    // private function serializeSignatures(ByteBuffer $buffer, bool $skipSignature = false): void
-    // {
-    //     if (! $skipSignature && isset($this->transaction->data['signature'])) {
-    //         $buffer->writeHex($this->transaction->data['signature']);
-    //     }
-    // }
 }
