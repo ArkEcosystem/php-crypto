@@ -42,4 +42,35 @@ class TransferBuilderTest extends TestCase
 
         $this->assertTrue($builder->verify());
     }
+
+    /** @test */
+    public function it_should_handle_large_amounts()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'transfer-large-amount');
+
+        $builder = TransferBuilder::new()
+            ->gasPrice($fixture['data']['gasPrice'])
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->gasLimit($fixture['data']['gasLimit'])
+            ->recipientAddress($fixture['data']['recipientAddress'])
+            ->value($fixture['data']['value'])
+            ->sign($this->passphrase);
+
+        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
+        $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
+        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame($fixture['data']['recipientAddress'], $builder->transaction->data['recipientAddress']);
+        $this->assertSame($fixture['data']['value'], $builder->transaction->data['value']);
+        $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
+        $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
+        $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
+
+        $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
+
+        $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+
+        $this->assertTrue($builder->verify());
+    }
 }
