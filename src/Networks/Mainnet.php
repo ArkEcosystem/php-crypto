@@ -7,19 +7,36 @@ namespace ArkEcosystem\Crypto\Networks;
 class Mainnet extends AbstractNetwork
 {
     /**
-     * Get the chain identifier.
+     * {@inheritdoc}
      *
-     * @return int
+     * @see Network::$base58PrefixMap
      */
-    public function chainId(): int
+    protected $base58PrefixMap = [
+        self::BASE58_ADDRESS_P2PKH => '17',
+        self::BASE58_ADDRESS_P2SH  => '00',
+        self::BASE58_WIF           => 'aa',
+    ];
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see Network::$bip32PrefixMap
+     */
+    protected $bip32PrefixMap = [
+        self::BIP32_PREFIX_XPUB => '46090600',
+        self::BIP32_PREFIX_XPRV => '46089520',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function pubKeyHash(): int
     {
         return 23;
     }
 
     /**
-     * Get the network epoch.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function epoch(): string
     {

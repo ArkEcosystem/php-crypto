@@ -19,7 +19,7 @@ abstract class AbstractTransactionBuilder
             'senderPublicKey'   => '',
             'gasPrice'          => '5',
             'nonce'             => '1',
-            'network'           => Network::get()->chainId(),
+            'network'           => Network::get()->pubKeyHash(),
             'gasLimit'          => 1_000_000,
             'data'              => '',
         ]);

@@ -4,8 +4,27 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-abstract class AbstractNetwork
+use BitWasp\Bitcoin\Network\Network;
+use BitWasp\Bitcoin\Script\ScriptType;
+
+abstract class AbstractNetwork extends Network
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $bip32ScriptTypeMap = [
+        self::BIP32_PREFIX_XPUB => ScriptType::P2PKH,
+        self::BIP32_PREFIX_XPRV => ScriptType::P2PKH,
+    ];
+
+    /**
+     * Call a method on the network instance.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return mixed
+     */
     public static function __callStatic(string $method, array $args)
     {
         return static::factory()->{$method}(...$args);
@@ -22,16 +41,16 @@ abstract class AbstractNetwork
     }
 
     /**
-     * Get the chain identifier.
+     * Get the network version as number.
      *
      * @return int
      */
-    abstract public function chainId(): int;
+    public function version(): int
+    {
+        return hexdec($this->getAddressByte());
+    }
 
-    /**
-     * Get the network epoch.
-     *
-     * @return string
-     */
+    abstract public function pubKeyHash(): int;
+
     abstract public function epoch(): string;
 }
