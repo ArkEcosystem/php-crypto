@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Enums\Constants;
+use BI\BigInteger;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
@@ -89,7 +90,7 @@ class TransactionUtils
                 return $value;
             }
 
-            return '0x'.dechex((int) $value);
+            return '0x'.(new BigInteger($value, 10))->toHex();
         }
 
         return '0x';
