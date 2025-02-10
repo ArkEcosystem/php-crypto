@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
+use ArkEcosystem\Crypto\Configuration\Network;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
@@ -63,6 +64,6 @@ class PrivateKey
                 Bitcoin::getMath(),
                 Bitcoin::getGenerator()
             )
-        ))->fromWif($wif);
+        ))->fromWif($wif, Network::get());
     }
 }
