@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-
 abstract class AbstractNetwork
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function __callStatic(string $method, array $args)
     {
         return static::factory()->{$method}(...$args);
