@@ -13,7 +13,7 @@ class Mainnet extends AbstractNetwork
      */
     public function chainId(): int
     {
-        return 23;
+        return 10000;
     }
 
     /**

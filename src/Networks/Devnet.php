@@ -13,7 +13,7 @@ class Devnet extends AbstractNetwork
      */
     public function chainId(): int
     {
-        return 30;
+        return 10000;
     }
 
     /**

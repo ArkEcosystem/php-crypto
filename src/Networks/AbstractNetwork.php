@@ -4,9 +4,21 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
+use BitWasp\Bitcoin\Network\Network;
 
-abstract class AbstractNetwork
+abstract class AbstractNetwork extends Network
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @see Network::$base58PrefixMap
+     */
+    protected $base58PrefixMap = [
+        self::BASE58_ADDRESS_P2PKH => '1e',
+        self::BASE58_ADDRESS_P2SH  => '00',
+        self::BASE58_WIF           => 'aa',
+    ];
+
     /**
      * {@inheritdoc}
      */
