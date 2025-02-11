@@ -9,18 +9,6 @@ use ArkEcosystem\Crypto\Exceptions\InvalidUsernameException;
 
 class Helpers
 {
-    /**
-     * Get the network version.
-     *
-     * @param Networks\AbstractNetwork|int $network
-     *
-     * @return int
-     */
-    public static function version($network): int
-    {
-        return is_int($network) ? $network : $network->version();
-    }
-
     // Based on https://github.com/ArkEcosystem/mainsail/blob/develop/contracts/src/usernames/UsernamesV1.sol#L101
     public static function isValidUsername(string $username): bool
     {

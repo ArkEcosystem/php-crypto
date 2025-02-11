@@ -113,7 +113,7 @@ abstract class AbstractTransaction
     {
         return array_filter([
             'gasPrice'         => $this->data['gasPrice'],
-            'network'          => $this->data['network'] ?? Network::get()->version(),
+            'network'          => $this->data['network'] ?? Network::get()->chainId(),
             'id'               => $this->data['id'],
             'gasLimit'         => $this->data['gasLimit'],
             'nonce'            => $this->data['nonce'],
