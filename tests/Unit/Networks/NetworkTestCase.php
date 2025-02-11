@@ -22,8 +22,8 @@ class NetworkTestCase extends TestCase
     /** @test */
     public function it_should_get_public_key_hash()
     {
-        $actual = $this->getTestSubject()->pubKeyHash();
+        $actual = $this->getTestSubject()->chainId();
 
-        $this->assertSame($actual, $this->pubKeyHash);
+        $this->assertSame($actual, $this->chainId);
     }
 }

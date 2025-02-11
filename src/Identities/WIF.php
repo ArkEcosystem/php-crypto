@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
+use ArkEcosystem\Crypto\Configuration\Network;
+
 class WIF
 {
     /**
@@ -15,6 +17,6 @@ class WIF
      */
     public static function fromPassphrase(string $passphrase): string
     {
-        return PrivateKey::fromPassphrase($passphrase)->toWif();
+        return PrivateKey::fromPassphrase($passphrase)->toWif(Network::get());
     }
 }
