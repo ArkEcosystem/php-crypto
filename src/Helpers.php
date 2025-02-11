@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Exceptions\InvalidUsernameException;
 
 class Helpers
