@@ -14,7 +14,7 @@ class MainnetTest extends NetworkTestCase
     protected $epoch = '2017-03-21T13:00:00.000Z';
 
     /**
-     * @todo: adjust the value of $pubKeyHash to match the actual value
+     * @todo: adjust the $chainId once known
      */
     protected $chainId = 10000;
 
