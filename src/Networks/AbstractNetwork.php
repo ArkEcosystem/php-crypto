@@ -14,7 +14,7 @@ abstract class AbstractNetwork extends Network
      * @see Network::$base58PrefixMap
      */
     protected $base58PrefixMap = [
-        self::BASE58_WIF           => 'aa',
+        self::BASE58_WIF           => 'aa', // 170
     ];
 
     /**

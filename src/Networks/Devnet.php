@@ -7,6 +7,15 @@ namespace ArkEcosystem\Crypto\Networks;
 class Devnet extends AbstractNetwork
 {
     /**
+     * {@inheritdoc}
+     *
+     * @see Network::$base58PrefixMap
+     */
+    protected $base58PrefixMap = [
+        self::BASE58_WIF           => 'ba', // 186
+    ];
+
+    /**
      * Get the chain identifier.
      *
      * @return int
