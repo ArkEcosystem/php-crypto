@@ -14,7 +14,7 @@ class Devnet extends AbstractNetwork
     protected $base58PrefixMap = [
         self::BASE58_ADDRESS_P2PKH => '1e',
         self::BASE58_ADDRESS_P2SH  => '00',
-        self::BASE58_WIF           => 'aa',
+        self::BASE58_WIF           => 'ba',
     ];
 
     /**
