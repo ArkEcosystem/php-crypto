@@ -9,6 +9,7 @@ use BI\BigInteger;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
+use kornrunner\Keccak;
 
 class TransactionUtils
 {
@@ -57,7 +58,11 @@ class TransactionUtils
      */
     public static function toHash(array $transaction, bool $skipSignature = false): BufferInterface
     {
-        return Hash::sha256(self::toBuffer($transaction, $skipSignature));
+        $encoding = self::toBuffer($transaction, $skipSignature);
+
+        $keccak = Keccak::hash($encoding->getBinary(), 256);
+
+        return Buffer::hex($keccak);
     }
 
     public static function getId(array $transaction): string
