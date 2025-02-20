@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey as TestClass;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -35,6 +37,8 @@ class PrivateKeyTest extends TestCase
     /** @test */
     public function it_should_get_the_private_key_from_wif()
     {
+        Network::set(Testnet::new());
+
         $fixture = $this->getFixture('identity');
 
         $actual = TestClass::fromWif($fixture['data']['wif']);

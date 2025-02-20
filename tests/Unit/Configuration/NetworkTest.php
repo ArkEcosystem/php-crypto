@@ -8,6 +8,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -35,5 +36,10 @@ class NetworkTest extends TestCase
 
         $actual = Network::get();
         $this->assertInstanceOf(Devnet::class, $actual);
+
+        Network::set(Testnet::new());
+
+        $actual = Network::get();
+        $this->assertInstanceOf(Testnet::class, $actual);
     }
 }
