@@ -8,8 +8,8 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
@@ -157,13 +157,7 @@ abstract class AbstractTransaction
             return null;
         }
 
-        $payload = $data['data'];
-
-        if ($payload === '') {
-            return null;
-        }
-
-        return (new AbiDecoder($type))->decodeFunctionData($payload);
+        return Deserializer::decodePayload($data, $type);
     }
 
     private function getSignature(): CompactSignatureInterface
