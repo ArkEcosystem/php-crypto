@@ -12,31 +12,23 @@ class Devnet extends AbstractNetwork
      * @see Network::$base58PrefixMap
      */
     protected $base58PrefixMap = [
-        self::BASE58_ADDRESS_P2PKH => '1e',
-        self::BASE58_ADDRESS_P2SH  => '00',
-        self::BASE58_WIF           => 'ba',
+        self::BASE58_WIF => 'ba', // 186
     ];
 
     /**
-     * {@inheritdoc}
+     * Get the chain identifier.
      *
-     * @see Network::$bip32PrefixMap
+     * @return int
      */
-    protected $bip32PrefixMap = [
-        self::BIP32_PREFIX_XPUB => '46090600',
-        self::BIP32_PREFIX_XPRV => '46089520',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pubKeyHash(): int
+    public function chainId(): int
     {
-        return 30;
+        return 10000;
     }
 
     /**
-     * {@inheritdoc}
+     * Get the network epoch.
+     *
+     * @return string
      */
     public function epoch(): string
     {
