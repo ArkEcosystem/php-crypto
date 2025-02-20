@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions;
 
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
@@ -34,7 +38,7 @@ class DeserializerTest extends TestCase
 
         $transaction = $this->assertTransaction($fixture);
 
-        expect($transaction)->toBeInstanceOf(Transfer::class);
+        expect($transaction)->toBeInstanceOf(EvmCall::class);
     }
 
     /** @test */
@@ -46,7 +50,7 @@ class DeserializerTest extends TestCase
 
         expect($transaction->data['vote'])->toEqual('0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763');
 
-        expect($transaction->data['id'])->toEqual('991a3a63dc47be84d7982acb4c2aae488191373f31b8097e07d3ad95c0997e69');
+        expect($transaction->data['id'])->toEqual($fixture['data']['id']);
 
         expect($transaction)->toBeInstanceOf(Vote::class);
     }
@@ -79,6 +83,36 @@ class DeserializerTest extends TestCase
         $transaction = $this->assertTransaction($fixture);
 
         expect($transaction)->toBeInstanceOf(ValidatorResignation::class);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_username_registration_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'username-registration');
+
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction)->toBeInstanceOf(UsernameRegistration::class);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_username_resignation_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
+
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction)->toBeInstanceOf(UsernameResignation::class);
+    }
+
+    /** @test */
+    public function it_should_deserialize_a_multipayment_signed_with_a_passphrase()
+    {
+        $fixture = $this->getTransactionFixture('evm_call', 'multipayment');
+
+        $transaction = $this->assertTransaction($fixture);
+
+        expect($transaction)->toBeInstanceOf(Multipayment::class);
     }
 
     private function assertTransaction(array $fixture): AbstractTransaction
