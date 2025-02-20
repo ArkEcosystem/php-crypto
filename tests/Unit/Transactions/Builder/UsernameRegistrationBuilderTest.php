@@ -23,7 +23,7 @@ class UsernameRegistrationBuilderTest extends TestCase
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
             ->gasLimit($fixture['data']['gasLimit'])
-            ->username('php')
+            ->username('fixture')
             ->sign($this->passphrase);
 
         $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
