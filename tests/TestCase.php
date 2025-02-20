@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
     use Concerns\Serialize;
     use Concerns\Deserialize;
 
-    protected $passphrase = 'my super secret passphrase';
+    protected $passphrase = 'found lobster oblige describe ready addict body brave live vacuum display salute lizard combine gift resemble race senior quality reunion proud tell adjust angle';
 
     protected $secondPassphrase = 'this is a top secret second passphrase';
 
