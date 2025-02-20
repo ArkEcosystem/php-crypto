@@ -90,67 +90,6 @@ class Deserializer
         return $transaction;
     }
 
-    private function guessTransactionFromData(array $data): AbstractTransaction
-    {
-        $consensusPayloadData = $this->decodePayload($data);
-        if ($consensusPayloadData !== null) {
-            $functionName = null;
-            if (array_key_exists('functionName', $consensusPayloadData)) {
-                $functionName = $consensusPayloadData['functionName'];
-            }
-
-            if ($functionName == AbiFunction::VOTE->value) {
-                return new Vote($data);
-            }
-
-            if ($functionName == AbiFunction::UNVOTE->value) {
-                return new Unvote($data);
-            }
-
-            if ($functionName == AbiFunction::VALIDATOR_REGISTRATION->value) {
-                return new ValidatorRegistration($data);
-            }
-
-            if ($functionName == AbiFunction::VALIDATOR_RESIGNATION->value) {
-                return new ValidatorResignation($data);
-            }
-        }
-
-        $usernamePayloadData = $this->decodePayload($data, ContractAbiType::USERNAMES);
-        if ($usernamePayloadData !== null) {
-            $functionName = null;
-            if (array_key_exists('functionName', $usernamePayloadData)) {
-                $functionName = $usernamePayloadData['functionName'];
-            }
-
-            if ($functionName == AbiFunction::USERNAME_REGISTRATION->value) {
-                return new UsernameRegistration($data);
-            }
-
-            if ($functionName == AbiFunction::USERNAME_RESIGNATION->value) {
-                return new UsernameResignation($data);
-            }
-        }
-
-        $multipaymentPayloadData = $this->decodePayload($data, ContractAbiType::MULTIPAYMENT);
-        if ($multipaymentPayloadData !== null) {
-            $functionName = null;
-            if (array_key_exists('functionName', $multipaymentPayloadData)) {
-                $functionName = $multipaymentPayloadData['functionName'];
-            }
-
-            if ($functionName == AbiFunction::MULTIPAYMENT->value) {
-                return new Multipayment($data);
-            }
-        }
-
-        if ($data['value'] !== '0') {
-            return new Transfer($data);
-        }
-
-        return new EvmCall($data);
-    }
-
     public static function decodePayload(array $data, ContractAbiType $abiType = ContractAbiType::CONSENSUS): ?array
     {
         $payload = $data['data'];
@@ -167,6 +106,67 @@ class Deserializer
         }
 
         return null;
+    }
+
+    private function guessTransactionFromData(array $data): AbstractTransaction
+    {
+        $consensusPayloadData = $this->decodePayload($data);
+        if ($consensusPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $consensusPayloadData)) {
+                $functionName = $consensusPayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::VOTE->value) {
+                return new Vote($data);
+            }
+
+            if ($functionName === AbiFunction::UNVOTE->value) {
+                return new Unvote($data);
+            }
+
+            if ($functionName === AbiFunction::VALIDATOR_REGISTRATION->value) {
+                return new ValidatorRegistration($data);
+            }
+
+            if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
+                return new ValidatorResignation($data);
+            }
+        }
+
+        $usernamePayloadData = $this->decodePayload($data, ContractAbiType::USERNAMES);
+        if ($usernamePayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $usernamePayloadData)) {
+                $functionName = $usernamePayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::USERNAME_REGISTRATION->value) {
+                return new UsernameRegistration($data);
+            }
+
+            if ($functionName === AbiFunction::USERNAME_RESIGNATION->value) {
+                return new UsernameResignation($data);
+            }
+        }
+
+        $multipaymentPayloadData = $this->decodePayload($data, ContractAbiType::MULTIPAYMENT);
+        if ($multipaymentPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $multipaymentPayloadData)) {
+                $functionName = $multipaymentPayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::MULTIPAYMENT->value) {
+                return new Multipayment($data);
+            }
+        }
+
+        if ($data['value'] !== '0') {
+            return new Transfer($data);
+        }
+
+        return new EvmCall($data);
     }
 
     private function parseNumber(string $value): int
