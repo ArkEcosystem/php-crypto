@@ -57,7 +57,6 @@ abstract class AbstractTransaction
 
     /**
      * Sign the transaction using the given passphrase.
-     * @TODO: Update this method
      */
     public function sign(PrivateKey $keys): static
     {
