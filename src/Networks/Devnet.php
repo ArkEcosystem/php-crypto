@@ -12,7 +12,7 @@ class Devnet extends AbstractNetwork
      * @see Network::$base58PrefixMap
      */
     protected $base58PrefixMap = [
-        self::BASE58_WIF           => 'ba', // 186
+        self::BASE58_WIF => 'ba', // 186
     ];
 
     /**

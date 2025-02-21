@@ -26,8 +26,8 @@ class MultipaymentBuilderTest extends TestCase
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
             ->gasLimit($fixture['data']['gasLimit'])
-            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '100000000')
-            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '200000000')
+            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', '100000')
+            ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', '200000')
             ->sign($this->passphrase);
 
         $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
@@ -55,7 +55,7 @@ class MultipaymentBuilderTest extends TestCase
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
             ->gasLimit($fixture['data']['gasLimit'])
-            ->pay('0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5', '100000000')
+            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', '100000')
             ->sign($this->passphrase);
 
         $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);

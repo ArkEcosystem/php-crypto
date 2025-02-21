@@ -7,11 +7,15 @@ namespace ArkEcosystem\Crypto\Transactions;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Enums\Constants;
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
@@ -86,48 +90,83 @@ class Deserializer
         return $transaction;
     }
 
-    private function guessTransactionFromData(array $data): AbstractTransaction
-    {
-        if ($data['value'] !== '0') {
-            return new Transfer($data);
-        }
-
-        $payloadData = $this->decodePayload($data);
-
-        if ($payloadData === null) {
-            return new Transfer($data);
-        }
-
-        $functionName = $payloadData['functionName'];
-
-        if ($functionName === AbiFunction::VOTE->value) {
-            return new Vote($data);
-        }
-
-        if ($functionName === AbiFunction::UNVOTE->value) {
-            return new Unvote($data);
-        }
-
-        if ($functionName === AbiFunction::VALIDATOR_REGISTRATION->value) {
-            return new ValidatorRegistration($data);
-        }
-
-        if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
-            return new ValidatorResignation($data);
-        }
-
-        return new EvmCall();
-    }
-
-    private function decodePayload(array $data): ?array
+    public static function decodePayload(array $data, ContractAbiType $abiType = ContractAbiType::CONSENSUS): ?array
     {
         $payload = $data['data'];
-
         if ($payload === '') {
             return null;
         }
 
-        return (new AbiDecoder())->decodeFunctionData($payload);
+        $decoder = new AbiDecoder($abiType);
+
+        try {
+            return $decoder->decodeFunctionData($payload);
+        } catch (\Throwable $e) {
+            //
+        }
+
+        return null;
+    }
+
+    private function guessTransactionFromData(array $data): AbstractTransaction
+    {
+        $consensusPayloadData = $this->decodePayload($data);
+        if ($consensusPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $consensusPayloadData)) {
+                $functionName = $consensusPayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::VOTE->value) {
+                return new Vote($data);
+            }
+
+            if ($functionName === AbiFunction::UNVOTE->value) {
+                return new Unvote($data);
+            }
+
+            if ($functionName === AbiFunction::VALIDATOR_REGISTRATION->value) {
+                return new ValidatorRegistration($data);
+            }
+
+            if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
+                return new ValidatorResignation($data);
+            }
+        }
+
+        $usernamePayloadData = $this->decodePayload($data, ContractAbiType::USERNAMES);
+        if ($usernamePayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $usernamePayloadData)) {
+                $functionName = $usernamePayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::USERNAME_REGISTRATION->value) {
+                return new UsernameRegistration($data);
+            }
+
+            if ($functionName === AbiFunction::USERNAME_RESIGNATION->value) {
+                return new UsernameResignation($data);
+            }
+        }
+
+        $multipaymentPayloadData = $this->decodePayload($data, ContractAbiType::MULTIPAYMENT);
+        if ($multipaymentPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $multipaymentPayloadData)) {
+                $functionName = $multipaymentPayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::MULTIPAYMENT->value) {
+                return new Multipayment($data);
+            }
+        }
+
+        if ($data['value'] !== '0') {
+            return new Transfer($data);
+        }
+
+        return new EvmCall($data);
     }
 
     private function parseNumber(string $value): int

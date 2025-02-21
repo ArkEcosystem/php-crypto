@@ -32,6 +32,13 @@ trait Deserialize
             $keys = array_keys($expected['data']);
         }
 
+        if (in_array('recipientAddress', $keys, true)) {
+            array_splice($keys, array_search('recipientAddress', $keys, true), 1);
+
+            $this->assertArrayHasKey('recipientAddress', $expected['data']);
+            $this->assertSame(strtolower($expected['data']['recipientAddress']), strtolower($actual['recipientAddress']));
+        }
+
         $expected = Arr::only($expected['data'], $keys);
         $actual   = Arr::only($actual, $keys);
 
