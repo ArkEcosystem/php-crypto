@@ -7,7 +7,7 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\Address as TestClass;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -19,7 +19,7 @@ class AddressTest extends TestCase
     {
         parent::setUp();
 
-        Network::set(Devnet::new());
+        Network::set(Testnet::new());
     }
 
     /** @test */

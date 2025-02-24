@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
-use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 
 /**
- * @covers \ArkEcosystem\Crypto\Networks\Devnet
+ * @covers \ArkEcosystem\Crypto\Networks\Testnet
  */
-class DevnetTest extends NetworkTestCase
+class TestnetTest extends NetworkTestCase
 {
     protected $epoch = '2017-03-21T13:00:00.000Z';
 
@@ -20,6 +20,6 @@ class DevnetTest extends NetworkTestCase
 
     public function getTestSubject()
     {
-        return Devnet::new();
+        return Testnet::new();
     }
 }
