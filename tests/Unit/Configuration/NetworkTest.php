@@ -6,8 +6,8 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Managers;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
