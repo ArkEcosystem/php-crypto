@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Builder\TransferBuilder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -70,6 +71,25 @@ class TransferBuilderTest extends TestCase
         $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
 
         $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+
+        $this->assertTrue($builder->verify());
+    }
+
+    /** @test */
+    public function it_should_handle_unit_converter()
+    {
+        $builder = TransferBuilder::new()
+            ->gasPrice(UnitConverter::parseUnits(5, 'gwei'))
+            ->nonce('1')
+            ->gasLimit(UnitConverter::parseUnits(0.1, 'gwei'))
+            ->recipientAddress($this->address)
+            ->value(UnitConverter::parseUnits(10, 'ark'))
+            ->sign($this->passphrase);
+
+        $this->assertSame('5000000000', $builder->transaction->data['gasPrice']);
+        $this->assertSame('1', $builder->transaction->data['nonce']);
+        $this->assertSame('100000000', $builder->transaction->data['gasLimit']);
+        $this->assertSame('10000000000000000000', $builder->transaction->data['value']);
 
         $this->assertTrue($builder->verify());
     }
