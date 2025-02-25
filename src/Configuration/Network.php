@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 
 class Network
 {
@@ -36,7 +36,7 @@ class Network
      */
     public static function get(): AbstractNetwork
     {
-        return static::$network ?? Devnet::new();
+        return static::$network ?? Testnet::new();
     }
 
     /**

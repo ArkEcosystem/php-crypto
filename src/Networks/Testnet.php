@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-class Devnet extends AbstractNetwork
+class Testnet extends AbstractNetwork
 {
     /**
      * {@inheritdoc}
