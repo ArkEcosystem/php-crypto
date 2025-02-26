@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Builder\EvmCallBuilder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -18,11 +19,11 @@ class EvmCallBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'evm-sign');
 
         $builder = EvmCallBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
             ->payload($fixture['data']['data'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->recipientAddress('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
             ->sign($this->passphrase);
 

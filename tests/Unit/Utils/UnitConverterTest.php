@@ -17,28 +17,28 @@ class UnitConverterTest extends TestCase
     public function it_should_parse_units_into_wei()
     {
         $weiValue = UnitConverter::parseUnits(1, 'wei');
-        $this->assertSame('1', $weiValue);
+        $this->assertSame('1', (string) $weiValue);
     }
 
     /** @test */
     public function it_should_parse_units_into_gwei()
     {
         $gweiValue = UnitConverter::parseUnits(1, 'gwei');
-        $this->assertSame('1000000000', $gweiValue);
+        $this->assertSame('1000000000', (string) $gweiValue);
     }
 
     /** @test */
     public function it_should_parse_units_into_ark()
     {
         $arkValue = UnitConverter::parseUnits(1, 'ark');
-        $this->assertSame('1000000000000000000', $arkValue);
+        $this->assertSame('1000000000000000000', (string) $arkValue);
     }
 
     /** @test */
     public function it_should_parse_decimal_units_into_ark()
     {
         $arkValueDecimal = UnitConverter::parseUnits(0.1, 'ark');
-        $this->assertSame('100000000000000000', $arkValueDecimal);
+        $this->assertSame('100000000000000000', (string) $arkValueDecimal);
     }
 
     /** @test */
@@ -80,7 +80,7 @@ class UnitConverterTest extends TestCase
     public function it_should_parse_units_into_ark_with_fraction()
     {
         $arkValue = UnitConverter::parseUnits(0.1, 'ark');
-        $this->assertSame('100000000000000000', $arkValue);
+        $this->assertSame('100000000000000000', (string) $arkValue);
     }
 
     /** @test */

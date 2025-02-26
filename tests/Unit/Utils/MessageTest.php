@@ -113,6 +113,6 @@ class MessageTest extends TestCase
     {
         $message = Message::new($this->getFixture('message-v1')['data']);
 
-        $this->assertIsString($message->__toString());
+        $this->assertIsString((string) $message);
     }
 }

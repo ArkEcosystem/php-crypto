@@ -9,6 +9,7 @@ use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Builder\MultipaymentBuilder;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -22,18 +23,18 @@ class MultipaymentBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'multipayment');
 
         $builder = MultipaymentBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
-            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', '100000')
-            ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', '200000')
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
+            ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', UnitConverter::parseUnits('200000', 'wei'))
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
@@ -51,17 +52,17 @@ class MultipaymentBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'multipayment-single');
 
         $builder = MultipaymentBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
-            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', '100000')
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+            ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
@@ -79,16 +80,16 @@ class MultipaymentBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'multipayment-empty');
 
         $builder = MultipaymentBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);

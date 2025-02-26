@@ -19,20 +19,20 @@ class TransferBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'transfer');
 
         $builder = TransferBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->recipientAddress($fixture['data']['recipientAddress'])
-            ->value($fixture['data']['value'])
+            ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['recipientAddress'], $builder->transaction->data['recipientAddress']);
-        $this->assertSame($fixture['data']['value'], $builder->transaction->data['value']);
+        $this->assertSame((string) $fixture['data']['value'], (string) $builder->transaction->data['value']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
@@ -50,20 +50,20 @@ class TransferBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'transfer-large-amount');
 
         $builder = TransferBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->recipientAddress($fixture['data']['recipientAddress'])
-            ->value($fixture['data']['value'])
+            ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['recipientAddress'], $builder->transaction->data['recipientAddress']);
-        $this->assertSame($fixture['data']['value'], $builder->transaction->data['value']);
+        $this->assertSame((string) $fixture['data']['value'], (string) $builder->transaction->data['value']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
@@ -86,10 +86,10 @@ class TransferBuilderTest extends TestCase
             ->value(UnitConverter::parseUnits(10, 'ark'))
             ->sign($this->passphrase);
 
-        $this->assertSame('5000000000', $builder->transaction->data['gasPrice']);
+        $this->assertSame('5000000000', (string) $builder->transaction->data['gasPrice']);
         $this->assertSame('1', $builder->transaction->data['nonce']);
-        $this->assertSame('100000000', $builder->transaction->data['gasLimit']);
-        $this->assertSame('10000000000000000000', $builder->transaction->data['value']);
+        $this->assertSame('100000000', (string) $builder->transaction->data['gasLimit']);
+        $this->assertSame('10000000000000000000', (string) $builder->transaction->data['value']);
 
         $this->assertTrue($builder->verify());
     }
