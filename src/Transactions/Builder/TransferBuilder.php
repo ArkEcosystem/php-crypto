@@ -6,10 +6,11 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use Brick\Math\BigDecimal;
 
 class TransferBuilder extends AbstractTransactionBuilder
 {
-    public function value(string $value): self
+    public function value(BigDecimal $value): self
     {
         $this->transaction->data['value'] = $value;
 

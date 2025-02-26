@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorRegistrationBuilder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -18,17 +19,17 @@ class ValidatorRegistrationBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'validator-registration');
 
         $builder = ValidatorRegistrationBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);

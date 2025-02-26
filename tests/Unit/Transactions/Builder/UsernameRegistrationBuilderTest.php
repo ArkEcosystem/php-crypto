@@ -6,6 +6,7 @@ namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
 
 use ArkEcosystem\Crypto\Exceptions\InvalidUsernameException;
 use ArkEcosystem\Crypto\Transactions\Builder\UsernameRegistrationBuilder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -19,17 +20,17 @@ class UsernameRegistrationBuilderTest extends TestCase
         $fixture = $this->getTransactionFixture('evm_call', 'username-registration');
 
         $builder = UsernameRegistrationBuilder::new()
-            ->gasPrice($fixture['data']['gasPrice'])
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit($fixture['data']['gasLimit'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->username('fixture')
             ->sign($this->passphrase);
 
-        $this->assertSame($fixture['data']['gasPrice'], $builder->transaction->data['gasPrice']);
+        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
         $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
         $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame($fixture['data']['gasLimit'], $builder->transaction->data['gasLimit']);
+        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
         $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
         $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
         $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
@@ -49,12 +50,12 @@ class UsernameRegistrationBuilderTest extends TestCase
 
         $fixture = $this->getTransactionFixture('evm_call', 'username-registration');
 
-        $builder = UsernameRegistrationBuilder::new()
-          ->gasPrice($fixture['data']['gasPrice'])
-          ->nonce($fixture['data']['nonce'])
-          ->network($fixture['data']['network'])
-          ->gasLimit($fixture['data']['gasLimit'])
-          ->username('this_is_a_very_long_username_that_is_invalid')
-          ->sign($this->passphrase);
+        UsernameRegistrationBuilder::new()
+            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+            ->nonce($fixture['data']['nonce'])
+            ->network($fixture['data']['network'])
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+            ->username('this_is_a_very_long_username_that_is_invalid')
+            ->sign($this->passphrase);
     }
 }

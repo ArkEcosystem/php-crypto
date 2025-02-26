@@ -7,6 +7,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use Brick\Math\BigDecimal;
 
 abstract class AbstractTransactionBuilder
 {
@@ -15,13 +16,13 @@ abstract class AbstractTransactionBuilder
     public function __construct(?array $data = null)
     {
         $this->transaction = $this->getTransactionInstance($data ?? [
-            'value'             => '0',
-            'senderPublicKey'   => '',
-            'gasPrice'          => '5',
-            'nonce'             => '1',
-            'network'           => Network::get()->chainId(),
-            'gasLimit'          => 1_000_000,
-            'data'              => '',
+            'value'           => BigDecimal::zero(),
+            'senderPublicKey' => '',
+            'gasPrice'        => '5',
+            'nonce'           => '1',
+            'network'         => Network::get()->chainId(),
+            'gasLimit'        => 1_000_000,
+            'data'            => '',
         ]);
     }
 
@@ -35,7 +36,7 @@ abstract class AbstractTransactionBuilder
         return new static($data);
     }
 
-    public function gasLimit(int $gasLimit): static
+    public function gasLimit(BigDecimal $gasLimit): static
     {
         $this->transaction->data['gasLimit'] = $gasLimit;
 
@@ -49,7 +50,7 @@ abstract class AbstractTransactionBuilder
         return $this;
     }
 
-    public function gasPrice(int $gasPrice): static
+    public function gasPrice(BigDecimal $gasPrice): static
     {
         $this->transaction->data['gasPrice'] = $gasPrice;
 

@@ -23,17 +23,17 @@ class UnitConverter
      *
      * @param float|int|string $value
      * @param string $unit
-     * @return string
+     * @return BigDecimal
      */
-    public static function parseUnits($value, string $unit = 'ark'): string
+    public static function parseUnits($value, string $unit = 'ark'): BigDecimal
     {
         switch (strtolower($unit)) {
             case 'wei':
-                return bcmul((string) $value, (string) self::WEI_MULTIPLIER, 0);
+                return BigDecimal::of(bcmul((string) $value, (string) self::WEI_MULTIPLIER, 0));
             case 'gwei':
-                return bcmul((string) $value, (string) self::GWEI_MULTIPLIER, 0);
+                return BigDecimal::of(bcmul((string) $value, (string) self::GWEI_MULTIPLIER, 0));
             case 'ark':
-                return bcmul((string) $value, (string) self::ARK_MULTIPLIER, 0);
+                return BigDecimal::of(bcmul((string) $value, (string) self::ARK_MULTIPLIER, 0));
             default:
                 throw new InvalidArgumentException("Unsupported unit: {$unit}. Supported units are 'wei', 'gwei', and 'ark'.");
         }
@@ -69,7 +69,7 @@ class UnitConverter
      */
     public static function weiToArk(string | int | float $value, ?string $suffix = null): string
     {
-        $convertedValue = (string) BigDecimal::of(self::formatUnits(self::parseUnits($value, 'wei'), 'ark'))
+        $convertedValue = (string) BigDecimal::of(self::formatUnits((string) self::parseUnits($value, 'wei'), 'ark'))
             ->stripTrailingZeros();
 
         if ($suffix !== null) {
@@ -88,7 +88,7 @@ class UnitConverter
      */
     public static function gweiToArk(string | int | float $value, ?string $suffix = null): string
     {
-        $convertedValue = (string) BigDecimal::of(self::formatUnits(self::parseUnits($value, 'gwei'), 'ark'))
+        $convertedValue = (string) BigDecimal::of(self::formatUnits((string) self::parseUnits($value, 'gwei'), 'ark'))
             ->stripTrailingZeros();
 
         if ($suffix !== null) {
