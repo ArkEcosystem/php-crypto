@@ -6,9 +6,9 @@ namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Enums\Constants;
 use BI\BigInteger;
-use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
+use Brick\Math\BigDecimal;
 use kornrunner\Keccak;
 
 class TransactionUtils
@@ -96,6 +96,14 @@ class TransactionUtils
             }
 
             return '0x'.(new BigInteger($value, 10))->toHex();
+        }
+
+        if ($value instanceof BigDecimal) {
+            if ((string) $value === '0') {
+                return '0x';
+            }
+
+            return '0x'.(new BigInteger((string) $value, 10))->toHex();
         }
 
         return '0x';

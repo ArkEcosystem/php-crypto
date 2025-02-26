@@ -7,6 +7,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Enums\ContractAddresses;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
+use Brick\Math\BigDecimal;
 
 class MultipaymentBuilder extends AbstractTransactionBuilder
 {
@@ -20,14 +21,14 @@ class MultipaymentBuilder extends AbstractTransactionBuilder
         $this->transaction->refreshPayloadData();
     }
 
-    public function pay(string $address, string $amount): self
+    public function pay(string $address, BigDecimal $amount): self
     {
         $this->transaction->data['pay'][0][] = $address;
         $this->transaction->data['pay'][1][] = $amount;
 
         $this->transaction->refreshPayloadData();
 
-        $this->transaction->data['value'] += $amount;
+        $this->transaction->data['value'] = $this->transaction->data['value']->plus($amount);
 
         return $this;
     }

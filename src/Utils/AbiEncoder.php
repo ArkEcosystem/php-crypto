@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use Brick\Math\BigDecimal;
 use Exception;
 
 class AbiEncoder extends AbiBase
@@ -248,9 +249,14 @@ class AbiEncoder extends AbiBase
 
     private function encodeNumber($value, bool $signed): array
     {
+        if ($value instanceof BigDecimal) {
+            $value = (string) $value;
+        }
+
         if (! is_numeric($value)) {
             throw new Exception('Invalid number value');
         }
+
         if ($signed) {
             $gmpValue = gmp_init($value, 10);
             if (gmp_cmp($gmpValue, 0) < 0) {
