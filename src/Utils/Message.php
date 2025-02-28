@@ -103,7 +103,7 @@ class Message
 
         return static::new([
             'publickey' => $keys->getPublicKey()->getHex(),
-            'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
+            'signature' => $keys->sign(Hash::sha256(new Buffer($message))->getHex()),
             'message'   => $message,
         ]);
     }

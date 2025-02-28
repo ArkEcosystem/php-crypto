@@ -8,12 +8,12 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PublicKeyInterface;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
@@ -62,15 +62,14 @@ abstract class AbstractTransaction
     {
         $hash = $this->hash(skipSignature: true);
 
-        /** @var CompactSignature $signature */
-        $signature = $keys->signCompact($hash);
+        $signature = $keys->signCompact($hash->getHex());
 
         // Extract the recovery ID (an integer between 0 and 3) from the signature
-        $recoveryId = $signature->getRecoveryId();
+        $recoveryId = $signature->recoveryParam;
 
         $this->data['v'] = $recoveryId + 27;
-        $this->data['r'] = $this->gmpToHex($signature->getR());
-        $this->data['s'] = $this->gmpToHex($signature->getS());
+        $this->data['r'] = $signature->r->toString('hex'); //$this->gmpToHex($signature->r);
+        $this->data['s'] = $signature->s->toString('hex'); //$this->gmpToHex($signature->s);
 
         return $this;
     }
