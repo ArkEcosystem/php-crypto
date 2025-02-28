@@ -43,7 +43,7 @@ class PrivateKey
         $checksum = substr($hash2, 0, 8);
 
         // Final WIF format key
-        $finalKey = $extendedKey . $checksum;
+        $finalKey = $extendedKey.$checksum;
 
         // Encode to Base58
         return self::base58Encode(hex2bin($finalKey));
@@ -119,14 +119,14 @@ class PrivateKey
     private static function base58Decode($input)
     {
         $alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        $base = (string) strlen($alphabet);
-        $length = strlen($input);
-        $num = '0';
+        $base     = (string) strlen($alphabet);
+        $length   = strlen($input);
+        $num      = '0';
 
         for ($i = 0; $i < $length; $i++) {
             $pos = strpos($alphabet, $input[$i]);
             if ($pos === false) {
-                throw new \Exception("Invalid character in Base58 string.");
+                throw new \Exception('Invalid character in Base58 string.');
             }
             $num = bcmul($num, $base, 0);
             $num = bcadd($num, (string) $pos, 0);
@@ -134,9 +134,9 @@ class PrivateKey
 
         $decoded = '';
         while (bccomp($num, '0') > 0) {
-            $rem = bcmod($num, '256');
-            $decoded = chr((int)$rem) . $decoded;
-            $num = bcdiv($num, '256', 0);
+            $rem     = bcmod($num, '256');
+            $decoded = chr((int) $rem).$decoded;
+            $num     = bcdiv($num, '256', 0);
         }
 
         // Handle leading zeros
@@ -145,25 +145,25 @@ class PrivateKey
             $leadingZeros++;
         }
 
-        return str_repeat("\0", $leadingZeros) . $decoded;
+        return str_repeat("\0", $leadingZeros).$decoded;
     }
 
     private static function base58Encode($input)
     {
         $alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-        $num = gmp_init(bin2hex($input), 16);
-        $base = gmp_init(strlen($alphabet));
-        $encoded = '';
+        $num      = gmp_init(bin2hex($input), 16);
+        $base     = gmp_init(strlen($alphabet));
+        $encoded  = '';
 
         while (gmp_cmp($num, 0) > 0) {
             list($num, $rem) = gmp_div_qr($num, $base);
-            $encoded = $alphabet[gmp_intval($rem)] . $encoded;
+            $encoded         = $alphabet[gmp_intval($rem)].$encoded;
         }
 
         // Handle leading zeros
         foreach (str_split($input) as $char) {
             if ($char === "\0") {
-                $encoded = '1' . $encoded;
+                $encoded = '1'.$encoded;
             } else {
                 break;
             }
