@@ -99,5 +99,5 @@ abstract class AbstractTransactionBuilder
         return $this->transaction->toJson();
     }
 
-    abstract protected function getTransactionInstance(?array $data = []): AbstractTransaction;
+    abstract protected function getTransactionInstance(array $data): AbstractTransaction;
 }

@@ -26,7 +26,7 @@ abstract class AbstractTransaction
 
     public Buffer $serialized;
 
-    public function __construct(?array $data = null)
+    public function __construct(array $data)
     {
         $this->data = $data ?? [];
 

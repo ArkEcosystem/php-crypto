@@ -17,7 +17,7 @@ class UnvoteBuilder extends AbstractTransactionBuilder
         $this->recipientAddress(ContractAddresses::CONSENSUS->value);
     }
 
-    protected function getTransactionInstance(?array $data = []): AbstractTransaction
+    protected function getTransactionInstance(array $data): AbstractTransaction
     {
         return new Unvote($data);
     }

@@ -17,7 +17,7 @@ class UsernameResignationBuilder extends AbstractTransactionBuilder
         $this->recipientAddress(ContractAddresses::USERNAMES->value);
     }
 
-    protected function getTransactionInstance(?array $data = []): AbstractTransaction
+    protected function getTransactionInstance(array $data): AbstractTransaction
     {
         return new UsernameResignation($data);
     }
