@@ -10,7 +10,7 @@ use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class UsernameRegistration extends AbstractTransaction
 {
-    public function __construct(?array $data = [])
+    public function __construct(array $data)
     {
         $payload = $this->decodePayload($data, ContractAbiType::USERNAMES);
 
