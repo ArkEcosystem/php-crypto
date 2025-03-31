@@ -69,8 +69,8 @@ abstract class AbstractTransaction
         $recoveryId = $signature->getRecoveryId();
 
         $this->data['v'] = $recoveryId + 27;
-        $this->data['r'] = $this->gmpToHex($signature->getR());
-        $this->data['s'] = $this->gmpToHex($signature->getS());
+        $this->data['r'] = Helpers::gmpToHex($signature->getR());
+        $this->data['s'] = Helpers::gmpToHex($signature->getS());
 
         return $this;
     }
