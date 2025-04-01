@@ -8,7 +8,6 @@ use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
-use BitWasp\Buffertools\Buffer;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
