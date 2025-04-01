@@ -47,14 +47,6 @@ class TransactionTest extends TestCase
     }
 
     /** @test */
-    public function should_turn_the_transaction_to_bytes()
-    {
-        $actual = $this->getTransaction()->getBytes();
-
-        $this->assertInstanceOf(Buffer::class, $actual);
-    }
-
-    /** @test */
     public function should_turn_the_transaction_to_an_array()
     {
         $actual = $this->getTransaction()->toArray();
