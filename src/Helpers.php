@@ -48,4 +48,11 @@ class Helpers
     {
         return preg_replace('/^0x/', '', $hex); // using ltrim($hex, '0x') also removes leading 0s which is not desired, e.g. 0x0123 -> 123
     }
+
+    public static function gmpToHex(\GMP $gmp): string
+    {
+        $hex = gmp_strval($gmp, 16);
+
+        return str_pad($hex, 64, '0', STR_PAD_LEFT);
+    }
 }

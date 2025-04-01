@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 use InvalidArgumentException;
+use kornrunner\Keccak;
 
 class Message
 {
@@ -101,9 +104,18 @@ class Message
     {
         $keys = PrivateKey::fromPassphrase($passphrase);
 
+        $hash = Keccak::hash($message, 256);
+
+        /** @var CompactSignature $signature */
+        $signature = $keys->signCompact(Buffer::hex($hash));
+
+        $r = Helpers::gmpToHex($signature->getR());
+        $s = Helpers::gmpToHex($signature->getS());
+        $v = dechex($signature->getRecoveryId() + 27);
+
         return static::new([
             'publickey' => $keys->getPublicKey()->getHex(),
-            'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
+            'signature' => $r.$s.$v,
             'message'   => $message,
         ]);
     }
@@ -117,9 +129,11 @@ class Message
     {
         $factory = new PublicKeyFactory();
 
+        $signature = $this->getSignature();
+
         return $factory->fromHex($this->publicKey)->verify(
-            new Buffer(hash('sha256', $this->message, true)),
-            SignatureFactory::fromHex($this->signature)
+            Buffer::hex(Keccak::hash($this->message, 256)),
+            $signature,
         );
     }
 
@@ -145,5 +159,29 @@ class Message
     public function toJson(): string
     {
         return json_encode($this->toArray());
+    }
+
+    private function getSignature(): CompactSignature
+    {
+        $r = substr($this->signature, 0, 64);
+        $s = substr($this->signature, 64, 64);
+        $v = hexdec(substr($this->signature, 128, 2));
+
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        $recoverId = $v - 27;
+        $r         = gmp_init($r, 16);
+        $s         = gmp_init($s, 16);
+
+        return new CompactSignature(
+            adapter: $ecAdapter,
+            r: $r,
+            s: $s,
+            recid: $recoverId,
+            compressed: true
+        );
     }
 }

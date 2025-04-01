@@ -15,49 +15,49 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_sign_a_valid_message()
     {
-        $fixture = $this->getFixture('message-v1');
+        $fixture = $this->getFixture('message-sign');
 
-        $message = Message::sign($fixture['data']['message'], $fixture['passphrase']);
+        $message = Message::sign($fixture['message'], $this->passphrase);
 
-        $this->assertSame($message->publicKey, $fixture['data']['publickey']);
-        $this->assertSame($message->signature, $fixture['data']['signature']);
-        $this->assertSame($message->message, $fixture['data']['message']);
+        $this->assertSame($fixture['publicKey'], $message->publicKey);
+        $this->assertSame($fixture['signature'], $message->signature);
+        $this->assertSame($fixture['message'], $message->message);
     }
 
     /** @test */
     public function it_should_create_a_message_from_an_object()
     {
-        $fixture = json_decode(json_encode($this->getFixture('message-v1')['data']));
+        $fixture = json_decode(json_encode($this->getFixture('message-sign')));
 
         $message = Message::new($fixture);
 
-        $this->assertSame($message->publicKey, $fixture->publickey);
-        $this->assertSame($message->signature, $fixture->signature);
-        $this->assertSame($message->message, $fixture->message);
+        $this->assertSame($fixture->publicKey, $message->publicKey);
+        $this->assertSame($fixture->signature, $message->signature);
+        $this->assertSame($fixture->message, $message->message);
     }
 
     /** @test */
     public function it_should_create_a_message_from_an_array()
     {
-        $fixture = $this->getFixture('message-v1')['data'];
+        $fixture = $this->getFixture('message-sign');
 
         $message = Message::new($fixture);
 
-        $this->assertSame($message->publicKey, $fixture['publickey']);
-        $this->assertSame($message->signature, $fixture['signature']);
-        $this->assertSame($message->message, $fixture['message']);
+        $this->assertSame($fixture['publicKey'], $message->publicKey);
+        $this->assertSame($fixture['signature'], $message->signature);
+        $this->assertSame($fixture['message'], $message->message);
     }
 
     /** @test */
     public function it_should_create_a_message_from_a_string()
     {
-        $fixture = $this->getFixture('message-v1')['data'];
+        $fixture = $this->getFixture('message-sign');
 
         $message = Message::new(json_encode($fixture));
 
-        $this->assertSame($message->publicKey, $fixture['publickey']);
-        $this->assertSame($message->signature, $fixture['signature']);
-        $this->assertSame($message->message, $fixture['message']);
+        $this->assertSame($fixture['publicKey'], $message->publicKey);
+        $this->assertSame($fixture['signature'], $message->signature);
+        $this->assertSame($fixture['message'], $message->message);
     }
 
     /** @test */
@@ -79,15 +79,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_verify_a_message_from_v1()
     {
-        $message = Message::new($this->getFixture('message-v1')['data']);
-
-        $this->assertTrue($message->verify());
-    }
-
-    /** @test */
-    public function it_should_verify_a_message_from_v2()
-    {
-        $message = Message::new($this->getFixture('message-v2')['data']);
+        $message = Message::new($this->getFixture('message-sign'));
 
         $this->assertTrue($message->verify());
     }
@@ -95,7 +87,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_an_array()
     {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+        $message = Message::new($this->getFixture('message-sign'));
 
         $this->assertIsArray($message->toArray());
     }
@@ -103,7 +95,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_json()
     {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+        $message = Message::new($this->getFixture('message-sign'));
 
         $this->assertIsString($message->toJSON());
     }
@@ -111,7 +103,7 @@ class MessageTest extends TestCase
     /** @test */
     public function it_should_turn_a_message_into_a_string()
     {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+        $message = Message::new($this->getFixture('message-sign'));
 
         $this->assertIsString((string) $message);
     }
