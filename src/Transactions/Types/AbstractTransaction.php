@@ -50,11 +50,6 @@ abstract class AbstractTransaction
         return $this->hash(skipSignature: false)->getHex();
     }
 
-    public function getBytes(bool $skipSignature = false): Buffer
-    {
-        return Serializer::getBytes($this, $skipSignature);
-    }
-
     /**
      * Sign the transaction using the given passphrase.
      */

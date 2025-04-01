@@ -8,7 +8,6 @@ use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Tests\Crypto\TestCase;
-use BitWasp\Buffertools\Buffer;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
@@ -44,14 +43,6 @@ class TransactionTest extends TestCase
         $actual = $this->getTransaction()->verify();
 
         $this->assertTrue($actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_bytes()
-    {
-        $actual = $this->getTransaction()->getBytes();
-
-        $this->assertInstanceOf(Buffer::class, $actual);
     }
 
     /** @test */

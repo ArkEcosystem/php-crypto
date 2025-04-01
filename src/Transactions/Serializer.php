@@ -32,11 +32,6 @@ class Serializer
         return new static($transaction);
     }
 
-    public static function getBytes(AbstractTransaction $transaction, bool $skipSignature = false): Buffer
-    {
-        return $transaction->serialize(skipSignature: $skipSignature);
-    }
-
     /**
      * @return Buffer
      */
