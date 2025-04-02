@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Transformable
  */
 
@@ -41,7 +41,7 @@ it('should transform to array', function () {
 it('should transform to gmp', function () {
     $buffer = ByteBuffer::new('Hello World 😄');
 
-    expect($buffer->toGmp())->toBeInstanceOf(\GMP::class);
+    expect($buffer->toGmp())->toBeInstanceOf(GMP::class);
 });
 
 it('should transform to gmp integer', function () {
@@ -82,5 +82,5 @@ it('should transform to string as base64', function () {
 
 it('should throw for invalid type', function () {
     expect(fn () => ByteBuffer::new('Hello World 😄')->toString('_INVALID_'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 });

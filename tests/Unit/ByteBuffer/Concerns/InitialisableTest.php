@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
  */
 
@@ -25,7 +25,7 @@ it('should initialise from hex', function () {
 });
 
 it('should fail to initialise from hex', function () {
-    expect(fn () => ByteBuffer::fromHex('😄'))->toThrow(\InvalidArgumentException::class);
+    expect(fn () => ByteBuffer::fromHex('😄'))->toThrow(InvalidArgumentException::class);
 });
 
 it('should initialise from utf8', function () {
@@ -72,5 +72,5 @@ it('should initialise from string as base64', function () {
 
 it('should throw for invalid type', function () {
     expect(fn () => ByteBuffer::fromString('Hello World 😄', '_INVALID_'))
-        ->toThrow(\InvalidArgumentException::class);
+        ->toThrow(InvalidArgumentException::class);
 });

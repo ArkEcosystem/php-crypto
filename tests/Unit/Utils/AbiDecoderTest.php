@@ -9,8 +9,8 @@ test('it should decode vote payload', function () {
     $decoder = new AbiDecoder();
 
     $functionName = 'vote';
-    $args = ['0x512F366D524157BcF734546eB29a6d687B762255'];
-    $data = '0x6dd7d8ea000000000000000000000000512f366d524157bcf734546eb29a6d687b762255';
+    $args         = ['0x512F366D524157BcF734546eB29a6d687B762255'];
+    $data         = '0x6dd7d8ea000000000000000000000000512f366d524157bcf734546eb29a6d687b762255';
 
     $decodedData = $decoder->decodeFunctionData($data);
 
@@ -24,7 +24,7 @@ test('should decode multipayment payload', function () {
     $decoder = new AbiDecoder(ContractAbiType::MULTIPAYMENT);
 
     $functionName = 'pay';
-    $args = [
+    $args         = [
         ['0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A', '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A'],
         ['100000000', '200000000'],
     ];
@@ -41,7 +41,7 @@ test('should decode multipayment payload', function () {
 
 test('it should decode function with abi', function () {
     $functionSignature = 'function name() view returns (string)';
-    $payload = '0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000064441524b32300000000000000000000000000000000000000000000000000000';
+    $payload           = '0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000064441524b32300000000000000000000000000000000000000000000000000000';
 
     $decoded = AbiDecoder::decodeFunctionWithAbi($functionSignature, $payload);
 
