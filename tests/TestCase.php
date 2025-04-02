@@ -6,6 +6,8 @@ namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -29,5 +31,35 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         Network::set(Mainnet::new());
+    }
+
+    protected function assertTransaction(array $fixture): AbstractTransaction
+    {
+        $actual = $this->assertDeserialized($fixture, [
+            'id',
+            'network',
+            'nonce',
+            'value',
+            'gasPrice',
+            'gasLimit',
+            'contractId',
+            'senderPublicKey',
+            'senderAddress',
+            'recipientAddress',
+            'v',
+            'r',
+            's',
+        ]);
+
+        $this->assertTrue($actual->verify());
+
+        return $actual;
+    }
+
+    protected function getTransaction($file = 'transfer'): AbstractTransaction
+    {
+        $fixture = $this->getTransactionFixture('evm_call', $file);
+
+        return Deserializer::new($fixture['serialized'])->deserialize();
     }
 }

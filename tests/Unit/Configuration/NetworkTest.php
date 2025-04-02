@@ -8,32 +8,25 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Mainnet;
 use ArkEcosystem\Crypto\Networks\Testnet;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\Configuration\Network
  */
-class NetworkTest extends TestCase
-{
-    /** @test */
-    public function it_should_get_the_network()
-    {
-        $actual = Network::get();
 
-        $this->assertInstanceOf(AbstractNetwork::class, $actual);
-    }
+it('should get the network', function () {
+    $actual = Network::get();
 
-    /** @test */
-    public function it_should_set_the_network()
-    {
-        Network::set(Mainnet::new());
+    expect($actual)->toBeInstanceOf(AbstractNetwork::class);
+});
 
-        $actual = Network::get();
-        $this->assertInstanceOf(Mainnet::class, $actual);
+it('should set the network', function () {
+    Network::set(Mainnet::new());
 
-        Network::set(Testnet::new());
+    $actual = Network::get();
+    expect($actual)->toBeInstanceOf(Mainnet::class);
 
-        $actual = Network::get();
-        $this->assertInstanceOf(Testnet::class, $actual);
-    }
-}
+    Network::set(Testnet::new());
+
+    $actual = Network::get();
+    expect($actual)->toBeInstanceOf(Testnet::class);
+});
