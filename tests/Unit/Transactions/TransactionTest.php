@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
- */
 it('should compute the id of the transaction', function () {
     $actual = $this->getTransaction()->getId();
 
