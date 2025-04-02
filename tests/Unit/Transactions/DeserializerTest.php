@@ -12,7 +12,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\Transactions\Deserializer
  */
 it('should deserialize a transfer signed with a passphrase', function () {

@@ -18,7 +18,7 @@ $epoch = '2017-03-21T13:00:00.000Z';
 $chainId = 10000;
 
 beforeEach(function () use ($epoch, $chainId) {
-    $this->epoch = $epoch;
+    $this->epoch   = $epoch;
     $this->chainId = $chainId;
     $this->network = Testnet::new();
 });

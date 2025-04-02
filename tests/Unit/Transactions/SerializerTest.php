@@ -8,7 +8,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\Transactions\Serializer
  */
 it('should serialize a transfer transaction', function () {

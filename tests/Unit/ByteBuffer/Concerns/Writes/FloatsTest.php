@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Floats
  */
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
  */
 it('should compute the id of the transaction', function () {
@@ -16,7 +16,7 @@ it('should compute the id of the transaction', function () {
 it('should sign the transaction using a passphrase', function () {
     $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
-    $transaction = $this->getTransaction();
+    $transaction                    = $this->getTransaction();
     $transaction->data['signature'] = null;
 
     expect($transaction->data['signature'])->toBeEmpty();
