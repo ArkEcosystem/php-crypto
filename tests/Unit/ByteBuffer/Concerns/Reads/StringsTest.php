@@ -2,63 +2,48 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Concerns\Reads;
-
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\Strings
  */
-class StringsTest extends TestCase
-{
-    /** @test */
-    public function it_should_read_string()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeString('Hello World');
-        $buffer->position(0);
 
-        $this->assertSame('Hello World', $buffer->readString(11));
-    }
+test('it should read string', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeString('Hello World');
+    $buffer->position(0);
 
-    /** @test */
-    public function it_should_read_utf8_string()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUTF8String('Hello World 😄');
-        $buffer->position(0);
+    expect($buffer->readString(11))->toBe('Hello World');
+});
 
-        $this->assertSame('Hello World 😄', $buffer->readUTF8String(20));
-    }
+test('it should read utf8 string', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUTF8String('Hello World 😄');
+    $buffer->position(0);
 
-    /** @test */
-    public function it_should_read_c_string()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeCString('Hello World ');
-        $buffer->position(0);
+    expect($buffer->readUTF8String(20))->toBe('Hello World 😄');
+});
 
-        $this->assertSame('Hello World', $buffer->readCString(11));
-    }
+test('it should read c string', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeCString('Hello World ');
+    $buffer->position(0);
 
-    /** @test */
-    public function it_should_read_i_string()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeIString('Hello World');
-        $buffer->position(0);
+    expect($buffer->readCString(11))->toBe('Hello World');
+});
 
-        $this->assertSame('Hello World', $buffer->readIString(11));
-    }
+test('it should read i string', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeIString('Hello World');
+    $buffer->position(0);
 
-    /** @test */
-    public function it_should_write_v_string()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeVString('Hello World');
-        $buffer->position(0);
+    expect($buffer->readIString(11))->toBe('Hello World');
+});
 
-        $this->assertSame('Hello World', $buffer->readVString(11));
-    }
-}
+test('it should write v string', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeVString('Hello World');
+    $buffer->position(0);
+
+    expect($buffer->readVString(11))->toBe('Hello World');
+});

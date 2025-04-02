@@ -2,41 +2,30 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Builder;
-
 use ArkEcosystem\Crypto\Transactions\Builder\UsernameResignationBuilder;
 use ArkEcosystem\Crypto\Utils\UnitConverter;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Builder\UsernameResignationBuilder
- */
-class UsernameResignationBuilderTest extends TestCase
-{
-    /** @test */
-    public function it_should_sign_it_with_a_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
+it('should sign it with a passphrase', function () {
+    $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
 
-        $builder = UsernameResignationBuilder::new()
-            ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
-            ->nonce($fixture['data']['nonce'])
-            ->network($fixture['data']['network'])
-            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
-            ->sign($this->passphrase);
+    $builder = UsernameResignationBuilder::new()
+        ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->nonce($fixture['data']['nonce'])
+        ->network($fixture['data']['network'])
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+        ->sign($this->passphrase);
 
-        $this->assertSame((string) $fixture['data']['gasPrice'], (string) $builder->transaction->data['gasPrice']);
-        $this->assertSame($fixture['data']['nonce'], $builder->transaction->data['nonce']);
-        $this->assertSame($fixture['data']['network'], $builder->transaction->data['network']);
-        $this->assertSame((string) $fixture['data']['gasLimit'], (string) $builder->transaction->data['gasLimit']);
-        $this->assertSame($fixture['data']['v'], $builder->transaction->data['v']);
-        $this->assertSame($fixture['data']['r'], $builder->transaction->data['r']);
-        $this->assertSame($fixture['data']['s'], $builder->transaction->data['s']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
+    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
+    expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
+    expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
 
-        $this->assertSame($fixture['serialized'], $builder->transaction->serialize()->getHex());
+    expect($builder->transaction->serialize()->getHex())->toBe($fixture['serialized']);
 
-        $this->assertSame($fixture['data']['id'], $builder->transaction->data['id']);
+    expect($builder->transaction->data['id'])->toBe($fixture['data']['id']);
 
-        $this->assertTrue($builder->verify());
-    }
-}
+    expect($builder->verify())->toBeTrue();
+});

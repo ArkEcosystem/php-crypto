@@ -2,85 +2,64 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Concerns\Writes;
-
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Writes\Integer
  */
-class IntegerTest extends TestCase
-{
-    /** @test */
-    public function it_should_write_int8()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeInt8(8);
 
-        $this->assertSame(1, $buffer->internalSize());
-    }
+it('should write int8', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeInt8(8);
 
-    /** @test */
-    public function it_should_write_int16()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeInt16(16);
+    expect($buffer->internalSize())->toBe(1);
+});
 
-        $this->assertSame(2, $buffer->internalSize());
-    }
+it('should write int16', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeInt16(16);
 
-    /** @test */
-    public function it_should_write_int32()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeInt32(32);
+    expect($buffer->internalSize())->toBe(2);
+});
 
-        $this->assertSame(4, $buffer->internalSize());
-    }
+it('should write int32', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeInt32(32);
 
-    /** @test */
-    public function it_should_write_int64()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeInt64(64);
+    expect($buffer->internalSize())->toBe(4);
+});
 
-        $this->assertSame(8, $buffer->internalSize());
-    }
+it('should write int64', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeInt64(64);
 
-    /** @test */
-    public function it_should_write_byte()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeByte(8);
+    expect($buffer->internalSize())->toBe(8);
+});
 
-        $this->assertSame(1, $buffer->internalSize());
-    }
+it('should write byte', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeByte(8);
 
-    /** @test */
-    public function it_should_write_short()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeShort(16);
+    expect($buffer->internalSize())->toBe(1);
+});
 
-        $this->assertSame(2, $buffer->internalSize());
-    }
+it('should write short', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeShort(16);
 
-    /** @test */
-    public function it_should_write_int()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeInt(32);
+    expect($buffer->internalSize())->toBe(2);
+});
 
-        $this->assertSame(4, $buffer->internalSize());
-    }
+it('should write int', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeInt(32);
 
-    /** @test */
-    public function it_should_write_long()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeLong(64);
+    expect($buffer->internalSize())->toBe(4);
+});
 
-        $this->assertSame(8, $buffer->internalSize());
-    }
-}
+it('should write long', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeLong(64);
+
+    expect($buffer->internalSize())->toBe(8);
+});

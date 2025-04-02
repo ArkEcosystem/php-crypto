@@ -2,69 +2,46 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
-
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
  */
-class TransactionTest extends TestCase
-{
-    /** @test */
-    public function should_compute_the_id_of_the_transaction()
-    {
-        $actual = $this->getTransaction()->getId();
+it('should compute the id of the transaction', function () {
+    $actual = $this->getTransaction()->getId();
 
-        $this->assertTrue(strlen($actual) === 64);
-    }
+    expect(strlen($actual))->toBe(64);
+});
 
-    /** @test */
-    public function should_sign_the_transaction_using_a_passphrase()
-    {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
+it('should sign the transaction using a passphrase', function () {
+    $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
-        $transaction                    = $this->getTransaction();
-        $transaction->data['signature'] = null;
+    $transaction = $this->getTransaction();
+    $transaction->data['signature'] = null;
 
-        $this->assertEmpty($transaction->data['signature']);
-        $transaction->sign($privateKey);
-        $this->assertNotEmpty($transaction->data['r']);
-        $this->assertNotEmpty($transaction->data['s']);
-        $this->assertNotEmpty($transaction->data['v']);
-    }
+    expect($transaction->data['signature'])->toBeEmpty();
 
-    /** @test */
-    public function should_verify_the_transaction()
-    {
-        $actual = $this->getTransaction()->verify();
+    $transaction->sign($privateKey);
 
-        $this->assertTrue($actual);
-    }
+    expect($transaction->data['r'])->not->toBeEmpty();
+    expect($transaction->data['s'])->not->toBeEmpty();
+    expect($transaction->data['v'])->not->toBeEmpty();
+});
 
-    /** @test */
-    public function should_turn_the_transaction_to_an_array()
-    {
-        $actual = $this->getTransaction()->toArray();
+it('should verify the transaction', function () {
+    $actual = $this->getTransaction()->verify();
 
-        $this->assertIsArray($actual);
-    }
+    expect($actual)->toBeTrue();
+});
 
-    /** @test */
-    public function should_turn_the_transaction_to_json()
-    {
-        $actual = $this->getTransaction()->toJson();
+it('should turn the transaction to an array', function () {
+    $actual = $this->getTransaction()->toArray();
 
-        $this->assertIsString($actual);
-    }
+    expect($actual)->toBeArray();
+});
 
-    private function getTransaction($file = 'transfer'): AbstractTransaction
-    {
-        $fixture = $this->getTransactionFixture('evm_call', $file);
+it('should turn the transaction to json', function () {
+    $actual = $this->getTransaction()->toJson();
 
-        return Deserializer::new($fixture['serialized'])->deserialize();
-    }
-}
+    expect($actual)->toBeString();
+});

@@ -2,133 +2,88 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Unit;
-
 use ArkEcosystem\Crypto\Exceptions\InvalidUsernameException;
 use ArkEcosystem\Crypto\Helpers;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * @covers \ArkEcosystem\Crypto\Helpers
- */
-class HelpersTest extends TestCase
-{
-    /** @test */
-    public function it_should_trim_hex_values_properly(): void
-    {
-        $this->assertSame('0123', Helpers::removeLeadingHexZero('0x0123'));
-        $this->assertSame('0123', Helpers::removeLeadingHexZero('0123'));
-        $this->assertSame('1234', Helpers::removeLeadingHexZero('0x1234'));
-        $this->assertSame('0000', Helpers::removeLeadingHexZero('0x0000'));
-    }
+// Test for trimming hex values
+test('it should trim hex values properly', function () {
+    expect(Helpers::removeLeadingHexZero('0x0123'))->toBe('0123');
+    expect(Helpers::removeLeadingHexZero('0123'))->toBe('0123');
+    expect(Helpers::removeLeadingHexZero('0x1234'))->toBe('1234');
+    expect(Helpers::removeLeadingHexZero('0x0000'))->toBe('0000');
+});
 
-    /**
-     * @test
-     * @dataProvider validUsernamesProvider
-     */
-    public function it_accepts_valid_usernames(string $username): void
-    {
-        try {
-            Helpers::isValidUsername($username);
-            $this->assertTrue(true); // If we get here, no exception was thrown
-        } catch (InvalidUsernameException $e) {
-            $this->fail('Valid username threw an exception: '.$e->getMessage());
-        }
-    }
+// Tests for valid usernames
+dataset('valid_usernames', [
+    'simple username'                 => ['john'],
+    'username with numbers'           => ['john123'],
+    'username with single underscore' => ['john_doe'],
+    'minimum length'                  => ['a'],
+    'maximum length'                  => ['abcdefghijklmnopqrst'], // 20 characters
+    'mixed characters'                => ['user_123_name'],
+]);
 
-    /**
-     * @test
-     * @dataProvider invalidLengthUsernamesProvider
-     */
-    public function it_rejects_usernames_with_invalid_length(string $username): void
-    {
-        $this->expectException(InvalidUsernameException::class);
-        $this->expectExceptionMessage('Username must be between 1 and 20 characters long');
-
+test('it accepts valid usernames', function (string $username) {
+    try {
         Helpers::isValidUsername($username);
+        expect(true)->toBeTrue(); // If we get here, no exception was thrown
+    } catch (InvalidUsernameException $e) {
+        $this->fail('Valid username threw an exception: '.$e->getMessage());
     }
+})->with('valid_usernames');
 
-    /**
-     * @test
-     * @dataProvider invalidCharacterUsernamesProvider
-     */
-    public function it_rejects_usernames_with_invalid_characters(string $username): void
-    {
-        $this->expectException(InvalidUsernameException::class);
-        $this->expectExceptionMessage('Username can only contain lowercase letters, numbers and underscores');
+// Tests for invalid username length
+dataset('invalid_length_usernames', [
+    'empty string' => [''],
+    'too long'     => ['abcdefghijklmnopqrstu'], // 21 characters
+]);
 
-        Helpers::isValidUsername($username);
-    }
+test('it rejects usernames with invalid length', function (string $username) {
+    $this->expectException(InvalidUsernameException::class);
+    $this->expectExceptionMessage('Username must be between 1 and 20 characters long');
 
-    /**
-     * @test
-     * @dataProvider usernamesWithUnderscoreBoundariesProvider
-     */
-    public function it_rejects_usernames_starting_or_ending_with_underscore(string $username): void
-    {
-        $this->expectException(InvalidUsernameException::class);
-        $this->expectExceptionMessage('Username cannot start or end with an underscore');
+    Helpers::isValidUsername($username);
+})->with('invalid_length_usernames');
 
-        Helpers::isValidUsername($username);
-    }
+// Tests for invalid username characters
+dataset('invalid_character_usernames', [
+    'uppercase letters'    => ['John'],
+    'special characters'   => ['john@doe'],
+    'spaces'               => ['john doe'],
+    'non-ASCII characters' => ['jöhn'],
+]);
 
-    /**
-     * @test
-     * @dataProvider usernamesWithConsecutiveUnderscoresProvider
-     */
-    public function it_rejects_usernames_with_consecutive_underscores(string $username): void
-    {
-        $this->expectException(InvalidUsernameException::class);
-        $this->expectExceptionMessage('Username cannot contain consecutive underscores');
+test('it rejects usernames with invalid characters', function (string $username) {
+    $this->expectException(InvalidUsernameException::class);
+    $this->expectExceptionMessage('Username can only contain lowercase letters, numbers and underscores');
 
-        Helpers::isValidUsername($username);
-    }
+    Helpers::isValidUsername($username);
+})->with('invalid_character_usernames');
 
-    public function validUsernamesProvider(): array
-    {
-        return [
-            'simple username'                 => ['john'],
-            'username with numbers'           => ['john123'],
-            'username with single underscore' => ['john_doe'],
-            'minimum length'                  => ['a'],
-            'maximum length'                  => ['abcdefghijklmnopqrst'], // 20 characters
-            'mixed characters'                => ['user_123_name'],
-        ];
-    }
+// Tests for usernames with underscore boundaries
+dataset('usernames_with_underscore_boundaries', [
+    'starting underscore' => ['_john'],
+    'ending underscore'   => ['john_'],
+    'both underscores'    => ['_john_'],
+]);
 
-    public function invalidLengthUsernamesProvider(): array
-    {
-        return [
-            'empty string' => [''],
-            'too long'     => ['abcdefghijklmnopqrstu'], // 21 characters
-        ];
-    }
+test('it rejects usernames starting or ending with underscore', function (string $username) {
+    $this->expectException(InvalidUsernameException::class);
+    $this->expectExceptionMessage('Username cannot start or end with an underscore');
 
-    public function invalidCharacterUsernamesProvider(): array
-    {
-        return [
-            'uppercase letters'    => ['John'],
-            'special characters'   => ['john@doe'],
-            'spaces'               => ['john doe'],
-            'non-ASCII characters' => ['jöhn'],
-        ];
-    }
+    Helpers::isValidUsername($username);
+})->with('usernames_with_underscore_boundaries');
 
-    public function usernamesWithUnderscoreBoundariesProvider(): array
-    {
-        return [
-            'starting underscore' => ['_john'],
-            'ending underscore'   => ['john_'],
-            'both underscores'    => ['_john_'],
-        ];
-    }
+// Tests for usernames with consecutive underscores
+dataset('usernames_with_consecutive_underscores', [
+    'double underscore'           => ['john__doe'],
+    'triple underscore'           => ['john___doe'],
+    'multiple double underscores' => ['john__doe__smith'],
+]);
 
-    public function usernamesWithConsecutiveUnderscoresProvider(): array
-    {
-        return [
-            'double underscore'           => ['john__doe'],
-            'triple underscore'           => ['john___doe'],
-            'multiple double underscores' => ['john__doe__smith'],
-        ];
-    }
-}
+test('it rejects usernames with consecutive underscores', function (string $username) {
+    $this->expectException(InvalidUsernameException::class);
+    $this->expectExceptionMessage('Username cannot contain consecutive underscores');
+
+    Helpers::isValidUsername($username);
+})->with('usernames_with_consecutive_underscores');

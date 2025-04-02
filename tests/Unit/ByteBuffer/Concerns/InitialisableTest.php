@@ -2,103 +2,75 @@
 
 declare(strict_types=1);
 
-namespace ArkEcosystem\Tests\Crypto\Concerns\Reads;
-
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Initialisable
  */
-class InitialisableTest extends TestCase
-{
-    private $expected = '48656c6c6f20576f726c6420f09f9884';
 
-    /** @test */
-    public function it_should_initialise_from_binary()
-    {
-        $buffer = ByteBuffer::fromBinary('Hello World 😄');
+beforeEach(function () {
+    $this->expected = '48656c6c6f20576f726c6420f09f9884';
+});
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+it('should initialise from binary', function () {
+    $buffer = ByteBuffer::fromBinary('Hello World 😄');
 
-    /** @test */
-    public function it_should_initialise_from_hex()
-    {
-        $buffer = ByteBuffer::fromHex('48656c6c6f20576f726c6420f09f9884');
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+it('should initialise from hex', function () {
+    $buffer = ByteBuffer::fromHex('48656c6c6f20576f726c6420f09f9884');
 
-    /** @test */
-    public function it_should_fail_to_initialise_from_hex()
-    {
-        $this->expectException(\InvalidArgumentException::class);
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-        ByteBuffer::fromHex('😄');
-    }
+it('should fail to initialise from hex', function () {
+    expect(fn () => ByteBuffer::fromHex('😄'))->toThrow(\InvalidArgumentException::class);
+});
 
-    /** @test */
-    public function it_should_initialise_from_utf8()
-    {
-        $buffer = ByteBuffer::fromUTF8('Hello World 😄');
+it('should initialise from utf8', function () {
+    $buffer = ByteBuffer::fromUTF8('Hello World 😄');
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_base64()
-    {
-        $buffer = ByteBuffer::fromBase64(base64_encode('Hello World 😄'));
+it('should initialise from base64', function () {
+    $buffer = ByteBuffer::fromBase64(base64_encode('Hello World 😄'));
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_array()
-    {
-        $buffer = ByteBuffer::fromArray(str_split('Hello World 😄'));
+it('should initialise from array', function () {
+    $buffer = ByteBuffer::fromArray(str_split('Hello World 😄'));
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_string_as_binary()
-    {
-        $buffer = ByteBuffer::fromString('Hello World 😄', 'binary');
+it('should initialise from string as binary', function () {
+    $buffer = ByteBuffer::fromString('Hello World 😄', 'binary');
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_string_as_hex()
-    {
-        $buffer = ByteBuffer::fromString('48656c6c6f20576f726c6420f09f9884', 'hex');
+it('should initialise from string as hex', function () {
+    $buffer = ByteBuffer::fromString('48656c6c6f20576f726c6420f09f9884', 'hex');
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_string_as_utf8()
-    {
-        $buffer = ByteBuffer::fromString('Hello World 😄', 'utf8');
+it('should initialise from string as utf8', function () {
+    $buffer = ByteBuffer::fromString('Hello World 😄', 'utf8');
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_initialise_from_string_as_base64()
-    {
-        $buffer = ByteBuffer::fromString(base64_encode('Hello World 😄'), 'base64');
+it('should initialise from string as base64', function () {
+    $buffer = ByteBuffer::fromString(base64_encode('Hello World 😄'), 'base64');
 
-        $this->assertSame($this->expected, $buffer->toHex());
-    }
+    expect($buffer->toHex())->toBe($this->expected);
+});
 
-    /** @test */
-    public function it_should_throw_for_invalid_type()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        ByteBuffer::fromString('Hello World 😄', '_INVALID_');
-    }
-}
+it('should throw for invalid type', function () {
+    expect(fn () => ByteBuffer::fromString('Hello World 😄', '_INVALID_'))
+        ->toThrow(\InvalidArgumentException::class);
+});

@@ -5,65 +5,52 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Utils;
 
 use ArkEcosystem\Crypto\Utils\Abi\ArgumentDecoder;
-use PHPUnit\Framework\TestCase;
 
-/**
+/*
  * @covers \ArkEcosystem\Crypto\Utils\Abi\ArgumentDecoder
  */
-class ArgumentDecoderTest extends TestCase
-{
-    /** @test */
-    public function it_should_decode_address()
-    {
-        $payload  = '000000000000000000000000512F366D524157BcF734546eB29a6d687B762255';
-        $expected = '0x512F366D524157BcF734546eB29a6d687B762255';
 
-        $decoder = new ArgumentDecoder($payload);
+it('should decode address', function () {
+    $payload  = '000000000000000000000000512F366D524157BcF734546eB29a6d687B762255';
+    $expected = '0x512F366D524157BcF734546eB29a6d687B762255';
 
-        $this->assertSame($expected, $decoder->decodeAddress());
-    }
+    $decoder = new ArgumentDecoder($payload);
 
-    /** @test */
-    public function it_should_decode_unsigned_int()
-    {
-        $payload  = '000000000000000000000000000000000000000000000000016345785d8a0000';
-        $expected = '100000000000000000';
+    expect($decoder->decodeAddress())->toBe($expected);
+});
 
-        $decoder = new ArgumentDecoder($payload);
+it('should decode unsigned int', function () {
+    $payload  = '000000000000000000000000000000000000000000000000016345785d8a0000';
+    $expected = '100000000000000000';
 
-        $this->assertSame($expected, $decoder->decodeUnsignedInt());
-    }
+    $decoder = new ArgumentDecoder($payload);
 
-    /** @test */
-    public function it_should_decode_signed_int()
-    {
-        $payload  = '000000000000000000000000000000000000000000000000016345785d8a0000';
-        $expected = '100000000000000000';
+    expect($decoder->decodeUnsignedInt())->toBe($expected);
+});
 
-        $decoder = new ArgumentDecoder($payload);
+it('should decode signed int', function () {
+    $payload  = '000000000000000000000000000000000000000000000000016345785d8a0000';
+    $expected = '100000000000000000';
 
-        $this->assertSame($expected, $decoder->decodeSignedInt());
-    }
+    $decoder = new ArgumentDecoder($payload);
 
-    /** @test */
-    public function it_should_decode_bool_as_true()
-    {
-        $payload  = '0000000000000000000000000000000000000000000000000000000000000001';
-        $expected = true;
+    expect($decoder->decodeSignedInt())->toBe($expected);
+});
 
-        $decoder = new ArgumentDecoder($payload);
+it('should decode bool as true', function () {
+    $payload  = '0000000000000000000000000000000000000000000000000000000000000001';
+    $expected = true;
 
-        $this->assertSame($expected, $decoder->decodeBool());
-    }
+    $decoder = new ArgumentDecoder($payload);
 
-    /** @test */
-    public function it_should_decode_bool_as_false()
-    {
-        $payload  = '0000000000000000000000000000000000000000000000000000000000000000';
-        $expected = false;
+    expect($decoder->decodeBool())->toBe($expected);
+});
 
-        $decoder = new ArgumentDecoder($payload);
+it('should decode bool as false', function () {
+    $payload  = '0000000000000000000000000000000000000000000000000000000000000000';
+    $expected = false;
 
-        $this->assertSame($expected, $decoder->decodeBool());
-    }
-}
+    $decoder = new ArgumentDecoder($payload);
+
+    expect($decoder->decodeBool())->toBe($expected);
+});
