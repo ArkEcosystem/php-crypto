@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-interface NetworkInterface {
+interface NetworkInterface
+{
     /**
      * Get the chain identifier.
      *
