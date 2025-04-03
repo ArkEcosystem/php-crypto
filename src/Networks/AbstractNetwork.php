@@ -6,7 +6,7 @@ namespace ArkEcosystem\Crypto\Networks;
 
 use BitWasp\Bitcoin\Network\Network;
 
-abstract class AbstractNetwork extends Network
+abstract class AbstractNetwork extends Network implements NetworkInterface
 {
     /**
      * {@inheritdoc}
@@ -35,17 +35,8 @@ abstract class AbstractNetwork extends Network
         return new static();
     }
 
-    /**
-     * Get the chain identifier.
-     *
-     * @return int
-     */
-    abstract public function chainId(): int;
-
-    /**
-     * Get the network epoch.
-     *
-     * @return string
-     */
-    abstract public function epoch(): string;
+    public function wif(): string
+    {
+        return $this->getPrivByte();
+    }
 }
