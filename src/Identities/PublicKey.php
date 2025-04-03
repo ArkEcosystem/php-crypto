@@ -25,29 +25,6 @@ class PublicKey
     }
 
     /**
-     * Create a public key instance from a multi-signature asset.
-     *
-     * @param int   $min
-     * @param array $publicKeys
-     *
-     * @return EcPublicKey
-     */
-    public static function fromMultiSignatureAsset(int $min, array $publicKeys): EcPublicKey
-    {
-        $minKey = static::fromPassphrase('0'.dechex($min));
-        $keys   = [$minKey->getHex(), ...$publicKeys];
-
-        $curve = (new EC('secp256k1'))->curve;
-        $P     = $curve->jpoint(null, null, null);
-
-        foreach ($keys as $publicKey) {
-            $P = $P->add($curve->decodePoint($publicKey, 'hex'));
-        }
-
-        return static::fromHex(bin2hex(implode(array_map('chr', $P->encodeCompressed(true)))));
-    }
-
-    /**
      * Create a public key instance from a hex string.
      *
      * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
