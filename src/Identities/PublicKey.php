@@ -38,7 +38,7 @@ class PublicKey
     /**
      * Create a public key instance from a hex string.
      *
-     * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
+     * @param BufferInterface|string $publicKey
      *
      * @return PublicKey
      */
@@ -57,7 +57,7 @@ class PublicKey
     /**
      * Create a public key instance from a binary string.
      *
-     * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
+     * @param BufferInterface|string $publicKey
      *
      * @return PublicKey
      */
