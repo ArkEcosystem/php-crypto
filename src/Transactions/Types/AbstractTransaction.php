@@ -8,6 +8,7 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
@@ -74,9 +75,9 @@ abstract class AbstractTransaction
     {
         $compactSignature = $this->getSignature();
 
-        $publicKey = $this->getPublicKey($compactSignature);
+        $publicKey = $this->recoverPublicKey($compactSignature);
 
-        $this->data['senderPublicKey'] = $publicKey->getHex();
+        $this->data['senderPublicKey'] = $publicKey->publicKey;
 
         $this->data['senderAddress'] = Address::fromPublicKey($this->data['senderPublicKey']);
     }
@@ -85,9 +86,9 @@ abstract class AbstractTransaction
     {
         $compactSignature = $this->getSignature();
 
-        $publicKey = $this->getPublicKey($compactSignature);
+        $publicKey = $this->recoverPublicKey($compactSignature);
 
-        return $publicKey->verify($this->hash(skipSignature: true), $compactSignature);
+        return $publicKey->instance->verify($this->hash(skipSignature: true), $compactSignature);
     }
 
     public function hash(bool $skipSignature = false): BufferInterface
@@ -135,14 +136,9 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
-    protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
+    protected function recoverPublicKey(CompactSignatureInterface $compactSignature): PublicKey
     {
-        $ecAdapter = EcAdapterFactory::getPhpEcc(
-            Bitcoin::getMath(),
-            Bitcoin::getGenerator()
-        );
-
-        return $ecAdapter->recover($this->hash(skipSignature: true), $compactSignature);
+        return PublicKey::recover($this->hash(skipSignature: true), $compactSignature);
     }
 
     protected function decodePayload(array $data, ContractAbiType $type = ContractAbiType::CONSENSUS): ?array
