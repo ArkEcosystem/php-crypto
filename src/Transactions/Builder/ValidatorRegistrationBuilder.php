@@ -14,7 +14,7 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::CONSENSUS->value);
+        $this->to(ContractAddresses::CONSENSUS->value);
     }
 
     public function validatorPublicKey(string $validatorPublicKey): self

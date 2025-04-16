@@ -15,7 +15,7 @@ class MultipaymentBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::MULTIPAYMENT->value);
+        $this->to(ContractAddresses::MULTIPAYMENT->value);
 
         $this->transaction->data['pay'] = [[], []];
         $this->transaction->refreshPayloadData();

@@ -106,18 +106,18 @@ abstract class AbstractTransaction
     public function toArray(): array
     {
         return array_filter([
-            'gasPrice'         => $this->data['gasPrice'],
-            'network'          => $this->data['network'] ?? Network::get()->chainId(),
-            'id'               => $this->data['id'],
-            'gas'              => $this->data['gas'],
-            'nonce'            => $this->data['nonce'],
-            'senderPublicKey'  => $this->data['senderPublicKey'],
-            'recipientAddress' => $this->data['recipientAddress'] ?? null,
-            'value'            => $this->data['value'],
-            'data'             => $this->data['data'],
-            'r'                => $this->data['r'],
-            's'                => $this->data['s'],
-            'v'                => $this->data['v'],
+            'gasPrice'        => $this->data['gasPrice'],
+            'network'         => $this->data['network'] ?? Network::get()->chainId(),
+            'hash'            => $this->data['hash'],
+            'gas'             => $this->data['gas'],
+            'nonce'           => $this->data['nonce'],
+            'senderPublicKey' => $this->data['senderPublicKey'],
+            'to'              => $this->data['to'] ?? null,
+            'value'           => $this->data['value'],
+            'data'            => $this->data['data'],
+            'r'               => $this->data['r'],
+            's'               => $this->data['s'],
+            'v'               => $this->data['v'],
         ], function ($element) {
             if (null !== $element) {
                 return true;

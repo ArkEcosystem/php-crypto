@@ -14,7 +14,7 @@ class VoteBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::CONSENSUS->value);
+        $this->to(ContractAddresses::CONSENSUS->value);
     }
 
     public function vote(string $vote): self

@@ -14,7 +14,7 @@ it('should sign it with a passphrase', function () {
         ->network($fixture['data']['network'])
         ->payload($fixture['data']['data'])
         ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
-        ->recipientAddress('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
+        ->to('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
         ->sign($this->passphrase);
 
     expect($builder->verify())->toBeTrue();

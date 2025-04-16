@@ -14,7 +14,7 @@ class ValidatorResignationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::CONSENSUS->value);
+        $this->to(ContractAddresses::CONSENSUS->value);
     }
 
     protected function getTransactionInstance(array $data): AbstractTransaction

@@ -63,13 +63,13 @@ class Deserializer
 
         $data = [];
 
-        $data['network']          = $this->parseNumber($decodedRlp[0]);
-        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]);
-        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]);
-        $data['gas']              = $this->parseNumber($decodedRlp[4]);
-        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]);
-        $data['value']            = $this->parseBigNumber($decodedRlp[6]);
-        $data['data']             = $this->parseHex($decodedRlp[7]);
+        $data['network']  = $this->parseNumber($decodedRlp[0]);
+        $data['nonce']    = $this->parseBigNumber($decodedRlp[1]);
+        $data['gasPrice'] = $this->parseNumber($decodedRlp[3]);
+        $data['gas']      = $this->parseNumber($decodedRlp[4]);
+        $data['to']       = $this->parseAddress($decodedRlp[5]);
+        $data['value']    = $this->parseBigNumber($decodedRlp[6]);
+        $data['data']     = $this->parseHex($decodedRlp[7]);
 
         if (count($decodedRlp) === 12) {
             $data['v'] = $this->parseNumber($decodedRlp[9]) + 27;
