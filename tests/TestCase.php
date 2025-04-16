@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
             'nonce',
             'value',
             'gasPrice',
-            'gasLimit',
+            'gas',
             'contractId',
             'senderPublicKey',
             'senderAddress',

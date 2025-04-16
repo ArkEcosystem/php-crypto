@@ -13,14 +13,14 @@ it('should sign it with a passphrase', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
-        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->username('fixture')
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -40,7 +40,7 @@ it('should throw exception for invalid username', function () {
             ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
             ->nonce($fixture['data']['nonce'])
             ->network($fixture['data']['network'])
-            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+            ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
             ->username('this_is_a_very_long_username_that_is_invalid')
             ->sign($this->passphrase);
     };

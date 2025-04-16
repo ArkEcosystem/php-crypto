@@ -13,13 +13,13 @@ it('should sign it with a passphrase', function () {
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
         ->vote('0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763')
-        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);

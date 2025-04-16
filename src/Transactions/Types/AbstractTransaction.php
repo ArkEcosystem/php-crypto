@@ -109,7 +109,7 @@ abstract class AbstractTransaction
             'gasPrice'         => $this->data['gasPrice'],
             'network'          => $this->data['network'] ?? Network::get()->chainId(),
             'id'               => $this->data['id'],
-            'gasLimit'         => $this->data['gasLimit'],
+            'gas'              => $this->data['gas'],
             'nonce'            => $this->data['nonce'],
             'senderPublicKey'  => $this->data['senderPublicKey'],
             'recipientAddress' => $this->data['recipientAddress'] ?? null,

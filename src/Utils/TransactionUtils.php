@@ -26,7 +26,7 @@ class TransactionUtils
             self::toBeArray(isset($transaction['nonce']) ? $transaction['nonce'] : 0),
             self::toBeArray(0),
             self::toBeArray($transaction['gasPrice'] ?? 0),
-            self::toBeArray($transaction['gasLimit'] ?? 0),
+            self::toBeArray($transaction['gas'] ?? 0),
             $transaction['recipientAddress'] ?? '0x',
             self::toBeArray(isset($transaction['value']) ? $transaction['value'] : 0),
             isset($transaction['data']) && str_starts_with($transaction['data'], '0x')

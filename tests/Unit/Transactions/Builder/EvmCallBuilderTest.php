@@ -13,7 +13,7 @@ it('should sign it with a passphrase', function () {
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
         ->payload($fixture['data']['data'])
-        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
+        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->recipientAddress('0xE536720791A7DaDBeBdBCD8c8546fb0791a11901')
         ->sign($this->passphrase);
 
