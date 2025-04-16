@@ -29,7 +29,7 @@ it('should sign it with a passphrase', function () {
 
     expect($builder->transaction->serialize()->getHex())->toBe($fixture['serialized']);
 
-    expect($builder->transaction->data['id'])->toBe($fixture['data']['id']);
+    expect($builder->transaction->data['hash'])->toBe($fixture['data']['hash']);
 
     expect($builder->verify())->toBeTrue();
 });
@@ -58,7 +58,7 @@ it('should handle large amounts', function () {
 
     expect($builder->transaction->serialize()->getHex())->toBe($fixture['serialized']);
 
-    expect($builder->transaction->data['id'])->toBe($fixture['data']['id']);
+    expect($builder->transaction->data['hash'])->toBe($fixture['data']['hash']);
 
     expect($builder->verify())->toBeTrue();
 });

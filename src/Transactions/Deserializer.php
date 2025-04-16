@@ -83,7 +83,7 @@ class Deserializer
 
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
-        $transaction->data['id'] = TransactionUtils::getId($data);
+        $transaction->data['hash'] = $transaction->hash()->getHex();
 
         $transaction->recoverSender();
 

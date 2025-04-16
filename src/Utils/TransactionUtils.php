@@ -65,11 +65,6 @@ class TransactionUtils
         return Buffer::hex($keccak);
     }
 
-    public static function getId(array $transaction): string
-    {
-        return self::toHash($transaction, false)->getHex();
-    }
-
     /**
      * Converts a big integer to a big-endian byte array.
      *

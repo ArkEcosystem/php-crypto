@@ -79,7 +79,7 @@ abstract class AbstractTransactionBuilder
 
         $this->transaction             = $this->transaction->sign($keys);
 
-        $this->transaction->data['id'] = $this->transaction->getId();
+        $this->transaction->data['hash'] = $this->transaction->hash()->getHex();
 
         return $this;
     }

@@ -43,14 +43,6 @@ abstract class AbstractTransaction
     }
 
     /**
-     * Convert the byte representation to a unique identifier.
-     */
-    public function getId(): string
-    {
-        return $this->hash(skipSignature: false)->getHex();
-    }
-
-    /**
      * Sign the transaction using the given passphrase.
      */
     public function sign(PrivateKey $keys): static
