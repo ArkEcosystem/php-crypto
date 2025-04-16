@@ -44,7 +44,7 @@ abstract class TestCase extends BaseTestCase
             'gas',
             'contractId',
             'senderPublicKey',
-            'senderAddress',
+            'from',
             'to',
             'v',
             'r',

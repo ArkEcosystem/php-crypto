@@ -70,7 +70,7 @@ abstract class AbstractTransaction
 
         $this->data['senderPublicKey'] = $publicKey->getHex();
 
-        $this->data['senderAddress'] = Address::fromPublicKey($this->data['senderPublicKey']);
+        $this->data['from'] = Address::fromPublicKey($this->data['senderPublicKey']);
     }
 
     public function verify(): bool
