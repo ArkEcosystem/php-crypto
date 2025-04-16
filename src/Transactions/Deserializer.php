@@ -21,7 +21,6 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
-use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Buffertools\Buffer;
 
 class Deserializer
