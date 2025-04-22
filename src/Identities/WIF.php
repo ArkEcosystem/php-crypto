@@ -17,6 +17,6 @@ class WIF
      */
     public static function fromPassphrase(string $passphrase): string
     {
-        return PrivateKey::fromPassphrase($passphrase)->toWif(Network::get());
+        return PrivateKey::fromPassphrase($passphrase)->instance->toWif(Network::get());
     }
 }
