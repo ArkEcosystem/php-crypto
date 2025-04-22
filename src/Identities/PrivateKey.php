@@ -17,12 +17,12 @@ use BitWasp\Buffertools\BufferInterface;
 
 class PrivateKey
 {
-    public PrivateKeyInterface $privateKey;
+    public PrivateKeyInterface $instance;
     public string $publicKey;
 
     public function __construct(PrivateKeyInterface $privateKey)
     {
-        $this->privateKey = $privateKey;
+        $this->instance = $privateKey;
         $this->publicKey = $privateKey->getPublicKey()->getHex();
     }
 
@@ -33,7 +33,7 @@ class PrivateKey
      */
     public function getHex(): string
     {
-        return $this->privateKey->getHex();
+        return $this->instance->getHex();
     }
 
     /**
@@ -83,7 +83,7 @@ class PrivateKey
      */
     public function sign(BufferInterface $message): CompactSignature
     {
-        return $this->privateKey->signCompact($message);
+        return $this->instance->signCompact($message);
     }
 
     private static function factory(): PrivateKeyFactory
