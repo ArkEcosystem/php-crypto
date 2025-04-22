@@ -8,7 +8,6 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\Signature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PrivateKeyInterface;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
@@ -18,11 +17,12 @@ use BitWasp\Buffertools\BufferInterface;
 class PrivateKey
 {
     public PrivateKeyInterface $instance;
+
     public string $publicKey;
 
     public function __construct(PrivateKeyInterface $privateKey)
     {
-        $this->instance = $privateKey;
+        $this->instance  = $privateKey;
         $this->publicKey = $privateKey->getPublicKey()->getHex();
     }
 
@@ -53,7 +53,7 @@ class PrivateKey
     /**
      * Create a private key instance from a hex string.
      *
-     * @param \BitWasp\Buffertools\BufferInterface|string $privateKey
+     * @param BufferInterface|string $privateKey
      *
      * @return self
      */

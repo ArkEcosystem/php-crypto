@@ -51,5 +51,5 @@ it('should sign a message', function () {
     expect($r)->toBeString();
     expect($s)->toBeString();
 
-    expect(dechex($v) . $r . $s)->toHaveLength(129);
+    expect(dechex($v).$r.$s)->toHaveLength(129);
 });
