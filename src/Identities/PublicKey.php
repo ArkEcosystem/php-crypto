@@ -11,16 +11,33 @@ use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 
 class PublicKey
 {
+    public EcPublicKey $publicKey;
+
+    public function __construct(EcPublicKey $publicKey)
+    {
+        $this->publicKey = $publicKey;
+    }
+
+    /**
+     * Get the public key in hex format.
+     *
+     * @return string
+     */
+    public function getHex(): string
+    {
+        return $this->publicKey->getHex();
+    }
+
     /**
      * Derive the public from the given passphrase.
      *
      * @param string $passphrase
      *
-     * @return EcPublicKey
+     * @return self
      */
-    public static function fromPassphrase(string $passphrase): EcPublicKey
+    public static function fromPassphrase(string $passphrase): self
     {
-        return PrivateKey::fromPassphrase($passphrase)->getPublicKey();
+        return new static(PrivateKey::fromPassphrase($passphrase)->instance->getPublicKey());
     }
 
     /**
@@ -28,15 +45,17 @@ class PublicKey
      *
      * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
      *
-     * @return EcPublicKey
+     * @return self
      */
-    public static function fromHex($publicKey): EcPublicKey
+    public static function fromHex($publicKey): self
     {
-        return (new PublicKeyFactory(
+        $factory = (new PublicKeyFactory(
             EcAdapterFactory::getPhpEcc(
                 Bitcoin::getMath(),
                 Bitcoin::getGenerator()
             )
-        ))->fromHex($publicKey);
+        ));
+
+        return new static($factory->fromHex($publicKey));
     }
 }
