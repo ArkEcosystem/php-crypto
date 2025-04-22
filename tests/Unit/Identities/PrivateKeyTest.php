@@ -43,12 +43,12 @@ it('should sign a message', function () {
     $r = Helpers::gmpToHex($signature->getR());
     $s = Helpers::gmpToHex($signature->getS());
 
-    fwrite(STDERR, $signature->getHex() . PHP_EOL);
+    fwrite(STDERR, $signature->getHex().PHP_EOL);
 
     expect($signature->getHex())->toBeString();
     expect($v)->toBe(0);
     expect($r)->toBeString();
     expect($s)->toBeString();
 
-    expect(dechex($v) . $r . $s)->toHaveLength(129);
+    expect(dechex($v).$r.$s)->toHaveLength(129);
 });
