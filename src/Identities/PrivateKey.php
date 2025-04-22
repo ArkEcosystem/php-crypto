@@ -7,30 +7,47 @@ namespace ArkEcosystem\Crypto\Identities;
 use ArkEcosystem\Crypto\Configuration\Network;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EcPrivateKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\Signature;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PrivateKeyInterface;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Bitcoin\Key\Factory\PrivateKeyFactory;
 use BitWasp\Buffertools\Buffer;
+use BitWasp\Buffertools\BufferInterface;
 
 class PrivateKey
 {
+    public PrivateKeyInterface $privateKey;
+    public string $publicKey;
+
+    public function __construct(PrivateKeyInterface $privateKey)
+    {
+        $this->privateKey = $privateKey;
+        $this->publicKey = $privateKey->getPublicKey()->getHex();
+    }
+
+    /**
+     * Get the private key in hex format.
+     *
+     * @return string
+     */
+    public function getHex(): string
+    {
+        return $this->privateKey->getHex();
+    }
+
     /**
      * Derive the private key for the given passphrase.
      *
      * @param string $passphrase
      *
-     * @return EcPrivateKey
+     * @return self
      */
-    public static function fromPassphrase(string $passphrase): EcPrivateKey
+    public static function fromPassphrase(string $passphrase): self
     {
         $passphrase = Hash::sha256(new Buffer($passphrase));
 
-        return (new PrivateKeyFactory(
-            EcAdapterFactory::getPhpEcc(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        ))->fromHexCompressed($passphrase->getHex());
+        return new self(static::factory()->fromHexCompressed($passphrase->getHex()));
     }
 
     /**
@@ -38,16 +55,11 @@ class PrivateKey
      *
      * @param \BitWasp\Buffertools\BufferInterface|string $privateKey
      *
-     * @return EcPrivateKey
+     * @return self
      */
-    public static function fromHex($privateKey): EcPrivateKey
+    public static function fromHex($privateKey): self
     {
-        return (new PrivateKeyFactory(
-            EcAdapterFactory::getPhpEcc(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        ))->fromHexCompressed($privateKey);
+        return new self(static::factory()->fromHexCompressed($privateKey));
     }
 
     /**
@@ -55,15 +67,32 @@ class PrivateKey
      *
      * @param string $wif
      *
-     * @return EcPrivateKey
+     * @return self
      */
-    public static function fromWif(string $wif): EcPrivateKey
+    public static function fromWif(string $wif): self
     {
-        return (new PrivateKeyFactory(
+        return new self(static::factory()->fromWif($wif, Network::get()));
+    }
+
+    /**
+     * Derive the private key for the given WIF.
+     *
+     * @param BufferInterface $message
+     *
+     * @return CompactSignature
+     */
+    public function sign(BufferInterface $message): CompactSignature
+    {
+        return $this->privateKey->signCompact($message);
+    }
+
+    private static function factory(): PrivateKeyFactory
+    {
+        return new PrivateKeyFactory(
             EcAdapterFactory::getPhpEcc(
                 Bitcoin::getMath(),
                 Bitcoin::getGenerator()
             )
-        ))->fromWif($wif, Network::get());
+        );
     }
 }
