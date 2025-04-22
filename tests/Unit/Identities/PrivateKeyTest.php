@@ -13,6 +13,7 @@ it('should get the private key from passphrase', function () {
 
     $actual = PrivateKey::fromPassphrase($fixture['passphrase']);
 
+    expect($actual)->toBeInstanceOf(PrivateKey::class);
     expect($actual->getHex())->toBe($fixture['data']['privateKey']);
 });
 
@@ -21,6 +22,7 @@ it('should get the private key from hex', function () {
 
     $actual = PrivateKey::fromHex($fixture['data']['privateKey']);
 
+    expect($actual)->toBeInstanceOf(PrivateKey::class);
     expect($actual->getHex())->toBe($fixture['data']['privateKey']);
 });
 
@@ -29,6 +31,7 @@ it('should get the private key from wif', function () {
 
     $actual = PrivateKey::fromWif($fixture['data']['wif']);
 
+    expect($actual)->toBeInstanceOf(PrivateKey::class);
     expect($actual->getHex())->toBe($fixture['data']['privateKey']);
 });
 
@@ -42,8 +45,6 @@ it('should sign a message', function () {
     $v = $signature->getRecoveryId();
     $r = Helpers::gmpToHex($signature->getR());
     $s = Helpers::gmpToHex($signature->getS());
-
-    fwrite(STDERR, $signature->getHex() . PHP_EOL);
 
     expect($signature->getHex())->toBeString();
     expect($v)->toBe(0);
