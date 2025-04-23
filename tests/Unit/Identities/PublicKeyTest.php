@@ -11,7 +11,8 @@ it('should get the public key from passphrase', function () {
 
     $actual = PublicKey::fromPassphrase($fixture['passphrase']);
 
-    expect($actual->getHex())->toBe($fixture['data']['publicKey']);
+    expect($actual)->toBeInstanceOf(PublicKey::class);
+    expect($actual->publicKey)->toBe($fixture['data']['publicKey']);
 });
 
 it('should get the public key from hex', function () {
@@ -19,5 +20,6 @@ it('should get the public key from hex', function () {
 
     $actual = PublicKey::fromHex($fixture['data']['publicKey']);
 
-    expect($actual->getHex())->toBe($fixture['data']['publicKey']);
+    expect($actual)->toBeInstanceOf(PublicKey::class);
+    expect($actual->publicKey)->toBe($fixture['data']['publicKey']);
 });

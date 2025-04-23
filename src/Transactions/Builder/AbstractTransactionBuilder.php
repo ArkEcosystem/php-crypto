@@ -73,11 +73,11 @@ abstract class AbstractTransactionBuilder
 
     public function sign(string $passphrase): static
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $privateKey = PrivateKey::fromPassphrase($passphrase);
 
-        $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
+        $this->transaction->data['senderPublicKey'] = $privateKey->publicKey;
 
-        $this->transaction = $this->transaction->sign($keys);
+        $this->transaction = $this->transaction->sign($privateKey);
 
         $this->transaction->data['hash'] = $this->transaction->hash()->getHex();
 

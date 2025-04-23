@@ -102,19 +102,18 @@ class Message
      */
     public static function sign(string $message, string $passphrase): self
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $privateKey = PrivateKey::fromPassphrase($passphrase);
 
         $hash = Keccak::hash($message, 256);
 
-        /** @var CompactSignature $signature */
-        $signature = $keys->signCompact(Buffer::hex($hash));
+        $signature = $privateKey->sign(Buffer::hex($hash));
 
         $r = Helpers::gmpToHex($signature->getR());
         $s = Helpers::gmpToHex($signature->getS());
         $v = dechex($signature->getRecoveryId() + 27);
 
         return static::new([
-            'publickey' => $keys->getPublicKey()->getHex(),
+            'publickey' => $privateKey->publicKey,
             'signature' => $r.$s.$v,
             'message'   => $message,
         ]);

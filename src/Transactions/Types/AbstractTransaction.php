@@ -8,14 +8,14 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Key\PublicKeyInterface;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
@@ -45,12 +45,11 @@ abstract class AbstractTransaction
     /**
      * Sign the transaction using the given passphrase.
      */
-    public function sign(PrivateKey $keys): static
+    public function sign(PrivateKey $privateKey): static
     {
         $hash = $this->hash(skipSignature: true);
 
-        /** @var CompactSignature $signature */
-        $signature = $keys->signCompact($hash);
+        $signature = $privateKey->sign($hash);
 
         // Extract the recovery ID (an integer between 0 and 3) from the signature
         $recoveryId = $signature->getRecoveryId();
@@ -66,9 +65,9 @@ abstract class AbstractTransaction
     {
         $compactSignature = $this->getSignature();
 
-        $publicKey = $this->getPublicKey($compactSignature);
+        $publicKey = $this->recoverPublicKey($compactSignature);
 
-        $this->data['senderPublicKey'] = $publicKey->getHex();
+        $this->data['senderPublicKey'] = $publicKey->publicKey;
 
         $this->data['from'] = Address::fromPublicKey($this->data['senderPublicKey']);
     }
@@ -77,9 +76,9 @@ abstract class AbstractTransaction
     {
         $compactSignature = $this->getSignature();
 
-        $publicKey = $this->getPublicKey($compactSignature);
+        $publicKey = $this->recoverPublicKey($compactSignature);
 
-        return $publicKey->verify($this->hash(skipSignature: true), $compactSignature);
+        return $publicKey->instance->verify($this->hash(skipSignature: true), $compactSignature);
     }
 
     public function hash(bool $skipSignature = false): BufferInterface
@@ -127,14 +126,9 @@ abstract class AbstractTransaction
         return json_encode($this->toArray());
     }
 
-    protected function getPublicKey(CompactSignatureInterface $compactSignature): PublicKeyInterface
+    protected function recoverPublicKey(CompactSignatureInterface $compactSignature): PublicKey
     {
-        $ecAdapter = EcAdapterFactory::getPhpEcc(
-            Bitcoin::getMath(),
-            Bitcoin::getGenerator()
-        );
-
-        return $ecAdapter->recover($this->hash(skipSignature: true), $compactSignature);
+        return PublicKey::recover($this->hash(skipSignature: true), $compactSignature);
     }
 
     protected function decodePayload(array $data, ContractAbiType $type = ContractAbiType::CONSENSUS): ?array
@@ -164,12 +158,5 @@ abstract class AbstractTransaction
             recid: $recoverId,
             compressed: true
         );
-    }
-
-    private function gmpToHex(\GMP $gmp): string
-    {
-        $hex = gmp_strval($gmp, 16);
-
-        return str_pad($hex, 64, '0', STR_PAD_LEFT);
     }
 }
