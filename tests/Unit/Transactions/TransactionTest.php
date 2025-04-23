@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 
-it('should compute the id of the transaction', function () {
-    $actual = $this->getTransaction()->getId();
-
-    expect(strlen($actual))->toBe(64);
-});
-
 it('should sign the transaction using a passphrase', function () {
     $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 

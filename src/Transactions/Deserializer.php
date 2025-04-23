@@ -21,7 +21,6 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
-use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Buffertools\Buffer;
 
 class Deserializer
@@ -63,13 +62,13 @@ class Deserializer
 
         $data = [];
 
-        $data['network']          = $this->parseNumber($decodedRlp[0]);
-        $data['nonce']            = $this->parseBigNumber($decodedRlp[1]);
-        $data['gasPrice']         = $this->parseNumber($decodedRlp[3]);
-        $data['gasLimit']         = $this->parseNumber($decodedRlp[4]);
-        $data['recipientAddress'] = $this->parseAddress($decodedRlp[5]);
-        $data['value']            = $this->parseBigNumber($decodedRlp[6]);
-        $data['data']             = $this->parseHex($decodedRlp[7]);
+        $data['network']  = $this->parseNumber($decodedRlp[0]);
+        $data['nonce']    = $this->parseBigNumber($decodedRlp[1]);
+        $data['gasPrice'] = $this->parseNumber($decodedRlp[3]);
+        $data['gas']      = $this->parseNumber($decodedRlp[4]);
+        $data['to']       = $this->parseAddress($decodedRlp[5]);
+        $data['value']    = $this->parseBigNumber($decodedRlp[6]);
+        $data['data']     = $this->parseHex($decodedRlp[7]);
 
         if (count($decodedRlp) === 12) {
             $data['v'] = $this->parseNumber($decodedRlp[9]) + 27;
@@ -83,7 +82,7 @@ class Deserializer
 
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
-        $transaction->data['id'] = TransactionUtils::getId($data);
+        $transaction->data['hash'] = $transaction->hash()->getHex();
 
         $transaction->recoverSender();
 

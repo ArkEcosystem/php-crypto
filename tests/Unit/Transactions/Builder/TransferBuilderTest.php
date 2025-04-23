@@ -12,16 +12,16 @@ it('should sign it with a passphrase', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
-        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
-        ->recipientAddress($fixture['data']['recipientAddress'])
+        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
+        ->to($fixture['data']['to'])
         ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
-    expect($builder->transaction->data['recipientAddress'])->toBe($fixture['data']['recipientAddress']);
+    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
+    expect($builder->transaction->data['to'])->toBe($fixture['data']['to']);
     expect((string) $builder->transaction->data['value'])->toBe((string) $fixture['data']['value']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
@@ -29,7 +29,7 @@ it('should sign it with a passphrase', function () {
 
     expect($builder->transaction->serialize()->getHex())->toBe($fixture['serialized']);
 
-    expect($builder->transaction->data['id'])->toBe($fixture['data']['id']);
+    expect($builder->transaction->data['hash'])->toBe($fixture['data']['hash']);
 
     expect($builder->verify())->toBeTrue();
 });
@@ -41,16 +41,16 @@ it('should handle large amounts', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
-        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
-        ->recipientAddress($fixture['data']['recipientAddress'])
+        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
+        ->to($fixture['data']['to'])
         ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
-    expect($builder->transaction->data['recipientAddress'])->toBe($fixture['data']['recipientAddress']);
+    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
+    expect($builder->transaction->data['to'])->toBe($fixture['data']['to']);
     expect((string) $builder->transaction->data['value'])->toBe((string) $fixture['data']['value']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
@@ -58,7 +58,7 @@ it('should handle large amounts', function () {
 
     expect($builder->transaction->serialize()->getHex())->toBe($fixture['serialized']);
 
-    expect($builder->transaction->data['id'])->toBe($fixture['data']['id']);
+    expect($builder->transaction->data['hash'])->toBe($fixture['data']['hash']);
 
     expect($builder->verify())->toBeTrue();
 });
@@ -67,14 +67,14 @@ it('should handle unit converter', function () {
     $builder = TransferBuilder::new()
         ->gasPrice(UnitConverter::parseUnits(5, 'gwei'))
         ->nonce('1')
-        ->gasLimit(UnitConverter::parseUnits(0.1, 'gwei'))
-        ->recipientAddress($this->address)
+        ->gas(UnitConverter::parseUnits(0.1, 'gwei'))
+        ->to($this->address)
         ->value(UnitConverter::parseUnits(10, 'ark'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe('5000000000');
     expect($builder->transaction->data['nonce'])->toBe('1');
-    expect((string) $builder->transaction->data['gasLimit'])->toBe('100000000');
+    expect((string) $builder->transaction->data['gas'])->toBe('100000000');
     expect((string) $builder->transaction->data['value'])->toBe('10000000000000000000');
 
     expect($builder->verify())->toBeTrue();

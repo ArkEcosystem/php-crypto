@@ -43,14 +43,6 @@ abstract class AbstractTransaction
     }
 
     /**
-     * Convert the byte representation to a unique identifier.
-     */
-    public function getId(): string
-    {
-        return $this->hash(skipSignature: false)->getHex();
-    }
-
-    /**
      * Sign the transaction using the given passphrase.
      */
     public function sign(PrivateKey $privateKey): static
@@ -77,7 +69,7 @@ abstract class AbstractTransaction
 
         $this->data['senderPublicKey'] = $publicKey->publicKey;
 
-        $this->data['senderAddress'] = Address::fromPublicKey($this->data['senderPublicKey']);
+        $this->data['from'] = Address::fromPublicKey($this->data['senderPublicKey']);
     }
 
     public function verify(): bool
@@ -105,18 +97,18 @@ abstract class AbstractTransaction
     public function toArray(): array
     {
         return array_filter([
-            'gasPrice'         => $this->data['gasPrice'],
-            'network'          => $this->data['network'] ?? Network::get()->chainId(),
-            'id'               => $this->data['id'],
-            'gasLimit'         => $this->data['gasLimit'],
-            'nonce'            => $this->data['nonce'],
-            'senderPublicKey'  => $this->data['senderPublicKey'],
-            'recipientAddress' => $this->data['recipientAddress'] ?? null,
-            'value'            => $this->data['value'],
-            'data'             => $this->data['data'],
-            'r'                => $this->data['r'],
-            's'                => $this->data['s'],
-            'v'                => $this->data['v'],
+            'gasPrice'        => $this->data['gasPrice'],
+            'network'         => $this->data['network'] ?? Network::get()->chainId(),
+            'hash'            => $this->data['hash'],
+            'gas'             => $this->data['gas'],
+            'nonce'           => $this->data['nonce'],
+            'senderPublicKey' => $this->data['senderPublicKey'],
+            'to'              => $this->data['to'] ?? null,
+            'value'           => $this->data['value'],
+            'data'            => $this->data['data'],
+            'r'               => $this->data['r'],
+            's'               => $this->data['s'],
+            'v'               => $this->data['v'],
         ], function ($element) {
             if (null !== $element) {
                 return true;

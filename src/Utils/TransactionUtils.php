@@ -26,8 +26,8 @@ class TransactionUtils
             self::toBeArray(isset($transaction['nonce']) ? $transaction['nonce'] : 0),
             self::toBeArray(0),
             self::toBeArray($transaction['gasPrice'] ?? 0),
-            self::toBeArray($transaction['gasLimit'] ?? 0),
-            $transaction['recipientAddress'] ?? '0x',
+            self::toBeArray($transaction['gas'] ?? 0),
+            $transaction['to'] ?? '0x',
             self::toBeArray(isset($transaction['value']) ? $transaction['value'] : 0),
             isset($transaction['data']) && str_starts_with($transaction['data'], '0x')
                 ? $transaction['data']
@@ -63,11 +63,6 @@ class TransactionUtils
         $keccak = Keccak::hash($encoding->getBinary(), 256);
 
         return Buffer::hex($keccak);
-    }
-
-    public static function getId(array $transaction): string
-    {
-        return self::toHash($transaction, false)->getHex();
     }
 
     /**

@@ -36,16 +36,16 @@ abstract class TestCase extends BaseTestCase
     protected function assertTransaction(array $fixture): AbstractTransaction
     {
         $actual = $this->assertDeserialized($fixture, [
-            'id',
+            'hash',
             'network',
             'nonce',
             'value',
             'gasPrice',
-            'gasLimit',
+            'gas',
             'contractId',
             'senderPublicKey',
-            'senderAddress',
-            'recipientAddress',
+            'from',
+            'to',
             'v',
             'r',
             's',

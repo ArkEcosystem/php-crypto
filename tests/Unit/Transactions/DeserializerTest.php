@@ -37,7 +37,7 @@ it('should deserialize a vote signed with a passphrase', function () {
     $transaction = $this->assertTransaction($fixture);
 
     expect($transaction->data['vote'])->toEqual('0xC3bBE9B1CeE1ff85Ad72b87414B0E9B7F2366763');
-    expect($transaction->data['id'])->toEqual($fixture['data']['id']);
+    expect($transaction->data['hash'])->toEqual($fixture['data']['hash']);
     expect($transaction)->toBeInstanceOf(Vote::class);
 });
 

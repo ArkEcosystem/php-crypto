@@ -15,7 +15,7 @@ class UsernameRegistrationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::USERNAMES->value);
+        $this->to(ContractAddresses::USERNAMES->value);
     }
 
     public function username(string $username): self

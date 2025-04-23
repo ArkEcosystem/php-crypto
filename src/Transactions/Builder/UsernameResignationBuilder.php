@@ -14,7 +14,7 @@ class UsernameResignationBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::USERNAMES->value);
+        $this->to(ContractAddresses::USERNAMES->value);
     }
 
     protected function getTransactionInstance(array $data): AbstractTransaction

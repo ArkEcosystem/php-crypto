@@ -15,20 +15,20 @@ class MultipaymentBuilder extends AbstractTransactionBuilder
     {
         parent::__construct($data);
 
-        $this->recipientAddress(ContractAddresses::MULTIPAYMENT->value);
+        $this->to(ContractAddresses::MULTIPAYMENT->value);
 
         $this->transaction->data['pay'] = [[], []];
         $this->transaction->refreshPayloadData();
     }
 
-    public function pay(string $address, BigDecimal $amount): self
+    public function pay(string $address, BigDecimal $value): self
     {
         $this->transaction->data['pay'][0][] = $address;
-        $this->transaction->data['pay'][1][] = $amount;
+        $this->transaction->data['pay'][1][] = $value;
 
         $this->transaction->refreshPayloadData();
 
-        $this->transaction->data['value'] = $this->transaction->data['value']->plus($amount);
+        $this->transaction->data['value'] = $this->transaction->data['value']->plus($value);
 
         return $this;
     }
