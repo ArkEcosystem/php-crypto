@@ -32,7 +32,7 @@ class PublicKey
      */
     public static function fromPassphrase(string $passphrase): self
     {
-        return new self(PrivateKey::fromPassphrase($passphrase)->getPublicKey());
+        return new self(PrivateKey::fromPassphrase($passphrase)->instance->getPublicKey());
     }
 
     /**

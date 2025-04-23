@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Utils\Address as AddressUtils;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
@@ -62,15 +61,13 @@ class Address
     /**
      * Derive the address from the given private key.
      *
-     * @param EccPrivateKey $privateKey
+     * @param PrivateKey $privateKey
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey): string
+    public static function fromPrivateKey(PrivateKey $privateKey): string
     {
-        $publicKey = $privateKey->getPublicKey()->getHex();
-
-        return static::fromPublicKey($publicKey);
+        return static::fromPublicKey($privateKey->publicKey);
     }
 
     /**
