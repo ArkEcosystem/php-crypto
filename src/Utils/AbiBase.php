@@ -33,7 +33,7 @@ abstract class AbiBase
         return null;
     }
 
-    protected function stripHexPrefix(string $hex): string
+    protected static function stripHexPrefix(string $hex): string
     {
         if (substr($hex, 0, 2) === '0x') {
             return substr($hex, 2);
