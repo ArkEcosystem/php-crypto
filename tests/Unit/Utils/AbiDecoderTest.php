@@ -149,15 +149,15 @@ it('should decode an array', function () {
     $payload = '000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a';
 
     $param = [
-        "name" => "recipients",
-        "type" => "address",
+        'name' => 'recipients',
+        'type' => 'address',
     ];
 
     $decoded = AbiDecoder::decodeArray(hex2bin($payload), 0, $param, 2);
 
     expect($decoded)->toBe([
         ['0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A', '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A'],
-        32
+        32,
     ]);
 });
 
@@ -165,18 +165,18 @@ it('should decode a tuple', function () {
     $payload = '000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a';
 
     $param = [
-        "name"         => "recipients",
-        "type"         => "address",
-        "components"   => [
+        'name'         => 'recipients',
+        'type'         => 'address',
+        'components'   => [
             [
-                "name" => "from",
-                "type" => "address",
+                'name' => 'from',
+                'type' => 'address',
             ],
             [
-                "name" => "to",
-                "type" => "address",
-            ]
-        ]
+                'name' => 'to',
+                'type' => 'address',
+            ],
+        ],
     ];
 
     $decoded = AbiDecoder::decodeTuple(hex2bin($payload), 0, $param);
@@ -184,9 +184,9 @@ it('should decode a tuple', function () {
     expect($decoded)->toBe([
         [
             'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
-            'to' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+            'to'   => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
         ],
-        32
+        32,
     ]);
 });
 
@@ -199,9 +199,9 @@ it('should read an unsigned int', function () {
 });
 
 it('should handle boolean param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -212,7 +212,7 @@ it('should handle boolean param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('0001'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe([true, 32]);
@@ -220,16 +220,16 @@ it('should handle boolean param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('0000'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe([false, 32]);
 });
 
 it('should handle bytes param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -240,16 +240,16 @@ it('should handle bytes param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000474657374'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe(['0x74657374', 32]);
 });
 
 it('should handle dynamic byte length param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -260,16 +260,16 @@ it('should handle dynamic byte length param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('74657374'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe(['0x74657374', 32]);
 });
 
 it('should handle signed integer param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -280,16 +280,16 @@ it('should handle signed integer param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('fffffffffffffffffffffffffffffffffffffffffffffffffffffffff4143E00'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe(['-200000000', 32]);
 });
 
 it('should handle unsigned integer param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -300,52 +300,52 @@ it('should handle unsigned integer param types', function () {
     $result = $method->invokeArgs(null, [
         hex2bin('000000000000000000000000000000000000000000000000000000000bebc200'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe(['200000000', 32]);
 });
 
 it('should handle tuple param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
         'name'         => 'text',
         'type'         => 'tuple',
-        "components"   => [
+        'components'   => [
             [
-                "name" => "from",
-                "type" => "address",
+                'name' => 'from',
+                'type' => 'address',
             ],
             [
-                "name" => "to",
-                "type" => "address",
-            ]
-        ]
+                'name' => 'to',
+                'type' => 'address',
+            ],
+        ],
     ];
 
     $result = $method->invokeArgs(null, [
         hex2bin('000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a'),
         0,
-        $param
+        $param,
     ]);
 
     expect($result)->toBe([
         [
             'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
-            'to' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+            'to'   => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
         ],
-        32
+        32,
     ]);
 });
 
 it('should throw an exception for invalid param types', function () {
-    $object = new AbiDecoder();
+    $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod('decodeParameter');
+    $method    = $reflector->getMethod('decodeParameter');
     $method->setAccessible(true);
 
     $param = [
@@ -356,6 +356,6 @@ it('should throw an exception for invalid param types', function () {
     $method->invokeArgs(null, [
         hex2bin('000000000000000000000000000000000000000000000000000000000bebc200'),
         0,
-        $param
+        $param,
     ]);
 })->throws(Exception::class, 'Unsupported type: testing');
