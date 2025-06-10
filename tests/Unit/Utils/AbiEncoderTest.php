@@ -6,11 +6,11 @@ use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 use Brick\Math\BigDecimal;
 
-function testPrivateMethod(string $methodName, &$object): \ReflectionMethod
+function testPrivateMethod(string $methodName, &$object): ReflectionMethod
 {
-    $object = new AbiEncoder();
+    $object    = new AbiEncoder();
     $reflector = new ReflectionObject($object);
-    $method = $reflector->getMethod($methodName);
+    $method    = $reflector->getMethod($methodName);
     $method->setAccessible(true);
 
     return $method;
@@ -102,7 +102,7 @@ it('should throw an exception for unknown function', function () {
     $encoder = new AbiEncoder();
 
     $functionName = 'unknownFunction';
-    $args = ['0x512F366D524157BcF734546eB29a6d687B762255'];
+    $args         = ['0x512F366D524157BcF734546eB29a6d687B762255'];
 
     $encoder->encodeFunctionCall($functionName, $args);
 })->throws(Exception::class, 'Function not found in ABI: unknownFunction');
@@ -111,13 +111,13 @@ it('should throw an exception if there are no arguments', function () {
     $encoder = new AbiEncoder();
 
     $functionName = 'vote';
-    $args = [];
+    $args         = [];
 
     $encoder->encodeFunctionCall($functionName, $args);
 })->throws(Exception::class, 'Function with matching arguments not found in ABI: vote');
 
 it('should encode an address', function () {
-    $address = '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A';
+    $address         = '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A';
     $expectedPayload = '0x000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a';
 
     $encoded = testPrivateMethod('encodeAddress', $object)->invokeArgs($object, [$address]);
@@ -252,7 +252,7 @@ it('should error when encoding fixed bytes of the wrong size', function () {
 it('should encode an array', function () {
     $addresses = [
         '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
-        '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A'
+        '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
     ];
     $expectedPayload = '0x000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a';
 
@@ -272,7 +272,7 @@ it('should encode an array', function () {
 it('should encode a tuple', function () {
     $tuple = [
         'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
-        'to' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+        'to'   => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
     ];
     $expectedPayload = '0x000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a000000000000000000000000b693449adda7efc015d87944eae8b7c37eb1690a';
 
@@ -340,21 +340,21 @@ it('should handle a single function when preparing function data', function () {
 
     expect($encoded)->toBe([
         [
-            'type' => 'function',
-            'name' => 'UPGRADE_INTERFACE_VERSION',
+            'type'   => 'function',
+            'name'   => 'UPGRADE_INTERFACE_VERSION',
             'inputs' => [
                 [
-                    'name' => 'count',
-                    'type' => 'uint256',
+                    'name'         => 'count',
+                    'type'         => 'uint256',
                     'internalType' => 'uint256',
-                ]
+                ],
             ],
             'outputs' => [
                 [
-                    'name' => '',
-                    'type' => 'string',
-                    'internalType' => 'string'
-                ]
+                    'name'         => '',
+                    'type'         => 'string',
+                    'internalType' => 'string',
+                ],
             ],
             'stateMutability' => 'view',
         ],
@@ -362,34 +362,22 @@ it('should handle a single function when preparing function data', function () {
     ]);
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 it('should handle array param types', function () {
     $method = testPrivateMethod('prepareParam', $object);
 
     $param = [
         'name'         => 'text',
         'type'         => 'int[]',
-        "components"   => [
+        'components'   => [
             [
-                "name" => "from",
-                "type" => "address",
+                'name' => 'from',
+                'type' => 'address',
             ],
             [
-                "name" => "to",
-                "type" => "address",
-            ]
-        ]
+                'name' => 'to',
+                'type' => 'address',
+            ],
+        ],
     ];
 
     $result = $method->invokeArgs($object, [
@@ -412,16 +400,16 @@ it('should handle invalid array type in param types', function () {
     $param = [
         'name'         => 'text',
         'type'         => 'int[]',
-        "components"   => [
+        'components'   => [
             [
-                "name" => "from",
-                "type" => "address",
+                'name' => 'from',
+                'type' => 'address',
             ],
             [
-                "name" => "to",
-                "type" => "address",
-            ]
-        ]
+                'name' => 'to',
+                'type' => 'address',
+            ],
+        ],
     ];
 
     $method->invokeArgs($object, [
@@ -600,23 +588,23 @@ it('should handle tuple param types', function () {
     $param = [
         'name'         => 'text',
         'type'         => 'tuple',
-        "components"   => [
+        'components'   => [
             'from' => [
-                "name" => "from",
-                "type" => "address",
+                'name' => 'from',
+                'type' => 'address',
             ],
             'to' => [
-                "name" => "to",
-                "type" => "address",
-            ]
-        ]
+                'name' => 'to',
+                'type' => 'address',
+            ],
+        ],
     ];
 
     $result = $method->invokeArgs($object, [
         $param,
         [
             'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
-            'to' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+            'to'   => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
         ],
     ]);
 
@@ -632,12 +620,12 @@ it('should handle dynamic tuple types param types', function () {
     $param = [
         'name'         => 'text',
         'type'         => 'tuple',
-        "components"   => [
+        'components'   => [
             'recipient' => [
-                "name" => "from",
-                "type" => "string",
+                'name' => 'from',
+                'type' => 'string',
             ],
-        ]
+        ],
     ];
 
     $result = $method->invokeArgs($object, [
