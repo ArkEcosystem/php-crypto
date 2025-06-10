@@ -42,9 +42,7 @@ class Writer
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return pack('S', $data);
-        }
+        return pack('S', $data);
     }
 
     /**
@@ -68,9 +66,7 @@ class Writer
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return pack('L', $data);
-        }
+        return pack('L', $data);
     }
 
     /**
@@ -81,21 +77,24 @@ class Writer
      *
      * @return string
      */
-    public static function bit64(int $data, $endianness = false): string
+    public static function bit64(int|string $data, $endianness = false): string
     {
-        // big-endian
-        if (true === $endianness) {
-            return pack('J', $data);
-        }
+        $gmpValue = is_string($data) ? gmp_init($data, 10) : gmp_init($data);
 
-        // little-endian
+        $hex = str_pad(gmp_strval($gmpValue, 16), 16, '0', STR_PAD_LEFT);
+        $bytes = hex2bin($hex);
+
+        // Default to little-endian (reverse the big-endian hex representation)
         if (false === $endianness) {
-            return pack('P', $data);
+            return strrev($bytes); // Convert to little-endian
         }
 
-        // machine byte order
-        if (null === $endianness) {
-            return pack('Q', $data);
+        // Big-endian
+        if (true === $endianness) {
+            return $bytes;
         }
+
+        // Machine order
+        return pack('Q', gmp_cmp($gmpValue, PHP_INT_MAX) <= 0 ? gmp_intval($gmpValue) : 0);
     }
 }
