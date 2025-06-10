@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer;
 
 it('creates a buffer from hex', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = Buffer::fromHex($hex);
 
     expect($buffer)->toBeInstanceOf(Buffer::class);
@@ -12,7 +14,7 @@ it('creates a buffer from hex', function () {
 });
 
 it('sets position and updates bytes', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = Buffer::fromHex($hex)->position(2);
 
     $expectedBytes = substr(hex2bin($hex), 2);
@@ -21,7 +23,7 @@ it('sets position and updates bytes', function () {
 });
 
 it('skips bytes correctly', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = Buffer::fromHex($hex)->position(1)->skip(1);
 
     $expectedBytes = substr(hex2bin($hex), 2);
@@ -30,21 +32,21 @@ it('skips bytes correctly', function () {
 });
 
 it('returns binary representation', function () {
-    $hex = 'cafebabe';
+    $hex    = 'cafebabe';
     $buffer = Buffer::fromHex($hex);
 
     expect($buffer->toBinary())->toBe(hex2bin($hex));
 });
 
 it('returns hex representation', function () {
-    $hex = 'cafebabe';
+    $hex    = 'cafebabe';
     $buffer = Buffer::fromHex($hex);
 
     expect($buffer->toHex())->toBe($hex);
 });
 
 it('handles empty hex string', function () {
-    $hex = '';
+    $hex    = '';
     $buffer = Buffer::fromHex($hex);
 
     expect($buffer->toHex())->toBe('')
@@ -52,21 +54,21 @@ it('handles empty hex string', function () {
 });
 
 it('position beyond length returns empty bytes', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = Buffer::fromHex($hex)->position(100);
 
     expect($buffer->toBinary())->toBe('');
 });
 
 it('skip beyond length returns empty bytes', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = Buffer::fromHex($hex)->skip(100);
 
     expect($buffer->toBinary())->toBe('');
 });
 
 it('multiple position and skip calls work as expected', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = Buffer::fromHex($hex)->position(2)->skip(3);
 
     $expectedBytes = substr(hex2bin($hex), 5);
@@ -75,7 +77,7 @@ it('multiple position and skip calls work as expected', function () {
 });
 
 it('reads hex correctly with readHex', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = Buffer::fromHex($hex);
 
     $readHex = $buffer->readHex(4);
@@ -89,7 +91,7 @@ it('reads hex correctly with readHex', function () {
 });
 
 it('reads hex bytes correctly with readHexBytes', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = Buffer::fromHex($hex);
 
     $readHex = $buffer->readHexBytes(4);
@@ -97,7 +99,7 @@ it('reads hex bytes correctly with readHexBytes', function () {
 });
 
 it('reads raw hex correctly with readHexRaw', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = Buffer::fromHex($hex);
 
     $readHex = $buffer->readHexRaw(4);
@@ -105,7 +107,7 @@ it('reads raw hex correctly with readHexRaw', function () {
 });
 
 it('should read int 8', function () {
-    $hex = 'ff'; // -1 in signed 8-bit
+    $hex    = 'ff'; // -1 in signed 8-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readInt8();
@@ -113,7 +115,7 @@ it('should read int 8', function () {
 });
 
 it('should read int 16', function () {
-    $hex = 'ffff'; // -1 in signed 16-bit
+    $hex    = 'ffff'; // -1 in signed 16-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readInt16();
@@ -121,7 +123,7 @@ it('should read int 16', function () {
 });
 
 it('should read int 32', function () {
-    $hex = 'ffffffff'; // -1 in signed 32-bit
+    $hex    = 'ffffffff'; // -1 in signed 32-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readInt32();
@@ -129,7 +131,7 @@ it('should read int 32', function () {
 });
 
 it('should read int 64', function () {
-    $hex = 'ffffffffffffffff'; // -1 in signed 64-bit
+    $hex    = 'ffffffffffffffff'; // -1 in signed 64-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readInt64();
@@ -137,7 +139,7 @@ it('should read int 64', function () {
 });
 
 it('should read unsigned int 8', function () {
-    $hex = 'ff'; // 255 in unsigned 8-bit
+    $hex    = 'ff'; // 255 in unsigned 8-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt8();
@@ -145,7 +147,7 @@ it('should read unsigned int 8', function () {
 });
 
 it('should read unsigned int 16', function () {
-    $hex = 'ffff'; // 65535 in unsigned 16-bit
+    $hex    = 'ffff'; // 65535 in unsigned 16-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt16();
@@ -153,7 +155,7 @@ it('should read unsigned int 16', function () {
 });
 
 it('should read unsigned int 32', function () {
-    $hex = 'ffffffff'; // 4294967295 in unsigned 32-bit
+    $hex    = 'ffffffff'; // 4294967295 in unsigned 32-bit
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt32();
@@ -161,7 +163,7 @@ it('should read unsigned int 32', function () {
 });
 
 it('should read unsigned int 64 as string', function () {
-    $hex = 'FFFFFFFFFFFFFFDD';
+    $hex    = 'FFFFFFFFFFFFFFDD';
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt64();
@@ -169,7 +171,7 @@ it('should read unsigned int 64 as string', function () {
 });
 
 it('should read unsigned int 64 as number', function () {
-    $hex = '7FFFFFFFFFFFFFFF';
+    $hex    = '7FFFFFFFFFFFFFFF';
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt64();
