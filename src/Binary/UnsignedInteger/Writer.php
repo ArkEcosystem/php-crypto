@@ -81,7 +81,7 @@ class Writer
     {
         $gmpValue = is_string($data) ? gmp_init($data, 10) : gmp_init($data);
 
-        $hex = str_pad(gmp_strval($gmpValue, 16), 16, '0', STR_PAD_LEFT);
+        $hex   = str_pad(gmp_strval($gmpValue, 16), 16, '0', STR_PAD_LEFT);
         $bytes = hex2bin($hex);
 
         // Default to little-endian (reverse the big-endian hex representation)

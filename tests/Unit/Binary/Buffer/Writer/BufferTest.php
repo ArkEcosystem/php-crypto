@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use ArkEcosystem\Crypto\Binary\Buffer\Writer\Buffer;
 
 it('creates a buffer from hex and writes correctly', function () {
-    $hex = 'deadbeef';
+    $hex    = 'deadbeef';
     $buffer = (new Buffer())->writeHex($hex);
 
     expect($buffer)->toBeInstanceOf(Buffer::class);
@@ -12,21 +14,21 @@ it('creates a buffer from hex and writes correctly', function () {
 });
 
 it('returns binary representation after writing', function () {
-    $hex = 'cafebabe';
+    $hex    = 'cafebabe';
     $buffer = (new Buffer())->writeHex($hex);
 
     expect($buffer->toBytes())->toBe(hex2bin($hex));
 });
 
 it('returns hex representation after writing', function () {
-    $hex = 'cafebabe';
+    $hex    = 'cafebabe';
     $buffer = (new Buffer())->writeHex($hex);
 
     expect($buffer->toHex())->toBe($hex);
 });
 
 it('writes hex correctly with writeHex', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = (new Buffer())->writeHex($hex);
 
     expect($buffer->toHex())->toBe($hex);
@@ -34,7 +36,7 @@ it('writes hex correctly with writeHex', function () {
 });
 
 it('writes hex bytes correctly with writeHexBytes', function () {
-    $hex = 'deadbeefcafebabe';
+    $hex    = 'deadbeefcafebabe';
     $buffer = (new Buffer())->writeHexBytes($hex);
 
     expect($buffer->toBytes())->toBe(hex2bin($hex));
@@ -96,7 +98,7 @@ it('should write unsigned int 64 as number', function () {
 
 it('writes string correctly with writeString', function () {
     $string = 'hello world';
-    $hex = bin2hex($string);
+    $hex    = bin2hex($string);
     $buffer = (new Buffer())->writeString($string);
 
     expect($buffer->toBytes())->toBe($string);
@@ -113,7 +115,7 @@ it('writes empty string with writeString', function () {
 
 it('writes multibyte string with writeString', function () {
     $string = 'こんにちは'; // "Hello" in Japanese
-    $hex = bin2hex($string);
+    $hex    = bin2hex($string);
     $buffer = (new Buffer())->writeString($string);
 
     expect($buffer->toBytes())->toBe($string);
