@@ -94,7 +94,7 @@ class Reader
             $bytes = strrev($bytes);
         }
 
-        $hex = bin2hex($bytes);
+        $hex      = bin2hex($bytes);
         $gmpValue = gmp_init($hex, 16);
 
         // If it fits in PHP's int range, return as int
