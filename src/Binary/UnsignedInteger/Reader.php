@@ -85,21 +85,24 @@ class Reader
      *
      * @return int
      */
-    public static function bit64(string $data, int $offset = 0, bool $endianness = false): int
+    public static function bit64(string $data, int $offset = 0, bool $endianness = false): int|string
     {
-        // big-endian
-        if (true === $endianness) {
-            return unpack('J', $data, $offset)[1];
+        $bytes = substr($data, $offset, 8);
+
+        if ($endianness === true) {
+            // big-endian - reverse for little-endian system
+            $bytes = strrev($bytes);
         }
 
-        // little-endian
-        if (false === $endianness) {
-            return unpack('P', $data, $offset)[1];
+        $hex = bin2hex($bytes);
+        $gmpValue = gmp_init($hex, 16);
+
+        // If it fits in PHP's int range, return as int
+        if (gmp_cmp($gmpValue, PHP_INT_MAX) <= 0) {
+            return gmp_intval($gmpValue);
         }
 
-        // machine byte order
-        if (null === $endianness) {
-            return unpack('Q', $data, $offset)[1];
-        }
+        // Otherwise return as string
+        return gmp_strval($gmpValue);
     }
 }
