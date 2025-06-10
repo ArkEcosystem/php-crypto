@@ -19,7 +19,7 @@ class Writer
      */
     public static function low($data, $nibble = null): string
     {
-        return pack($nibble ? "h{$nibble}" : 'h', $data);
+        return pack($nibble ? "h{$nibble}" : 'h'.strlen($data), $data);
     }
 
     /**
@@ -32,6 +32,6 @@ class Writer
      */
     public static function high($data, $nibble = null): string
     {
-        return pack($nibble ? "H{$nibble}" : 'H', $data);
+        return pack($nibble ? "H{$nibble}" : 'H'.strlen($data), $data);
     }
 }
