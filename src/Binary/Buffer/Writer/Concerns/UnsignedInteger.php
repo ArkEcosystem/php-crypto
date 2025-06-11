@@ -53,11 +53,11 @@ trait UnsignedInteger
     /**
      * Write an unsigned 64 bit integer.
      *
-     * @param int $value
+     * @param string $value
      *
      * @return \ArkEcosystem\Crypto\Binary\Buffer\Writer\Buffer
      */
-    public function writeUInt64(int $value): self
+    public function writeUInt64(string $value): self
     {
         $this->bytes .= Writer::bit64($value);
 

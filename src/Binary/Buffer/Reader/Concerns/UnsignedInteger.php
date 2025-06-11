@@ -11,7 +11,7 @@ trait UnsignedInteger
     /**
      * Read an unsigned 8 bit integer.
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return int
      */
     public function readUInt8()
     {
@@ -25,7 +25,7 @@ trait UnsignedInteger
     /**
      * Read an unsigned 16 bit integer.
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return int
      */
     public function readUInt16()
     {
@@ -39,7 +39,7 @@ trait UnsignedInteger
     /**
      * Read an unsigned 32 bit integer.
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return int
      */
     public function readUInt32()
     {
@@ -53,7 +53,7 @@ trait UnsignedInteger
     /**
      * Read an unsigned 64 bit integer.
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return int|string
      */
     public function readUInt64()
     {

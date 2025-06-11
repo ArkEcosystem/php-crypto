@@ -29,7 +29,7 @@ class Buffer
      *
      * @var string
      */
-    private $offset;
+    private int $offset = 0;
 
     /**
      * Create a new byte buffer instance.
