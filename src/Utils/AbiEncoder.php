@@ -359,7 +359,7 @@ class AbiEncoder extends AbiBase
             if (empty($hex) || $hex === '0x') {
                 continue;
             }
-            $result .= $this->stripHexPrefix($hex);
+            $result .= self::stripHexPrefix($hex);
         }
 
         return $result;

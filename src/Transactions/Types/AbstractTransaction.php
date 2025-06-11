@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;
@@ -129,15 +127,6 @@ abstract class AbstractTransaction
     protected function recoverPublicKey(CompactSignatureInterface $compactSignature): PublicKey
     {
         return PublicKey::recover($this->hash(skipSignature: true), $compactSignature);
-    }
-
-    protected function decodePayload(array $data, ContractAbiType $type = ContractAbiType::CONSENSUS): ?array
-    {
-        if (! isset($data['data'])) {
-            return null;
-        }
-
-        return Deserializer::decodePayload($data, $type);
     }
 
     private function getSignature(): CompactSignatureInterface

@@ -112,10 +112,6 @@ class RlpEncoder
             return $result;
         }
 
-        if (is_array($value)) {
-            return array_map(fn ($v) => $v & 0xff, $value);
-        }
-
         throw new InvalidArgumentException('invalid type');
     }
 }
