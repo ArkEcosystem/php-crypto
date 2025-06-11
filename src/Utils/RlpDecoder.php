@@ -10,7 +10,12 @@ class RlpDecoder
 {
     public static function decode(string $data): mixed
     {
-        $bytes   = self::getBytes($data, 'data');
+        $bytes = self::getBytes($data, 'data');
+
+        if (count($bytes) === 0) {
+            throw new InvalidArgumentException('RLP data is empty');
+        }
+
         $decoded = self::_decode($bytes, 0);
 
         if ($decoded['consumed'] !== count($bytes)) {

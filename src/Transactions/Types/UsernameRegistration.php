@@ -6,13 +6,14 @@ namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class UsernameRegistration extends AbstractTransaction
 {
     public function __construct(array $data)
     {
-        $payload = $this->decodePayload($data, ContractAbiType::USERNAMES);
+        $payload = Deserializer::decodePayload($data, ContractAbiType::USERNAMES);
 
         if ($payload !== null) {
             $data['username'] = $payload['args'][0];
