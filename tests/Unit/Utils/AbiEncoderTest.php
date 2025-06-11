@@ -40,7 +40,6 @@ it('should encode getAllValidators function call', function () {
     expect($encodedData)->toBe($expectedEncodedData);
 });
 
-// TODO: this only works if the abi has only 1 function entry
 it('should handle function name as hex', function () {
     $encoder = new AbiEncoder(ContractAbiType::CUSTOM, dirname(dirname(__DIR__)).'/fixtures/mock-abi.json');
 
