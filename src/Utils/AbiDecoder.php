@@ -10,7 +10,7 @@ class AbiDecoder extends AbiBase
 {
     public function decodeFunctionData(string $data): array
     {
-        $data = $this->stripHexPrefix($data);
+        $data = self::stripHexPrefix($data);
 
         $functionSelector = substr($data, 0, 8);
 
@@ -257,7 +257,7 @@ class AbiDecoder extends AbiBase
 
     private static function decodeFunctionOutput(array $abiItem, string $payload): array
     {
-        $hex   = self::stripHexPrefixStatic($payload);
+        $hex   = self::stripHexPrefix($payload);
         $bytes = hex2bin($hex);
 
         $cursor  = 0;
@@ -271,14 +271,5 @@ class AbiDecoder extends AbiBase
         }
 
         return $decoded;
-    }
-
-    private static function stripHexPrefixStatic(string $hex): string
-    {
-        if (substr($hex, 0, 2) === '0x') {
-            return substr($hex, 2);
-        }
-
-        return $hex;
     }
 }
