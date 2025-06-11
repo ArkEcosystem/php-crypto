@@ -324,6 +324,7 @@ class AbiEncoder extends AbiBase
         $dynamic        = false;
         $preparedParams = [];
         // TODO: it currently relies on the ABI component arrays to have a string index but our DARK20 ABI doesn't seem to have that
+        // https://app.clickup.com/t/86dx0at7u
         foreach ($param['components'] as $index => $component) {
             $key = is_array($value) ? $index : $component['name'];
             if (! isset($value[$key])) {
