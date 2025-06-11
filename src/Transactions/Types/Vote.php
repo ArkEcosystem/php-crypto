@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
 class Vote extends AbstractTransaction
 {
     public function __construct(array $data)
     {
-        $payload = $this->decodePayload($data);
+        $payload = Deserializer::decodePayload($data);
 
         if ($payload !== null) {
             $data['vote'] = $payload['args'][0];

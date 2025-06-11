@@ -131,15 +131,6 @@ abstract class AbstractTransaction
         return PublicKey::recover($this->hash(skipSignature: true), $compactSignature);
     }
 
-    protected function decodePayload(array $data, ContractAbiType $type = ContractAbiType::CONSENSUS): ?array
-    {
-        if (! isset($data['data'])) {
-            return null;
-        }
-
-        return Deserializer::decodePayload($data, $type);
-    }
-
     private function getSignature(): CompactSignatureInterface
     {
         $ecAdapter = EcAdapterFactory::getPhpEcc(
