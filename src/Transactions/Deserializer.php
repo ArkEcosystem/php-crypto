@@ -91,6 +91,10 @@ class Deserializer
 
     public static function decodePayload(array $data, ContractAbiType $abiType = ContractAbiType::CONSENSUS): ?array
     {
+        if (! isset($data['data'])) {
+            return null;
+        }
+
         $payload = $data['data'];
         if ($payload === '') {
             return null;
