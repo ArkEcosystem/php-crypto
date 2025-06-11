@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use BitWasp\Bitcoin\Bitcoin;

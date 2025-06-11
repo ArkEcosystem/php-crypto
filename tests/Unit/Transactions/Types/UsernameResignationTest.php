@@ -28,7 +28,7 @@ it('should sign it with a passphrase', function () {
 });
 
 it('should recover sender', function () {
-    $this->subject->data['from'] = null;
+    $this->subject->data['from']            = null;
     $this->subject->data['senderPublicKey'] = null;
 
     expect($this->subject->data['from'])->toBeNull();
@@ -54,53 +54,53 @@ it('should serialize', function () {
 
 it('should convert to an array', function () {
     expect($this->subject->toArray())->toBe([
-        'gasPrice' => $this->subject->data['gasPrice'],
-        'network' => $this->subject->data['network'],
-        'hash' => $this->subject->data['hash'],
-        'gas' => $this->subject->data['gas'],
-        'nonce' => $this->subject->data['nonce'],
+        'gasPrice'        => $this->subject->data['gasPrice'],
+        'network'         => $this->subject->data['network'],
+        'hash'            => $this->subject->data['hash'],
+        'gas'             => $this->subject->data['gas'],
+        'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
-        'to' => $this->subject->data['to'],
-        'value' => $this->subject->data['value'],
-        'data' => $this->subject->data['data'],
-        'r' => $this->subject->data['r'],
-        's' => $this->subject->data['s'],
-        'v' => $this->subject->data['v'],
+        'to'              => $this->subject->data['to'],
+        'value'           => $this->subject->data['value'],
+        'data'            => $this->subject->data['data'],
+        'r'               => $this->subject->data['r'],
+        's'               => $this->subject->data['s'],
+        'v'               => $this->subject->data['v'],
     ]);
 });
 
 it('should omit value if null when converting to array', function () {
     $this->subject->data['gasPrice'] = null;
-    $this->subject->data['hash'] = null;
-    $this->subject->data['gas'] = null;
+    $this->subject->data['hash']     = null;
+    $this->subject->data['gas']      = null;
 
     expect($this->subject->toArray())->toBe([
-        'network' => $this->subject->data['network'],
-        'nonce' => $this->subject->data['nonce'],
+        'network'         => $this->subject->data['network'],
+        'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
-        'to' => $this->subject->data['to'],
-        'value' => $this->subject->data['value'],
-        'data' => $this->subject->data['data'],
-        'r' => $this->subject->data['r'],
-        's' => $this->subject->data['s'],
-        'v' => $this->subject->data['v'],
+        'to'              => $this->subject->data['to'],
+        'value'           => $this->subject->data['value'],
+        'data'            => $this->subject->data['data'],
+        'r'               => $this->subject->data['r'],
+        's'               => $this->subject->data['s'],
+        'v'               => $this->subject->data['v'],
     ]);
 });
 
 it('should convert to json', function () {
     expect($this->subject->toJson())->toBe(json_encode([
-        'gasPrice' => $this->subject->data['gasPrice'],
-        'network' => $this->subject->data['network'],
-        'hash' => $this->subject->data['hash'],
-        'gas' => $this->subject->data['gas'],
-        'nonce' => $this->subject->data['nonce'],
+        'gasPrice'        => $this->subject->data['gasPrice'],
+        'network'         => $this->subject->data['network'],
+        'hash'            => $this->subject->data['hash'],
+        'gas'             => $this->subject->data['gas'],
+        'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
-        'to' => $this->subject->data['to'],
-        'value' => $this->subject->data['value'],
-        'data' => $this->subject->data['data'],
-        'r' => $this->subject->data['r'],
-        's' => $this->subject->data['s'],
-        'v' => $this->subject->data['v'],
+        'to'              => $this->subject->data['to'],
+        'value'           => $this->subject->data['value'],
+        'data'            => $this->subject->data['data'],
+        'r'               => $this->subject->data['r'],
+        's'               => $this->subject->data['s'],
+        'v'               => $this->subject->data['v'],
     ]));
 });
 
