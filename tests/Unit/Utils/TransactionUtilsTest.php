@@ -1,10 +1,10 @@
 <?php
 
-use ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer;
+declare(strict_types=1);
+
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
 use ArkEcosystem\Crypto\Utils\TransactionUtils;
 use Brick\Math\BigDecimal;
-use Brick\Math\BigNumber;
 
 it('should convert a transaction to a buffer', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
@@ -17,7 +17,7 @@ it('should convert a transaction to a buffer', function () {
 it('should convert a transaction to a buffer when data starts with 0x', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
 
-    $fixture['data']['data'] = '0x' . $fixture['data']['data'];
+    $fixture['data']['data'] = '0x'.$fixture['data']['data'];
 
     $transaction = TransactionUtils::toBuffer($fixture['data']);
 
