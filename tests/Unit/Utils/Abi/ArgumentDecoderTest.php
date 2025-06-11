@@ -19,6 +19,15 @@ it('should decode address', function () {
     expect($decoder->decodeAddress())->toBe($expected);
 });
 
+it('should decode a string', function () {
+    $payload = '0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000474657374';
+    $expected = 'test';
+
+    $decoder = new ArgumentDecoder($payload);
+
+    expect($decoder->decodeString())->toBe($expected);
+});
+
 it('should decode unsigned int', function () {
     $payload  = '000000000000000000000000000000000000000000000000016345785d8a0000';
     $expected = '100000000000000000';
@@ -53,4 +62,13 @@ it('should decode bool as false', function () {
     $decoder = new ArgumentDecoder($payload);
 
     expect($decoder->decodeBool())->toBe($expected);
+});
+
+it('should handle issue converting hex to binary', function () {
+    $decoder = new ArgumentDecoder('invalid');
+
+    $reflectionProperty = new \ReflectionProperty(ArgumentDecoder::class, 'bytes');
+    $reflectionProperty->setAccessible(true);
+
+    expect($reflectionProperty->getValue($decoder))->toBe('');
 });
