@@ -43,7 +43,7 @@ it('writes hex bytes correctly with writeHexBytes', function () {
 });
 
 it('should write int 8', function () {
-    $buffer = (new Buffer())->writeInt8('-1');
+    $buffer = (new Buffer())->writeInt8(-1);
 
     expect($buffer->toHex())->toBe('ff');
 });
@@ -61,7 +61,7 @@ it('should write int 32', function () {
 });
 
 it('should write int 64', function () {
-    $buffer = (new Buffer())->writeInt64('-1');
+    $buffer = (new Buffer())->writeInt64(-1);
 
     expect($buffer->toHex())->toBe('ffffffffffffffff');
 });
