@@ -126,17 +126,17 @@ it('should convert to an array', function () {
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([
-        'gasPrice' => $builder->transaction->data['gasPrice'],
-        'network' => $builder->transaction->data['network'],
-        'hash' => $builder->transaction->data['hash'],
-        'gas' => $builder->transaction->data['gas'],
-        'nonce' => $builder->transaction->data['nonce'],
+        'gasPrice'        => $builder->transaction->data['gasPrice'],
+        'network'         => $builder->transaction->data['network'],
+        'hash'            => $builder->transaction->data['hash'],
+        'gas'             => $builder->transaction->data['gas'],
+        'nonce'           => $builder->transaction->data['nonce'],
         'senderPublicKey' => $builder->transaction->data['senderPublicKey'],
-        'to' => $builder->transaction->data['to'],
-        'value' => $builder->transaction->data['value'],
-        'data' => $builder->transaction->data['data'],
-        'r' => $builder->transaction->data['r'],
-        's' => $builder->transaction->data['s'],
-        'v' => $builder->transaction->data['v'],
+        'to'              => $builder->transaction->data['to'],
+        'value'           => $builder->transaction->data['value'],
+        'data'            => $builder->transaction->data['data'],
+        'r'               => $builder->transaction->data['r'],
+        's'               => $builder->transaction->data['s'],
+        'v'               => $builder->transaction->data['v'],
     ]);
 });
