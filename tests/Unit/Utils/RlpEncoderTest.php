@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use ArkEcosystem\Crypto\Utils\RlpEncoder;
 
 it('should encoding str', function () {
@@ -99,7 +101,7 @@ it('should handle integer values', function () {
 it('should error for invalid types', function ($type) {
     RlpEncoder::encode($type);
 })->with([
-    'bool' => true,
-    'float' => 1.0,
+    'bool'   => true,
+    'float'  => 1.0,
     'object' => new stdClass(),
-])->throws(\InvalidArgumentException::class, 'invalid type');
+])->throws(InvalidArgumentException::class, 'invalid type');

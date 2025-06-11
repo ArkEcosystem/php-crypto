@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
 
 it('should_decode_function_call', function () {
@@ -8,7 +10,7 @@ it('should_decode_function_call', function () {
     // Remove '0x' prefix from serialized hex string
     $serialized = substr($fixture['serialized'], 2);
 
-    $decoded_rlp = RlpDecoder::decode('0x' . $serialized);
+    $decoded_rlp = RlpDecoder::decode('0x'.$serialized);
 
     expect(count($decoded_rlp))->toBe(12);
     expect($decoded_rlp[0])->toBe('0x2710');
