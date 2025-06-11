@@ -61,7 +61,7 @@ it('should write int 32', function () {
 });
 
 it('should write int 64', function () {
-    $buffer = (new Buffer())->writeInt64(-1);
+    $buffer = (new Buffer())->writeInt64('-1');
 
     expect($buffer->toHex())->toBe('ffffffffffffffff');
 });
@@ -88,12 +88,6 @@ it('should write unsigned int 64 as string', function () {
     $buffer = (new Buffer())->writeUInt64('18446744073709551581');
 
     expect($buffer->toHex())->toBe('ddffffffffffffff');
-});
-
-it('should write unsigned int 64 as number', function () {
-    $buffer = (new Buffer())->writeUInt64(9223372036854775807);
-
-    expect($buffer->toHex())->toBe('ffffffffffffff7f');
 });
 
 it('writes string correctly with writeString', function () {

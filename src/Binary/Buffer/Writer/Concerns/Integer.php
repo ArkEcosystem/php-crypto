@@ -59,7 +59,7 @@ trait Integer
      */
     public function writeInt64(string $value): self
     {
-        $this->bytes .= Writer::bit64((string) $value);
+        $this->bytes .= Writer::bit64($value);
 
         return $this;
     }
