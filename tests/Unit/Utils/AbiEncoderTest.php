@@ -43,8 +43,8 @@ it('should encode getAllValidators function call', function () {
 it('should handle function name as hex', function () {
     $encoder = new AbiEncoder(ContractAbiType::CUSTOM, dirname(dirname(__DIR__)).'/fixtures/mock-abi.json');
 
-    $functionName        = '0x1234';
-    $args                = ['1'];
+    $functionName = '0x1234';
+    $args         = ['1'];
 
     $encodedData = $encoder->encodeFunctionCall($functionName, $args);
 
@@ -54,8 +54,8 @@ it('should handle function name as hex', function () {
 it('should error for unknown function name', function () {
     $encoder = new AbiEncoder();
 
-    $functionName        = 'testFunction';
-    $args                = ['0x512F366D524157BcF734546eB29a6d687B762255'];
+    $functionName = 'testFunction';
+    $args         = ['0x512F366D524157BcF734546eB29a6d687B762255'];
 
     $encoder->encodeFunctionCall($functionName, $args);
 })->throws(Exception::class, 'Function not found in ABI: testFunction');
@@ -63,8 +63,8 @@ it('should error for unknown function name', function () {
 it('should error for wrong amount of arguments in function call', function () {
     $encoder = new AbiEncoder(ContractAbiType::CUSTOM, dirname(dirname(__DIR__)).'/fixtures/mock-abi.json');
 
-    $functionName        = '0x1234';
-    $args                = [];
+    $functionName = '0x1234';
+    $args         = [];
 
     $encoder->encodeFunctionCall($functionName, $args);
 })->throws(Exception::class, 'Length of parameters and values do not match');
