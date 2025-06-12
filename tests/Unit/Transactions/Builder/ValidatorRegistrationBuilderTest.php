@@ -13,6 +13,7 @@ it('should sign it with a passphrase', function () {
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
         ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
+        ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
@@ -39,6 +40,7 @@ it('should convert to json when casting to string', function () {
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
         ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
+        ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
@@ -53,6 +55,7 @@ it('should convert to an array', function () {
         ->nonce($fixture['data']['nonce'])
         ->network($fixture['data']['network'])
         ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
+        ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
