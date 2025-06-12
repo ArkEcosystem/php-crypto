@@ -1,0 +1,17 @@
+{
+    "abi": [
+        {
+            "type": "function",
+            "name": "UPGRADE_INTERFACE_VERSION",
+            "inputs": [{
+                "name": "count",
+                "type": "uint256",
+                "internalType": "uint256"
+            }],
+            "outputs": [
+                { "name": "", "type": "string", "internalType": "string" }
+            ],
+            "stateMutability": "view"
+        }
+    ]
+}
