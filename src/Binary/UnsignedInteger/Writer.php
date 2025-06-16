@@ -25,19 +25,19 @@ class Writer
      * Write an unsigned 16 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool|null $bigEndian
      *
      * @return string
      */
-    public static function bit16(int $data, $endianness = false): string
+    public static function bit16(int $data, ?bool $bigEndian = false): string
     {
         // big-endian
-        if (true === $endianness) {
+        if ($bigEndian === true) {
             return pack('n', $data);
         }
 
         // little-endian
-        if (false === $endianness) {
+        if ($bigEndian === false) {
             return pack('v', $data);
         }
 
@@ -49,19 +49,19 @@ class Writer
      * Write an unsigned 32 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool|null $bigEndian
      *
      * @return string
      */
-    public static function bit32(int $data, $endianness = false): string
+    public static function bit32(int $data, ?bool $bigEndian = false): string
     {
         // big-endian
-        if (true === $endianness) {
+        if ($bigEndian === true) {
             return pack('N', $data);
         }
 
         // little-endian
-        if (false === $endianness) {
+        if ($bigEndian === false) {
             return pack('V', $data);
         }
 
@@ -73,28 +73,23 @@ class Writer
      * Write an unsigned 64 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool $bigEndian
      *
      * @return string
      */
-    public static function bit64(int|string $data, $endianness = false): string
+    public static function bit64(int|string $data, bool $bigEndian = false): string
     {
         $gmpValue = is_string($data) ? gmp_init($data, 10) : gmp_init($data);
 
         $hex   = str_pad(gmp_strval($gmpValue, 16), 16, '0', STR_PAD_LEFT);
         $bytes = hex2bin($hex);
 
-        // Default to little-endian (reverse the big-endian hex representation)
-        if (false === $endianness) {
-            return strrev($bytes); // Convert to little-endian
-        }
-
         // Big-endian
-        if (true === $endianness) {
+        if ($bigEndian === true) {
             return $bytes;
         }
 
-        // Machine order
-        return pack('Q', gmp_cmp($gmpValue, PHP_INT_MAX) <= 0 ? gmp_intval($gmpValue) : 0);
+        // Convert to little-endian
+        return strrev($bytes);
     }
 }

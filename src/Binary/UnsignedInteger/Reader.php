@@ -27,11 +27,11 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool|null  $endianness
      *
      * @return int
      */
-    public static function bit16(string $data, int $offset = 0, $endianness = false): int
+    public static function bit16(string $data, int $offset = 0, ?bool $endianness = false): int
     {
         // big-endian
         if (true === $endianness) {
@@ -44,9 +44,7 @@ class Reader
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return unpack('S', $data, $offset)[1];
-        }
+        return unpack('S', $data, $offset)[1];
     }
 
     /**
@@ -54,11 +52,11 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool|null  $endianness
      *
      * @return int
      */
-    public static function bit32(string $data, int $offset = 0, $endianness = false): int
+    public static function bit32(string $data, int $offset = 0, ?bool $endianness = false): int
     {
         // big-endian
         if (true === $endianness) {
@@ -71,9 +69,7 @@ class Reader
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return unpack('L', $data, $offset)[1];
-        }
+        return unpack('L', $data, $offset)[1];
     }
 
     /**
@@ -81,7 +77,7 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool   $endianness
      *
      * @return int
      */
@@ -89,7 +85,7 @@ class Reader
     {
         $bytes = substr($data, $offset, 8);
 
-        if ($endianness === true) {
+        if ($endianness === false) {
             // big-endian - reverse for little-endian system
             $bytes = strrev($bytes);
         }

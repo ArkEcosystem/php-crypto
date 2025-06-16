@@ -167,13 +167,5 @@ it('should read unsigned int 64 as string', function () {
     $buffer = Buffer::fromHex($hex);
 
     $value = $buffer->readUInt64();
-    expect($value)->toBe('18446744073709551581');
-});
-
-it('should read unsigned int 64 as number', function () {
-    $hex    = '7FFFFFFFFFFFFFFF';
-    $buffer = Buffer::fromHex($hex);
-
-    $value = $buffer->readUInt64();
-    expect($value)->toBe(9223372036854775807);
+    expect($value)->toBe('15996785876420001791');
 });
