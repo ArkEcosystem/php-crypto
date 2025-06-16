@@ -66,7 +66,7 @@ it('should write ulong', function () {
 
 test('it should write uint256', function () {
     // 256-bit unsigned integer (32 bytes)
-    $value = '1157920892373161954235709850086879078532699846656405640323232344'; // max uint256
+    $value  = '1157920892373161954235709850086879078532699846656405640323232344'; // max uint256
     $buffer = ByteBuffer::new(0);
     $buffer->writeUInt256($value);
 
@@ -75,7 +75,7 @@ test('it should write uint256', function () {
 
 test('it should write uint256 gmp value', function () {
     // 256-bit unsigned integer (32 bytes)
-    $value = gmp_init('1157920892373161954235709850086879078532699846656405640323232344'); // max uint256
+    $value  = gmp_init('1157920892373161954235709850086879078532699846656405640323232344'); // max uint256
     $buffer = ByteBuffer::new(0);
     $buffer->writeUInt256($value);
 
@@ -84,14 +84,14 @@ test('it should write uint256 gmp value', function () {
 
 test('it should throw exception when writing invalid uint256', function () {
     // 256-bit unsigned integer (32 bytes)
-    $value = 'asd';
+    $value  = 'asd';
     $buffer = ByteBuffer::new(0);
     $buffer->writeUInt256($value);
 })->throws(InvalidArgumentException::class, 'The value must be a numeric string, integer, or GMP object.');
 
 test('it should throw exception when writing uint256 which is too long', function () {
     // 256-bit unsigned integer (32 bytes)
-    $value = '1157920892373161954235709850086879078532699846656405640323232344444411579208923731619542357098500868790785326998466564056403232323444444';
+    $value  = '1157920892373161954235709850086879078532699846656405640323232344444411579208923731619542357098500868790785326998466564056403232323444444';
     $buffer = ByteBuffer::new(0);
     $buffer->writeUInt256($value);
 })->throws(InvalidArgumentException::class, 'The value must fit into 256 bits.');
