@@ -63,7 +63,7 @@
             "vendor/bin/php-cs-fixer fix"
         ],
         "test": [
-            "./vendor/bin/pest --parallel"
+            "./vendor/bin/pest --coverage --min=96 --coverage-html=.coverage --coverage-clover=coverage.xml"
         ]
     },
     "minimum-stability": "dev",
