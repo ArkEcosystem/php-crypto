@@ -10,13 +10,9 @@ use ArkEcosystem\Crypto\Networks\Testnet;
  * @covers \ArkEcosystem\Crypto\Networks\Testnet
  */
 
-$epoch = '2017-03-21T13:00:00.000Z';
-$wif   = 'ba';
-
-/**
- * @todo: adjust the value of $chainId to match the actual value
- */
-$chainId = 10000;
+$epoch   = '2017-03-21T13:00:00.000Z';
+$wif     = 'ba';
+$chainId = 11812;
 
 beforeEach(function () use ($epoch, $chainId, $wif) {
     $this->chainId = $chainId;
