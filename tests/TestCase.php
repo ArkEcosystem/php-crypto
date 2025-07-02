@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use Concerns\Fixtures,
-        Concerns\Serialize,
-        Concerns\Deserialize;
+    use Concerns\Fixtures;
+    use Concerns\Serialize;
+    use Concerns\Deserialize;
 
     protected $passphrase = 'this is a top secret passphrase';
 

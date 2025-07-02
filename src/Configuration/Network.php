@@ -27,7 +27,7 @@ class Network
     /**
      * The network used for crypto operations.
      *
-     * @var \ArkEcosystem\Crypto\Networks\AbstractNetwork
+     * @var AbstractNetwork
      */
     private static $network;
 
@@ -47,7 +47,7 @@ class Network
     /**
      * Get the network used for crypto operations.
      *
-     * @return \ArkEcosystem\Crypto\Networks\AbstractNetwork
+     * @return AbstractNetwork
      */
     public static function get(): AbstractNetwork
     {
@@ -57,7 +57,7 @@ class Network
     /**
      * Set the network used for crypto operations.
      *
-     * @param \ArkEcosystem\Crypto\Networks\AbstractNetwork $network
+     * @param AbstractNetwork $network
      */
     public static function set(AbstractNetwork $network): void
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
+use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
@@ -22,7 +23,6 @@ use BitWasp\Bitcoin\Base58;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
 use BitWasp\Bitcoin\Crypto\Hash;
 use BitWasp\Buffertools\Buffer;
-use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
 
 /**
  * This is the address class.
@@ -78,7 +78,7 @@ class Address
     /**
      * Derive the address from the given private key.
      *
-     * @param \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey $privateKey
+     * @param EccPrivateKey $privateKey
      * @param AbstractNetwork|null                                         $network
      *
      * @return string

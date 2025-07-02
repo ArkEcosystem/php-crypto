@@ -64,7 +64,7 @@ class Buffer
      *
      * @param int $value
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return Buffer
      */
     public function position(int $value): self
     {
@@ -79,7 +79,7 @@ class Buffer
      *
      * @param int $value
      *
-     * @return \ArkEcosystem\Crypto\Binary\Buffer\Reader\Buffer
+     * @return Buffer
      */
     public function skip(int $value): self
     {

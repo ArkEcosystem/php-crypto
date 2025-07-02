@@ -62,7 +62,7 @@ class HtlcClaimTest extends TestCase
             ->htlcClaimAsset(
                 $fixture['data']['asset']['claim']['lockTransactionId'],
                 $fixture['data']['asset']['claim']['unlockSecret']
-                )
+            )
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
@@ -78,7 +78,7 @@ class HtlcClaimTest extends TestCase
             ->htlcClaimAsset(
                 $fixture['data']['asset']['claim']['lockTransactionId'],
                 $fixture['data']['asset']['claim']['unlockSecret']
-                )
+            )
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
 

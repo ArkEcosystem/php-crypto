@@ -71,7 +71,7 @@ class HtlcLockTest extends TestCase
                 $fixture['data']['asset']['lock']['secretHash'],
                 $fixture['data']['asset']['lock']['expiration']['type'],
                 $fixture['data']['asset']['lock']['expiration']['value']
-                )
+            )
             ->sign($this->passphrase);
 
         $this->assertTrue($builder->verify());
@@ -90,7 +90,7 @@ class HtlcLockTest extends TestCase
                 $fixture['data']['asset']['lock']['secretHash'],
                 $fixture['data']['asset']['lock']['expiration']['type'],
                 $fixture['data']['asset']['lock']['expiration']['value']
-                )
+            )
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);
 
@@ -111,7 +111,7 @@ class HtlcLockTest extends TestCase
                 $fixture['data']['asset']['lock']['secretHash'],
                 $fixture['data']['asset']['lock']['expiration']['type'],
                 $fixture['data']['asset']['lock']['expiration']['value']
-                )
+            )
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase);
 
@@ -132,7 +132,7 @@ class HtlcLockTest extends TestCase
                 $fixture['data']['asset']['lock']['secretHash'],
                 $fixture['data']['asset']['lock']['expiration']['type'],
                 $fixture['data']['asset']['lock']['expiration']['value']
-                )
+            )
             ->vendorField($fixture['data']['vendorField'])
             ->sign($this->passphrase)
             ->secondSign($this->secondPassphrase);

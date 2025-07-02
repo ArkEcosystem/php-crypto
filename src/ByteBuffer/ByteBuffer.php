@@ -20,13 +20,13 @@ use InvalidArgumentException;
  */
 class ByteBuffer
 {
-    use Concerns\Initialisable,
-        Concerns\Offsetable,
-        Concerns\Positionable,
-        Concerns\Readable,
-        Concerns\Sizeable,
-        Concerns\Transformable,
-        Concerns\Writeable;
+    use Concerns\Initialisable;
+    use Concerns\Offsetable;
+    use Concerns\Positionable;
+    use Concerns\Readable;
+    use Concerns\Sizeable;
+    use Concerns\Transformable;
+    use Concerns\Writeable;
 
     /**
      * Backing ArrayBuffer.
@@ -66,14 +66,17 @@ class ByteBuffer
         switch (gettype($value)) {
             case 'array':
                 $this->initializeBuffer(count($value), $value);
+
                 break;
 
             case 'integer':
                 $this->initializeBuffer($value, pack("x{$value}"));
+
                 break;
 
             case 'string':
                 $this->initializeBuffer(strlen($value), $value);
+
                 break;
 
             default:
@@ -131,7 +134,7 @@ class ByteBuffer
      *
      * @param array|string|int $value
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public static function new($value): self
     {
@@ -143,7 +146,7 @@ class ByteBuffer
      *
      * @param int $capacity
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public static function allocate(int $capacity): self
     {
@@ -176,7 +179,7 @@ class ByteBuffer
      * @param string|int $value
      * @param int        $offset
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function pack(string $format, $value, int $offset): self
     {
@@ -227,7 +230,7 @@ class ByteBuffer
      *
      * @param array $buffers
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public static function concat(...$buffers): self
     {
@@ -246,7 +249,7 @@ class ByteBuffer
      * @param mixed $value
      * @param int   $offset
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function append($value, int $offset = 0): self
     {
@@ -270,10 +273,10 @@ class ByteBuffer
     /**
      * Appends this ByteBuffers contents to another ByteBuffer.
      *
-     * @param \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer $buffer
+     * @param ByteBuffer $buffer
      * @param int                               $offset
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function appendTo(self $buffer, int $offset = 0): self
     {
@@ -286,7 +289,7 @@ class ByteBuffer
      * @param mixed $value
      * @param int   $offset
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function prepend($value, int $offset = 0): self
     {
@@ -314,10 +317,10 @@ class ByteBuffer
     /**
      * Prepends this ByteBuffers contents to another ByteBuffer.
      *
-     * @param \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer $buffer
+     * @param ByteBuffer $buffer
      * @param int                               $offset
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function prependTo(self $buffer, int $offset = 0): self
     {
@@ -330,7 +333,7 @@ class ByteBuffer
      * @param int $length
      * @param int $start
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function fill(int $length, int $start = 0): self
     {
@@ -351,7 +354,7 @@ class ByteBuffer
      * @param int $start
      * @param int $length
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function flip(int $start = 0, int $length = 0): self
     {
@@ -368,7 +371,7 @@ class ByteBuffer
      * @param int $start
      * @param int $length
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function reverse(int $start = 0, int $length = 0): self
     {
@@ -380,7 +383,7 @@ class ByteBuffer
      *
      * @param int $value
      *
-     * @return \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer
+     * @return ByteBuffer
      */
     public function order(int $value): self
     {
@@ -417,7 +420,7 @@ class ByteBuffer
     /**
      * Determine if the given value is a ByteBuffer.
      *
-     * @param \ArkEcosystem\Crypto\ByteBuffer\ByteBuffer $buffer
+     * @param ByteBuffer $buffer
      *
      * @return bool
      */

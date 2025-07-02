@@ -84,7 +84,7 @@ class Message
      *
      * @param mixed $message
      *
-     * @return \ArkEcosystem\Crypto\Utils\Message
+     * @return Message
      */
     public static function new($message): self
     {
@@ -109,7 +109,7 @@ class Message
      * @param string $message
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Utils\Message
+     * @return Message
      */
     public static function sign(string $message, string $passphrase): self
     {

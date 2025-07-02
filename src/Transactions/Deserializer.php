@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use BitWasp\Bitcoin\Crypto\Hash;
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 
 /**
  * This is the deserializer class.
@@ -24,6 +24,8 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
  */
 class Deserializer
 {
+    private ByteBuffer $buffer;
+
     /**
      * The transaction classes.
      *
@@ -92,6 +94,20 @@ class Deserializer
         }
 
         $transaction = $this->handleVersionTwo($transaction);
+
+        return $transaction;
+    }
+
+    /**
+     * Handle the deserialization of transaction data with a version of 2.0.
+     *
+     * @param Transaction $transaction
+     *
+     * @return Transaction
+     */
+    public function handleVersionTwo(Transaction $transaction): Transaction
+    {
+        $transaction->data['id'] = Hash::sha256(Serializer::new($transaction)->serialize())->getHex();
 
         return $transaction;
     }
@@ -259,19 +275,5 @@ class Deserializer
         }
 
         return false;
-    }
-
-    /**
-     * Handle the deserialization of transaction data with a version of 2.0.
-     *
-     * @param Transaction $transaction
-     *
-     * @return Transaction
-     */
-    public function handleVersionTwo(Transaction $transaction): Transaction
-    {
-        $transaction->data['id'] = Hash::sha256(Serializer::new($transaction)->serialize())->getHex();
-
-        return $transaction;
     }
 }

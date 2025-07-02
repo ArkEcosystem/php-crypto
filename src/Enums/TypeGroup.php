@@ -20,9 +20,9 @@ namespace ArkEcosystem\Crypto\Enums;
  */
 class TypeGroup
 {
-    const TEST = 0;
+    public const TEST = 0;
 
-    const CORE = 1;
+    public const CORE = 1;
 
-    const RESERVED = 1000; // Everything above is available to anyone
+    public const RESERVED = 1000; // Everything above is available to anyone
 }

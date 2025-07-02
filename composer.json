@@ -17,15 +17,16 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "bitwasp/bitcoin": "^1.0",
+        "php": "^8.2",
+        "protonlabs/bitcoin": "^1.0",
         "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {
-        "graham-campbell/analyzer": "^3.0",
-        "illuminate/support": "^8.62",
-        "pestphp/pest": "^1.11",
-        "pestphp/pest-plugin-parallel": "^0.3.1"
+        "friendsofphp/php-cs-fixer": "^3.59",
+        "graham-campbell/analyzer": "^3.1",
+        "illuminate/support": "^8.8",
+        "pestphp/pest": "^1.23",
+        "pestphp/pest-plugin-parallel": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +40,10 @@
     },
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "extra": {
         "branch-alias": {

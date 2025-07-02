@@ -25,7 +25,7 @@ class LengthMap
      *
      * @var array
      */
-    const LENGTHS = [
+    public const LENGTHS = [
         // Chars (8 bit)
         'c' => 1,
         'C' => 1,
@@ -82,7 +82,7 @@ class LengthMap
             return (int) substr($format, 1) / 2;
         }
 
-        if (!array_key_exists($format, static::LENGTHS)) {
+        if (! array_key_exists($format, static::LENGTHS)) {
             throw new InvalidArgumentException("The given format [{$format}] is not supported.");
         }
 

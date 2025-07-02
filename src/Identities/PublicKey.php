@@ -31,7 +31,7 @@ class PublicKey
      *
      * @param string $passphrase
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey
+     * @return EcPublicKey
      */
     public static function fromPassphrase(string $passphrase): EcPublicKey
     {
@@ -44,7 +44,7 @@ class PublicKey
      * @param int   $min
      * @param array $publicKeys
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey
+     * @return EcPublicKey
      */
     public static function fromMultiSignatureAsset(int $min, array $publicKeys): EcPublicKey
     {
@@ -66,7 +66,7 @@ class PublicKey
      *
      * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
      *
-     * @return \BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey
+     * @return EcPublicKey
      */
     public static function fromHex($publicKey): EcPublicKey
     {

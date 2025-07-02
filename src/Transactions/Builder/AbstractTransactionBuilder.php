@@ -25,6 +25,8 @@ use ArkEcosystem\Crypto\Transactions\Types\Transaction;
  */
 abstract class AbstractTransactionBuilder
 {
+    public $transaction;
+
     /**
      * Create a new transaction instance.
      */
@@ -53,7 +55,7 @@ abstract class AbstractTransactionBuilder
     /**
      * Create a new transaction instance.
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public static function new(): self
     {
@@ -65,7 +67,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $fee
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public function withFee(string $fee): self
     {
@@ -79,7 +81,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $nonce
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public function withNonce(string $nonce): self
     {
@@ -93,7 +95,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param int $network
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public function withNetwork(int $network): self
     {
@@ -107,7 +109,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $passphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public function sign(string $passphrase): self
     {
@@ -125,7 +127,7 @@ abstract class AbstractTransactionBuilder
      *
      * @param string $secondPassphrase
      *
-     * @return \ArkEcosystem\Crypto\Transactions\Builder\AbstractTransactionBuilder
+     * @return AbstractTransactionBuilder
      */
     public function secondSign(string $secondPassphrase): self
     {
