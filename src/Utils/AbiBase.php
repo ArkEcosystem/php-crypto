@@ -11,7 +11,7 @@ abstract class AbiBase
 {
     protected array $abi;
 
-    public function __construct(ContractAbiType $type = ContractAbiType::CONSENSUS, string $path = null)
+    public function __construct(ContractAbiType $type = ContractAbiType::CONSENSUS, ?string $path = null)
     {
         $abiFilePath = $this->contractAbiPath($type, $path);
 
@@ -75,7 +75,7 @@ abstract class AbiBase
         return $selector;
     }
 
-    private function contractAbiPath(ContractAbiType $type, string $path = null): ?string
+    private function contractAbiPath(ContractAbiType $type, ?string $path = null): ?string
     {
         switch ($type) {
             case ContractAbiType::CONSENSUS:
