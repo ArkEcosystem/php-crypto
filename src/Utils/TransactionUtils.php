@@ -48,7 +48,6 @@ class TransactionUtils
 
         $encoded = RlpEncoder::encode($fields);
 
-        $payload = Constants::EIP_1559_PREFIX.substr($encoded, 2);
 
         return new Buffer(hex2bin(substr($encoded, 2)));
     }
