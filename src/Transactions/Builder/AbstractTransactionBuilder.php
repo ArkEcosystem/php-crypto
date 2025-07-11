@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use Brick\Math\BigDecimal;
