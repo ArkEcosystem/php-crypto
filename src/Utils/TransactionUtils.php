@@ -32,7 +32,7 @@ class TransactionUtils
                 : ('0x'.($transaction['data'] ?? '')),
         ];
 
-        if (! $skipSignature && isset($transaction['v'], $transaction['r'], $transaction['s']) && ! empty($transaction['v'])) {
+        if (! $skipSignature && isset($transaction['v'], $transaction['r'], $transaction['s']) && $transaction['v'] !== '') {
             $fields[] = self::toBeArray($transaction['v'] + Network::get()->chainId() * 2 + 35);
             $fields[] = '0x'.$transaction['r'];
             $fields[] = '0x'.$transaction['s'];
@@ -47,7 +47,9 @@ class TransactionUtils
 
         $encoded = RlpEncoder::encode($fields);
 
-        return new Buffer(hex2bin(substr($encoded, 2)));
+        $payload = substr($encoded, 2);
+
+        return new Buffer(hex2bin($payload));
     }
 
     /**

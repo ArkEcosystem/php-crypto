@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function setUp(): void
     {
-        Network::set(Mainnet::new());
+        Network::set(Testnet::new());
     }
 
     protected function assertTransaction(array $fixture): AbstractTransaction
