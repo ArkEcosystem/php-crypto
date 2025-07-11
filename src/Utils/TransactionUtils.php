@@ -41,7 +41,6 @@ class TransactionUtils
             $fields[] = self::toBeArray(Network::get()->chainId());
             $fields[] = self::toBeArray(0);
             $fields[] = self::toBeArray(0);
-            }
         }
 
         // TODO: second signature handling
