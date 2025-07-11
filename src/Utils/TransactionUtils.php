@@ -47,7 +47,6 @@ class TransactionUtils
 
         $encoded = RlpEncoder::encode($fields);
 
-
         return new Buffer(hex2bin(substr($encoded, 2)));
     }
 
