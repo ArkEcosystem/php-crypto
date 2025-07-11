@@ -19,9 +19,8 @@ abstract class AbstractTransactionBuilder
             'value'           => BigDecimal::zero(),
             'senderPublicKey' => '',
             'gasPrice'        => '5',
+            'gasLimit'        => 1_000_000,
             'nonce'           => '1',
-            'network'         => Network::get()->chainId(),
-            'gas'             => 1_000_000,
             'data'            => '',
         ]);
     }
@@ -36,9 +35,9 @@ abstract class AbstractTransactionBuilder
         return new static($data);
     }
 
-    public function gas(BigDecimal $gas): static
+    public function gasLimit(BigDecimal $gasLimit): static
     {
-        $this->transaction->data['gas'] = $gas;
+        $this->transaction->data['gasLimit'] = $gasLimit;
 
         return $this;
     }
@@ -60,13 +59,6 @@ abstract class AbstractTransactionBuilder
     public function nonce(string $nonce): static
     {
         $this->transaction->data['nonce'] = $nonce;
-
-        return $this;
-    }
-
-    public function network(int $network): static
-    {
-        $this->transaction->data['network'] = $network;
 
         return $this;
     }

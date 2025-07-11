@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
-use ArkEcosystem\Crypto\Enums\Constants;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
@@ -62,23 +62,24 @@ class Deserializer
 
         $data = [];
 
-        $data['network']  = $this->parseNumber($decodedRlp[0]);
-        $data['nonce']    = $this->parseBigNumber($decodedRlp[1]);
-        $data['gasPrice'] = $this->parseNumber($decodedRlp[3]);
-        $data['gas']      = $this->parseNumber($decodedRlp[4]);
-        $data['to']       = $this->parseAddress($decodedRlp[5]);
-        $data['value']    = $this->parseBigNumber($decodedRlp[6]);
-        $data['data']     = $this->parseHex($decodedRlp[7]);
+        $data['nonce']    = $this->parseBigNumber($decodedRlp[0]);
+        $data['gasPrice'] = $this->parseNumber($decodedRlp[1]);
+        $data['gasLimit'] = $this->parseNumber($decodedRlp[2]);
+        $data['to']       = $this->parseAddress($decodedRlp[3]);
+        $data['value']    = $this->parseBigNumber($decodedRlp[4]);
+        $data['data']     = $this->parseHex($decodedRlp[5]);
 
-        if (count($decodedRlp) === 12) {
-            $data['v'] = $this->parseNumber($decodedRlp[9]) + 27;
-            $data['r'] = $this->parseHex($decodedRlp[10]);
-            $data['s'] = $this->parseHex($decodedRlp[11]);
+        if (count($decodedRlp) >= 9) {
+            $data['v'] = $this->parseNumber($decodedRlp[6]) - (Network::get()->chainId() * 2 + 35);
+            $data['r'] = $this->parseHex($decodedRlp[7]);
+            $data['s'] = $this->parseHex($decodedRlp[8]);
         }
+
+        // TODO: second signature handling
 
         $transaction = $this->guessTransactionFromData($data);
 
-        $serializedHex = sprintf('%s%s', Constants::EIP_1559_PREFIX, mb_substr($this->encodedRlp, 2));
+        $serializedHex = mb_substr($this->encodedRlp, 2);
 
         $transaction->serialized = new Buffer(hex2bin($serializedHex));
 
