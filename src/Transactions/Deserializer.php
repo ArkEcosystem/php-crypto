@@ -42,7 +42,7 @@ class Deserializer
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
 
-        $this->encodedRlp = '0x'.mb_substr($this->buffer->toString('hex'), 2);
+        $this->encodedRlp = '0x'.$this->buffer->toString('hex');
     }
 
     /**
