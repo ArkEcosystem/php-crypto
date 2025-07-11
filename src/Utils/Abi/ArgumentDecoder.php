@@ -12,7 +12,7 @@ final class ArgumentDecoder
 
     public function __construct(string $bytes)
     {
-        if (!ctype_xdigit($bytes) || strlen($bytes) % 2 !== 0) {
+        if (! ctype_xdigit($bytes) || strlen($bytes) % 2 !== 0) {
             $bytes = false;
         } else {
             $bytes = hex2bin($bytes);
