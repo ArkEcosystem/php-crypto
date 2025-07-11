@@ -59,9 +59,9 @@ it('should handle zero BigDecimal value', function () {
 
     $transaction = TransactionUtils::toBuffer($fixture['data'], true);
 
-    $decoded = RlpDecoder::decode('0x'.substr($transaction->getHex(), 2));
+    $decoded = RlpDecoder::decode('0x'.$transaction->getHex());
 
-    expect($decoded[3])->toBe('0x');
+    expect($decoded[1])->toBe('0x');
 });
 
 it('should handle unknown value value', function () {
@@ -71,9 +71,9 @@ it('should handle unknown value value', function () {
 
     $transaction = TransactionUtils::toBuffer($fixture['data'], true);
 
-    $decoded = RlpDecoder::decode('0x'.substr($transaction->getHex(), 2));
+    $decoded = RlpDecoder::decode('0x'.$transaction->getHex());
 
-    expect($decoded[3])->toBe('0x');
+    expect($decoded[1])->toBe('0x');
 });
 
 // toBuffer
