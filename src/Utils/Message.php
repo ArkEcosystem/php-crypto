@@ -44,16 +44,11 @@ class Message
      */
     public function __construct(object $message)
     {
-        if (property_exists($message, 'publickey')) {
-            $this->publicKey = $message->publickey;
-        } elseif (property_exists($message, 'publicKey')) {
-            $this->publicKey = $message->publicKey;
-        } elseif (property_exists($message, 'signatory')) {
-            $this->publicKey = $message->signatory;
-        } else {
+        if (! property_exists($message, 'publicKey')) {
             throw new InvalidArgumentException('The given message did not contain a valid public key.');
         }
 
+        $this->publicKey = $message->publicKey;
         $this->signature = $message->signature;
         $this->message   = $message->message;
     }
@@ -113,7 +108,7 @@ class Message
         $v = dechex($signature->getRecoveryId() + 27);
 
         return static::new([
-            'publickey' => $privateKey->publicKey,
+            'publicKey' => $privateKey->publicKey,
             'signature' => $r.$s.$v,
             'message'   => $message,
         ]);
@@ -144,7 +139,7 @@ class Message
     public function toArray(): array
     {
         return [
-            'publickey' => $this->publicKey,
+            'publicKey' => $this->publicKey,
             'signature' => $this->signature,
             'message'   => $this->message,
         ];
