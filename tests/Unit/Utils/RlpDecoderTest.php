@@ -8,23 +8,20 @@ it('should_decode_function_call', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'transfer');
 
     // Remove '0x' prefix from serialized hex string
-    $serialized = substr($fixture['serialized'], 2);
+    $serialized = $fixture['serialized'];
 
     $decoded_rlp = RlpDecoder::decode('0x'.$serialized);
 
-    expect(count($decoded_rlp))->toBe(12);
-    expect($decoded_rlp[0])->toBe('0x2710');
-    expect($decoded_rlp[1])->toBe('0x01');
-    expect($decoded_rlp[2])->toBe('0x');
-    expect($decoded_rlp[3])->toBe('0x012a05f200');
-    expect($decoded_rlp[4])->toBe('0x5208');
-    expect($decoded_rlp[5])->toBe('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22');
-    expect($decoded_rlp[6])->toBe('0x05f5e100');
-    expect($decoded_rlp[7])->toBe('0x');
-    expect($decoded_rlp[8])->toBe([]);
-    expect($decoded_rlp[9])->toBe('0x01');
-    expect($decoded_rlp[10])->toBe('0x104665257d4dea61c4654e74c6c0f6cd0a398905781c3040bea67dc641a66da0');
-    expect($decoded_rlp[11])->toBe('0x46d718d04b2331f3b0561808549ed3f3f0d867a284acf6b334869078df7a9136');
+    expect(count($decoded_rlp))->toBe(9);
+    expect($decoded_rlp[0])->toBe('0x01');
+    expect($decoded_rlp[1])->toBe('0x012a05f200');
+    expect($decoded_rlp[2])->toBe('0x5208');
+    expect($decoded_rlp[3])->toBe('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22');
+    expect($decoded_rlp[4])->toBe('0x05f5e100');
+    expect($decoded_rlp[5])->toBe('0x');
+    expect($decoded_rlp[6])->toBe('0x5c6b'); // Chain ID * 2 + 35
+    expect($decoded_rlp[7])->toBe('0xa1f79cb40a4bb409d6cebd874002ceda3ec0ccb614c1d8155f5c2f7f798135f9');
+    expect($decoded_rlp[8])->toBe('0x2d2ef517aaf6feed747385e260c206f46b2ce9d6b2a585427a111685a097bd79');
 });
 
 it('should_decoding_str', function () {
