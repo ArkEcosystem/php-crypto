@@ -55,9 +55,8 @@ it('should serialize', function () {
 it('should convert to an array', function () {
     expect($this->subject->toArray())->toBe([
         'gasPrice'        => $this->subject->data['gasPrice'],
-        'network'         => $this->subject->data['network'],
+        'gasLimit'        => $this->subject->data['gasLimit'],
         'hash'            => $this->subject->data['hash'],
-        'gas'             => $this->subject->data['gas'],
         'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
         'to'              => $this->subject->data['to'],
@@ -72,10 +71,9 @@ it('should convert to an array', function () {
 it('should omit value if null when converting to array', function () {
     $this->subject->data['gasPrice'] = null;
     $this->subject->data['hash']     = null;
-    $this->subject->data['gas']      = null;
+    $this->subject->data['gasLimit'] = null;
 
     expect($this->subject->toArray())->toBe([
-        'network'         => $this->subject->data['network'],
         'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
         'to'              => $this->subject->data['to'],
@@ -90,9 +88,8 @@ it('should omit value if null when converting to array', function () {
 it('should convert to json', function () {
     expect($this->subject->toJson())->toBe(json_encode([
         'gasPrice'        => $this->subject->data['gasPrice'],
-        'network'         => $this->subject->data['network'],
+        'gasLimit'        => $this->subject->data['gasLimit'],
         'hash'            => $this->subject->data['hash'],
-        'gas'             => $this->subject->data['gas'],
         'nonce'           => $this->subject->data['nonce'],
         'senderPublicKey' => $this->subject->data['senderPublicKey'],
         'to'              => $this->subject->data['to'],

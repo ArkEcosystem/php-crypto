@@ -37,11 +37,10 @@ abstract class TestCase extends BaseTestCase
     {
         $actual = $this->assertDeserialized($fixture, [
             'hash',
-            'network',
             'nonce',
             'value',
             'gasPrice',
-            'gas',
+            'gasLimit',
             'contractId',
             'senderPublicKey',
             'from',

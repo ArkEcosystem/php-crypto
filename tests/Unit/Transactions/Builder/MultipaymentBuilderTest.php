@@ -10,17 +10,15 @@ it('should sign it with a passphrase', function () {
 
     $builder = MultipaymentBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
         ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', UnitConverter::parseUnits('200000', 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
-    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -37,16 +35,14 @@ it('should handle single recipient', function () {
 
     $builder = MultipaymentBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
-    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -63,15 +59,13 @@ it('should handle empty payment', function () {
 
     $builder = MultipaymentBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
-    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -90,8 +84,7 @@ it('should handle empty payment', function () {
 //     $payload = (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall('pay', [['0x8233F6Df6449D7655f4643D2E752DC8D2283fAd5'], ['1000000000000000000']]);
 //     $tx = (new Multipayment(['data' => $payload]));
 //     $tx->data['nonce'] = $fixture['data']['nonce'];
-//     $tx->data['network'] = $fixture['data']['network'];
-//     $tx->data['gas'] = $fixture['data']['gas'];
+//     $tx->data['gasLimit'] = $fixture['data']['gasLimit'];
 //     $tx->data['gasPrice'] = $fixture['data']['gasPrice'];
 //     $tx->sign(PrivateKey::fromPassphrase($this->passphrase));
 //
@@ -103,9 +96,8 @@ it('should convert to json when casting to string', function () {
 
     $builder = MultipaymentBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
         ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', UnitConverter::parseUnits('200000', 'wei'))
         ->sign($this->passphrase);
@@ -118,18 +110,16 @@ it('should convert to an array', function () {
 
     $builder = MultipaymentBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
         ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', UnitConverter::parseUnits('200000', 'wei'))
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([
         'gasPrice'        => $builder->transaction->data['gasPrice'],
-        'network'         => $builder->transaction->data['network'],
+        'gasLimit'        => $builder->transaction->data['gasLimit'],
         'hash'            => $builder->transaction->data['hash'],
-        'gas'             => $builder->transaction->data['gas'],
         'nonce'           => $builder->transaction->data['nonce'],
         'senderPublicKey' => $builder->transaction->data['senderPublicKey'],
         'to'              => $builder->transaction->data['to'],
