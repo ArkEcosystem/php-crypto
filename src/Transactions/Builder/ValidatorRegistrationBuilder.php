@@ -7,6 +7,7 @@ namespace ArkEcosystem\Crypto\Transactions\Builder;
 use ArkEcosystem\Crypto\Enums\ContractAddresses;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use Brick\Math\BigDecimal;
 
 class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
 {
@@ -20,6 +21,15 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
     public function validatorPublicKey(string $validatorPublicKey): self
     {
         $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;
+
+        $this->transaction->refreshPayloadData();
+
+        return $this;
+    }
+
+    public function value(BigDecimal $value): self
+    {
+        $this->transaction->data['value'] = $value;
 
         $this->transaction->refreshPayloadData();
 

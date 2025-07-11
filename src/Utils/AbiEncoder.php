@@ -323,17 +323,21 @@ class AbiEncoder extends AbiBase
     {
         $dynamic        = false;
         $preparedParams = [];
-        // TODO: it currently relies on the ABI component arrays to have a string index but our DARK20 ABI doesn't seem to have that
-        // https://app.clickup.com/t/86dx0at7u
-        foreach ($param['components'] as $index => $component) {
-            $key = is_array($value) ? $index : $component['name'];
+        foreach ($param['components'] as $component) {
+            if (! isset($component['name'])) {
+                throw new Exception('Tuple component missing name');
+            }
+
+            $key = $component['name'];
             if (! isset($value[$key])) {
                 throw new Exception('Tuple value missing component: '.$component['name']);
             }
+
             $preparedParam = $this->prepareParam($component, $value[$key]);
             if ($preparedParam['dynamic']) {
                 $dynamic = true;
             }
+
             $preparedParams[] = $preparedParam;
         }
         if ($dynamic) {
