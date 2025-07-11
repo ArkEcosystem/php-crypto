@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
