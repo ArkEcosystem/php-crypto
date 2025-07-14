@@ -75,6 +75,17 @@ abstract class AbstractTransactionBuilder
         return $this;
     }
 
+    public function legacySecondSign(string $passphrase, string $secondPassphrase): static
+    {
+        $this->sign($passphrase);
+
+        $this->transaction->legacySecondSign(
+            PrivateKey::fromPassphrase($secondPassphrase)
+        );
+
+        return $this;
+    }
+
     public function verify(): bool
     {
         return $this->transaction->verify();

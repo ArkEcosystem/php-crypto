@@ -36,6 +36,10 @@ class TransactionUtils
             $fields[] = self::toBeArray($transaction['v'] + Network::get()->chainId() * 2 + 35);
             $fields[] = '0x'.$transaction['r'];
             $fields[] = '0x'.$transaction['s'];
+
+            if (isset($transaction['legacySecondSignature'])) {
+                $fields[] = '0x'.$transaction['legacySecondSignature'];
+            }
         } else {
             // Push chainId + 0s for r and s
             $fields[] = self::toBeArray(Network::get()->chainId());
@@ -43,13 +47,9 @@ class TransactionUtils
             $fields[] = self::toBeArray(0);
         }
 
-        // TODO: second signature handling
-
         $encoded = RlpEncoder::encode($fields);
 
-        $payload = substr($encoded, 2);
-
-        return new Buffer(hex2bin($payload));
+        return new Buffer(hex2bin(substr($encoded, 2)));
     }
 
     /**
