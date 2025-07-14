@@ -20,7 +20,7 @@ abstract class TestCase extends BaseTestCase
 
     protected $passphrase = 'found lobster oblige describe ready addict body brave live vacuum display salute lizard combine gift resemble race senior quality reunion proud tell adjust angle';
 
-    protected $secondPassphrase = 'this is a top secret second passphrase';
+    protected $secondPassphrase = 'gold favorite math anchor detect march purpose such sausage crucial reform novel connect misery update episode invite salute barely garbage exclude winner visa cruise';
 
     protected $passphrases = [
         'album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree',
