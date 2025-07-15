@@ -1,11 +1,12 @@
 {
     "data": {
         "nonce": "1",
-        "gasPrice": 5000000000,
-        "gasLimit": 21000,
+        "gasPrice": "5000000000",
+        "gasLimit": "21000",
         "to": "0x6F0182a0cc707b055322CcF6d4CB6a5Aff1aEb22",
         "value": "10000000000000000000",
         "data": "",
+        "network": 11812,
         "v": 1,
         "r": "2ee46aba6c285231d92bb3eb7c348ac01fa5d4e1f057ad8ba47d4c5f120c9090",
         "s": "559b3971e492cfd8b1dc1fecdefcc0ed99619ffc1da09e12144880070134e6b1",
