@@ -46,7 +46,7 @@ trait Deserialize
         ksort($actual);
 
         foreach ($expected as $key => $value) {
-            if (in_array($key, ['gasPrice', 'gasLimit'])) {
+            if (in_array($key, ['gasPrice', 'gasLimit'], true)) {
                 $actual[$key] = (string) $value;
             }
         }
