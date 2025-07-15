@@ -110,8 +110,8 @@ it('should handle large amounts', function () {
 
     $subject = new Transfer($fixture['data']);
 
-    expect((string) $subject->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $subject->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $subject->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $subject->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($subject->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($subject->data['to'])->toBe($fixture['data']['to']);
     expect((string) $subject->data['value'])->toBe((string) $fixture['data']['value']);

@@ -16,8 +16,8 @@ it('should sign it with a passphrase', function () {
         ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['to'])->toBe($fixture['data']['to']);
     expect((string) $builder->transaction->data['value'])->toBe((string) $fixture['data']['value']);
@@ -43,8 +43,8 @@ it('should handle large amounts', function () {
         ->value(UnitConverter::parseUnits($fixture['data']['value'], 'wei'))
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['to'])->toBe($fixture['data']['to']);
     expect((string) $builder->transaction->data['value'])->toBe((string) $fixture['data']['value']);

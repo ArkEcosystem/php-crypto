@@ -35,7 +35,7 @@ it('should get the hash for a transaction', function () {
 it('should handle string data starting with 0x', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'username-resignation');
 
-    $fixture['data']['gasPrice'] = '0x'.dechex($fixture['data']['gasPrice']);
+    $fixture['data']['nonce'] = '0x'.dechex((int) $fixture['data']['nonce']);
 
     $transaction = TransactionUtils::toBuffer($fixture['data']);
 
