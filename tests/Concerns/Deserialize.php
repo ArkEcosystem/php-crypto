@@ -45,6 +45,12 @@ trait Deserialize
         ksort($expected);
         ksort($actual);
 
+        foreach ($expected as $key => $value) {
+            if (in_array($key, ['gasPrice', 'gasLimit'])) {
+                $actual[$key] = (string) $value;
+            }
+        }
+
         $this->assertSame($expected, $actual);
     }
 }

@@ -16,8 +16,8 @@ it('should sign it with a passphrase', function () {
         ->pay('0xc3bbe9b1cee1ff85ad72b87414b0e9b7f2366763', UnitConverter::parseUnits('200000', 'wei'))
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
@@ -40,8 +40,8 @@ it('should handle single recipient', function () {
         ->pay('0x6f0182a0cc707b055322ccf6d4cb6a5aff1aeb22', UnitConverter::parseUnits('100000', 'wei'))
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
@@ -63,8 +63,8 @@ it('should handle empty payment', function () {
         ->nonce($fixture['data']['nonce'])
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);

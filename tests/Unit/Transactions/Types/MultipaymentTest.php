@@ -116,8 +116,8 @@ it('should handle single recipient', function () {
 
     $subject = new Multipayment($fixture['data']);
 
-    expect((string) $subject->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $subject->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $subject->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $subject->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($subject->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($subject->data['v'])->toBe($fixture['data']['v']);
     expect($subject->data['r'])->toBe($fixture['data']['r']);
@@ -135,8 +135,8 @@ it('should handle empty payment', function () {
 
     $subject = new Multipayment($fixture['data']);
 
-    expect((string) $subject->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $subject->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $subject->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $subject->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($subject->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($subject->data['v'])->toBe($fixture['data']['v']);
     expect($subject->data['r'])->toBe($fixture['data']['r']);

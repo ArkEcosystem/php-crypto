@@ -14,8 +14,8 @@ it('should sign it with a passphrase', function () {
         ->nonce($fixture['data']['nonce'])
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
-    expect((string) $builder->transaction->data['gasLimit'])->toBe((string) $fixture['data']['gasLimit']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
