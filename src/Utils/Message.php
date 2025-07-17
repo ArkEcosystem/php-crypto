@@ -16,6 +16,8 @@ use kornrunner\Keccak;
 
 class Message
 {
+    const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
+
     /**
      * The message signer public key.
      *
@@ -99,7 +101,7 @@ class Message
     {
         $privateKey = PrivateKey::fromPassphrase($passphrase);
 
-        $hash = Keccak::hash($message, 256);
+        $hash = Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256);
 
         $signature = $privateKey->sign(Buffer::hex($hash));
 
@@ -125,10 +127,14 @@ class Message
 
         $signature = $this->getSignature();
 
-        return $factory->fromHex($this->publicKey)->verify(
-            Buffer::hex(Keccak::hash($this->message, 256)),
-            $signature,
-        );
+        $message = static::MESSAGE_PREFIX.strlen($this->message).$this->message;
+
+        return $factory
+            ->fromHex($this->publicKey)
+            ->verify(
+                Buffer::hex(Keccak::hash($message, 256)),
+                $signature,
+            );
     }
 
     /**

@@ -10,7 +10,7 @@ test('it should sign a valid message', function () {
     $message = Message::sign($fixture['message'], $this->passphrase);
 
     expect($message->publicKey)->toBe($fixture['publicKey']);
-    expect($message->signature)->toBe($fixture['signature']);
+    expect($message->signature)->toBe(substr($fixture['signature'], 2));
     expect($message->message)->toBe($fixture['message']);
 });
 
@@ -64,7 +64,9 @@ test('it should sign a message', function () {
 });
 
 test('it should verify a message', function () {
-    $message = Message::new($this->getFixture('message-sign'));
+    $fixture = $this->getFixture('message-sign');
+    $fixture['signature'] = substr($fixture['signature'], 2);
+    $message = Message::new($fixture);
 
     expect($message->verify())->toBeTrue();
 });
