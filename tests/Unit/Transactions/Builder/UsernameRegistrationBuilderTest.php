@@ -11,16 +11,14 @@ it('should sign it with a passphrase', function () {
 
     $builder = UsernameRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->username('fixture')
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
-    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -38,9 +36,8 @@ it('should throw exception for invalid username', function () {
 
         UsernameRegistrationBuilder::new()
             ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+            ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
             ->nonce($fixture['data']['nonce'])
-            ->network($fixture['data']['network'])
-            ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
             ->username('this_is_a_very_long_username_that_is_invalid')
             ->sign($this->passphrase);
     };
@@ -56,9 +53,8 @@ it('should convert to json when casting to string', function () {
 
     $builder = UsernameRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->username('fixture')
         ->sign($this->passphrase);
 
@@ -70,17 +66,15 @@ it('should convert to an array', function () {
 
     $builder = UsernameRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->username('fixture')
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([
         'gasPrice'        => $builder->transaction->data['gasPrice'],
-        'network'         => $builder->transaction->data['network'],
+        'gasLimit'        => $builder->transaction->data['gasLimit'],
         'hash'            => $builder->transaction->data['hash'],
-        'gas'             => $builder->transaction->data['gas'],
         'nonce'           => $builder->transaction->data['nonce'],
         'senderPublicKey' => $builder->transaction->data['senderPublicKey'],
         'to'              => $builder->transaction->data['to'],

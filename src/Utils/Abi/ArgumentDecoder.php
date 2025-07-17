@@ -12,11 +12,10 @@ final class ArgumentDecoder
 
     public function __construct(string $bytes)
     {
-        try {
-            $bytes = hex2bin($bytes);
-        } catch (\Throwable $e) {
-            // Handle the case where hex2bin fails, e.g., invalid hex string
+        if (! ctype_xdigit($bytes) || strlen($bytes) % 2 !== 0) {
             $bytes = false;
+        } else {
+            $bytes = hex2bin($bytes);
         }
 
         if ($bytes === false) {

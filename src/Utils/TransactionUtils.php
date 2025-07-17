@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
-use ArkEcosystem\Crypto\Enums\Constants;
+use ArkEcosystem\Crypto\Configuration\Network;
 use BI\BigInteger;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
@@ -22,30 +22,32 @@ class TransactionUtils
     public static function toBuffer(array $transaction, bool $skipSignature = false): Buffer
     {
         $fields = [
-            self::toBeArray($transaction['network'] ?? 0),
             self::toBeArray(isset($transaction['nonce']) ? $transaction['nonce'] : 0),
-            self::toBeArray(0),
             self::toBeArray($transaction['gasPrice'] ?? 0),
-            self::toBeArray($transaction['gas'] ?? 0),
+            self::toBeArray($transaction['gasLimit'] ?? 0),
             $transaction['to'] ?? '0x',
             self::toBeArray(isset($transaction['value']) ? $transaction['value'] : 0),
             isset($transaction['data']) && str_starts_with($transaction['data'], '0x')
                 ? $transaction['data']
                 : ('0x'.($transaction['data'] ?? '')),
-            [],
         ];
 
-        if (! $skipSignature) {
-            if (isset($transaction['v'], $transaction['r'], $transaction['s'])) {
-                $fields[] = self::toBeArray($transaction['v'] - 27);
-                $fields[] = '0x'.$transaction['r'];
-                $fields[] = '0x'.$transaction['s'];
-            }
+        if (! $skipSignature && isset($transaction['v'], $transaction['r'], $transaction['s']) && $transaction['v'] !== '') {
+            $fields[] = self::toBeArray($transaction['v'] + Network::get()->chainId() * 2 + 35);
+            $fields[] = '0x'.$transaction['r'];
+            $fields[] = '0x'.$transaction['s'];
+        } else {
+            // Push chainId + 0s for r and s
+            $fields[] = self::toBeArray(Network::get()->chainId());
+            $fields[] = self::toBeArray(0);
+            $fields[] = self::toBeArray(0);
         }
+
+        // TODO: second signature handling
 
         $encoded = RlpEncoder::encode($fields);
 
-        $payload = Constants::EIP_1559_PREFIX.substr($encoded, 2);
+        $payload = substr($encoded, 2);
 
         return new Buffer(hex2bin($payload));
     }
