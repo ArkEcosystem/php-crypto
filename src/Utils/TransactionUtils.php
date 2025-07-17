@@ -47,6 +47,8 @@ class TransactionUtils
             $fields[] = self::toBeArray(0);
         }
 
+        // TODO: second signature handling
+
         $encoded = RlpEncoder::encode($fields);
 
         return new Buffer(hex2bin(substr($encoded, 2)));
