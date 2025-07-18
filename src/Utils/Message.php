@@ -107,7 +107,7 @@ class Message
 
         $r = Helpers::gmpToHex($signature->getR());
         $s = Helpers::gmpToHex($signature->getS());
-        $v = str_pad(dechex($signature->getRecoveryId()), 2, '0', STR_PAD_LEFT);
+        $v = str_pad(dechex($signature->getRecoveryId() + 27), 2, '0', STR_PAD_LEFT);
 
         return static::new([
             'publicKey' => $privateKey->publicKey,
