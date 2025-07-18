@@ -16,7 +16,7 @@ use kornrunner\Keccak;
 
 class Message
 {
-    const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
+    public const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
 
     /**
      * The message signer public key.

@@ -64,9 +64,9 @@ test('it should sign a message', function () {
 });
 
 test('it should verify a message', function () {
-    $fixture = $this->getFixture('message-sign');
+    $fixture              = $this->getFixture('message-sign');
     $fixture['signature'] = substr($fixture['signature'], 2);
-    $message = Message::new($fixture);
+    $message              = Message::new($fixture);
 
     expect($message->verify())->toBeTrue();
 });
