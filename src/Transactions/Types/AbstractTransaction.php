@@ -58,6 +58,15 @@ abstract class AbstractTransaction
         return $this;
     }
 
+    public function legacySecondSign(PrivateKey $privateKey): static
+    {
+        $hash = $this->hash(skipSignature: true);
+
+        $this->data['legacySecondSignature'] = $privateKey->signToEcdsa($hash);
+
+        return $this;
+    }
+
     public function recoverSender(): void
     {
         $compactSignature = $this->getSignature();

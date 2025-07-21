@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Helpers;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
@@ -75,7 +76,7 @@ class PrivateKey
     }
 
     /**
-     * Derive the private key for the given WIF.
+     * Sign a message using the private key.
      *
      * @param BufferInterface $message
      *
@@ -84,6 +85,25 @@ class PrivateKey
     public function sign(BufferInterface $message): CompactSignature
     {
         return $this->instance->signCompact($message);
+    }
+
+    /**
+     * Sign a message using the private key and return an ECDSA signature.
+     *
+     * @param BufferInterface $message
+     *
+     * @return string
+     */
+    public function signToEcdsa(BufferInterface $message): string
+    {
+        $signature = $this->instance->signCompact($message);
+
+        return sprintf(
+            '%s%s%s',
+            Helpers::gmpToHex($signature->getR()),
+            Helpers::gmpToHex($signature->getS()),
+            str_pad((string) $signature->getRecoveryId(), 2, '0', STR_PAD_LEFT),
+        );
     }
 
     private static function factory(): PrivateKeyFactory
