@@ -28,6 +28,20 @@ class AbiDecoder extends AbiBase
         ];
     }
 
+    public function decodeError(string $data): string
+    {
+        $data = $this->stripHexPrefix($data);
+
+        $errorSelector = substr($data, 0, 8);
+
+        $abiItem = $this->findErrorBySelector($errorSelector);
+        if (! $abiItem) {
+            throw new Exception('Function selector not found in ABI: '.$errorSelector);
+        }
+
+        return $abiItem['name'];
+    }
+
     public static function decodeAddress(string $bytes, int $offset): array
     {
         $data         = substr($bytes, $offset, 32);
@@ -152,12 +166,31 @@ class AbiDecoder extends AbiBase
     private function findFunctionBySelector(string $selector): ?array
     {
         foreach ($this->abi as $item) {
-            if ($item['type'] === 'function') {
-                $functionSignature = $this->getFunctionSignature($item);
-                $functionSelector  = substr($this->keccak256($functionSignature), 2, 8);
-                if ($functionSelector === $selector) {
-                    return $item;
-                }
+            if ($item['type'] !== 'function') {
+                continue;
+            }
+
+            $functionSignature = $this->getFunctionSignature($item);
+            $functionSelector  = substr($this->keccak256($functionSignature), 2, 8);
+            if ($functionSelector === $selector) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    private function findErrorBySelector(string $selector): ?array
+    {
+        foreach ($this->abi as $item) {
+            if ($item['type'] !== 'error') {
+                continue;
+            }
+
+            $errorSignature = $this->getFunctionSignature($item);
+            $errorSelector  = substr($this->keccak256($errorSignature), 2, 8);
+            if ($errorSelector === $selector) {
+                return $item;
             }
         }
 
