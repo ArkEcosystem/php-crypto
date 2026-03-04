@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use Brick\Math\BigDecimal;
@@ -19,9 +18,8 @@ abstract class AbstractTransactionBuilder
             'value'           => BigDecimal::zero(),
             'senderPublicKey' => '',
             'gasPrice'        => '5',
+            'gasLimit'        => 1_000_000,
             'nonce'           => '1',
-            'network'         => Network::get()->chainId(),
-            'gas'             => 1_000_000,
             'data'            => '',
         ]);
     }
@@ -36,9 +34,9 @@ abstract class AbstractTransactionBuilder
         return new static($data);
     }
 
-    public function gas(BigDecimal $gas): static
+    public function gasLimit(BigDecimal $gasLimit): static
     {
-        $this->transaction->data['gas'] = $gas;
+        $this->transaction->data['gasLimit'] = $gasLimit;
 
         return $this;
     }
@@ -64,13 +62,6 @@ abstract class AbstractTransactionBuilder
         return $this;
     }
 
-    public function network(int $network): static
-    {
-        $this->transaction->data['network'] = $network;
-
-        return $this;
-    }
-
     public function sign(string $passphrase): static
     {
         $privateKey = PrivateKey::fromPassphrase($passphrase);
@@ -80,6 +71,17 @@ abstract class AbstractTransactionBuilder
         $this->transaction = $this->transaction->sign($privateKey);
 
         $this->transaction->data['hash'] = $this->transaction->hash()->getHex();
+
+        return $this;
+    }
+
+    public function legacySecondSign(string $passphrase, string $secondPassphrase): static
+    {
+        $this->sign($passphrase);
+
+        $this->transaction->legacySecondSign(
+            PrivateKey::fromPassphrase($secondPassphrase)
+        );
 
         return $this;
     }

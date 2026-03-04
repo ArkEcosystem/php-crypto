@@ -17,7 +17,7 @@ class Testnet extends AbstractNetwork implements NetworkInterface
 
     public function chainId(): int
     {
-        return 10000;
+        return 11812;
     }
 
     public function epoch(): string

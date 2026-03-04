@@ -359,3 +359,17 @@ it('should throw an exception for invalid param types', function () {
         $param,
     ]);
 })->throws(Exception::class, 'Unsupported type: testing');
+
+test('should decode error payload', function () {
+    $decoder = new AbiDecoder();
+
+    $decodedData = $decoder->decodeError('cd03235e');
+
+    expect($decodedData)->toBe('CallerIsNotValidator');
+});
+
+test('should throw exception if error payload does not exist', function () {
+    $decoder = new AbiDecoder();
+
+    $decoder->decodeError('123456');
+})->throws(Exception::class, 'Function selector not found in ABI: 123456');

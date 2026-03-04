@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto;
 
 use ArkEcosystem\Crypto\Configuration\Network;
-use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Networks\Testnet;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -20,7 +20,7 @@ abstract class TestCase extends BaseTestCase
 
     protected $passphrase = 'found lobster oblige describe ready addict body brave live vacuum display salute lizard combine gift resemble race senior quality reunion proud tell adjust angle';
 
-    protected $secondPassphrase = 'this is a top secret second passphrase';
+    protected $secondPassphrase = 'gold favorite math anchor detect march purpose such sausage crucial reform novel connect misery update episode invite salute barely garbage exclude winner visa cruise';
 
     protected $passphrases = [
         'album pony urban cheap small blade cannon silent run reveal luxury glad predict excess fire beauty hollow reward solar egg exclude leaf sight degree',
@@ -30,18 +30,17 @@ abstract class TestCase extends BaseTestCase
 
     protected function setUp(): void
     {
-        Network::set(Mainnet::new());
+        Network::set(Testnet::new());
     }
 
     protected function assertTransaction(array $fixture): AbstractTransaction
     {
         $actual = $this->assertDeserialized($fixture, [
             'hash',
-            'network',
             'nonce',
             'value',
             'gasPrice',
-            'gas',
+            'gasLimit',
             'contractId',
             'senderPublicKey',
             'from',

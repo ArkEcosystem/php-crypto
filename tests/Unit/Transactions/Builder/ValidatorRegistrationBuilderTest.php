@@ -10,16 +10,14 @@ it('should sign it with a passphrase', function () {
 
     $builder = ValidatorRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
-    expect((string) $builder->transaction->data['gasPrice'])->toBe((string) $fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
+    expect((string) $builder->transaction->data['gasLimit'])->toBe($fixture['data']['gasLimit']);
     expect($builder->transaction->data['nonce'])->toBe($fixture['data']['nonce']);
-    expect($builder->transaction->data['network'])->toBe($fixture['data']['network']);
-    expect((string) $builder->transaction->data['gas'])->toBe((string) $fixture['data']['gas']);
     expect($builder->transaction->data['v'])->toBe($fixture['data']['v']);
     expect($builder->transaction->data['r'])->toBe($fixture['data']['r']);
     expect($builder->transaction->data['s'])->toBe($fixture['data']['s']);
@@ -36,9 +34,8 @@ it('should convert to json when casting to string', function () {
 
     $builder = ValidatorRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
@@ -50,17 +47,15 @@ it('should convert to an array', function () {
 
     $builder = ValidatorRegistrationBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
+        ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->network($fixture['data']['network'])
-        ->gas(UnitConverter::parseUnits($fixture['data']['gas'], 'wei'))
         ->validatorPublicKey('30954f46d6097a1d314e900e66e11e0dad0a57cd03e04ec99f0dedd1c765dcb11e6d7fa02e22cf40f9ee23d9cc1c0624')
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([
         'gasPrice'        => $builder->transaction->data['gasPrice'],
-        'network'         => $builder->transaction->data['network'],
+        'gasLimit'        => $builder->transaction->data['gasLimit'],
         'hash'            => $builder->transaction->data['hash'],
-        'gas'             => $builder->transaction->data['gas'],
         'nonce'           => $builder->transaction->data['nonce'],
         'senderPublicKey' => $builder->transaction->data['senderPublicKey'],
         'to'              => $builder->transaction->data['to'],

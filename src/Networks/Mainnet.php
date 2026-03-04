@@ -17,7 +17,7 @@ class Mainnet extends AbstractNetwork implements NetworkInterface
 
     public function chainId(): int
     {
-        return 10000;
+        return 11811;
     }
 
     public function epoch(): string

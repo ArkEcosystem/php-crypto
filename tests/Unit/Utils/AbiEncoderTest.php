@@ -620,8 +620,8 @@ it('should handle dynamic tuple types param types', function () {
         'name'         => 'text',
         'type'         => 'tuple',
         'components'   => [
-            'recipient' => [
-                'name' => 'from',
+            [
+                'name' => 'recipient',
                 'type' => 'string',
             ],
         ],

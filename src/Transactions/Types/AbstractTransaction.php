@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
@@ -52,9 +51,18 @@ abstract class AbstractTransaction
         // Extract the recovery ID (an integer between 0 and 3) from the signature
         $recoveryId = $signature->getRecoveryId();
 
-        $this->data['v'] = $recoveryId + 27;
+        $this->data['v'] = $recoveryId;
         $this->data['r'] = Helpers::gmpToHex($signature->getR());
         $this->data['s'] = Helpers::gmpToHex($signature->getS());
+
+        return $this;
+    }
+
+    public function legacySecondSign(PrivateKey $privateKey): static
+    {
+        $hash = $this->hash(skipSignature: true);
+
+        $this->data['legacySecondSignature'] = $privateKey->signToEcdsa($hash);
 
         return $this;
     }
@@ -96,9 +104,8 @@ abstract class AbstractTransaction
     {
         return array_filter([
             'gasPrice'        => $this->data['gasPrice'],
-            'network'         => $this->data['network'] ?? Network::get()->chainId(),
+            'gasLimit'        => $this->data['gasLimit'],
             'hash'            => $this->data['hash'],
-            'gas'             => $this->data['gas'],
             'nonce'           => $this->data['nonce'],
             'senderPublicKey' => $this->data['senderPublicKey'],
             'to'              => $this->data['to'] ?? null,
@@ -136,7 +143,7 @@ abstract class AbstractTransaction
             Bitcoin::getGenerator()
         );
 
-        $recoverId = $this->data['v'] - 27;
+        $recoverId = $this->data['v'];
         $r         = gmp_init($this->data['r'], 16);
         $s         = gmp_init($this->data['s'], 16);
 
