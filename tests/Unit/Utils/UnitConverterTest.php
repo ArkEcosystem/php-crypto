@@ -30,10 +30,10 @@ test('it should format units from wei', function ($formattedAmount, $amount) {
     expect((string) $formattedValue)->toEqual($amount);
 })->with([
     ['1', '1'],
-	['10', '10'],
-	['100', '100'],
-	['1000', '1000'],
-	['10000', '10000'],
+    ['10', '10'],
+    ['100', '100'],
+    ['1000', '1000'],
+    ['10000', '10000'],
 ]);
 
 test('it should format units from gwei', function ($formattedAmount, $amount) {
@@ -41,13 +41,13 @@ test('it should format units from gwei', function ($formattedAmount, $amount) {
 
     expect((string) $formattedValue)->toEqual($amount);
 })->with([
-    ["100000001", "0.100000001"],
-    ["100000000", "0.1"],
-	["1000000000", "1"],
-	["10000000000", "10"],
-	["100000000000", "100"],
-	["1000000000000", "1000"],
-	["10000000000000", "10000"],
+    ['100000001', '0.100000001'],
+    ['100000000', '0.1'],
+    ['1000000000', '1'],
+    ['10000000000', '10'],
+    ['100000000000', '100'],
+    ['1000000000000', '1000'],
+    ['10000000000000', '10000'],
 ]);
 
 test('it should format units from ark', function ($formattedAmount, $amount) {
@@ -55,13 +55,13 @@ test('it should format units from ark', function ($formattedAmount, $amount) {
 
     expect((string) $formattedValue)->toEqual($amount);
 })->with([
-	["100000000000000001", "0.100000000000000001"],
-	["100000000000000000", "0.1"],
-	["1000000000000000000", "1"],
-	["10000000000000000000", "10"],
-	["100000000000000000000", "100"],
-	["1000000000000000000000", "1000"],
-	["10000000000000000000000", "10000"],
+    ['100000000000000001', '0.100000000000000001'],
+    ['100000000000000000', '0.1'],
+    ['1000000000000000000', '1'],
+    ['10000000000000000000', '10'],
+    ['100000000000000000000', '100'],
+    ['1000000000000000000000', '1000'],
+    ['10000000000000000000000', '10000'],
 ]);
 
 test('it should throw exception for unsupported unit in parse', function () {
