@@ -24,20 +24,45 @@ test('it should parse decimal units into ark', function () {
     expect((string) $arkValueDecimal)->toBe('100000000000000000');
 });
 
-test('it should format units from wei', function () {
-    $formattedValue = UnitConverter::formatUnits('1', 'wei');
-    expect($formattedValue)->toBe(1.0);
-});
+test('it should format units from wei', function ($formattedAmount, $amount) {
+    $formattedValue = UnitConverter::formatUnits($formattedAmount, 'wei');
 
-test('it should format units from gwei', function () {
-    $formattedValue = UnitConverter::formatUnits('1000000000', 'gwei');
-    expect($formattedValue)->toBe(1.0);
-});
+    expect((string) $formattedValue)->toEqual($amount);
+})->with([
+    ['1', '1'],
+	['10', '10'],
+	['100', '100'],
+	['1000', '1000'],
+	['10000', '10000'],
+]);
 
-test('it should format units from ark', function () {
-    $formattedValue = UnitConverter::formatUnits('1000000000000000000', 'ark');
-    expect($formattedValue)->toBe(1.0);
-});
+test('it should format units from gwei', function ($formattedAmount, $amount) {
+    $formattedValue = UnitConverter::formatUnits($formattedAmount, 'gwei');
+
+    expect((string) $formattedValue)->toEqual($amount);
+})->with([
+    ["100000001", "0.100000001"],
+    ["100000000", "0.1"],
+	["1000000000", "1"],
+	["10000000000", "10"],
+	["100000000000", "100"],
+	["1000000000000", "1000"],
+	["10000000000000", "10000"],
+]);
+
+test('it should format units from ark', function ($formattedAmount, $amount) {
+    $formattedValue = UnitConverter::formatUnits($formattedAmount, 'ark');
+
+    expect((string) $formattedValue)->toEqual($amount);
+})->with([
+	["100000000000000001", "0.100000000000000001"],
+	["100000000000000000", "0.1"],
+	["1000000000000000000", "1"],
+	["10000000000000000000", "10"],
+	["100000000000000000000", "100"],
+	["1000000000000000000000", "1000"],
+	["10000000000000000000000", "10000"],
+]);
 
 test('it should throw exception for unsupported unit in parse', function () {
     expect(fn () => UnitConverter::parseUnits(1, 'unsupported'))
