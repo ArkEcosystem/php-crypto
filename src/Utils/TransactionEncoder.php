@@ -13,13 +13,11 @@ class TransactionEncoder
     /**
      * @param string[] $recipients
      * @param BigDecimal[] $amounts
+     *
+     * @return string
      */
     public static function multiPayment(array $recipients, array $amounts): string
     {
-        if (count($recipients) !== count($amounts)) {
-            throw new \InvalidArgumentException('The number of recipients must match the number of amounts.');
-        }
-
         return (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall(
             AbiFunction::MULTIPAYMENT->value,
             [$recipients, $amounts]
