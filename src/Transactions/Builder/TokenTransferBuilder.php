@@ -16,9 +16,7 @@ class TokenTransferBuilder extends AbstractTransactionBuilder
 {
     public function contractAddress(string $address): self
     {
-        $this->transaction->data['to'] = $address;
-
-        return $this;
+        return $this->to($address);
     }
 
     public function recipient(string $address, BigDecimal $amount): self

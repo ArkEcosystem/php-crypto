@@ -6,18 +6,27 @@ namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use Brick\Math\BigDecimal;
 
 class TransactionEncoder
 {
+    /**
+     * @param string[] $recipients
+     * @param BigDecimal[] $amounts
+     */
     public static function multiPayment(array $recipients, array $amounts): string
     {
+        if (count($recipients) !== count($amounts)) {
+            throw new \InvalidArgumentException('The number of recipients must match the number of amounts.');
+        }
+
         return (new AbiEncoder(ContractAbiType::MULTIPAYMENT))->encodeFunctionCall(
             AbiFunction::MULTIPAYMENT->value,
             [$recipients, $amounts]
         );
     }
 
-    public static function tokenTransfer(string $recipientAddress, $amount): string
+    public static function tokenTransfer(string $recipientAddress, BigDecimal $amount): string
     {
         return (new AbiEncoder(ContractAbiType::TOKEN))->encodeFunctionCall(
             AbiFunction::TRANSFER->value,
