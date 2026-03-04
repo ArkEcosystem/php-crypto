@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Enums;
 
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
@@ -21,6 +22,7 @@ enum AbiFunction: string
     case USERNAME_REGISTRATION        = 'registerUsername';
     case USERNAME_RESIGNATION         = 'resignUsername';
     case MULTIPAYMENT                 = 'pay';
+    case TRANSFER                     = 'transfer';
 
     public function transactionClass(): string
     {
@@ -32,6 +34,7 @@ enum AbiFunction: string
             self::USERNAME_REGISTRATION      => UsernameRegistration::class,
             self::USERNAME_RESIGNATION       => UsernameResignation::class,
             self::MULTIPAYMENT               => Multipayment::class,
+            self::TRANSFER                   => EvmCall::class,
         };
     }
 }
