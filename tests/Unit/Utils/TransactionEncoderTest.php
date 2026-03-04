@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Utils\TransactionEncoder;
+use ArkEcosystem\Crypto\Utils\UnitConverter;
 
 it('should encode a multipayment payload', function () {
     $encoded = TransactionEncoder::multiPayment(
@@ -23,7 +24,7 @@ it('should encode a multipayment payload', function () {
 it('should encode a token transfer payload', function () {
     $encoded = TransactionEncoder::tokenTransfer(
         '0xA5cc0BfEB09742C5e4C610f2EBaaB82Eb142Ca10',
-        '1000000000000'
+        UnitConverter::parseUnits('1000000000000', 'wei')
     );
 
     expect($encoded)->toBe(
@@ -33,7 +34,7 @@ it('should encode a token transfer payload', function () {
 });
 
 it('should reject invalid address format in token transfer', function () {
-    TransactionEncoder::tokenTransfer('', '1000');
+    TransactionEncoder::tokenTransfer('', UnitConverter::parseUnits('1000', 'wei'));
 })->throws(Exception::class);
 
 it('should reject invalid address format in multipayment', function () {
