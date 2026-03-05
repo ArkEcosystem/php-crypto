@@ -86,8 +86,14 @@ abstract class AbiBase
                 return __DIR__.'/Abi/json/Abi.Usernames.json';
             case ContractAbiType::ERC20BATCH_TRANSFER:
                 return __DIR__.'/Abi/json/Abi.ERC20BatchTransfer.json';
-        }
+            case ContractAbiType::CUSTOM:
+                if ($path === null || $path === '') {
+                    throw new \InvalidArgumentException('A non-empty $path must be provided when using ContractAbiType::CUSTOM.');
+                }
 
-        return $path;
+                return $path;
+            default:
+                throw new \InvalidArgumentException('Unhandled ContractAbiType: '.$type->name);
+        }
     }
 }
