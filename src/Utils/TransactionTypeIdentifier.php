@@ -60,9 +60,9 @@ class TransactionTypeIdentifier
 
     public static function isTokenTransfer(string $data): bool
     {
-		$decodedData = static::decodeTokenFunction($data);
+        $decodedData = static::decodeTokenFunction($data);
 
-		return $decodedData ? $decodedData['functionName'] === "transfer" : false;
+        return $decodedData ? $decodedData['functionName'] === 'transfer' : false;
     }
 
     private static function startsWithSignature(string $data, string $signature): bool
@@ -98,15 +98,16 @@ class TransactionTypeIdentifier
         return self::$signatures;
     }
 
-	private static function decodeTokenFunction(string $data): ?array {
-		try {
-			$decodedData = (new AbiDecoder(ContractAbiType::TOKEN))->decodeFunctionData($data);
+    private static function decodeTokenFunction(string $data): ?array
+    {
+        try {
+            $decodedData = (new AbiDecoder(ContractAbiType::TOKEN))->decodeFunctionData($data);
 
-			return ['functionName' => $decodedData['functionName'], 'args' => $decodedData['args']];
-		} catch (\Exception $e) {
-			// Different abi type. Ignore.
-		}
+            return ['functionName' => $decodedData['functionName'], 'args' => $decodedData['args']];
+        } catch (\Exception $e) {
+            // Different abi type. Ignore.
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

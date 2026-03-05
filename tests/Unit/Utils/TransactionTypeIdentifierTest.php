@@ -19,9 +19,9 @@ function loadMethodIdentifiers(string $path): array
 }
 
 beforeEach(function () {
-    $this->consensusMethods = loadMethodIdentifiers(dirname(__DIR__, 3).'/src/Utils/Abi/json/Abi.Consensus.json');
+    $this->consensusMethods    = loadMethodIdentifiers(dirname(__DIR__, 3).'/src/Utils/Abi/json/Abi.Consensus.json');
     $this->multipaymentMethods = loadMethodIdentifiers(dirname(__DIR__, 3).'/src/Utils/Abi/json/Abi.Multipayment.json');
-    $this->usernamesMethods = loadMethodIdentifiers(dirname(__DIR__, 3).'/src/Utils/Abi/json/Abi.Usernames.json');
+    $this->usernamesMethods    = loadMethodIdentifiers(dirname(__DIR__, 3).'/src/Utils/Abi/json/Abi.Usernames.json');
 });
 
 it('identifies transfer by empty payload', function () {
