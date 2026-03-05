@@ -12,7 +12,7 @@ use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 it('should get transaction class', function ($type, $class) {
-    expect(AbiFunction::{$type}->transactionClass())->toEqual($class);
+    expect(constant(AbiFunction::class . '::' . $type)->transactionClass())->toEqual($class);
 })->with([
     'Vote'                  => ['VOTE', Vote::class],
     'Unvote'                => ['UNVOTE', Unvote::class],
