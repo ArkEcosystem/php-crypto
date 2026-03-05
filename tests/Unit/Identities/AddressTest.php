@@ -47,7 +47,7 @@ it('should validate an address', function () {
     expect($actual)->toBeTrue();
 });
 
-it('should return false for invalid an address', function () {
+it('should return false for an invalid address', function () {
     $actual = Address::validate('invalid-address');
 
     expect($actual)->toBeFalse();
