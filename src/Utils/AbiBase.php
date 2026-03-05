@@ -13,11 +13,24 @@ abstract class AbiBase
 
     public function __construct(ContractAbiType $type = ContractAbiType::CONSENSUS, ?string $path = null)
     {
-        $abiFilePath = $this->contractAbiPath($type, $path);
+        $abiFilePath = self::contractAbiPath($type, $path);
+        $decodedAbi  = self::loadAbiJson($abiFilePath);
 
-        $abiJson = file_get_contents($abiFilePath);
+        $this->abi = $decodedAbi['abi'];
+    }
 
-        $this->abi = json_decode($abiJson, true)['abi'];
+    public static function methodIdentifiers(
+        ContractAbiType $type = ContractAbiType::CONSENSUS,
+        ?string $path = null
+    ): array {
+        $abiFilePath = self::contractAbiPath($type, $path);
+        $decodedAbi  = self::loadAbiJson($abiFilePath);
+
+        if (! isset($decodedAbi['methodIdentifiers']) || ! is_array($decodedAbi['methodIdentifiers'])) {
+            throw new \RuntimeException("ABI JSON does not contain methodIdentifiers: {$abiFilePath}");
+        }
+
+        return $decodedAbi['methodIdentifiers'];
     }
 
     protected static function getArrayComponents(string $type): ?array
@@ -75,7 +88,7 @@ abstract class AbiBase
         return $selector;
     }
 
-    private function contractAbiPath(ContractAbiType $type, ?string $path = null): ?string
+    protected static function contractAbiPath(ContractAbiType $type, ?string $path = null): string
     {
         switch ($type) {
             case ContractAbiType::CONSENSUS:
@@ -87,7 +100,28 @@ abstract class AbiBase
             case ContractAbiType::TOKEN:
                 return __DIR__.'/Abi/json/Abi.Token.json';
             case ContractAbiType::CUSTOM:
+                if ($path === null || $path === '') {
+                    throw new \RuntimeException('Custom ABI type requires a valid path.');
+                }
+
                 return $path;
         }
+    }
+
+    private static function loadAbiJson(string $path): array
+    {
+        $rawJson = file_get_contents($path);
+
+        if ($rawJson === false) {
+            throw new \RuntimeException("Unable to load ABI JSON: {$path}");
+        }
+
+        $decoded = json_decode($rawJson, true);
+
+        if (! is_array($decoded) || ! isset($decoded['abi']) || ! is_array($decoded['abi'])) {
+            throw new \RuntimeException("ABI JSON does not contain a valid abi array: {$path}");
+        }
+
+        return $decoded;
     }
 }
