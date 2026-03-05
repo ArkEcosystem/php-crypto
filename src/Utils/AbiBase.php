@@ -84,6 +84,8 @@ abstract class AbiBase
                 return __DIR__.'/Abi/json/Abi.Multipayment.json';
             case ContractAbiType::USERNAMES:
                 return __DIR__.'/Abi/json/Abi.Usernames.json';
+            case ContractAbiType::ERC20BATCH_TRANSFER:
+                return __DIR__.'/Abi/json/Abi.ERC20BatchTransfer.json';
             case ContractAbiType::CUSTOM:
                 return $path;
         }
