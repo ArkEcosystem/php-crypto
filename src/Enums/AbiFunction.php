@@ -23,6 +23,7 @@ enum AbiFunction: string
     case USERNAME_RESIGNATION         = 'resignUsername';
     case MULTIPAYMENT                 = 'pay';
     case TRANSFER                     = 'transfer';
+    case APPROVE                      = 'approve';
 
     public function transactionClass(): string
     {
@@ -35,6 +36,7 @@ enum AbiFunction: string
             self::USERNAME_RESIGNATION       => UsernameResignation::class,
             self::MULTIPAYMENT               => Multipayment::class,
             self::TRANSFER                   => EvmCall::class,
+            self::APPROVE                    => EvmCall::class,
         };
     }
 }
