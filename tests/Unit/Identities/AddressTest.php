@@ -38,3 +38,17 @@ it('should get the address from private key', function () {
 
     expect($actual)->toBe($fixture['data']['address']);
 });
+
+it('should validate an address', function () {
+    $fixture = $this->getFixture('identity');
+
+    $actual = Address::validate($fixture['data']['address']);
+
+    expect($actual)->toBeTrue();
+});
+
+it('should return false for an invalid address', function () {
+    $actual = Address::validate('invalid-address');
+
+    expect($actual)->toBeFalse();
+});

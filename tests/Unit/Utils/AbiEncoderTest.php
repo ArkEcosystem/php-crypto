@@ -334,6 +334,24 @@ it('should error when encoding with a tuple missing component', function () {
     testPrivateMethod('encodeTuple', $object)->invokeArgs($object, [$tuple, $param]);
 })->throws(Exception::class, 'Tuple value missing component: from');
 
+it('should error when encoding a tuple with unnamed component', function () {
+    $tuple = [
+        'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+    ];
+
+    $param = [
+        'name'       => 'recipients',
+        'type'       => 'address',
+        'components' => [
+            [
+                'type' => 'address',
+            ],
+        ],
+    ];
+
+    testPrivateMethod('encodeTuple', $object)->invokeArgs($object, [$tuple, $param]);
+})->throws(Exception::class, 'Tuple component missing name');
+
 it('should error for missing function name when preparing function data', function () {
     $param = [
         ...json_decode(file_get_contents(dirname(dirname(dirname(__DIR__))).'/src/Utils/Abi/json/Abi.Consensus.json'), true),

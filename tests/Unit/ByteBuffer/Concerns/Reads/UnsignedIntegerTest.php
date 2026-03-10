@@ -71,3 +71,13 @@ test('it should read ulong', function () {
 
     expect($buffer->readULong())->toBe(64);
 });
+
+test('it should read uint256', function () {
+    // 256-bit unsigned integer (32 bytes)
+    $value  = '1157920892373161954235709850086879078532699846656405640323232344'; // max uint256
+    $buffer = ByteBuffer::new(0);
+    $buffer->writeUInt256($value);
+    $buffer->position(0);
+
+    expect($buffer->readUInt256())->toBe($value);
+});
