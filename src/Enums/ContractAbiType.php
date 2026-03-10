@@ -10,4 +10,5 @@ enum ContractAbiType: string
     case CONSENSUS    = 'consensus';
     case MULTIPAYMENT = 'multipayment';
     case USERNAMES    = 'usernames';
+    case TOKEN        = 'token';
 }
