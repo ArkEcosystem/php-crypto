@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
@@ -87,4 +88,46 @@ it('should deserialize a multipayment signed with a passphrase', function () {
     $transaction = $this->assertTransaction($fixture);
 
     expect($transaction)->toBeInstanceOf(Multipayment::class);
+});
+
+it('should use ByteBuffer::fromHex when there is no null-byte in the string', function () {
+    // The string does not contain a null-byte
+    $hexString    = 'abcdef1234567890';
+    $deserializer = new Deserializer($hexString);
+
+    // Use reflection to access the private buffer property
+    $reflection     = new ReflectionClass($deserializer);
+    $bufferProperty = $reflection->getProperty('buffer');
+    $bufferProperty->setAccessible(true);
+    $buffer = $bufferProperty->getValue($deserializer);
+
+    // The buffer should be an instance of ByteBuffer
+    expect($buffer)->toBeInstanceOf(ArkEcosystem\Crypto\ByteBuffer\ByteBuffer::class);
+
+    // The buffer should contain the hex string (converted to binary)
+    expect($buffer->toString('hex'))->toContain($hexString);
+});
+
+it('should use ByteBuffer::fromBinary when there is a null-byte in the string', function () {
+    // The string contains a null-byte
+    $binaryString = "abc\0def"; // hex: 61626300646566
+    $hexString    = '61626300646566';
+    $deserializer = new Deserializer($binaryString);
+
+    // Use reflection to access the private buffer property
+    $reflection     = new ReflectionClass($deserializer);
+    $bufferProperty = $reflection->getProperty('buffer');
+    $bufferProperty->setAccessible(true);
+    $buffer = $bufferProperty->getValue($deserializer);
+
+    // The buffer should be an instance of ByteBuffer
+    expect($buffer)->toBeInstanceOf(ArkEcosystem\Crypto\ByteBuffer\ByteBuffer::class);
+
+    // The buffer should contain the binary string
+    expect($buffer->toString('hex'))->toBe($hexString);
+});
+
+it('should return null if no data value in transaction data', function () {
+    expect(Deserializer::decodePayload([]))->toBeNull();
+    expect(Deserializer::decodePayload(['data' => '']))->toBeNull();
 });

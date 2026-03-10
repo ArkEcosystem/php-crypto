@@ -42,6 +42,13 @@ it('should convert to json when casting to string', function () {
     expect((string) $builder)->toBe($builder->toJson());
 });
 
+it('should set value on the transaction', function () {
+    $builder = ValidatorRegistrationBuilder::new()
+        ->value(UnitConverter::parseUnits(10, 'ark'));
+
+    expect((string) $builder->transaction->data['value'])->toBe('10000000000000000000');
+});
+
 it('should convert to an array', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'unvote');
 

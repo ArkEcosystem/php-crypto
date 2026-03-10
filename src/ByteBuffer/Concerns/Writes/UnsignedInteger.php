@@ -75,7 +75,7 @@ trait UnsignedInteger
     public function writeUInt256($value, int $offset = 0): self
     {
         // Convert the value to a GMP object for handling large numbers
-        if (is_numeric($value) || is_string($value)) {
+        if (is_numeric($value)) {
             $gmpValue = gmp_init($value);
         } elseif ($value instanceof \GMP) {
             $gmpValue = $value;

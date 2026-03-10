@@ -177,6 +177,13 @@ it('should fill the buffer starting from current position', function () {
     expect($buffer->internalSize())->toBe(4 + 11);
 });
 
+it('should fill the buffer starting from a different start point', function () {
+    $buffer = ByteBuffer::new('hello');
+    $buffer->fill(11, 4);
+
+    expect($buffer->internalSize())->toBe(4 + 11);
+});
+
 it('should flip the buffer contents', function () {
     $buffer = ByteBuffer::new('Hello World');
     $buffer->flip();
