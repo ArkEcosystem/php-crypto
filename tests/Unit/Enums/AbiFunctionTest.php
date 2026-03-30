@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
 use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
 use ArkEcosystem\Crypto\Transactions\Types\Unvote;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
@@ -21,4 +22,6 @@ it('should get transaction class', function ($type, $class) {
     'UsernameRegistration'  => ['USERNAME_REGISTRATION', UsernameRegistration::class],
     'UsernameResignation'   => ['USERNAME_RESIGNATION', UsernameResignation::class],
     'Multipayment'          => ['MULTIPAYMENT', Multipayment::class],
+    'Transfer'              => ['TRANSFER', EvmCall::class],
+    'Approve'               => ['APPROVE', EvmCall::class],
 ]);
