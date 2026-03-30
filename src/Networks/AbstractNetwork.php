@@ -14,16 +14,8 @@ abstract class AbstractNetwork extends Network implements NetworkInterface
      * @see Network::$base58PrefixMap
      */
     protected $base58PrefixMap = [
-        self::BASE58_WIF           => 'aa', // 170
+        self::BASE58_WIF => 'aa', // 170
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function __callStatic(string $method, array $args)
-    {
-        return static::factory()->{$method}(...$args);
-    }
 
     /**
      * Create a new network instance.

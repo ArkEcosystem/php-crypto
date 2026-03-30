@@ -97,6 +97,23 @@ test('should encode multipayment payload', function () {
     expect($encodedData)->toBe($expectedData);
 });
 
+test('should encode batch transfer payload', function () {
+    $encoder = new AbiEncoder(ContractAbiType::ERC20BATCH_TRANSFER);
+
+    $functionName = 'batchTransferFrom';
+    $args         = [
+         '0x8444ab9d74212f28e14b089b62ed4a4a7a8fefb3',
+        ['0xa5cc0bfeb09742c5e4c610f2ebaab82eb142ca10', '0xe3c31e486cca6eb2093c0f4883df949d45b021c5', '0xa5cc0bfeb09742c5e4c610f2ebaab82eb142ca10'],
+        ['1', '2', '3'],
+    ];
+
+    $expectedData = '0x4885b2540000000000000000000000008444ab9d74212f28e14b089b62ed4a4a7a8fefb3000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000003000000000000000000000000a5cc0bfeb09742c5e4c610f2ebaab82eb142ca10000000000000000000000000e3c31e486cca6eb2093c0f4883df949d45b021c5000000000000000000000000a5cc0bfeb09742c5e4c610f2ebaab82eb142ca100000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000003';
+
+    $encodedData = $encoder->encodeFunctionCall($functionName, $args);
+
+    expect($encodedData)->toBe($expectedData);
+});
+
 it('should throw an exception for unknown function', function () {
     $encoder = new AbiEncoder();
 
@@ -316,6 +333,24 @@ it('should error when encoding with a tuple missing component', function () {
 
     testPrivateMethod('encodeTuple', $object)->invokeArgs($object, [$tuple, $param]);
 })->throws(Exception::class, 'Tuple value missing component: from');
+
+it('should error when encoding a tuple with unnamed component', function () {
+    $tuple = [
+        'from' => '0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A',
+    ];
+
+    $param = [
+        'name'       => 'recipients',
+        'type'       => 'address',
+        'components' => [
+            [
+                'type' => 'address',
+            ],
+        ],
+    ];
+
+    testPrivateMethod('encodeTuple', $object)->invokeArgs($object, [$tuple, $param]);
+})->throws(Exception::class, 'Tuple component missing name');
 
 it('should error for missing function name when preparing function data', function () {
     $param = [

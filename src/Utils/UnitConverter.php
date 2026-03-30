@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use InvalidArgumentException;
 
 class UnitConverter
@@ -23,6 +24,7 @@ class UnitConverter
      *
      * @param float|int|string $value
      * @param string $unit
+     *
      * @return BigDecimal
      */
     public static function parseUnits($value, string $unit = 'ark'): BigDecimal
@@ -44,17 +46,24 @@ class UnitConverter
      *
      * @param string $value
      * @param string $unit
-     * @return float
+     *
+     * @return BigDecimal
      */
-    public static function formatUnits(string $value, string $unit = 'ark'): float
+    public static function formatUnits(string $value, string $unit = 'ark'): BigDecimal
     {
         switch (strtolower($unit)) {
             case 'wei':
-                return (float) bcdiv($value, (string) self::WEI_MULTIPLIER, 18);
+                return BigDecimal::of($value)
+                    ->dividedBy(self::WEI_MULTIPLIER, 0, RoundingMode::HALF_UP)
+                    ->stripTrailingZeros();
             case 'gwei':
-                return (float) bcdiv($value, (string) self::GWEI_MULTIPLIER, 18);
+                return BigDecimal::of($value)
+                    ->dividedBy(self::GWEI_MULTIPLIER, 9, RoundingMode::HALF_UP)
+                    ->stripTrailingZeros();
             case 'ark':
-                return (float) bcdiv($value, (string) self::ARK_MULTIPLIER, 18);
+                return BigDecimal::of($value)
+                    ->dividedBy(self::ARK_MULTIPLIER, 18, RoundingMode::HALF_UP)
+                    ->stripTrailingZeros();
             default:
                 throw new InvalidArgumentException("Unsupported unit: {$unit}. Supported units are 'wei', 'gwei', and 'ark'.");
         }
