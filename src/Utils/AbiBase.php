@@ -91,12 +91,12 @@ abstract class AbiBase
     protected static function contractAbiPath(ContractAbiType $type, ?string $path = null): string
     {
         return match ($type) {
-            ContractAbiType::CONSENSUS => __DIR__.'/Abi/json/Abi.Consensus.json',
-            ContractAbiType::MULTIPAYMENT => __DIR__.'/Abi/json/Abi.Multipayment.json',
-            ContractAbiType::USERNAMES => __DIR__.'/Abi/json/Abi.Usernames.json',
+            ContractAbiType::CONSENSUS           => __DIR__.'/Abi/json/Abi.Consensus.json',
+            ContractAbiType::MULTIPAYMENT        => __DIR__.'/Abi/json/Abi.Multipayment.json',
+            ContractAbiType::USERNAMES           => __DIR__.'/Abi/json/Abi.Usernames.json',
             ContractAbiType::ERC20BATCH_TRANSFER => __DIR__.'/Abi/json/Abi.ERC20BatchTransfer.json',
-            ContractAbiType::TOKEN => __DIR__.'/Abi/json/Abi.Token.json',
-            ContractAbiType::CUSTOM => (function () use ($path): string {
+            ContractAbiType::TOKEN               => __DIR__.'/Abi/json/Abi.Token.json',
+            ContractAbiType::CUSTOM              => (function () use ($path): string {
                 if ($path === null || $path === '') {
                     throw new \InvalidArgumentException('A non-empty $path must be provided when using ContractAbiType::CUSTOM.');
                 }
