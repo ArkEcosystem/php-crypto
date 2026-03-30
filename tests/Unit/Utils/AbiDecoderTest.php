@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use kornrunner\Keccak;
 
 it('should decode vote payload', function () {
     $decoder = new AbiDecoder();
@@ -373,3 +374,43 @@ test('should throw exception if error payload does not exist', function () {
 
     $decoder->decodeError('123456');
 })->throws(Exception::class, 'Function selector not found in ABI: 123456');
+
+test('should precompute selector maps for custom abi items', function () {
+    $decoder = new AbiDecoder(ContractAbiType::CUSTOM, dirname(__DIR__, 2).'/fixtures/mock-abi-selectors.json');
+
+    $reflector = new ReflectionObject($decoder);
+    $functions = $reflector->getProperty('functionSelectorMap');
+    $errors    = $reflector->getProperty('errorSelectorMap');
+    $functions->setAccessible(true);
+    $errors->setAccessible(true);
+
+    $functionSelector = substr(Keccak::hash('transfer(address,uint256)', 256), 0, 8);
+    $errorSelector    = substr(Keccak::hash('InsufficientBalance(uint256,uint256)', 256), 0, 8);
+
+    $functionMap = $functions->getValue($decoder);
+    $errorMap    = $errors->getValue($decoder);
+
+    expect($functionMap)->toHaveKey($functionSelector);
+    expect($functionMap[$functionSelector]['name'])->toBe('transfer');
+    expect($errorMap)->toHaveKey($errorSelector);
+    expect($errorMap[$errorSelector]['name'])->toBe('InsufficientBalance');
+});
+
+test('should decode function and error payloads using custom selector maps', function () {
+    $decoder = new AbiDecoder(ContractAbiType::CUSTOM, dirname(__DIR__, 2).'/fixtures/mock-abi-selectors.json');
+
+    $functionSelector = substr(Keccak::hash('transfer(address,uint256)', 256), 0, 8);
+    $errorSelector    = substr(Keccak::hash('InsufficientBalance(uint256,uint256)', 256), 0, 8);
+
+    $to       = 'b693449adda7efc015d87944eae8b7c37eb1690a';
+    $amount   = str_pad(dechex(7), 64, '0', STR_PAD_LEFT);
+    $data     = '0x'.$functionSelector.str_pad($to, 64, '0', STR_PAD_LEFT).$amount;
+    $decoded  = $decoder->decodeFunctionData($data);
+    $abiError = $decoder->decodeError('0x'.$errorSelector);
+
+    expect($decoded)->toBe([
+        'functionName' => 'transfer',
+        'args'         => ['0xb693449AdDa7EFc015D87944EAE8b7C37EB1690A', '7'],
+    ]);
+    expect($abiError)->toBe('InsufficientBalance');
+});
