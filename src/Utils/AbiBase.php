@@ -11,6 +11,10 @@ abstract class AbiBase
 {
     protected array $abi;
 
+    protected array $functionSelectorMap = [];
+
+    protected array $errorSelectorMap = [];
+
     public function __construct(ContractAbiType $type = ContractAbiType::CONSENSUS, ?string $path = null)
     {
         $abiFilePath = $this->contractAbiPath($type, $path);
@@ -18,6 +22,17 @@ abstract class AbiBase
         $abiJson = file_get_contents($abiFilePath);
 
         $this->abi = json_decode($abiJson, true)['abi'];
+
+        foreach ($this->abi as $item) {
+            $signature = $this->getFunctionSignature($item);
+            $selector  = substr($this->keccak256($signature), 2, 8);
+
+            if ($item['type'] === 'function') {
+                $this->functionSelectorMap[$selector] = $item;
+            } elseif ($item['type'] === 'error') {
+                $this->errorSelectorMap[$selector] = $item;
+            }
+        }
     }
 
     protected static function getArrayComponents(string $type): ?array

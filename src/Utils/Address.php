@@ -10,6 +10,8 @@ use kornrunner\Keccak;
 
 class Address
 {
+    private static array $cache = [];
+
     /**
      * Validate the given address.
      *
@@ -32,17 +34,23 @@ class Address
      */
     public static function toChecksumAddress(string $address): string
     {
-        $address         = strtolower(substr($address, 2));
-        $hash            = Keccak::hash($address, 256);
+        if (isset(self::$cache[$address])) {
+            return self::$cache[$address];
+        }
+
+        $rawAddress      = strtolower(substr($address, 2));
+        $hash            = Keccak::hash($rawAddress, 256);
         $checksumAddress = '0x';
 
         for ($i = 0; $i < 40; $i++) {
             if (intval($hash[$i], 16) >= 8) {
-                $checksumAddress .= strtoupper($address[$i]);
+                $checksumAddress .= strtoupper($rawAddress[$i]);
             } else {
-                $checksumAddress .= $address[$i];
+                $checksumAddress .= $rawAddress[$i];
             }
         }
+
+        self::$cache[$address] = $checksumAddress;
 
         return $checksumAddress;
     }

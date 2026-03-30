@@ -165,36 +165,12 @@ class AbiDecoder extends AbiBase
 
     private function findFunctionBySelector(string $selector): ?array
     {
-        foreach ($this->abi as $item) {
-            if ($item['type'] !== 'function') {
-                continue;
-            }
-
-            $functionSignature = $this->getFunctionSignature($item);
-            $functionSelector  = substr($this->keccak256($functionSignature), 2, 8);
-            if ($functionSelector === $selector) {
-                return $item;
-            }
-        }
-
-        return null;
+        return $this->functionSelectorMap[$selector] ?? null;
     }
 
     private function findErrorBySelector(string $selector): ?array
     {
-        foreach ($this->abi as $item) {
-            if ($item['type'] !== 'error') {
-                continue;
-            }
-
-            $errorSignature = $this->getFunctionSignature($item);
-            $errorSelector  = substr($this->keccak256($errorSignature), 2, 8);
-            if ($errorSelector === $selector) {
-                return $item;
-            }
-        }
-
-        return null;
+        return $this->errorSelectorMap[$selector] ?? null;
     }
 
     private function decodeAbiParameters(array $params, string $data): array
