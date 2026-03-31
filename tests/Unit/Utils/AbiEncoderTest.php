@@ -20,6 +20,32 @@ beforeEach(function () {
     $this->encoder = new AbiEncoder();
 });
 
+it('should require a non-empty custom ABI path', function () {
+    new AbiEncoder(ContractAbiType::CUSTOM);
+})->throws(
+    InvalidArgumentException::class,
+    'A non-empty $path must be provided when using ContractAbiType::CUSTOM.'
+);
+
+it('should fail when custom ABI file cannot be read', function () {
+    $previousErrorReporting = error_reporting();
+    error_reporting($previousErrorReporting & ~E_WARNING);
+
+    try {
+        new AbiEncoder(ContractAbiType::CUSTOM, dirname(__DIR__, 3).'/tests/fixtures/does-not-exist.json');
+    } finally {
+        error_reporting($previousErrorReporting);
+    }
+})->throws(RuntimeException::class, 'Unable to load ABI JSON');
+
+it('should fail when custom ABI JSON is missing abi array', function () {
+    new AbiEncoder(ContractAbiType::CUSTOM, dirname(__DIR__, 3).'/tests/fixtures/message-sign.json');
+})->throws(RuntimeException::class, 'ABI JSON does not contain a valid abi array');
+
+it('should fail when custom ABI JSON is missing method identifiers', function () {
+    AbiEncoder::methodIdentifiers(ContractAbiType::CUSTOM, dirname(__DIR__, 3).'/tests/fixtures/mock-abi.json');
+})->throws(RuntimeException::class, 'ABI JSON does not contain methodIdentifiers');
+
 it('should encode vote function call', function () {
     $functionName        = 'vote';
     $args                = ['0x512F366D524157BcF734546eB29a6d687B762255'];
