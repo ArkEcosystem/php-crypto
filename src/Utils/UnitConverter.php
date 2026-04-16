@@ -55,15 +55,15 @@ class UnitConverter
             case 'wei':
                 return BigDecimal::of($value)
                     ->dividedBy(self::WEI_MULTIPLIER, 0, RoundingMode::HALF_UP)
-                    ->stripTrailingZeros();
+                    ->strippedOfTrailingZeros();
             case 'gwei':
                 return BigDecimal::of($value)
                     ->dividedBy(self::GWEI_MULTIPLIER, 9, RoundingMode::HALF_UP)
-                    ->stripTrailingZeros();
+                    ->strippedOfTrailingZeros();
             case 'ark':
                 return BigDecimal::of($value)
                     ->dividedBy(self::ARK_MULTIPLIER, 18, RoundingMode::HALF_UP)
-                    ->stripTrailingZeros();
+                    ->strippedOfTrailingZeros();
             default:
                 throw new InvalidArgumentException("Unsupported unit: {$unit}. Supported units are 'wei', 'gwei', and 'ark'.");
         }
@@ -79,7 +79,7 @@ class UnitConverter
     public static function weiToArk(string | int | float $value, ?string $suffix = null): string
     {
         $convertedValue = (string) BigDecimal::of(self::formatUnits((string) self::parseUnits($value, 'wei'), 'ark'))
-            ->stripTrailingZeros();
+            ->strippedOfTrailingZeros();
 
         if ($suffix !== null) {
             return $convertedValue.' '.$suffix;
@@ -98,7 +98,7 @@ class UnitConverter
     public static function gweiToArk(string | int | float $value, ?string $suffix = null): string
     {
         $convertedValue = (string) BigDecimal::of(self::formatUnits((string) self::parseUnits($value, 'gwei'), 'ark'))
-            ->stripTrailingZeros();
+            ->strippedOfTrailingZeros();
 
         if ($suffix !== null) {
             return $convertedValue.' '.$suffix;
