@@ -19,7 +19,7 @@ class LegacyAddress
     public static function fromPublicKey(string $publicKey, int $pubKeyHash): string
     {
         $ripemd160 = Hash::ripemd160(new Buffer(hex2bin($publicKey)));
-        $seed = Writer::bit8($pubKeyHash) . $ripemd160->getBinary();
+        $seed      = Writer::bit8($pubKeyHash).$ripemd160->getBinary();
 
         return Base58::encodeCheck(new Buffer($seed));
     }
