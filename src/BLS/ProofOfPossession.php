@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\BLS;
 
 use ArkEcosystem\Crypto\BLS\Curves\G1;
-use ArkEcosystem\Crypto\BLS\Curves\G2;
-use ArkEcosystem\Crypto\BLS\EIP2333;
-use ArkEcosystem\Crypto\BLS\Fields\Fp;
 use ArkEcosystem\Crypto\BLS\HashToCurve\G2HashToCurve;
+use InvalidArgumentException;
 
 /**
  * BLS12-381 Proof of Possession following the TypeScript SDK's ProofOfPossession.ts.
@@ -55,10 +53,21 @@ final class ProofOfPossession
      *
      * @param  string $privateKeyBytes  32-byte raw private key
      * @return array{pk: string, pop: string}  hex-encoded G1 pk (96 chars) and G2 pop (192 chars)
+     * @throws InvalidArgumentException  if the key is not exactly 32 bytes or is the zero scalar
      */
     public static function buildProofOfPossession(string $privateKeyBytes): array
     {
+        if (strlen($privateKeyBytes) !== 32) {
+            throw new InvalidArgumentException(
+                'BLS secret key must be exactly 32 bytes, got ' . strlen($privateKeyBytes)
+            );
+        }
+
         $sk = gmp_init(bin2hex($privateKeyBytes), 16);
+
+        if (gmp_sign($sk) === 0) {
+            throw new InvalidArgumentException('BLS secret key must not be zero');
+        }
 
         // G1 public key: [sk] * G1
         $pk = G1::generator()->scalarMul($sk)->toCompressedBytes();
