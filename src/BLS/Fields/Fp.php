@@ -13,15 +13,16 @@ use GMP;
 final class Fp
 {
     // BLS12-381 field prime
-    const P_HEX = '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaaab';
+    public const P_HEX = '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaaab';
 
     // Subgroup order r (used by EIP-2333 hkdfModR)
-    const R_HEX = '73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001';
-
-    private static ?GMP $prime = null;
-    private static ?GMP $order = null;
+    public const R_HEX = '73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001';
 
     public readonly GMP $value;
+
+    private static ?GMP $prime = null;
+
+    private static ?GMP $order = null;
 
     public function __construct(GMP $value)
     {
@@ -65,6 +66,7 @@ final class Fp
         if (self::$prime === null) {
             self::$prime = gmp_init(self::P_HEX, 16);
         }
+
         return self::$prime;
     }
 
@@ -73,6 +75,7 @@ final class Fp
         if (self::$order === null) {
             self::$order = gmp_init(self::R_HEX, 16);
         }
+
         return self::$order;
     }
 
@@ -91,6 +94,7 @@ final class Fp
         if (gmp_sign($r) < 0) {
             $r = gmp_add($r, self::prime());
         }
+
         return new self($r);
     }
 
@@ -109,6 +113,7 @@ final class Fp
         if (gmp_sign($this->value) === 0) {
             return self::zero();
         }
+
         return new self(gmp_sub(self::prime(), $this->value));
     }
 
@@ -118,6 +123,7 @@ final class Fp
         if ($inv === false) {
             throw new \RuntimeException('Fp: element has no inverse (is zero)');
         }
+
         return new self($inv);
     }
 
@@ -175,6 +181,7 @@ final class Fp
     public function toBytes(): string
     {
         $hex = str_pad(gmp_strval($this->value, 16), 96, '0', STR_PAD_LEFT);
+
         return hex2bin($hex);
     }
 

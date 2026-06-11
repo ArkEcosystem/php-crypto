@@ -17,6 +17,7 @@ final class G2HashToCurve
     // RFC 9380 §8.8.2 cipher-suite: BLS12381G2_XMD:SHA-256_SSWU_RO_
     // SHA-256 parameters
     private const B_IN_BYTES = 32;  // sha256 output bytes
+
     private const R_IN_BYTES = 64;  // sha256 block size (zero-pad length)
 
     // SWU constants for the isogenous G2 curve E': y² = x³ + A'x + B'
@@ -29,63 +30,69 @@ final class G2HashToCurve
     private const ISO_XN = [
         [
             '5c759507e8e333ebb5b7a9a47d7ed8532c52d39fd3a042a88b58423c50ae15d5c2638e343d9c71c6238aaaaaaaa97d6',
-            '5c759507e8e333ebb5b7a9a47d7ed8532c52d39fd3a042a88b58423c50ae15d5c2638e343d9c71c6238aaaaaaaa97d6'
+            '5c759507e8e333ebb5b7a9a47d7ed8532c52d39fd3a042a88b58423c50ae15d5c2638e343d9c71c6238aaaaaaaa97d6',
         ],
         [
             '0',
-            '11560bf17baa99bc32126fced787c88f984f87adf7ae0c7f9a208c6b4f20a4181472aaa9cb8d555526a9ffffffffc71a'
+            '11560bf17baa99bc32126fced787c88f984f87adf7ae0c7f9a208c6b4f20a4181472aaa9cb8d555526a9ffffffffc71a',
         ],
         [
             '11560bf17baa99bc32126fced787c88f984f87adf7ae0c7f9a208c6b4f20a4181472aaa9cb8d555526a9ffffffffc71e',
-            '8ab05f8bdd54cde190937e76bc3e447cc27c3d6fbd7063fcd104635a790520c0a395554e5c6aaaa9354ffffffffe38d'
+            '8ab05f8bdd54cde190937e76bc3e447cc27c3d6fbd7063fcd104635a790520c0a395554e5c6aaaa9354ffffffffe38d',
         ],
         [
             '171d6541fa38ccfaed6dea691f5fb614cb14b4e7f4e810aa22d6108f142b85757098e38d0f671c7188e2aaaaaaaa5ed1',
-            '0'
+            '0',
         ],
     ];
+
     private const ISO_XD = [
         ['0', '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaa63'],
         ['c', '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaa9f'],
         ['1', '0'], // leading 1 (monic)
     ];
+
     private const ISO_YN = [
         [
             '1530477c7ab4113b59a4c18b076d11930f7da5d4a07f649bf54439d87d27e500fc8c25ebf8c92f6812cfc71c71c6d706',
-            '1530477c7ab4113b59a4c18b076d11930f7da5d4a07f649bf54439d87d27e500fc8c25ebf8c92f6812cfc71c71c6d706'
+            '1530477c7ab4113b59a4c18b076d11930f7da5d4a07f649bf54439d87d27e500fc8c25ebf8c92f6812cfc71c71c6d706',
         ],
         [
             '0',
-            '5c759507e8e333ebb5b7a9a47d7ed8532c52d39fd3a042a88b58423c50ae15d5c2638e343d9c71c6238aaaaaaaa97be'
+            '5c759507e8e333ebb5b7a9a47d7ed8532c52d39fd3a042a88b58423c50ae15d5c2638e343d9c71c6238aaaaaaaa97be',
         ],
         [
             '11560bf17baa99bc32126fced787c88f984f87adf7ae0c7f9a208c6b4f20a4181472aaa9cb8d555526a9ffffffffc71c',
-            '8ab05f8bdd54cde190937e76bc3e447cc27c3d6fbd7063fcd104635a790520c0a395554e5c6aaaa9354ffffffffe38f'
+            '8ab05f8bdd54cde190937e76bc3e447cc27c3d6fbd7063fcd104635a790520c0a395554e5c6aaaa9354ffffffffe38f',
         ],
         [
             '124c9ad43b6cf79bfbf7043de3811ad0761b0f37a1e26286b0e977c69aa274524e79097a56dc4bd9e1b371c71c718b10',
-            '0'
+            '0',
         ],
     ];
+
     private const ISO_YD = [
         [
             '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffa8fb',
-            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffa8fb'
+            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffa8fb',
         ],
         [
             '0',
-            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffa9d3'
+            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffa9d3',
         ],
         [
             '12',
-            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaa99'
+            '1a0111ea397fe69a4b1ba7b6434bacd764774b84f38512bf6730d2a0f6b0f6241eabfffeb153ffffb9feffffffffaa99',
         ],
         ['1', '0'], // leading 1 (monic)
     ];
 
     // Cached SWU sqrtRatio precomputed constants (c6 and c7 in RFC 9380 Appendix F.2.1.2)
     private static ?Fp2 $swuC6 = null;
+
     private static ?Fp2 $swuC7 = null;
+
+    private static ?Fp2 $swuC3cached = null;
 
     /**
      * Hash a byte string to a G2 point using the POP-DST.
@@ -117,16 +124,16 @@ final class G2HashToCurve
     private static function expandMessageXmd(string $msg, string $dst, int $lenInBytes): string
     {
         $ell       = (int) ceil($lenInBytes / self::B_IN_BYTES); // = 8 for 256 bytes
-        $dstPrime  = $dst . chr(strlen($dst));
+        $dstPrime  = $dst.chr(strlen($dst));
         $zPad      = str_repeat("\x00", self::R_IN_BYTES);
-        $libStr    = chr(($lenInBytes >> 8) & 0xff) . chr($lenInBytes & 0xff);
+        $libStr    = chr(($lenInBytes >> 8) & 0xff).chr($lenInBytes & 0xff);
 
-        $b0 = hash('sha256', $zPad . $msg . $libStr . "\x00" . $dstPrime, true);
-        $b  = [];
-        $b[0] = hash('sha256', $b0 . "\x01" . $dstPrime, true);
+        $b0   = hash('sha256', $zPad.$msg.$libStr."\x00".$dstPrime, true);
+        $b    = [];
+        $b[0] = hash('sha256', $b0."\x01".$dstPrime, true);
 
         for ($i = 1; $i < $ell; $i++) {
-            $b[$i] = hash('sha256', self::strxor($b0, $b[$i - 1]) . chr($i + 1) . $dstPrime, true);
+            $b[$i] = hash('sha256', self::strxor($b0, $b[$i - 1]).chr($i + 1).$dstPrime, true);
         }
 
         return substr(implode('', $b), 0, $lenInBytes);
@@ -139,6 +146,7 @@ final class G2HashToCurve
         for ($i = 0; $i < $len; $i++) {
             $out .= chr(ord($a[$i]) ^ ord($b[$i]));
         }
+
         return $out;
     }
 
@@ -165,6 +173,7 @@ final class G2HashToCurve
             new Fp(gmp_mod(gmp_init(bin2hex(substr($bytes, 2 * $L, $L)), 16), $p)),
             new Fp(gmp_mod(gmp_init(bin2hex(substr($bytes, 3 * $L, $L)), 16), $p))
         );
+
         return [$u0, $u1];
     }
 
@@ -194,7 +203,7 @@ final class G2HashToCurve
         $tv3 = $tv2->add($F1);            // 5.  tv3 = tv2 + 1
         $tv3 = $B->mul($tv3);             // 6.  tv3 = B * tv3
         // 7.  tv4 = CMOV(Z, -tv2, tv2 != 0)
-        $tv4 = Fp2::cmov($Z, $tv2->neg(), !$tv2->isZero());
+        $tv4 = Fp2::cmov($Z, $tv2->neg(), ! $tv2->isZero());
         $tv4 = $A->mul($tv4);             // 8.  tv4 = A * tv4
         $tv2 = $tv3->square();            // 9.  tv2 = tv3²
         $tv6 = $tv4->square();            // 10. tv6 = tv4²
@@ -248,21 +257,21 @@ final class G2HashToCurve
         $c3 = self::swuC3();
 
         // Steps 1-16
-        $tv1 = $c6;                                   // 1
-        $tv2 = self::fp2Pow7($v);                     // 2. v^7
-        $tv3 = $tv2->square()->mul($v);               // 3-4. v^14 * v = v^15
-        $tv5 = $u->mul($tv3);                         // 5. u * v^15
-        $tv5 = $tv5->pow($c3);                        // 6. (u * v^15)^c3
-        $tv5 = $tv5->mul($tv2);                       // 7. * v^7
-        $tv2 = $tv5->mul($v);                         // 8.
-        $tv3 = $tv5->mul($u);                         // 9.
-        $tv4 = $tv3->mul($tv2);                       // 10.
-        $tv5 = $tv4->pow($c5);                        // 11. tv4^4
+        $tv1  = $c6;                                   // 1
+        $tv2  = self::fp2Pow7($v);                     // 2. v^7
+        $tv3  = $tv2->square()->mul($v);               // 3-4. v^14 * v = v^15
+        $tv5  = $u->mul($tv3);                         // 5. u * v^15
+        $tv5  = $tv5->pow($c3);                        // 6. (u * v^15)^c3
+        $tv5  = $tv5->mul($tv2);                       // 7. * v^7
+        $tv2  = $tv5->mul($v);                         // 8.
+        $tv3  = $tv5->mul($u);                         // 9.
+        $tv4  = $tv3->mul($tv2);                       // 10.
+        $tv5  = $tv4->pow($c5);                        // 11. tv4^4
         $isQR = $tv5->equals(Fp2::one());             // 12.
-        $tv2 = $tv3->mul($c7);                        // 13.
-        $tv5 = $tv4->mul($tv1);                       // 14. tv4 * c6
-        $tv3 = Fp2::cmov($tv2, $tv3, $isQR);          // 15.
-        $tv4 = Fp2::cmov($tv5, $tv4, $isQR);          // 16.
+        $tv2  = $tv3->mul($c7);                        // 13.
+        $tv5  = $tv4->mul($tv1);                       // 14. tv4 * c6
+        $tv3  = Fp2::cmov($tv2, $tv3, $isQR);          // 15.
+        $tv4  = Fp2::cmov($tv5, $tv4, $isQR);          // 16.
 
         // Steps 17-26: loop i = c1 downto 2 (i.e., i = 3 then i = 2)
         for ($i = 3; $i >= 2; $i--) {
@@ -277,7 +286,8 @@ final class G2HashToCurve
             $tv4    = Fp2::cmov($tvv5, $tv4, $e1);             // 26.
         }
 
-        $isValid = !$v->isZero() && ($isQR || $u->isZero());
+        $isValid = ! $v->isZero() && ($isQR || $u->isZero());
+
         return ['isValid' => $isValid, 'value' => $tv3];
     }
 
@@ -286,6 +296,7 @@ final class G2HashToCurve
     {
         $v2 = $v->square();   // v²
         $v4 = $v2->square();  // v⁴
+
         return $v4->mul($v2)->mul($v); // v⁶ * v = v⁷
     }
 
@@ -316,8 +327,6 @@ final class G2HashToCurve
         return [self::$swuC6, self::$swuC7];
     }
 
-    private static ?Fp2 $swuC3cached = null;
-
     private static function swuC3(): \GMP
     {
         static $c3 = null;
@@ -327,6 +336,7 @@ final class G2HashToCurve
             $c2 = gmp_div(gmp_sub($q, gmp_init(1)), gmp_init(8));
             $c3 = gmp_div(gmp_sub($c2, gmp_init(1)), gmp_init(2));
         }
+
         return $c3;
     }
 
@@ -351,7 +361,7 @@ final class G2HashToCurve
     /**
      * Horner evaluation of a polynomial at x.
      * Coefficients in ascending order [k0, k1, ..., kd] are reversed for Horner.
-     * Result: k0 + k1*x + ... + kd*x^d = horner([kd,...,k1,k0], x)
+     * Result: k0 + k1*x + ... + kd*x^d = horner([kd,...,k1,k0], x).
      */
     private static function horner(array $ascCoeffs, Fp2 $x): Fp2
     {
@@ -360,6 +370,7 @@ final class G2HashToCurve
                 // '0' is falsy in PHP so use explicit comparison
                 $c0 = ($pair[0] !== '' && $pair[0] !== null) ? $pair[0] : '0';
                 $c1 = ($pair[1] !== '' && $pair[1] !== null) ? $pair[1] : '0';
+
                 return Fp2::fromHex($c0, $c1);
             }, $ascCoeffs)
         );
@@ -367,6 +378,7 @@ final class G2HashToCurve
         for ($i = 1, $n = count($coeffs); $i < $n; $i++) {
             $acc = $acc->mul($x)->add($coeffs[$i]);
         }
+
         return $acc;
     }
 }

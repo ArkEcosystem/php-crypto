@@ -32,6 +32,7 @@ final class ProofOfPossession
     public static function deriveBlsPublicKey(string $mnemonic): string
     {
         $privKey = self::deriveBlsPrivateKey($mnemonic);
+
         return self::privateKeyToPublicKey($privKey);
     }
 
@@ -41,6 +42,7 @@ final class ProofOfPossession
     public static function privateKeyToPublicKey(string $privateKeyBytes): string
     {
         $scalar = gmp_init(bin2hex($privateKeyBytes), 16);
+
         return G1::generator()->scalarMul($scalar)->toHex();
     }
 
@@ -52,14 +54,14 @@ final class ProofOfPossession
      * by the private key scalar.
      *
      * @param  string $privateKeyBytes  32-byte raw private key
-     * @return array{pk: string, pop: string}  hex-encoded G1 pk (96 chars) and G2 pop (192 chars)
      * @throws InvalidArgumentException  if the key is not exactly 32 bytes or is the zero scalar
+     * @return array{pk: string, pop: string}  hex-encoded G1 pk (96 chars) and G2 pop (192 chars)
      */
     public static function buildProofOfPossession(string $privateKeyBytes): array
     {
         if (strlen($privateKeyBytes) !== 32) {
             throw new InvalidArgumentException(
-                'BLS secret key must be exactly 32 bytes, got ' . strlen($privateKeyBytes)
+                'BLS secret key must be exactly 32 bytes, got '.strlen($privateKeyBytes)
             );
         }
 

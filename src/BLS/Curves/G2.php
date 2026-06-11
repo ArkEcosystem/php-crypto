@@ -15,17 +15,33 @@ use ArkEcosystem\Crypto\BLS\Fields\Fp2;
 final class G2
 {
     // G2 generator (from BLS12-381 spec, affine coordinates over Fp2)
-    const GX_C0 = '024aa2b2f08f0a91260805272dc51051c6e47ad4fa403b02b4510b647ae3d1770bac0326a805bbefd48056c8c121bdb8';
-    const GX_C1 = '13e02b6052719f607dacd3a088274f65596bd0d09920b61ab5da61bbdc7f5049334cf11213945d57e5ac7d055d042b7e';
-    const GY_C0 = '0ce5d527727d6e118cc9cdc6da2e351aadfd9baa8cbdd3a76d429a695160d12c923ac9cc3baca289e193548608b82801';
-    const GY_C1 = '0606c4a02ea734cc32acd2b02bc28b99cb3e287e85a763af267492ab572e99ab3f370d275cec1da1aaa9075ff05f79be';
+    public const GX_C0 = '024aa2b2f08f0a91260805272dc51051c6e47ad4fa403b02b4510b647ae3d1770bac0326a805bbefd48056c8c121bdb8';
+
+    public const GX_C1 = '13e02b6052719f607dacd3a088274f65596bd0d09920b61ab5da61bbdc7f5049334cf11213945d57e5ac7d055d042b7e';
+
+    public const GY_C0 = '0ce5d527727d6e118cc9cdc6da2e351aadfd9baa8cbdd3a76d429a695160d12c923ac9cc3baca289e193548608b82801';
+
+    public const GY_C1 = '0606c4a02ea734cc32acd2b02bc28b99cb3e287e85a763af267492ab572e99ab3f370d275cec1da1aaa9075ff05f79be';
 
     // BLS_X = 0xd201000000010000 (the BLS parameter for cofactor clearing)
-    const BLS_X = 'd201000000010000';
+    public const BLS_X = 'd201000000010000';
 
     private readonly Fp2 $x;
+
     private readonly Fp2 $y;
+
     private readonly Fp2 $z; // z = Fp2::zero() means identity
+
+    // -------------------------------------------------------------------------
+    // Frobenius (ψ) endomorphism for cofactor clearing
+    // Efficient: only needs Frobenius conjugation + multiplication by PSI constants
+    // -------------------------------------------------------------------------
+
+    private static ?Fp2 $psiX  = null;
+
+    private static ?Fp2 $psiY  = null;
+
+    private static ?Fp2 $psi2X = null;
 
     public function __construct(Fp2 $x, Fp2 $y, Fp2 $z)
     {
@@ -53,9 +69,20 @@ final class G2
         return $this->z->isZero();
     }
 
-    public function getX(): Fp2 { return $this->x; }
-    public function getY(): Fp2 { return $this->y; }
-    public function getZ(): Fp2 { return $this->z; }
+    public function getX(): Fp2
+    {
+        return $this->x;
+    }
+
+    public function getY(): Fp2
+    {
+        return $this->y;
+    }
+
+    public function getZ(): Fp2
+    {
+        return $this->z;
+    }
 
     // -------------------------------------------------------------------------
     // Point doubling (dbl-2009-l, a=0 for G2)
@@ -117,6 +144,7 @@ final class G2
             if ($r->isZero()) {
                 return $this->double();
             }
+
             return self::identity();
         }
 
@@ -164,62 +192,10 @@ final class G2
         return $result;
     }
 
-    // -------------------------------------------------------------------------
-    // Frobenius (ψ) endomorphism for cofactor clearing
-    // Efficient: only needs Frobenius conjugation + multiplication by PSI constants
-    // -------------------------------------------------------------------------
-
-    private static ?Fp2 $psiX  = null;
-    private static ?Fp2 $psiY  = null;
-    private static ?Fp2 $psi2X = null;
-
-    /**
-     * Lazily compute and cache the three Frobenius constants.
-     * base = 1/(1+u) in Fp2 = ((p+1)/2, (p-1)/2)
-     * PSI_X  = base^((p-1)/3)
-     * PSI_Y  = base^((p-1)/2)
-     * PSI2_X = base^((p²-1)/3)
-     */
-    private static function initPsiConstants(): void
-    {
-        if (self::$psiX !== null) {
-            return;
-        }
-        $p    = Fp::prime();
-        $inv2 = gmp_div(gmp_add($p, gmp_init(1)), gmp_init(2)); // (p+1)/2 = mod-inverse of 2
-        $base = new Fp2(new Fp($inv2), new Fp(gmp_sub($p, $inv2)));
-
-        $p1 = gmp_sub($p, gmp_init(1));
-        self::$psiX = $base->pow(gmp_div($p1, gmp_init(3)));
-        self::$psiY = $base->pow(gmp_div($p1, gmp_init(2)));
-
-        $p2  = gmp_mul($p, $p);
-        $p2m1 = gmp_sub($p2, gmp_init(1));
-        self::$psi2X = $base->pow(gmp_div($p2m1, gmp_init(3)));
-    }
-
-    private static function psiX(): Fp2
-    {
-        self::initPsiConstants();
-        return self::$psiX;
-    }
-
-    private static function psiY(): Fp2
-    {
-        self::initPsiConstants();
-        return self::$psiY;
-    }
-
-    private static function psi2X(): Fp2
-    {
-        self::initPsiConstants();
-        return self::$psi2X;
-    }
-
     /**
      * ψ (psi) Frobenius endomorphism.
      * ψ(x, y) = (conj(x) * PSI_X, conj(y) * PSI_Y)
-     * Applied to projective point (X:Y:Z): ψ(X:Y:Z) = (conj(X)*PSI_X : conj(Y)*PSI_Y : conj(Z))
+     * Applied to projective point (X:Y:Z): ψ(X:Y:Z) = (conj(X)*PSI_X : conj(Y)*PSI_Y : conj(Z)).
      */
     public function psi(): self
     {
@@ -229,13 +205,14 @@ final class G2
         $x2 = $this->x->conjugate()->mul(self::psiX());
         $y2 = $this->y->conjugate()->mul(self::psiY());
         $z2 = $this->z->conjugate();
+
         return new self($x2, $y2, $z2);
     }
 
     /**
      * ψ² (psi squared) endomorphism.
      * ψ²(x, y) = (x * PSI2_X, -y)
-     * In projective: (X*PSI2_X : -Y : Z) — no conjugation needed since PSI2_X ∈ Fp
+     * In projective: (X*PSI2_X : -Y : Z) — no conjugation needed since PSI2_X ∈ Fp.
      */
     public function psi2(): self
     {
@@ -244,6 +221,7 @@ final class G2
         }
         $x2 = $this->x->mul(self::psi2X());
         $y2 = $this->y->neg();
+
         return new self($x2, $y2, $this->z);
     }
 
@@ -288,6 +266,7 @@ final class G2
         $zinv  = $this->z->inv();
         $zinv2 = $zinv->square();
         $zinv3 = $zinv2->mul($zinv);
+
         return [$this->x->mul($zinv2), $this->y->mul($zinv3)];
     }
 
@@ -301,13 +280,14 @@ final class G2
         if ($this->isIdentity()) {
             $bytes    = str_repeat("\x00", 96);
             $bytes[0] = chr(0xc0); // 0x80 (compressed) | 0x40 (infinity)
+
             return $bytes;
         }
 
         [$ax, $ay] = $this->toAffine();
 
         // Fp2 serialization: c1 (high 48 bytes) then c0 (low 48 bytes)
-        $bytes = $ax->c1->toBytes() . $ax->c0->toBytes(); // 96 bytes, top 3 bits of first byte are 0
+        $bytes = $ax->c1->toBytes().$ax->c0->toBytes(); // 96 bytes, top 3 bits of first byte are 0
 
         // Bit 7 (0x80): compressed flag
         $bytes[0] = chr(ord($bytes[0]) | 0x80);
@@ -325,5 +305,51 @@ final class G2
     public function toHex(): string
     {
         return bin2hex($this->toCompressedBytes());
+    }
+
+    /**
+     * Lazily compute and cache the three Frobenius constants.
+     * base = 1/(1+u) in Fp2 = ((p+1)/2, (p-1)/2)
+     * PSI_X  = base^((p-1)/3)
+     * PSI_Y  = base^((p-1)/2)
+     * PSI2_X = base^((p²-1)/3).
+     */
+    private static function initPsiConstants(): void
+    {
+        if (self::$psiX !== null) {
+            return;
+        }
+        $p    = Fp::prime();
+        $inv2 = gmp_div(gmp_add($p, gmp_init(1)), gmp_init(2)); // (p+1)/2 = mod-inverse of 2
+        $base = new Fp2(new Fp($inv2), new Fp(gmp_sub($p, $inv2)));
+
+        $p1         = gmp_sub($p, gmp_init(1));
+        self::$psiX = $base->pow(gmp_div($p1, gmp_init(3)));
+        self::$psiY = $base->pow(gmp_div($p1, gmp_init(2)));
+
+        $p2          = gmp_mul($p, $p);
+        $p2m1        = gmp_sub($p2, gmp_init(1));
+        self::$psi2X = $base->pow(gmp_div($p2m1, gmp_init(3)));
+    }
+
+    private static function psiX(): Fp2
+    {
+        self::initPsiConstants();
+
+        return self::$psiX;
+    }
+
+    private static function psiY(): Fp2
+    {
+        self::initPsiConstants();
+
+        return self::$psiY;
+    }
+
+    private static function psi2X(): Fp2
+    {
+        self::initPsiConstants();
+
+        return self::$psi2X;
     }
 }

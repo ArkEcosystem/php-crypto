@@ -25,6 +25,7 @@ final class EIP2333
     {
         $seed   = self::mnemonicToSeed($mnemonic);  // 64-byte BIP-39 seed
         $master = self::deriveMaster($seed);         // 32-byte master key
+
         return self::deriveChild($master, 0);        // 32-byte child key at index 0
     }
 
@@ -63,8 +64,8 @@ final class EIP2333
     public static function hkdfModR(string $ikm, string $keyInfo = ''): string
     {
         $r     = Fp::order();
-        $input = $ikm . "\x00";           // IKM padded per EIP-2333
-        $info  = $keyInfo . "\x00\x30";  // key_info || I2OSP(48, 2)
+        $input = $ikm."\x00";           // IKM padded per EIP-2333
+        $info  = $keyInfo."\x00\x30";  // key_info || I2OSP(48, 2)
         $salt  = self::SALT_INIT;        // will be sha256'd before first use
 
         while (true) {
@@ -90,6 +91,7 @@ final class EIP2333
         for ($i = 0; $i < 255; $i++) {
             $chunks[] = substr($okm, $i * 32, 32);
         }
+
         return $chunks;
     }
 
@@ -120,6 +122,7 @@ final class EIP2333
         for ($i = 0; $i < $len; $i++) {
             $result .= chr(~ord($bytes[$i]) & 0xff);
         }
+
         return $result;
     }
 }

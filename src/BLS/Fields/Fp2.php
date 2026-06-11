@@ -13,6 +13,7 @@ use GMP;
 final class Fp2
 {
     public readonly Fp $c0;
+
     public readonly Fp $c1;
 
     public function __construct(Fp $c0, Fp $c1)
@@ -61,7 +62,7 @@ final class Fp2
 
     /**
      * Karatsuba multiplication in Fp2.
-     * (a + b·u)(c + d·u) = (ac - bd) + (ad + bc)·u  [since u²=-1]
+     * (a + b·u)(c + d·u) = (ac - bd) + (ad + bc)·u  [since u²=-1].
      */
     public function mul(self $other): self
     {
@@ -70,6 +71,7 @@ final class Fp2
         $c0 = $ac->sub($bd);
         // (a+b)(c+d) - ac - bd = ad + bc
         $c1 = $this->c0->add($this->c1)->mul($other->c0->add($other->c1))->sub($ac)->sub($bd);
+
         return new self($c0, $c1);
     }
 
@@ -81,16 +83,18 @@ final class Fp2
     public function mulInt(int $n): self
     {
         $s = Fp::fromInt($n);
+
         return new self($this->c0->mul($s), $this->c1->mul($s));
     }
 
     public function square(): self
     {
         // (a + b·u)² = (a²-b²) + 2ab·u
-        $a = $this->c0;
-        $b = $this->c1;
+        $a  = $this->c0;
+        $b  = $this->c1;
         $c0 = $a->add($b)->mul($a->sub($b)); // (a+b)(a-b) = a²-b²
         $c1 = $a->mul($b)->mul(Fp::fromInt(2));
+
         return new self($c0, $c1);
     }
 
@@ -108,8 +112,9 @@ final class Fp2
     public function inv(): self
     {
         // 1/(a + b·u) = (a - b·u) / (a² + b²)
-        $norm = $this->c0->square()->add($this->c1->square()); // a² + b²
+        $norm    = $this->c0->square()->add($this->c1->square()); // a² + b²
         $invNorm = $norm->inv();
+
         return new self($this->c0->mul($invNorm), $this->c1->neg()->mul($invNorm));
     }
 
@@ -133,6 +138,7 @@ final class Fp2
             $base = $base->square();
             $e    = gmp_div($e, gmp_init(2));
         }
+
         return $result;
     }
 
@@ -156,9 +162,10 @@ final class Fp2
      */
     public function isOdd(): bool
     {
-        if (!$this->c0->isZero()) {
+        if (! $this->c0->isZero()) {
             return $this->c0->isOdd();
         }
+
         return $this->c1->isOdd();
     }
 
@@ -174,6 +181,6 @@ final class Fp2
 
     public function toBytes(): string
     {
-        return $this->c1->toBytes() . $this->c0->toBytes();
+        return $this->c1->toBytes().$this->c0->toBytes();
     }
 }
