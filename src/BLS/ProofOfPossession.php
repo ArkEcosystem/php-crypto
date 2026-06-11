@@ -9,8 +9,6 @@ use ArkEcosystem\Crypto\BLS\HashToCurve\G2HashToCurve;
 use InvalidArgumentException;
 
 /**
- * BLS12-381 Proof of Possession following the TypeScript SDK's ProofOfPossession.ts.
- *
  * DST used for PoP signatures: "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"
  */
 final class ProofOfPossession
