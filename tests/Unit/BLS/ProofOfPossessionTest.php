@@ -87,7 +87,7 @@ it('matches the pinned pop for the same passphrase', function () {
 // [mnemonic, private key, public key, proof of possession]
 // -------------------------------------------------------------------------
 
-$testData = <<<JSON
+$testData = <<<'JSON'
     {
       "English": [
         "scrap math switch nominee eyebrow stone melody first episode focus piece weekend amount spirit novel warfare special soda stone become sad oven example cannon",
