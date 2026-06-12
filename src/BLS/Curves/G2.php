@@ -69,21 +69,6 @@ final class G2
         return $this->z->isZero();
     }
 
-    public function getX(): Fp2
-    {
-        return $this->x;
-    }
-
-    public function getY(): Fp2
-    {
-        return $this->y;
-    }
-
-    public function getZ(): Fp2
-    {
-        return $this->z;
-    }
-
     // -------------------------------------------------------------------------
     // Point doubling (dbl-2009-l, a=0 for G2)
     // -------------------------------------------------------------------------
@@ -300,11 +285,6 @@ final class G2
         }
 
         return $bytes;
-    }
-
-    public function toHex(): string
-    {
-        return bin2hex($this->toCompressedBytes());
     }
 
     /**

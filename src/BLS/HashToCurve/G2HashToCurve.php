@@ -92,8 +92,6 @@ final class G2HashToCurve
 
     private static ?Fp2 $swuC7 = null;
 
-    private static ?Fp2 $swuC3cached = null;
-
     /**
      * Hash a byte string to a G2 point using the POP-DST.
      * Input: arbitrary bytes (e.g., a compressed G1 public key for PoP).
@@ -251,8 +249,6 @@ final class G2HashToCurve
     {
         [$c6, $c7] = self::swuPrecompute();
 
-        // The algorithm uses small-power exponents that we compute with Fp2::pow
-        $c4 = gmp_init(7);  // 2^c1 - 1 = 7
         $c5 = gmp_init(4);  // 2^(c1-1) = 4
         $c3 = self::swuC3();
 

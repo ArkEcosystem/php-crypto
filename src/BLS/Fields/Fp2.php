@@ -75,11 +75,6 @@ final class Fp2
         return new self($c0, $c1);
     }
 
-    public function mulFp(Fp $scalar): self
-    {
-        return new self($this->c0->mul($scalar), $this->c1->mul($scalar));
-    }
-
     public function mulInt(int $n): self
     {
         $s = Fp::fromInt($n);
@@ -116,11 +111,6 @@ final class Fp2
         $invNorm = $norm->inv();
 
         return new self($this->c0->mul($invNorm), $this->c1->neg()->mul($invNorm));
-    }
-
-    public function div(self $other): self
-    {
-        return $this->mul($other->inv());
     }
 
     /**

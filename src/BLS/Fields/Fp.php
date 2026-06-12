@@ -46,11 +46,6 @@ final class Fp
         return new self(gmp_init($n));
     }
 
-    public static function fromBytes(string $bytes): self
-    {
-        return new self(gmp_init(bin2hex($bytes), 16));
-    }
-
     public static function zero(): self
     {
         return new self(gmp_init(0));
@@ -132,11 +127,6 @@ final class Fp
         return new self(gmp_powm($this->value, $exp, self::prime()));
     }
 
-    public function div(self $other): self
-    {
-        return $this->mul($other->inv());
-    }
-
     // -------------------------------------------------------------------------
     // Predicates
     // -------------------------------------------------------------------------
@@ -165,15 +155,6 @@ final class Fp
     }
 
     // -------------------------------------------------------------------------
-    // Conditional move (for constant-time-style operations in SWU)
-    // -------------------------------------------------------------------------
-
-    public static function cmov(self $a, self $b, bool $condition): self
-    {
-        return $condition ? $b : $a;
-    }
-
-    // -------------------------------------------------------------------------
     // Serialization
     // -------------------------------------------------------------------------
 
@@ -185,8 +166,4 @@ final class Fp
         return hex2bin($hex);
     }
 
-    public function toHex(): string
-    {
-        return str_pad(gmp_strval($this->value, 16), 96, '0', STR_PAD_LEFT);
-    }
 }

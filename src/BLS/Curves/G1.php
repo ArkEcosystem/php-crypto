@@ -127,7 +127,7 @@ final class G1
     }
 
     // -------------------------------------------------------------------------
-    // Scalar multiplication (double-and-add from MSB)
+    // Scalar multiplication (LSB double-and-add)
     // -------------------------------------------------------------------------
 
     public function scalarMul(\GMP $k): self
