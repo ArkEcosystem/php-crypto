@@ -139,14 +139,13 @@ $testData = <<<JSON
     }
 JSON;
 
-it('derives correct public key, private key, and pop for the given mnemonic', function ($key, $data) {
-    $mnemonic           = $data['mnemonic'];
-    $expectedPrivateKey = $data['privateKey'];
-    $expectedPublicKey  = $data['publicKey'];
-    $expectedPop        = $data['pop'];
-
-//    expect(EIP2333::deriveBlsPrivateKey($mnemonic))->toBe($expectedPrivateKey);
+it('derives correct public key, private key, and pop for the given mnemonic', function (string $mnemonic, string $expectedSk, string $expectedPk, string $expectedPop) {
+    expect(bin2hex(EIP2333::deriveBlsPrivateKey($mnemonic)))->toBe($expectedSk);
 
     $result = ProofOfPossession::fromMnemonic($mnemonic);
-    expect($result['pk'])->toBe($expectedPublicKey)->and($result['pop'])->toBe($expectedPop);
-})->with(json_decode($testData, true));
+    expect($result['pk'])->toBe($expectedPk)
+        ->and($result['pop'])->toBe($expectedPop);
+})->with(array_map(
+    fn ($d) => [$d['mnemonic'], $d['privateKey'], $d['publicKey'], $d['pop']],
+    json_decode($testData, true)
+));
