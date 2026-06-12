@@ -31,10 +31,14 @@ final class EIP2333
 
     /**
      * BIP-39: mnemonic → 64-byte seed via PBKDF2-HMAC-SHA512 with salt "mnemonic".
+     * Ideographic spaces (U+3000, used in Japanese wordlists) are normalized to U+0020
+     * before hashing, matching the behaviour of reference BIP-39 implementations.
      */
     public static function mnemonicToSeed(string $mnemonic): string
     {
-        return hash_pbkdf2('sha512', $mnemonic, 'mnemonic', 2048, 64, true);
+        $normalized = str_replace("\xe3\x80\x80", ' ', $mnemonic);
+
+        return hash_pbkdf2('sha512', $normalized, 'mnemonic', 2048, 64, true);
     }
 
     /**

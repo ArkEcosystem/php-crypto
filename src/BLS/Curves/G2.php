@@ -277,9 +277,9 @@ final class G2
         // Bit 7 (0x80): compressed flag
         $bytes[0] = chr(ord($bytes[0]) | 0x80);
 
-        // Bit 5 (0x20): sort/sign flag
-        // ZCash uses: if c1 != 0 then sign = (c1 > (p-1)/2) else sign = (c0 > (p-1)/2)
-        $signFp = $ax->c1->isZero() ? $ax->c0 : $ax->c1;
+        // Bit 5 (0x20): sort/sign flag — determined by y, not x
+        // ZCash: if y.c1 != 0 then sign = (y.c1 > (p-1)/2) else sign = (y.c0 > (p-1)/2)
+        $signFp = $ay->c1->isZero() ? $ay->c0 : $ay->c1;
         if ($signFp->isNegative()) {
             $bytes[0] = chr(ord($bytes[0]) | 0x20);
         }
