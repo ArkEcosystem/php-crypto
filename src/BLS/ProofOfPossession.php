@@ -9,7 +9,7 @@ use ArkEcosystem\Crypto\BLS\HashToCurve\G2HashToCurve;
 use InvalidArgumentException;
 
 /**
- * DST used for PoP signatures: "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"
+ * DST used for PoP signatures: "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_".
  */
 final class ProofOfPossession
 {
