@@ -165,5 +165,4 @@ final class Fp
 
         return hex2bin($hex);
     }
-
 }
