@@ -53,16 +53,4 @@ trait Deserialize
 
         $this->assertSame($expected, $actual);
     }
-
-    private function array_only(array $arr, array $keys): array
-    {
-        $returnArray = [];
-        foreach ($keys as $key) {
-            if (isset($arr[$key])) {
-                $returnArray[$key] = $arr[$key];
-            }
-        }
-
-        return $returnArray;
-    }
 }
