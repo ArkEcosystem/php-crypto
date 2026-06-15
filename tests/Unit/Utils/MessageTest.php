@@ -2,129 +2,89 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace ArkEcosystem\Tests\Crypto\Unit\Utils;
-
 use ArkEcosystem\Crypto\Utils\Message;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * This is the message test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Utils\Message
- */
-class MessageTest extends TestCase
-{
-    /** @test */
-    public function it_should_sign_a_valid_message()
-    {
-        $fixture = $this->getFixture('message-v1');
+test('it should sign a valid message', function () {
+    $fixture = $this->getFixture('message-sign');
 
-        $message = Message::sign($fixture['data']['message'], $fixture['passphrase']);
+    $message = Message::sign($fixture['message'], $this->passphrase);
 
-        $this->assertSame($message->publicKey, $fixture['data']['publickey']);
-        $this->assertSame($message->signature, $fixture['data']['signature']);
-        $this->assertSame($message->message, $fixture['data']['message']);
-    }
+    expect($message->publicKey)->toBe($fixture['publicKey']);
+    expect($message->signature)->toBe(substr($fixture['signature'], 2));
+    expect($message->message)->toBe($fixture['message']);
+});
 
-    /** @test */
-    public function it_should_create_a_message_from_an_object()
-    {
-        $fixture = json_decode(json_encode($this->getFixture('message-v1')['data']));
+test('it should create a message from an object', function () {
+    $fixture = json_decode(json_encode($this->getFixture('message-sign')));
 
-        $message = Message::new($fixture);
+    $message = Message::new($fixture);
 
-        $this->assertSame($message->publicKey, $fixture->publickey);
-        $this->assertSame($message->signature, $fixture->signature);
-        $this->assertSame($message->message, $fixture->message);
-    }
+    expect($message->publicKey)->toBe($fixture->publicKey);
+    expect($message->signature)->toBe($fixture->signature);
+    expect($message->message)->toBe($fixture->message);
+});
 
-    /** @test */
-    public function it_should_create_a_message_from_an_array()
-    {
-        $fixture = $this->getFixture('message-v1')['data'];
+test('it should create a message from an array', function () {
+    $fixture = $this->getFixture('message-sign');
 
-        $message = Message::new($fixture);
+    $message = Message::new($fixture);
 
-        $this->assertSame($message->publicKey, $fixture['publickey']);
-        $this->assertSame($message->signature, $fixture['signature']);
-        $this->assertSame($message->message, $fixture['message']);
-    }
+    expect($message->publicKey)->toBe($fixture['publicKey']);
+    expect($message->signature)->toBe($fixture['signature']);
+    expect($message->message)->toBe($fixture['message']);
+});
 
-    /** @test */
-    public function it_should_create_a_message_from_a_string()
-    {
-        $fixture = $this->getFixture('message-v1')['data'];
+test('it should throw if no public key is provided', function () {
+    $fixture = $this->getFixture('message-sign');
 
-        $message = Message::new(json_encode($fixture));
+    unset($fixture['publicKey']);
 
-        $this->assertSame($message->publicKey, $fixture['publickey']);
-        $this->assertSame($message->signature, $fixture['signature']);
-        $this->assertSame($message->message, $fixture['message']);
-    }
+    Message::new($fixture);
+})->throws(InvalidArgumentException::class, 'The given message did not contain a valid public key.');
 
-    /** @test */
-    public function it_should_not_create_a_message_from_an_invalid_Type()
-    {
-        $this->expectException(\InvalidArgumentException::class);
+test('it should create a message from a string', function () {
+    $fixture = $this->getFixture('message-sign');
 
-        Message::new(false);
-    }
+    $message = Message::new(json_encode($fixture));
 
-    /** @test */
-    public function it_should_sign_a_message()
-    {
-        $message = Message::sign('Hello World', 'passphrase');
+    expect($message->publicKey)->toBe($fixture['publicKey']);
+    expect($message->signature)->toBe($fixture['signature']);
+    expect($message->message)->toBe($fixture['message']);
+});
 
-        $this->assertInstanceOf(Message::class, $message);
-    }
+test('it should not create a message from an invalid Type', function () {
+    expect(fn () => Message::new(false))
+        ->toThrow(InvalidArgumentException::class);
+});
 
-    /** @test */
-    public function it_should_verify_a_message_from_v1()
-    {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+test('it should sign a message', function () {
+    $message = Message::sign('Hello World', 'passphrase');
 
-        $this->assertTrue($message->verify());
-    }
+    expect($message)->toBeInstanceOf(Message::class);
+});
 
-    /** @test */
-    public function it_should_verify_a_message_from_v2()
-    {
-        $message = Message::new($this->getFixture('message-v2')['data']);
+test('it should verify a message', function () {
+    $fixture              = $this->getFixture('message-sign');
+    $fixture['signature'] = substr($fixture['signature'], 2);
+    $message              = Message::new($fixture);
 
-        $this->assertTrue($message->verify());
-    }
+    expect($message->verify())->toBeTrue();
+});
 
-    /** @test */
-    public function it_should_turn_a_message_into_an_array()
-    {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+test('it should turn a message into an array', function () {
+    $message = Message::new($this->getFixture('message-sign'));
 
-        $this->assertIsArray($message->toArray());
-    }
+    expect($message->toArray())->toBeArray();
+});
 
-    /** @test */
-    public function it_should_turn_a_message_into_json()
-    {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+test('it should turn a message into json', function () {
+    $message = Message::new($this->getFixture('message-sign'));
 
-        $this->assertIsString($message->toJSON());
-    }
+    expect($message->toJSON())->toBeString();
+});
 
-    /** @test */
-    public function it_should_turn_a_message_into_a_string()
-    {
-        $message = Message::new($this->getFixture('message-v1')['data']);
+test('it should turn a message into a string', function () {
+    $message = Message::new($this->getFixture('message-sign'));
 
-        $this->assertIsString($message->__toString());
-    }
-}
+    expect((string) $message)->toBeString();
+});

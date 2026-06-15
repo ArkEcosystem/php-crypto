@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Binary\UnsignedInteger;
 
 /**
@@ -36,11 +27,11 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool|null  $endianness
      *
      * @return int
      */
-    public static function bit16(string $data, int $offset = 0, $endianness = false): int
+    public static function bit16(string $data, int $offset = 0, ?bool $endianness = false): int
     {
         // big-endian
         if (true === $endianness) {
@@ -53,9 +44,7 @@ class Reader
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return unpack('S', $data, $offset)[1];
-        }
+        return unpack('S', $data, $offset)[1];
     }
 
     /**
@@ -63,11 +52,11 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool|null  $endianness
      *
      * @return int
      */
-    public static function bit32(string $data, int $offset = 0, $endianness = false): int
+    public static function bit32(string $data, int $offset = 0, ?bool $endianness = false): int
     {
         // big-endian
         if (true === $endianness) {
@@ -80,9 +69,7 @@ class Reader
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return unpack('L', $data, $offset)[1];
-        }
+        return unpack('L', $data, $offset)[1];
     }
 
     /**
@@ -90,25 +77,28 @@ class Reader
      *
      * @param string $data
      * @param int    $offset
-     * @param mixed  $endianness
+     * @param bool   $endianness
      *
      * @return int
      */
-    public static function bit64(string $data, int $offset = 0, bool $endianness = false): int
+    public static function bit64(string $data, int $offset = 0, bool $endianness = false): int|string
     {
-        // big-endian
-        if (true === $endianness) {
-            return unpack('J', $data, $offset)[1];
+        $bytes = substr($data, $offset, 8);
+
+        if ($endianness === false) {
+            // big-endian - reverse for little-endian system
+            $bytes = strrev($bytes);
         }
 
-        // little-endian
-        if (false === $endianness) {
-            return unpack('P', $data, $offset)[1];
+        $hex      = bin2hex($bytes);
+        $gmpValue = gmp_init($hex, 16);
+
+        // If it fits in PHP's int range, return as int
+        if (gmp_cmp($gmpValue, PHP_INT_MAX) <= 0) {
+            return gmp_intval($gmpValue);
         }
 
-        // machine byte order
-        if (null === $endianness) {
-            return unpack('Q', $data, $offset)[1];
-        }
+        // Otherwise return as string
+        return gmp_strval($gmpValue);
     }
 }

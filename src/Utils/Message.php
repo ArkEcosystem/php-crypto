@@ -2,31 +2,22 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
+use BitWasp\Bitcoin\Bitcoin;
+use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
 use BitWasp\Buffertools\Buffer;
 use InvalidArgumentException;
+use kornrunner\Keccak;
 
-/**
- * This is the message class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class Message
 {
+    public const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
+
     /**
      * The message signer public key.
      *
@@ -55,16 +46,11 @@ class Message
      */
     public function __construct(object $message)
     {
-        if (property_exists($message, 'publickey')) {
-            $this->publicKey = $message->publickey;
-        } elseif (property_exists($message, 'publicKey')) {
-            $this->publicKey = $message->publicKey;
-        } elseif (property_exists($message, 'signatory')) {
-            $this->publicKey = $message->signatory;
-        } else {
+        if (! property_exists($message, 'publicKey')) {
             throw new InvalidArgumentException('The given message did not contain a valid public key.');
         }
 
+        $this->publicKey = $message->publicKey;
         $this->signature = $message->signature;
         $this->message   = $message->message;
     }
@@ -113,11 +99,19 @@ class Message
      */
     public static function sign(string $message, string $passphrase): self
     {
-        $keys = PrivateKey::fromPassphrase($passphrase);
+        $privateKey = PrivateKey::fromPassphrase($passphrase);
+
+        $hash = Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256);
+
+        $signature = $privateKey->sign(Buffer::hex($hash));
+
+        $r = Helpers::gmpToHex($signature->getR());
+        $s = Helpers::gmpToHex($signature->getS());
+        $v = str_pad(dechex($signature->getRecoveryId() + 27), 2, '0', STR_PAD_LEFT);
 
         return static::new([
-            'publickey' => $keys->getPublicKey()->getHex(),
-            'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
+            'publicKey' => $privateKey->publicKey,
+            'signature' => $r.$s.$v,
             'message'   => $message,
         ]);
     }
@@ -131,10 +125,16 @@ class Message
     {
         $factory = new PublicKeyFactory();
 
-        return $factory->fromHex($this->publicKey)->verify(
-            new Buffer(hash('sha256', $this->message, true)),
-            SignatureFactory::fromHex($this->signature)
-        );
+        $signature = $this->getSignature();
+
+        $message = static::MESSAGE_PREFIX.strlen($this->message).$this->message;
+
+        return $factory
+            ->fromHex($this->publicKey)
+            ->verify(
+                Buffer::hex(Keccak::hash($message, 256)),
+                $signature,
+            );
     }
 
     /**
@@ -145,7 +145,7 @@ class Message
     public function toArray(): array
     {
         return [
-            'publickey' => $this->publicKey,
+            'publicKey' => $this->publicKey,
             'signature' => $this->signature,
             'message'   => $this->message,
         ];
@@ -159,5 +159,29 @@ class Message
     public function toJson(): string
     {
         return json_encode($this->toArray());
+    }
+
+    private function getSignature(): CompactSignature
+    {
+        $r = substr($this->signature, 0, 64);
+        $s = substr($this->signature, 64, 64);
+        $v = hexdec(substr($this->signature, 128, 2));
+
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        $recoverId = $v - 27;
+        $r         = gmp_init($r, 16);
+        $s         = gmp_init($s, 16);
+
+        return new CompactSignature(
+            adapter: $ecAdapter,
+            r: $r,
+            s: $s,
+            recid: $recoverId,
+            compressed: true
+        );
     }
 }

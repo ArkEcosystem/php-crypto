@@ -2,65 +2,51 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
-use BitWasp\Bitcoin\Crypto\Hash;
+use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Enums\ContractAbiType;
+use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Transactions\Types\EvmCall;
+use ArkEcosystem\Crypto\Transactions\Types\Multipayment;
+use ArkEcosystem\Crypto\Transactions\Types\Transfer;
+use ArkEcosystem\Crypto\Transactions\Types\Unvote;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\Vote;
+use ArkEcosystem\Crypto\Utils\AbiDecoder;
+use ArkEcosystem\Crypto\Utils\RlpDecoder;
+use BitWasp\Buffertools\Buffer;
 
-/**
- * This is the deserializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class Deserializer
 {
+    public const SIGNATURE_SIZE = 64;
+
+    public const RECOVERY_SIZE  = 1;
+
     private ByteBuffer $buffer;
 
-    /**
-     * The transaction classes.
-     *
-     * @var array
-     */
-    private $transactionsClasses = [
-        Types\Transfer::class,
-        Types\SecondSignatureRegistration::class,
-        Types\DelegateRegistration::class,
-        Types\Vote::class,
-        Types\MultiSignatureRegistration::class,
-        Types\IPFS::class,
-        Types\MultiPayment::class,
-        Types\DelegateResignation::class,
-        Types\HtlcLock::class,
-        Types\HtlcClaim::class,
-        Types\HtlcRefund::class,
-    ];
+    private string $encodedRlp;
 
     /**
      * Create a new deserializer instance.
-     *
-     * @param object $serialized
      */
     public function __construct(string $serialized)
     {
-        $this->buffer = false === strpos($serialized, "\0")
+        $this->buffer = strpos($serialized, "\0") === false
             ? ByteBuffer::fromHex($serialized)
             : ByteBuffer::fromBinary($serialized);
+
+        $this->encodedRlp = '0x'.$this->buffer->toString('hex');
     }
 
     /**
      * Create a new deserializer instance.
-     *
-     * @param string $serialized
      */
     public static function new(string $serialized)
     {
@@ -69,211 +55,141 @@ class Deserializer
 
     /**
      * Perform AIP11 compliant deserialization.
-     *
-     * @return Transaction
      */
-    public function deserialize(): Transaction
+    public function deserialize(): AbstractTransaction
     {
+        $decodedRlp = RlpDecoder::decode($this->encodedRlp);
+
         $data = [];
 
-        $this->deserializeCommon($data);
+        $data['nonce']    = $this->parseBigNumber($decodedRlp[0]);
+        $data['gasPrice'] = $this->parseNumber($decodedRlp[1]);
+        $data['gasLimit'] = $this->parseNumber($decodedRlp[2]);
+        $data['to']       = $this->parseAddress($decodedRlp[3]);
+        $data['value']    = $this->parseBigNumber($decodedRlp[4]);
+        $data['data']     = $this->parseHex($decodedRlp[5]);
 
-        $transactionClass  = $this->transactionsClasses[$data['type']];
-        $transaction       = new $transactionClass();
-        $transaction->data = $data;
-
-        $this->deserializeVendorField($transaction);
-
-        // Deserialize type specific parts
-        $transaction->deserialize($this->buffer);
-
-        $this->deserializeSignatures($transaction->data);
-
-        if (! isset($transaction->data['amount'])) {
-            $transaction->data['amount'] = '0';
+        if (count($decodedRlp) >= 9) {
+            $data['v'] = $this->parseNumber($decodedRlp[6]) - (Network::get()->chainId() * 2 + 35);
+            $data['r'] = $this->parseHex($decodedRlp[7]);
+            $data['s'] = $this->parseHex($decodedRlp[8]);
         }
 
-        $transaction = $this->handleVersionTwo($transaction);
+        // TODO: second signature handling
+
+        $transaction = $this->guessTransactionFromData($data);
+
+        $serializedHex = mb_substr($this->encodedRlp, 2);
+
+        $transaction->serialized = new Buffer(hex2bin($serializedHex));
+
+        $transaction->data['hash'] = $transaction->hash()->getHex();
+
+        $transaction->recoverSender();
 
         return $transaction;
     }
 
-    /**
-     * Handle the deserialization of transaction data with a version of 2.0.
-     *
-     * @param Transaction $transaction
-     *
-     * @return Transaction
-     */
-    public function handleVersionTwo(Transaction $transaction): Transaction
+    public static function decodePayload(array $data, ContractAbiType $abiType = ContractAbiType::CONSENSUS): ?array
     {
-        $transaction->data['id'] = Hash::sha256(Serializer::new($transaction)->serialize())->getHex();
+        if (! isset($data['data'])) {
+            return null;
+        }
 
-        return $transaction;
+        $payload = $data['data'];
+        if ($payload === '') {
+            return null;
+        }
+
+        $decoder = new AbiDecoder($abiType);
+
+        try {
+            return $decoder->decodeFunctionData($payload);
+        } catch (\Throwable $e) {
+            //
+        }
+
+        return null;
     }
 
-    private function deserializeCommon(array &$data): void
+    private function guessTransactionFromData(array $data): AbstractTransaction
     {
-        $this->buffer->skip(1);
-        $data['version']         = $this->buffer->readUInt8();
-        $data['network']         = $this->buffer->readUInt8();
-        $data['typeGroup']       = $this->buffer->readUInt32();
-        $data['type']            = $this->buffer->readUInt16();
-        $data['nonce']           = strval($this->buffer->readUInt64());
-        $data['senderPublicKey'] = $this->buffer->readHex(33 * 2);
-        $data['fee']             = strval($this->buffer->readUInt64());
-    }
-
-    private function deserializeVendorField(Transaction $transaction): void
-    {
-        $vendorFieldLength = $this->buffer->readUInt8();
-        if ($vendorFieldLength > 0) {
-            if ($transaction->hasVendorField()) {
-                $marker                              = $this->buffer->current();
-                $transaction->data['vendorFieldHex'] = $this->buffer->readHex($vendorFieldLength * 2);
-                $this->buffer->position($marker);
-                $transaction->data['vendorField'] = $this->buffer->readHexString($vendorFieldLength * 2);
-            } else {
-                $this->buffer->skip($vendorFieldLength);
+        $consensusPayloadData = $this->decodePayload($data);
+        if ($consensusPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $consensusPayloadData)) {
+                $functionName = $consensusPayloadData['functionName'];
             }
-        }
-    }
 
-    private function deserializeSignatures(array &$data): void
-    {
-        $this->deserializeSchnorrOrECDSA($data);
-    }
-
-    private function deserializeSchnorrOrECDSA(array &$data): void
-    {
-        if ($this->detectSchnorr()) {
-            $this->deserializeSchnorr($data);
-        } else {
-            $this->deserializeECDSA($data);
-        }
-    }
-
-    private function deserializeSchnorr(array &$data): void
-    {
-        if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data['signature'] = $this->buffer->readHex(64 * 2);
-        }
-
-        if ($this->canReadNonMultiSignature($this->buffer)) {
-            $data['secondSignature'] = $this->buffer->readHex(64 * 2);
-        }
-
-        if ($this->buffer->remaining()) {
-            if ($this->buffer->remaining() % 65 === 0) {
-                $data['signatures'] = [];
-
-                $count            = $this->buffer->remaining() / 65;
-                $publicKeyIndexes = [];
-                for ($i = 0; $i < $count; $i++) {
-                    $multiSignaturePart = $this->buffer->readHex(65 * 2);
-                    $publicKeyIndex     = intval(substr($multiSignaturePart, 0, 2), 16);
-
-                    if (! isset($publicKeyIndexes[$publicKeyIndex])) {
-                        $publicKeyIndexes[$publicKeyIndex] = true;
-                    } else {
-                        throw new \Exception('Duplicate participant in multisignature');
-                    }
-
-                    $data['signatures'][] = $multiSignaturePart;
-                }
-            } else {
-                throw new \Exception('signature buffer not exhausted');
+            if ($functionName === AbiFunction::VOTE->value) {
+                return new Vote($data);
             }
-        }
-    }
 
-    private function canReadNonMultiSignature(ByteBuffer $buffer)
-    {
-        return
-            $buffer->remaining()
-            && ($buffer->remaining() % 64 === 0 || $buffer->remaining() % 65 !== 0);
-    }
+            if ($functionName === AbiFunction::UNVOTE->value) {
+                return new Unvote($data);
+            }
 
-    private function deserializeECDSA(array &$data): void
-    {
-        // Signature
-        if ($this->buffer->remaining()) {
-            $signatureLength   = $this->currentSignatureLength($this->buffer);
-            $data['signature'] = $this->buffer->readHex($signatureLength * 2);
-        }
+            if ($functionName === AbiFunction::VALIDATOR_REGISTRATION->value) {
+                return new ValidatorRegistration($data);
+            }
 
-        // Second Signature
-        if ($this->buffer->remaining() && ! $this->beginningMultiSignature($this->buffer)) {
-            $secondSignatureLength   = $this->currentSignatureLength($this->buffer);
-            $data['secondSignature'] = $this->buffer->readHex($secondSignatureLength * 2);
-        }
-
-        // Multi Signatures
-        if ($this->buffer->remaining() && $this->beginningMultiSignature($this->buffer)) {
-            $this->buffer->skip(1);
-            $signaturesSerialized = $this->buffer->readHex($this->buffer->remaining() * 2);
-            $data['signatures']   = [];
-
-            $moreSignatures = true;
-            while ($moreSignatures) {
-                $mLength = intval(substr($signaturesSerialized, 2, 2), 16);
-
-                if ($mLength > 0) {
-                    $data['signatures'][] = substr($signaturesSerialized, 0, ($mLength + 2) * 2);
-                } else {
-                    $moreSignatures = false;
-                }
-
-                $signaturesSerialized = substr($signaturesSerialized, ($mLength + 2) * 2);
+            if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
+                return new ValidatorResignation($data);
             }
         }
 
-        if ($this->buffer->remaining()) {
-            throw new \Exception('signature buffer not exhausted');
+        $usernamePayloadData = $this->decodePayload($data, ContractAbiType::USERNAMES);
+        if ($usernamePayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $usernamePayloadData)) {
+                $functionName = $usernamePayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::USERNAME_REGISTRATION->value) {
+                return new UsernameRegistration($data);
+            }
+
+            if ($functionName === AbiFunction::USERNAME_RESIGNATION->value) {
+                return new UsernameResignation($data);
+            }
         }
+
+        $multipaymentPayloadData = $this->decodePayload($data, ContractAbiType::MULTIPAYMENT);
+        if ($multipaymentPayloadData !== null) {
+            $functionName = null;
+            if (array_key_exists('functionName', $multipaymentPayloadData)) {
+                $functionName = $multipaymentPayloadData['functionName'];
+            }
+
+            if ($functionName === AbiFunction::MULTIPAYMENT->value) {
+                return new Multipayment($data);
+            }
+        }
+
+        if ($data['value'] !== '0') {
+            return new Transfer($data);
+        }
+
+        return new EvmCall($data);
     }
 
-    private function currentSignatureLength(ByteBuffer $buffer)
+    private function parseNumber(string $value): int
     {
-        $mark = $buffer->current();
-
-        $lengthHex = $buffer->skip(1)->readHex(1 * 2);
-
-        $buffer->position($mark);
-
-        return intval($lengthHex, 16) + 2;
+        return $value === '0x' ? 0 : intval($value, 16);
     }
 
-    private function beginningMultiSignature(ByteBuffer $buffer)
+    private function parseBigNumber(string $value): string
     {
-        $mark = $buffer->current();
-
-        $marker = $buffer->readUint8();
-
-        $buffer->position($mark);
-
-        return $marker === 255;
+        return $value === '0x' ? '0' : gmp_strval(gmp_init($value, 16));
     }
 
-    private function detectSchnorr(): bool
+    private function parseHex(string $value): string
     {
-        $remaining = $this->buffer->remaining();
+        return Helpers::removeLeadingHexZero($value);
+    }
 
-        // `signature` / `secondSignature`
-        if ($remaining === 64 || $remaining === 128) {
-            return true;
-        }
-
-        // `signatures` of a multi signature transaction (type != 4)
-        if ($remaining % 65 === 0) {
-            return true;
-        }
-
-        // only possiblity left is a type 4 transaction with and without a `secondSignature`.
-        if (($remaining - 64) % 65 === 0 || ($remaining - 128) % 65 === 0) {
-            return true;
-        }
-
-        return false;
+    private function parseAddress(string $value): string|null
+    {
+        return $value === '0x' ? null : $value;
     }
 }

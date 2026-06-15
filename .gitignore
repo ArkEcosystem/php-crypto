@@ -1,7 +1,10 @@
-phpunit.xml
 vendor
 clover.xml
 .php_cs.cache
 .phpunit.result.cache
+.phpunit.cache
 .coverage
 coverage.xml
+.php-cs-fixer.cache
+# Used for the schnorr signature hack, remove once a php version is implemented
+scripts/node_modules

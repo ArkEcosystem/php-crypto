@@ -2,26 +2,11 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use ArkEcosystem\Crypto\Networks\Devnet;
-use BitWasp\Bitcoin\Bitcoin;
+use ArkEcosystem\Crypto\Networks\Testnet;
 
-/**
- * This is the network configuration class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class Network
 {
     /**
@@ -51,7 +36,7 @@ class Network
      */
     public static function get(): AbstractNetwork
     {
-        return static::$network ?? Devnet::new();
+        return static::$network ?? Testnet::new();
     }
 
     /**
@@ -62,7 +47,5 @@ class Network
     public static function set(AbstractNetwork $network): void
     {
         static::$network = $network;
-
-        Bitcoin::setNetwork($network);
     }
 }

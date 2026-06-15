@@ -2,55 +2,31 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
-use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Enums\AbiFunction;
+use ArkEcosystem\Crypto\Transactions\Deserializer;
+use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
-/**
- * This is the serializer class.
- *
- * @author Brian Faust <brian@ark.io>
- */
-class Vote extends Transaction
+class Vote extends AbstractTransaction
 {
-    public function serialize(array $options = []): ByteBuffer
+    public function __construct(array $data)
     {
-        $buffer = ByteBuffer::new(24);
+        $payload = Deserializer::decodePayload($data);
 
-        $voteBytes = [];
-
-        foreach ($this->data['asset']['votes'] as $vote) {
-            $voteBytes[] = '+' === substr($vote, 0, 1)
-                ? '01'.substr($vote, 1)
-                : '00'.substr($vote, 1);
+        if ($payload !== null) {
+            $data['vote'] = $payload['args'][0];
         }
 
-        $buffer->writeUInt8(count($this->data['asset']['votes']));
-        $buffer->writeHex(implode('', $voteBytes));
-
-        return $buffer;
+        parent::__construct($data);
     }
 
-    public function deserialize(ByteBuffer $buffer): void
+    public function getPayload(): string
     {
-        $voteLength = $buffer->readUInt8();
-
-        $this->data['asset'] = ['votes' => []];
-
-        $vote = null;
-        for ($i = 0; $i < $voteLength; $i++) {
-            $vote                           = $buffer->readHex(34 * 2);
-            $vote                           = ('1' === $vote[1] ? '+' : '-').substr($vote, 2);
-            $this->data['asset']['votes'][] = $vote;
+        if (! array_key_exists('vote', $this->data)) {
+            return '';
         }
+
+        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VOTE->value, [$this->data['vote']]);
     }
 }

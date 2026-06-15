@@ -2,34 +2,39 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
 use ArkEcosystem\Crypto\Networks\Mainnet;
-use BitWasp\Bitcoin\Network\Network;
 
-/**
- * This is the mainnet network test class.
- *
- * @author Brian Faust <brian@ark.io>
+/*
  * @covers \ArkEcosystem\Crypto\Networks\Mainnet
  */
-class MainnetTest extends NetworkTestCase
-{
-    protected $epoch = '2017-03-21T13:00:00.000Z';
 
-    protected $pubKeyHash = 23;
+$epoch   = '2017-03-21T13:00:00.000Z';
+$wif     = 'ba';
+$chainId = 11811;
 
-    public function getTestSubject()
-    {
-        return Mainnet::new();
-    }
-}
+beforeEach(function () use ($epoch, $chainId, $wif) {
+    $this->chainId = $chainId;
+    $this->epoch   = $epoch;
+    $this->wif     = $wif;
+    $this->network = Mainnet::new();
+});
+
+it('should get epoch', function () {
+    $actual = $this->network->epoch();
+
+    expect($actual)->toBe($this->epoch);
+});
+
+it('should get chain id', function () {
+    $actual = $this->network->chainId();
+
+    expect($actual)->toBe($this->chainId);
+});
+
+it('should get the wif', function () {
+    $actual = $this->network->wif();
+
+    expect($actual)->toBe($this->wif);
+});

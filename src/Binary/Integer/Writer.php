@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Binary\Integer;
 
 /**
@@ -25,9 +16,9 @@ class Writer
      *
      * @return string
      */
-    public static function bit8(string $data): string
+    public static function bit8(int $data): string
     {
-        return pack('c', $data)[1];
+        return pack('c', $data);
     }
 
     /**
@@ -37,9 +28,9 @@ class Writer
      *
      * @return string
      */
-    public static function bit16(string $data): string
+    public static function bit16(int $data): string
     {
-        return pack('s', $data)[1];
+        return pack('s', $data);
     }
 
     /**
@@ -49,9 +40,9 @@ class Writer
      *
      * @return string
      */
-    public static function bit32(string $data): string
+    public static function bit32(int $data): string
     {
-        return pack('l', $data)[1];
+        return pack('l', $data);
     }
 
     /**
@@ -61,8 +52,8 @@ class Writer
      *
      * @return string
      */
-    public static function bit64(string $data): string
+    public static function bit64(int $data): string
     {
-        return pack('q', $data)[1];
+        return pack('q', $data);
     }
 }

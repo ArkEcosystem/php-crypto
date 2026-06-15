@@ -11,23 +11,24 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Brian Faust",
-            "email": "hello@brianfaust.me",
-            "homepage": "https://github.com/faustbrian"
+            "name": "ARK Ecosystem",
+            "email": "info@arkscic.com",
+            "homepage": "https://arkscic.com"
         }
     ],
     "require": {
         "php": "^8.2",
+        "brick/math": "^0.14.2",
+        "kornrunner/keccak": "^1.1",
         "protonlabs/bitcoin": "^1.0",
-        "simplito/elliptic-php": "^1.0",
-        "ext-gmp": "*"
+        "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",
-        "graham-campbell/analyzer": "^3.1",
-        "illuminate/support": "^8.8",
-        "pestphp/pest": "^1.23",
-        "pestphp/pest-plugin-parallel": "^1.2"
+        "graham-campbell/analyzer": "4.2.x-dev",
+        "illuminate/support": "^12.18",
+        "pestphp/pest": "^2.34",
+        "phpunit/phpunit": "^10.5"
     },
     "autoload": {
         "psr-4": {
@@ -51,12 +52,18 @@
             "dev-master": "1.0-dev"
         }
     },
+    "repositories": [
+        {
+            "url": "https://github.com/alexbarnsley/GrahamCampbell-Analyzer.git",
+            "type": "git"
+        }
+    ],
     "scripts": {
         "format": [
             "vendor/bin/php-cs-fixer fix"
         ],
         "test": [
-            "./vendor/bin/pest --parallel"
+            "./vendor/bin/pest --coverage --min=100 --coverage-html=.coverage --coverage-clover=coverage.xml"
         ]
     },
     "minimum-stability": "dev",

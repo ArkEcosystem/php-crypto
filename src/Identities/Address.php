@@ -2,111 +2,84 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Identities;
 
-use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
-use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
-use ArkEcosystem\Crypto\Helpers;
-use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use BitWasp\Bitcoin\Address\AddressCreator;
-use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Address as AddressUtils;
+use Elliptic\EC;
+use kornrunner\Keccak;
 
-/**
- * This is the address class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class Address
 {
     /**
      * Derive the address from the given passphrase.
      *
      * @param string               $passphrase
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
+    public static function fromPassphrase(string $passphrase): string
     {
-        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
-    }
-
-    /**
-     * Derive the address from the given multi-signature asset.
-     *
-     * @param int   $min
-     * @param array $publicKeys
-     *
-     * @return string
-     */
-    public static function fromMultiSignatureAsset(int $min, array $publicKeys): string
-    {
-        return static::fromPublicKey(PublicKey::fromMultiSignatureAsset($min, $publicKeys)->getHex());
+        return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase));
     }
 
     /**
      * Derive the address from the given public key.
      *
      * @param string               $publicKey
-     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPublicKey(string $publicKey, $network = null): string
+    public static function fromPublicKey(string $publicKey): string
     {
-        $network = $network ?? NetworkConfiguration::get();
+        // Convert the public key to a byte array
+        $publicKeyBytes = hex2bin($publicKey);
 
-        $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
-        $seed      = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
+        // Ensure the public key is uncompressed
+        $ec                    = new EC('secp256k1');
+        $key                   = $ec->keyFromPublic($publicKeyBytes);
+        $uncompressedPublicKey = $key->getPublic(false, 'hex'); // Get uncompressed public key
 
-        return Base58::encodeCheck(new Buffer($seed));
+        // Remove the prefix (0x04)
+        $uncompressedPublicKey = substr($uncompressedPublicKey, 2);
+
+        // Convert the public key to a byte array
+        $uncompressedPublicKeyBytes = hex2bin($uncompressedPublicKey);
+
+        // Hash the public key using Keccak-256
+        $keccakHash = Keccak::hash($uncompressedPublicKeyBytes, 256);
+
+        // Take the last 40 characters of the hash (20 bytes)
+        $address = substr($keccakHash, -40);
+
+        // Prefix with 0x
+        $address = '0x'.$address;
+
+        // Convert to checksum address
+        return AddressUtils::toChecksumAddress($address);
     }
 
     /**
      * Derive the address from the given private key.
      *
-     * @param EccPrivateKey $privateKey
-     * @param AbstractNetwork|null                                         $network
+     * @param PrivateKey $privateKey
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
+    public static function fromPrivateKey(PrivateKey $privateKey): string
     {
-        $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
-
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
+        return static::fromPublicKey($privateKey->publicKey);
     }
 
     /**
      * Validate the given address.
      *
-     * @param string                   $address
-     * @param AbstractNetwork|int|null $network
+     * @param string $address
      *
      * @return bool
      */
-    public static function validate(string $address, $network = null): bool
+    public static function validate(string $address): bool
     {
-        try {
-            $addressCreator = new AddressCreator();
-            $addressCreator->fromString($address, $network);
-
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        // Simple validation to check if the address starts with 0x and is 42 characters long
+        return preg_match('/^0x[a-fA-F0-9]{40}$/', $address) === 1;
     }
 }

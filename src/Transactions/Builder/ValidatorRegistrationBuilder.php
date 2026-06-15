@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ArkEcosystem\Crypto\Transactions\Builder;
+
+use ArkEcosystem\Crypto\Enums\ContractAddresses;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
+use Brick\Math\BigDecimal;
+
+class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
+{
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+
+        $this->to(ContractAddresses::CONSENSUS->value);
+    }
+
+    public function validatorPublicKey(string $validatorPublicKey): self
+    {
+        $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;
+
+        $this->transaction->refreshPayloadData();
+
+        return $this;
+    }
+
+    public function value(BigDecimal $value): self
+    {
+        $this->transaction->data['value'] = $value;
+
+        $this->transaction->refreshPayloadData();
+
+        return $this;
+    }
+
+    protected function getTransactionInstance(array $data): AbstractTransaction
+    {
+        return new ValidatorRegistration($data);
+    }
+}

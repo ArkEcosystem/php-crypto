@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Binary\UnsignedInteger;
 
 /**
@@ -34,77 +25,71 @@ class Writer
      * Write an unsigned 16 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool|null $bigEndian
      *
      * @return string
      */
-    public static function bit16(int $data, $endianness = false): string
+    public static function bit16(int $data, ?bool $bigEndian = false): string
     {
         // big-endian
-        if (true === $endianness) {
+        if ($bigEndian === true) {
             return pack('n', $data);
         }
 
         // little-endian
-        if (false === $endianness) {
+        if ($bigEndian === false) {
             return pack('v', $data);
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return pack('S', $data);
-        }
+        return pack('S', $data);
     }
 
     /**
      * Write an unsigned 32 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool|null $bigEndian
      *
      * @return string
      */
-    public static function bit32(int $data, $endianness = false): string
+    public static function bit32(int $data, ?bool $bigEndian = false): string
     {
         // big-endian
-        if (true === $endianness) {
+        if ($bigEndian === true) {
             return pack('N', $data);
         }
 
         // little-endian
-        if (false === $endianness) {
+        if ($bigEndian === false) {
             return pack('V', $data);
         }
 
         // machine byte order
-        if (null === $endianness) {
-            return pack('L', $data);
-        }
+        return pack('L', $data);
     }
 
     /**
      * Write an unsigned 64 bit integer.
      *
      * @param int   $data
-     * @param mixed $endianness
+     * @param bool $bigEndian
      *
      * @return string
      */
-    public static function bit64(int $data, $endianness = false): string
+    public static function bit64(int|string $data, bool $bigEndian = false): string
     {
-        // big-endian
-        if (true === $endianness) {
-            return pack('J', $data);
+        $gmpValue = is_string($data) ? gmp_init($data, 10) : gmp_init($data);
+
+        $hex   = str_pad(gmp_strval($gmpValue, 16), 16, '0', STR_PAD_LEFT);
+        $bytes = hex2bin($hex);
+
+        // Big-endian
+        if ($bigEndian === true) {
+            return $bytes;
         }
 
-        // little-endian
-        if (false === $endianness) {
-            return pack('P', $data);
-        }
-
-        // machine byte order
-        if (null === $endianness) {
-            return pack('Q', $data);
-        }
+        // Convert to little-endian
+        return strrev($bytes);
     }
 }

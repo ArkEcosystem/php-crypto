@@ -2,79 +2,74 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Identities;
 
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
+use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignatureInterface;
 use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use Elliptic\EC;
+use BitWasp\Buffertools\BufferInterface;
 
-/**
- * This is the public key class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 class PublicKey
 {
+    public string $publicKey;
+
+    public EcPublicKey $instance;
+
+    public function __construct(EcPublicKey $instance)
+    {
+        $this->instance  = $instance;
+        $this->publicKey = $instance->getHex();
+    }
+
     /**
      * Derive the public from the given passphrase.
      *
      * @param string $passphrase
      *
-     * @return EcPublicKey
+     * @return PublicKey
      */
-    public static function fromPassphrase(string $passphrase): EcPublicKey
+    public static function fromPassphrase(string $passphrase): self
     {
-        return PrivateKey::fromPassphrase($passphrase)->getPublicKey();
-    }
-
-    /**
-     * Create a public key instance from a multi-signature asset.
-     *
-     * @param int   $min
-     * @param array $publicKeys
-     *
-     * @return EcPublicKey
-     */
-    public static function fromMultiSignatureAsset(int $min, array $publicKeys): EcPublicKey
-    {
-        $minKey = static::fromPassphrase('0'.dechex($min));
-        $keys   = [$minKey->getHex(), ...$publicKeys];
-
-        $curve = (new EC('secp256k1'))->curve;
-        $P     = $curve->jpoint(null, null, null);
-
-        foreach ($keys as $publicKey) {
-            $P = $P->add($curve->decodePoint($publicKey, 'hex'));
-        }
-
-        return static::fromHex(bin2hex(implode(array_map('chr', $P->encodeCompressed(true)))));
+        return new self(PrivateKey::fromPassphrase($passphrase)->instance->getPublicKey());
     }
 
     /**
      * Create a public key instance from a hex string.
      *
-     * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
+     * @param BufferInterface|string $publicKey
      *
-     * @return EcPublicKey
+     * @return PublicKey
      */
-    public static function fromHex($publicKey): EcPublicKey
+    public static function fromHex($publicKey): self
     {
-        return (new PublicKeyFactory(
+        $instance = (new PublicKeyFactory(
             EcAdapterFactory::getPhpEcc(
                 Bitcoin::getMath(),
                 Bitcoin::getGenerator()
             )
         ))->fromHex($publicKey);
+
+        return new self($instance);
+    }
+
+    /**
+     * Create a public key instance from a binary string.
+     *
+     * @param BufferInterface|string $publicKey
+     *
+     * @return PublicKey
+     */
+    public static function recover(BufferInterface $message, CompactSignatureInterface $signature): self
+    {
+        $ecAdapter = EcAdapterFactory::getPhpEcc(
+            Bitcoin::getMath(),
+            Bitcoin::getGenerator()
+        );
+
+        $instance = $ecAdapter->recover($message, $signature);
+
+        return new self($instance);
     }
 }

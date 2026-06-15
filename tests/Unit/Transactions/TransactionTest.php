@@ -2,115 +2,37 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
-
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Identities\PublicKey;
-use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Tests\Crypto\TestCase;
-use BitWasp\Buffertools\Buffer;
 
-/**
- * This is the transaction test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
- */
-class TransactionTest extends TestCase
-{
-    /** @test */
-    public function should_compute_the_id_of_the_transaction()
-    {
-        $actual = $this->getTransaction()->getId();
+it('should sign the transaction using a passphrase', function () {
+    $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
 
-        $this->assertSame('8fd1cf0490276edb9b3cba40bcbf9a7b0ce04b90e40ffe4704fc776b2bf8aabe', $actual);
-    }
+    $transaction                    = $this->getTransaction();
+    $transaction->data['signature'] = null;
 
-    /** @test */
-    public function should_sign_the_transaction_using_a_passphrase()
-    {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
+    expect($transaction->data['signature'])->toBeEmpty();
 
-        $transaction                    = $this->getTransaction();
-        $transaction->data['signature'] = null;
+    $transaction->sign($privateKey);
 
-        $this->assertEmpty($transaction->data['signature']);
-        $transaction->sign($privateKey);
-        $this->assertNotEmpty($transaction->data['signature']);
-    }
+    expect($transaction->data['r'])->not->toBeEmpty();
+    expect($transaction->data['s'])->not->toBeEmpty();
+    expect($transaction->data['v'])->not->toBeEmpty();
+});
 
-    /** @test */
-    public function should_sign_the_transaction_using_a_second_passphrase()
-    {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
+it('should verify the transaction', function () {
+    $actual = $this->getTransaction()->verify();
 
-        $transaction                          = $this->getTransaction();
-        $transaction->data['secondSignature'] = null;
+    expect($actual)->toBeTrue();
+});
 
-        $this->assertEmpty($transaction->data['secondSignature']);
-        $transaction->secondSign($privateKey);
-        $this->assertNotEmpty($transaction->data['secondSignature']);
-    }
+it('should turn the transaction to an array', function () {
+    $actual = $this->getTransaction()->toArray();
 
-    /** @test */
-    public function should_verify_the_transaction()
-    {
-        $actual = $this->getTransaction()->verify();
+    expect($actual)->toBeArray();
+});
 
-        $this->assertTrue($actual);
-    }
+it('should turn the transaction to json', function () {
+    $actual = $this->getTransaction()->toJson();
 
-    /** @test */
-    public function should_verify_the_transaction_using_a_second_public_key()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $secondPublicKey = PublicKey::fromPassphrase($secondPassphrase)->getHex();
-
-        $actual = $this->getTransaction('transfer-secondSign')->secondVerify($secondPublicKey);
-
-        $this->assertTrue($actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_bytes()
-    {
-        $actual = $this->getTransaction()->getBytes();
-
-        $this->assertInstanceOf(Buffer::class, $actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_an_array()
-    {
-        $actual = $this->getTransaction()->toArray();
-
-        $this->assertIsArray($actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_json()
-    {
-        $actual = $this->getTransaction()->toJson();
-
-        $this->assertIsString($actual);
-    }
-
-    private function getTransaction($file = 'transfer-sign'): Transfer
-    {
-        $fixture = $this->getTransactionFixture('transfer', $file);
-
-        return Deserializer::new($fixture['serialized'])->deserialize();
-    }
-}
+    expect($actual)->toBeString();
+});

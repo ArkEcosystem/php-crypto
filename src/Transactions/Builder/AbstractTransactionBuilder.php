@@ -2,209 +2,104 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of Ark PHP Crypto.
- *
- * (c) Ark Ecosystem <info@ark.io>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
-use ArkEcosystem\Crypto\Configuration\Fee;
-use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
+use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
+use Brick\Math\BigDecimal;
 
-/**
- * This is the abstract transaction class.
- *
- * @author Brian Faust <brian@ark.io>
- */
 abstract class AbstractTransactionBuilder
 {
-    public $transaction;
+    public AbstractTransaction $transaction;
 
-    /**
-     * Create a new transaction instance.
-     */
-    public function __construct()
+    public function __construct(?array $data = null)
     {
-        $this->transaction                    = $this->getTransactionInstance();
-        $this->transaction->data['type']      = $this->getType();
-        $this->transaction->data['typeGroup'] = $this->getTypeGroup();
-        $this->transaction->data['nonce']     = '0';
-        $this->transaction->data['amount']    = '0';
-        $this->transaction->data['fee']       = $this->getFee();
-        $this->transaction->data['version']   = 2;
-        $this->transaction->data['network']   = Network::get()->pubKeyHash();
+        $this->transaction = $this->getTransactionInstance($data ?? [
+            'value'           => BigDecimal::zero(),
+            'senderPublicKey' => '',
+            'gasPrice'        => '5',
+            'gasLimit'        => 1_000_000,
+            'nonce'           => '1',
+            'data'            => '',
+        ]);
     }
 
-    /**
-     * Convert the message to its string representation.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toJson();
     }
 
-    /**
-     * Create a new transaction instance.
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public static function new(): self
+    public static function new(?array $data = null): static
     {
-        return new static();
+        return new static($data);
     }
 
-    /**
-     * Set the transaction fee.
-     *
-     * @param string $fee
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public function withFee(string $fee): self
+    public function gasLimit(BigDecimal $gasLimit): static
     {
-        $this->transaction->data['fee'] = $fee;
+        $this->transaction->data['gasLimit'] = $gasLimit;
 
         return $this;
     }
 
-    /**
-     * Set the transaction nonce.
-     *
-     * @param string $nonce
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public function withNonce(string $nonce): self
+    public function to(string $to): static
+    {
+        $this->transaction->data['to'] = $to;
+
+        return $this;
+    }
+
+    public function gasPrice(BigDecimal $gasPrice): static
+    {
+        $this->transaction->data['gasPrice'] = $gasPrice;
+
+        return $this;
+    }
+
+    public function nonce(string $nonce): static
     {
         $this->transaction->data['nonce'] = $nonce;
 
         return $this;
     }
 
-    /**
-     * Set the transaction network.
-     *
-     * @param int $network
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public function withNetwork(int $network): self
+    public function sign(string $passphrase): static
     {
-        $this->transaction->data['network'] = $network;
+        $privateKey = PrivateKey::fromPassphrase($passphrase);
+
+        $this->transaction->data['senderPublicKey'] = $privateKey->publicKey;
+
+        $this->transaction = $this->transaction->sign($privateKey);
+
+        $this->transaction->data['hash'] = $this->transaction->hash()->getHex();
 
         return $this;
     }
 
-    /**
-     * Sign the transaction using the given passphrase.
-     *
-     * @param string $passphrase
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public function sign(string $passphrase): self
+    public function legacySecondSign(string $passphrase, string $secondPassphrase): static
     {
-        $keys                                       = PrivateKey::fromPassphrase($passphrase);
-        $this->transaction->data['senderPublicKey'] = $keys->getPublicKey()->getHex();
+        $this->sign($passphrase);
 
-        $this->transaction             = $this->transaction->sign($keys);
-        $this->transaction->data['id'] = $this->transaction->getId();
+        $this->transaction->legacySecondSign(
+            PrivateKey::fromPassphrase($secondPassphrase)
+        );
 
         return $this;
     }
 
-    /**
-     * Sign the transaction using the given second passphrase.
-     *
-     * @param string $secondPassphrase
-     *
-     * @return AbstractTransactionBuilder
-     */
-    public function secondSign(string $secondPassphrase): self
-    {
-        $this->transaction             = $this->transaction->secondSign(PrivateKey::fromPassphrase($secondPassphrase));
-        $this->transaction->data['id'] = $this->transaction->getId();
-
-        return $this;
-    }
-
-    /**
-     * Verify the transaction validity.
-     *
-     * @return bool
-     */
     public function verify(): bool
     {
         return $this->transaction->verify();
     }
 
-    /**
-     * Verify the transaction validity with a second signature.
-     *
-     * @return bool
-     */
-    public function secondVerify(string $secondPublicKey): bool
-    {
-        return $this->transaction->secondVerify($secondPublicKey);
-    }
-
-    /**
-     * Convert the transaction to its array representation.
-     *
-     * @return array
-     */
     public function toArray(): array
     {
         return $this->transaction->toArray();
     }
 
-    /**
-     * Convert the transaction to its JSON representation.
-     *
-     * @return string
-     */
     public function toJson(): string
     {
         return $this->transaction->toJson();
     }
 
-    /**
-     * Get the transaction type.
-     *
-     * @return int
-     */
-    abstract protected function getType(): int;
-
-    /**
-     * Get the transaction typeGroup.
-     *
-     * @return int
-     */
-    abstract protected function getTypeGroup(): int;
-
-    /**
-     * Get the transaction instance.
-     *
-     * @return object
-     */
-    abstract protected function getTransactionInstance(): object;
-
-    /**
-     * Get the transaction fee.
-     *
-     * @return string
-     */
-    protected function getFee(): string
-    {
-        return Fee::get($this->transaction->data['type']);
-    }
+    abstract protected function getTransactionInstance(array $data): AbstractTransaction;
 }
