@@ -97,6 +97,6 @@ it('derives correct public key, private key, and pop for the given mnemonic', fu
     expect(bin2hex(EIP2333::deriveBlsPrivateKey($mnemonic)))->toBe($expectedSk);
 
     $result = ProofOfPossession::fromMnemonic($mnemonic);
-    expect($result['pk'])->toBe($expectedPk)
-        ->and($result['pop'])->toBe($expectedPop);
+    expect($result['pk'])->toBe(substr($expectedPk, 2))
+        ->and($result['pop'])->toBe(substr($expectedPop, 2));
 })->with($blsDataset);
