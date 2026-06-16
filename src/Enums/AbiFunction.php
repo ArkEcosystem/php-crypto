@@ -26,6 +26,7 @@ enum AbiFunction: string
     case MULTIPAYMENT                 = 'pay';
     case TRANSFER                     = 'transfer';
     case APPROVE                      = 'approve';
+    case BATCH_TRANSFER_FROM          = 'batchTransferFrom';
 
     public function transactionClass(): string
     {
@@ -40,6 +41,7 @@ enum AbiFunction: string
             self::MULTIPAYMENT               => Multipayment::class,
             self::TRANSFER                   => EvmCall::class,
             self::APPROVE                    => EvmCall::class,
+            self::BATCH_TRANSFER_FROM        => EvmCall::class,
         };
     }
 }
