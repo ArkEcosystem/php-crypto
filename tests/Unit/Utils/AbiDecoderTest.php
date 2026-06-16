@@ -154,7 +154,6 @@ it('should decode dynamic bytes at a non-zero slot offset', function () {
     expect($decoded)->toBe(['0x74657374', 32]);
 });
 
-
 it('should decode fixed bytes', function () {
     $payload = '74657374';
 
