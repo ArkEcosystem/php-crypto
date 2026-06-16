@@ -89,7 +89,7 @@ it('matches the pinned pop for the same passphrase', function () {
 $blsDataset = [];
 foreach (json_decode(file_get_contents(__DIR__.'/../../fixtures/bls-keys.json'), true) as $lang => $vectors) {
     foreach ($vectors as $i => $vector) {
-        $blsDataset["{$lang} #{$i}"] = $vector;
+        $blsDataset["{$lang} #{$i}"] = array_values($vector);
     }
 }
 
