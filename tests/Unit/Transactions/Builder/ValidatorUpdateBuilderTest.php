@@ -5,8 +5,6 @@ declare(strict_types=1);
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorUpdateBuilder;
 use ArkEcosystem\Crypto\Utils\UnitConverter;
 
-defined('BLS_PASSPHRASE') || define('BLS_PASSPHRASE', 'gold favorite math anchor detect march purpose such sausage crucial reform novel connect misery update episode invite salute barely garbage exclude winner visa cruise');
-
 it('should sign it with a passphrase', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'validator-update');
 
@@ -14,7 +12,7 @@ it('should sign it with a passphrase', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase(BLS_PASSPHRASE)
+        ->validatorPassphrase($this->secondPassphrase)
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
@@ -38,7 +36,7 @@ it('should convert to json when casting to string', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase(BLS_PASSPHRASE)
+        ->validatorPassphrase($this->secondPassphrase)
         ->sign($this->passphrase);
 
     expect((string) $builder)->toBe($builder->toJson());
@@ -46,7 +44,7 @@ it('should convert to json when casting to string', function () {
 
 it('should derive correct validatorPublicKey and validatorProof from passphrase', function () {
     $builder = ValidatorUpdateBuilder::new()
-        ->validatorPassphrase(BLS_PASSPHRASE);
+        ->validatorPassphrase($this->secondPassphrase);
 
     expect($builder->transaction->data['validatorPublicKey'])
         ->toBe('a18dba7811b212bbb2f080d7c69935998ffbe7b38586e2d3e9e12079ea789996d1c69feb158c002aed327f69865be496');
@@ -66,7 +64,7 @@ it('should convert to an array', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase(BLS_PASSPHRASE)
+        ->validatorPassphrase($this->secondPassphrase)
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([
