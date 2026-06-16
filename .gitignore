@@ -8,3 +8,6 @@ coverage.xml
 .php-cs-fixer.cache
 # Used for the schnorr signature hack, remove once a php version is implemented
 scripts/node_modules
+
+# airc
+CLAUDE.local.md

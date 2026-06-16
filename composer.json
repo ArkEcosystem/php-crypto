@@ -60,6 +60,9 @@
         }
     ],
     "scripts": {
+        "post-update-cmd": [
+            "npx @ardenthq/airc update"
+        ],
         "format": [
             "vendor/bin/php-cs-fixer fix"
         ],
