@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Builder;
 
+use ArkEcosystem\Crypto\BLS\ProofOfPossession;
 use ArkEcosystem\Crypto\Enums\ContractAddresses;
 use ArkEcosystem\Crypto\Transactions\Types\AbstractTransaction;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
@@ -18,9 +19,12 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
         $this->to(ContractAddresses::CONSENSUS->value);
     }
 
-    public function validatorPublicKey(string $validatorPublicKey): self
+    public function validatorPassphrase(string $passphrase): self
     {
-        $this->transaction->data['validatorPublicKey'] = $validatorPublicKey;
+        $pop = ProofOfPossession::fromMnemonic($passphrase);
+
+        $this->transaction->data['validatorPublicKey'] = $pop['pk'];
+        $this->transaction->data['validatorProof']     = $pop['pop'];
 
         $this->transaction->refreshPayloadData();
 

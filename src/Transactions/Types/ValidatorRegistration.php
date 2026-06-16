@@ -17,6 +17,7 @@ class ValidatorRegistration extends AbstractTransaction
 
         if ($payload !== null) {
             $data['validatorPublicKey'] = Helpers::removeLeadingHexZero($payload['args'][0]);
+            $data['validatorProof']     = Helpers::removeLeadingHexZero($payload['args'][1]);
         }
 
         parent::__construct($data);
@@ -24,10 +25,13 @@ class ValidatorRegistration extends AbstractTransaction
 
     public function getPayload(): string
     {
-        if (! array_key_exists('validatorPublicKey', $this->data)) {
+        if (! array_key_exists('validatorPublicKey', $this->data) || ! array_key_exists('validatorProof', $this->data)) {
             return '';
         }
 
-        return (new AbiEncoder())->encodeFunctionCall(AbiFunction::VALIDATOR_REGISTRATION->value, ['0x'.$this->data['validatorPublicKey']]);
+        return (new AbiEncoder())->encodeFunctionCall(
+            AbiFunction::VALIDATOR_REGISTRATION->value,
+            ['0x'.$this->data['validatorPublicKey'], '0x'.$this->data['validatorProof']]
+        );
     }
 }

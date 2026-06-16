@@ -11,6 +11,7 @@ use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorUpdate;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 
 enum AbiFunction: string
@@ -19,6 +20,7 @@ enum AbiFunction: string
     case UNVOTE                       = 'unvote';
     case VALIDATOR_REGISTRATION       = 'registerValidator';
     case VALIDATOR_RESIGNATION        = 'resignValidator';
+    case VALIDATOR_UPDATE             = 'updateValidator';
     case USERNAME_REGISTRATION        = 'registerUsername';
     case USERNAME_RESIGNATION         = 'resignUsername';
     case MULTIPAYMENT                 = 'pay';
@@ -32,6 +34,7 @@ enum AbiFunction: string
             self::UNVOTE                     => Unvote::class,
             self::VALIDATOR_REGISTRATION     => ValidatorRegistration::class,
             self::VALIDATOR_RESIGNATION      => ValidatorResignation::class,
+            self::VALIDATOR_UPDATE           => ValidatorUpdate::class,
             self::USERNAME_REGISTRATION      => UsernameRegistration::class,
             self::USERNAME_RESIGNATION       => UsernameResignation::class,
             self::MULTIPAYMENT               => Multipayment::class,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Utils;
 
+use ArkEcosystem\Crypto\BLS\ProofOfPossession;
 use ArkEcosystem\Crypto\Enums\AbiFunction;
 use ArkEcosystem\Crypto\Enums\ContractAbiType;
 use Brick\Math\BigDecimal;
@@ -47,11 +48,23 @@ class TransactionEncoder
         );
     }
 
-    public static function validatorRegistration(string $validatorPublicKey): string
+    public static function validatorRegistration(string $passphrase): string
     {
+        $pop = ProofOfPossession::fromMnemonic($passphrase);
+
         return (new AbiEncoder(ContractAbiType::CONSENSUS))->encodeFunctionCall(
             AbiFunction::VALIDATOR_REGISTRATION->value,
-            [self::addHexPrefix($validatorPublicKey)]
+            [self::addHexPrefix($pop['pk']), self::addHexPrefix($pop['pop'])]
+        );
+    }
+
+    public static function validatorUpdate(string $passphrase): string
+    {
+        $pop = ProofOfPossession::fromMnemonic($passphrase);
+
+        return (new AbiEncoder(ContractAbiType::CONSENSUS))->encodeFunctionCall(
+            AbiFunction::VALIDATOR_UPDATE->value,
+            [self::addHexPrefix($pop['pk']), self::addHexPrefix($pop['pop'])]
         );
     }
 
