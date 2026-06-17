@@ -74,7 +74,7 @@ class AbiDecoder extends AbiBase
     public static function decodeString(string $bytes, int $offset): array
     {
         $dataOffset   = self::readUInt($bytes, $offset);
-        $stringOffset = $offset + $dataOffset;
+        $stringOffset = $dataOffset;
         $length       = self::readUInt($bytes, $stringOffset);
         $stringData   = substr($bytes, $stringOffset + 32, $length);
         $value        = $stringData;
@@ -85,7 +85,7 @@ class AbiDecoder extends AbiBase
     public static function decodeDynamicBytes(string $bytes, int $offset): array
     {
         $dataOffset  = self::readUInt($bytes, $offset);
-        $bytesOffset = $offset + $dataOffset;
+        $bytesOffset = $dataOffset;
         $length      = self::readUInt($bytes, $bytesOffset);
         $bytesData   = substr($bytes, $bytesOffset + 32, $length);
         $value       = '0x'.bin2hex($bytesData);

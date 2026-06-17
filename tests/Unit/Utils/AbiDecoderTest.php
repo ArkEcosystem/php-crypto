@@ -138,6 +138,22 @@ it('should decode dynamic bytes', function () {
     expect($decoded)->toBe(['0x74657374', 32]);
 });
 
+it('should decode dynamic bytes at a non-zero slot offset', function () {
+    // Simulates the second `bytes` argument in a two-argument function.
+    // The pointer stored at slot 1 (offset=32) is 64 — an absolute offset from
+    // params start, NOT relative to the slot position. The old code added $offset
+    // to the pointer value, landing at byte 96 (mid-data) instead of byte 64 (length word).
+    $payload =
+        str_repeat('00', 32).                                              // slot 0: unused
+        '0000000000000000000000000000000000000000000000000000000000000040'. // slot 1: ptr = 64 (absolute)
+        '0000000000000000000000000000000000000000000000000000000000000004'. // byte 64: length = 4
+        '7465737400000000000000000000000000000000000000000000000000000000'; // byte 96: data "test" + pad
+
+    $decoded = AbiDecoder::decodeDynamicBytes(hex2bin($payload), 32);
+
+    expect($decoded)->toBe(['0x74657374', 32]);
+});
+
 it('should decode fixed bytes', function () {
     $payload = '74657374';
 

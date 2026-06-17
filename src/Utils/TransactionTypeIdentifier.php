@@ -87,11 +87,11 @@ class TransactionTypeIdentifier
             'multiPayment'      => $multipaymentMethods['pay(address[],uint256[])'],
             'registerUsername'  => $usernamesMethods['registerUsername(string)'],
             'resignUsername'    => $usernamesMethods['resignUsername()'],
-            'registerValidator' => $consensusMethods['registerValidator(bytes)'],
+            'registerValidator' => $consensusMethods['registerValidator(bytes,bytes)'],
             'resignValidator'   => $consensusMethods['resignValidator()'],
             'vote'              => $consensusMethods['vote(address)'],
             'unvote'            => $consensusMethods['unvote()'],
-            'updateValidator'   => $consensusMethods['updateValidator(bytes)'],
+            'updateValidator'   => $consensusMethods['updateValidator(bytes,bytes)'],
             'transfer'          => 'transfer',
         ];
 

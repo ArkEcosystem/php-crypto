@@ -18,6 +18,7 @@ use ArkEcosystem\Crypto\Transactions\Types\UsernameRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\UsernameResignation;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorRegistration;
 use ArkEcosystem\Crypto\Transactions\Types\ValidatorResignation;
+use ArkEcosystem\Crypto\Transactions\Types\ValidatorUpdate;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
 use ArkEcosystem\Crypto\Utils\AbiDecoder;
 use ArkEcosystem\Crypto\Utils\RlpDecoder;
@@ -135,6 +136,10 @@ class Deserializer
 
             if ($functionName === AbiFunction::VALIDATOR_RESIGNATION->value) {
                 return new ValidatorResignation($data);
+            }
+
+            if ($functionName === AbiFunction::VALIDATOR_UPDATE->value) {
+                return new ValidatorUpdate($data);
             }
         }
 

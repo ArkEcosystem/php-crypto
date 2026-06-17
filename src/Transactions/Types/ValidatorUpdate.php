@@ -9,7 +9,7 @@ use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Utils\AbiEncoder;
 
-class ValidatorRegistration extends AbstractTransaction
+class ValidatorUpdate extends AbstractTransaction
 {
     public function __construct(array $data)
     {
@@ -30,7 +30,7 @@ class ValidatorRegistration extends AbstractTransaction
         }
 
         return (new AbiEncoder())->encodeFunctionCall(
-            AbiFunction::VALIDATOR_REGISTRATION->value,
+            AbiFunction::VALIDATOR_UPDATE->value,
             ['0x'.$this->data['validatorPublicKey'], '0x'.$this->data['validatorProof']]
         );
     }

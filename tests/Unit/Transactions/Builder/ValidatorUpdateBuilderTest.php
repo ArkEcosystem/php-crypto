@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use ArkEcosystem\Crypto\Transactions\Builder\ValidatorRegistrationBuilder;
+use ArkEcosystem\Crypto\Transactions\Builder\ValidatorUpdateBuilder;
 use ArkEcosystem\Crypto\Utils\UnitConverter;
 
 it('should sign it with a passphrase', function () {
-    $fixture = $this->getTransactionFixture('evm_call', 'validator-registration');
+    $fixture = $this->getTransactionFixture('evm_call', 'validator-update');
 
-    $builder = ValidatorRegistrationBuilder::new()
+    $builder = ValidatorUpdateBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
@@ -30,9 +30,9 @@ it('should sign it with a passphrase', function () {
 });
 
 it('should convert to json when casting to string', function () {
-    $fixture = $this->getTransactionFixture('evm_call', 'validator-registration');
+    $fixture = $this->getTransactionFixture('evm_call', 'validator-update');
 
-    $builder = ValidatorRegistrationBuilder::new()
+    $builder = ValidatorUpdateBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
@@ -42,15 +42,8 @@ it('should convert to json when casting to string', function () {
     expect((string) $builder)->toBe($builder->toJson());
 });
 
-it('should set value on the transaction', function () {
-    $builder = ValidatorRegistrationBuilder::new()
-        ->value(UnitConverter::parseUnits(10, 'ark'));
-
-    expect((string) $builder->transaction->data['value'])->toBe('10000000000000000000');
-});
-
 it('should derive correct validatorPublicKey and validatorProof from passphrase', function () {
-    $builder = ValidatorRegistrationBuilder::new()
+    $builder = ValidatorUpdateBuilder::new()
         ->validatorPassphrase($this->secondPassphrase);
 
     expect($builder->transaction->data['validatorPublicKey'])
@@ -60,10 +53,14 @@ it('should derive correct validatorPublicKey and validatorProof from passphrase'
         ->toBe('a124539f9d469919eb57224cc003d9d5b086a27c6de244abf60b74b35fb749fceab7f4c24b983475cddab7d0876de49c000b5c362f5e3ce18d964f5c2d20d4eadcf7cb77a73d8ee4cd87bad10f7ba0824cea6715d1c045b4f93865a2758b7bfe');
 });
 
-it('should convert to an array', function () {
-    $fixture = $this->getTransactionFixture('evm_call', 'validator-registration');
+it('should not have a value method', function () {
+    expect(method_exists(ValidatorUpdateBuilder::class, 'value'))->toBeFalse();
+});
 
-    $builder = ValidatorRegistrationBuilder::new()
+it('should convert to an array', function () {
+    $fixture = $this->getTransactionFixture('evm_call', 'validator-update');
+
+    $builder = ValidatorUpdateBuilder::new()
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])

@@ -71,7 +71,7 @@ it('identifies username resignation signature', function () {
 });
 
 it('identifies validator registration signature', function () {
-    $signature = $this->consensusMethods['registerValidator(bytes)'];
+    $signature = $this->consensusMethods['registerValidator(bytes,bytes)'];
 
     expect(TransactionTypeIdentifier::isValidatorRegistration($signature))->toBeTrue();
     expect(TransactionTypeIdentifier::isValidatorRegistration('0x'.$signature))->toBeTrue();
@@ -87,7 +87,7 @@ it('identifies validator resignation signature', function () {
 });
 
 it('identifies update validator signature', function () {
-    $signature = $this->consensusMethods['updateValidator(bytes)'];
+    $signature = $this->consensusMethods['updateValidator(bytes,bytes)'];
 
     expect(TransactionTypeIdentifier::isUpdateValidator($signature))->toBeTrue();
     expect(TransactionTypeIdentifier::isUpdateValidator('0x'.$signature))->toBeTrue();
