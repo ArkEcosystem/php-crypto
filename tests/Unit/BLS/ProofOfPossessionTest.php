@@ -116,7 +116,7 @@ it('matches the pinned pop for the same passphrase', function () {
 
 // -------------------------------------------------------------------------
 // Table-driven derivation vectors
-// Each entry: [mnemonic, private key (hex), public key (hex), proof of possession (hex)]
+// Each entry: [mnemonic, registrant address, chain id, private key (hex), public key (hex), proof of possession (hex)]
 // -------------------------------------------------------------------------
 
 $blsDataset = [];
@@ -126,10 +126,10 @@ foreach (json_decode(file_get_contents(__DIR__.'/../../fixtures/bls-keys.json'),
     }
 }
 
-it('derives correct public key, private key, and pop for the given mnemonic', function (string $mnemonic, string $expectedSk, string $expectedPk, string $expectedPop) {
+it('derives correct public key, private key, and pop for the given mnemonic', function (string $mnemonic, string $address, int $chainId, string $expectedSk, string $expectedPk, string $expectedPop) {
     expect(bin2hex(EIP2333::deriveBlsPrivateKey($mnemonic)))->toBe($expectedSk);
 
-    $result = ProofOfPossession::fromMnemonic($mnemonic, POP_CHAIN_ID, POP_REGISTRANT);
+    $result = ProofOfPossession::fromMnemonic($mnemonic, $chainId, $address);
     expect($result['pk'])->toBe(substr($expectedPk, 2))
         ->and($result['pop'])->toBe(substr($expectedPop, 2));
 })->with($blsDataset);
