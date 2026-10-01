@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Transactions\Builder\ValidatorUpdateBuilder;
 use ArkEcosystem\Crypto\Utils\UnitConverter;
 
@@ -12,7 +13,7 @@ it('should sign it with a passphrase', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase($this->secondPassphrase)
+        ->proofOfPossession($this->secondPassphrase, $fixture['data']['from'])
         ->sign($this->passphrase);
 
     expect((string) $builder->transaction->data['gasPrice'])->toBe($fixture['data']['gasPrice']);
@@ -36,7 +37,7 @@ it('should convert to json when casting to string', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase($this->secondPassphrase)
+        ->proofOfPossession($this->secondPassphrase, $fixture['data']['from'])
         ->sign($this->passphrase);
 
     expect((string) $builder)->toBe($builder->toJson());
@@ -44,18 +45,34 @@ it('should convert to json when casting to string', function () {
 
 it('should derive correct validatorPublicKey and validatorProof from passphrase', function () {
     $builder = ValidatorUpdateBuilder::new()
-        ->validatorPassphrase($this->secondPassphrase);
+        ->proofOfPossession($this->secondPassphrase, Address::fromPassphrase($this->passphrase));
 
     expect($builder->transaction->data['validatorPublicKey'])
         ->toBe('a18dba7811b212bbb2f080d7c69935998ffbe7b38586e2d3e9e12079ea789996d1c69feb158c002aed327f69865be496');
 
     expect($builder->transaction->data['validatorProof'])
-        ->toBe('a124539f9d469919eb57224cc003d9d5b086a27c6de244abf60b74b35fb749fceab7f4c24b983475cddab7d0876de49c000b5c362f5e3ce18d964f5c2d20d4eadcf7cb77a73d8ee4cd87bad10f7ba0824cea6715d1c045b4f93865a2758b7bfe');
+        ->toBe('8dff1b303bfacacb2eb716892b79123b256314d8fc91635aae307f0fd7faf58019bba25c494b38eb1adccd91f49923ef00e39947932d7edffe710c48b9ab61ad4a9bd48f41f9babcfdd5c88bf3ad74c4d70d091a407310297b1dc4bc84ec6d5f');
 });
 
 it('should not have a value method', function () {
     expect(method_exists(ValidatorUpdateBuilder::class, 'value'))->toBeFalse();
 });
+
+it('should bind the proof to the given chain id instead of the configured network', function () {
+    $registrant = Address::fromPassphrase($this->passphrase);
+
+    $default  = ValidatorUpdateBuilder::new()->proofOfPossession($this->secondPassphrase, $registrant);
+    $explicit = ValidatorUpdateBuilder::new()->proofOfPossession($this->secondPassphrase, $registrant, 11812);
+    $other    = ValidatorUpdateBuilder::new()->proofOfPossession($this->secondPassphrase, $registrant, 11811);
+
+    expect($explicit->transaction->data['validatorProof'])->toBe($default->transaction->data['validatorProof'])
+        ->and($other->transaction->data['validatorProof'])->not->toBe($default->transaction->data['validatorProof'])
+        ->and($other->transaction->data['validatorPublicKey'])->toBe($default->transaction->data['validatorPublicKey']);
+});
+
+it('should reject an invalid registrant address', function () {
+    ValidatorUpdateBuilder::new()->proofOfPossession($this->secondPassphrase, '0x1234');
+})->throws(InvalidArgumentException::class, 'Invalid registrant address');
 
 it('should convert to an array', function () {
     $fixture = $this->getTransactionFixture('evm_call', 'validator-update');
@@ -64,7 +81,7 @@ it('should convert to an array', function () {
         ->gasPrice(UnitConverter::parseUnits($fixture['data']['gasPrice'], 'wei'))
         ->gasLimit(UnitConverter::parseUnits($fixture['data']['gasLimit'], 'wei'))
         ->nonce($fixture['data']['nonce'])
-        ->validatorPassphrase($this->secondPassphrase)
+        ->proofOfPossession($this->secondPassphrase, $fixture['data']['from'])
         ->sign($this->passphrase);
 
     expect($builder->toArray())->toBe([

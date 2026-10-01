@@ -55,3 +55,16 @@ it('should convert to checksum address and cache the result', function () {
     expect($cached)->toBe($expected);
     expect($cache->getValue())->toHaveCount(1);
 });
+
+it('should accept a correctly checksummed address', function () {
+    expect(TestClass::hasValidChecksum('0x75545540230d5c3BEf023202d23CB74cFA723376'))->toBeTrue();
+});
+
+it('should accept an all-lowercase address without a checksum', function () {
+    expect(TestClass::hasValidChecksum('0x75545540230d5c3bef023202d23cb74cfa723376'))->toBeTrue();
+});
+
+it('should reject an address with a wrong checksum', function () {
+    expect(TestClass::hasValidChecksum('0x75545540230d5c3bEf023202d23CB74cFA723376'))->toBeFalse()
+        ->and(TestClass::hasValidChecksum('0x75545540230D5C3BEF023202D23CB74CFA723376'))->toBeFalse();
+});

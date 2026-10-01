@@ -26,6 +26,22 @@ class Address
     }
 
     /**
+     * Check the EIP-55 checksum of the given address. All-lowercase addresses carry no checksum and pass.
+     *
+     * @param string $address
+     *
+     * @return bool
+     */
+    public static function hasValidChecksum(string $address): bool
+    {
+        if (strtolower($address) === $address) {
+            return true;
+        }
+
+        return self::toChecksumAddress($address) === $address;
+    }
+
+    /**
      * Convert to checksum address.
      *
      * @param string $address
