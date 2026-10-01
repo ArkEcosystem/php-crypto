@@ -21,10 +21,7 @@ class ValidatorRegistrationBuilder extends AbstractTransactionBuilder
     }
 
     /**
-     * Derive the validator BLS key from the given passphrase and prove possession of it.
-     *
-     * The proof is bound to the registrant address, which must be the address that signs
-     * this transaction, and to the chain id, which defaults to the configured network.
+     * The registrant address must be the one that signs this transaction.
      */
     public function proofOfPossession(string $validatorPassphrase, string $registrantAddress, ?int $chainId = null): self
     {

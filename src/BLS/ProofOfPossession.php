@@ -10,9 +10,6 @@ use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Utils\Address;
 use InvalidArgumentException;
 
-/**
- * DST used for PoP signatures: "MAINSAIL_BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_".
- */
 final class ProofOfPossession
 {
     public const POP_DST = 'MAINSAIL_BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_';
@@ -47,19 +44,11 @@ final class ProofOfPossession
     }
 
     /**
-     * Builds the Proof of Possession for a given private key, bound to a chain and registrant.
+     * Signs abi.encodePacked(uint256 chainId, address registrant, bytes pk) under POP_DST.
+     * The registrant must be the transaction sender, as the contract verifies against msg.sender.
      *
-     * PoP = Sign(sk, Hash_G2(chainId ‖ registrantAddress ‖ pk)) where the message is
-     * abi.encodePacked(uint256 chainId, address registrantAddress, bytes pk), hashed to
-     * a G2 point under POP_DST, then "signed" by multiplying by the private key scalar.
-     * The registrant must be the address that sends the registration/update transaction.
-     *
-     * @param  string $privateKeyBytes    32-byte raw private key
-     * @param  int    $chainId            chain the proof is valid on
-     * @param  string $registrantAddress  0x-prefixed address of the registering account
-     * @throws InvalidArgumentException  if the key is not exactly 32 bytes or is the zero scalar,
-     *                                   the chain id is not positive, or the address is invalid
-     * @return array{pk: string, pop: string}  hex-encoded G1 pk (96 chars) and G2 pop (192 chars)
+     * @throws InvalidArgumentException
+     * @return array{pk: string, pop: string}
      */
     public static function buildProofOfPossession(string $privateKeyBytes, int $chainId, string $registrantAddress): array
     {
@@ -94,7 +83,6 @@ final class ProofOfPossession
 
         $messagePoint = G2HashToCurve::hashToG2($message, self::POP_DST);
 
-        // Sign: PoP = [sk] * hash(chainId ‖ registrantAddress ‖ pk)
         $pop = $messagePoint->scalarMul($sk)->toCompressedBytes();
 
         return [

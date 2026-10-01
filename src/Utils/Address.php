@@ -26,11 +26,7 @@ class Address
     }
 
     /**
-     * Check the EIP-55 checksum of the given address. All-lowercase addresses carry no checksum and pass.
-     *
-     * @param string $address
-     *
-     * @return bool
+     * All-lowercase addresses carry no EIP-55 checksum and pass.
      */
     public static function hasValidChecksum(string $address): bool
     {
