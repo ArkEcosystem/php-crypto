@@ -17,13 +17,23 @@ const EXPECTED_POP_A        = 'a892e94d8ed6d0fe8792dcb31b7c5116a7d138ad4bbbd0447
 const EXPECTED_MNEMONIC_PK  = 'a3b93d0149c9e0ee8c2e734b641d313040b8901fcddbf61a018ae2a4633da49f9b169c0bb6653dee4cdd7dac2631a935';
 const EXPECTED_MNEMONIC_POP = 'a84ec0eb9ba99033ede2bf0c64e63a4b894b4ec865c8f25c9bd44a4d11e7e2f5e0643835bdef4b983d7577dc03539b370082fa7e537b0648182296b64df8027b8d35db7f87b430f1cc1c3af733fe97862fcf2fc8aea1cc6f819b38997bbd1a6e';
 
+function networkWithChainId(int $chainId): Testnet
+{
+    return new class($chainId) extends Testnet {
+        public function __construct(private readonly int $id)
+        {
+            parent::__construct();
+        }
+
+        public function chainId(): int
+        {
+            return $this->id;
+        }
+    };
+}
+
 // Mainsail's pinned vectors are built for chain 10_000, which no shipped network uses
-beforeEach(fn () => Network::set(new class() extends Testnet {
-    public function chainId(): int
-    {
-        return POP_CHAIN_ID;
-    }
-}));
+beforeEach(fn () => Network::set(networkWithChainId(POP_CHAIN_ID)));
 
 it('matches the pinned test vector for SK_A', function () {
     $result = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
@@ -84,9 +94,7 @@ foreach (json_decode(file_get_contents(__DIR__.'/../../fixtures/bls-keys.json'),
 }
 
 it('derives correct public key, private key, and pop for the given mnemonic', function (string $mnemonic, string $address, int $chainId, string $expectedSk, string $expectedPk, string $expectedPop) {
-    Network::set(Testnet::new());
-
-    expect($chainId)->toBe(Network::get()->chainId());
+    Network::set(networkWithChainId($chainId));
 
     expect(bin2hex(EIP2333::deriveBlsPrivateKey($mnemonic)))->toBe($expectedSk);
 
