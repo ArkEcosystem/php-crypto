@@ -8,7 +8,6 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Networks\Testnet;
 
 const POP_SK_A_HEX   = '67d53f170b908cabb9eb326c3c337762d59289a8fec79f7bc9254b584b73265c';
-const POP_SK_B_HEX   = '3325023a5e4e0069558c5bd9eb7eca78b4f4c7711b9b231d9263a8edc33bc510';
 const POP_CHAIN_ID   = 10_000;
 const POP_REGISTRANT = '0x75545540230d5c3BEf023202d23CB74cFA723376';
 const POP_PASSPHRASE = 'peasant list dentist thrive guide uncle announce city energy artist basket divert stool glow eternal stove length gun action slice type labor aunt unlock';
@@ -26,45 +25,20 @@ beforeEach(fn () => Network::set(new class() extends Testnet {
     }
 }));
 
-// -------------------------------------------------------------------------
-// buildProofOfPossession
-// -------------------------------------------------------------------------
-
-it('returns a 48-byte pk and 96-byte pop', function () {
-    $result = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
-    // hex strings: 96 chars = 48 bytes, 192 chars = 96 bytes
-    expect(strlen($result['pk']))->toBe(96)
-        ->and(strlen($result['pop']))->toBe(192);
-});
-
-it('is deterministic for the same secret key', function () {
-    $a = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
-    $b = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
-    expect($a['pk'])->toBe($b['pk'])
-        ->and($a['pop'])->toBe($b['pop']);
-});
-
-it('produces different pk and pop for different secret keys', function () {
-    $a = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
-    $b = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_B_HEX), POP_REGISTRANT);
-    expect($a['pk'])->not->toBe($b['pk'])
-        ->and($a['pop'])->not->toBe($b['pop']);
-});
-
-it('pk matches deriveBlsPublicKey for the same secret key', function () {
-    $result   = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
-    $expected = ProofOfPossession::privateKeyToPublicKey(hex2bin(POP_SK_A_HEX));
-    expect($result['pk'])->toBe($expected);
-});
-
 it('matches the pinned test vector for SK_A', function () {
     $result = ProofOfPossession::buildProofOfPossession(hex2bin(POP_SK_A_HEX), POP_REGISTRANT);
+
     expect($result['pk'])->toBe(EXPECTED_PK_A)
-        ->and($result['pop'])->toBe(EXPECTED_POP_A);
+        ->and($result['pop'])->toBe(EXPECTED_POP_A)
+        ->and(ProofOfPossession::privateKeyToPublicKey(hex2bin(POP_SK_A_HEX)))->toBe(EXPECTED_PK_A);
 });
 
-it('uses the MAINSAIL_ prefixed POP domain separation tag', function () {
-    expect(ProofOfPossession::POP_DST)->toBe('MAINSAIL_BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_');
+it('matches the pinned pop for a passphrase', function () {
+    $result = ProofOfPossession::fromMnemonic(POP_PASSPHRASE, POP_REGISTRANT);
+
+    expect($result['pk'])->toBe(EXPECTED_MNEMONIC_PK)
+        ->and($result['pop'])->toBe(EXPECTED_MNEMONIC_POP)
+        ->and(ProofOfPossession::deriveBlsPublicKey(POP_PASSPHRASE))->toBe(EXPECTED_MNEMONIC_PK);
 });
 
 it('binds the pop to the network chain id and registrant address', function () {
@@ -101,31 +75,7 @@ it('throws on the zero secret key', function () {
     expect(fn () => ProofOfPossession::buildProofOfPossession(str_repeat("\x00", 32), POP_REGISTRANT))->toThrow(InvalidArgumentException::class);
 });
 
-// -------------------------------------------------------------------------
-// deriveBlsPublicKey
-// -------------------------------------------------------------------------
-
-it('returns a 96-character hex string (48-byte G1)', function () {
-    $pk = ProofOfPossession::deriveBlsPublicKey(POP_PASSPHRASE);
-    expect(strlen($pk))->toBe(96);
-});
-
-it('is deterministic for the same passphrase', function () {
-    $pk = ProofOfPossession::deriveBlsPublicKey(POP_PASSPHRASE);
-    expect($pk)->toBe(EXPECTED_MNEMONIC_PK);
-});
-
-it('matches the pinned pop for the same passphrase', function () {
-    $result = ProofOfPossession::fromMnemonic(POP_PASSPHRASE, POP_REGISTRANT);
-    expect($result['pk'])->toBe(EXPECTED_MNEMONIC_PK)
-        ->and($result['pop'])->toBe(EXPECTED_MNEMONIC_POP);
-});
-
-// -------------------------------------------------------------------------
-// Table-driven derivation vectors
 // Each entry: [mnemonic, registrant address, chain id, private key (hex), public key (hex), proof of possession (hex)]
-// -------------------------------------------------------------------------
-
 $blsDataset = [];
 foreach (json_decode(file_get_contents(__DIR__.'/../../fixtures/bls-keys.json'), true) as $lang => $vectors) {
     foreach ($vectors as $i => $vector) {
