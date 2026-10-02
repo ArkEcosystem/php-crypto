@@ -18,9 +18,12 @@ class ValidatorUpdateBuilder extends AbstractTransactionBuilder
         $this->to(ContractAddresses::CONSENSUS->value);
     }
 
-    public function validatorPassphrase(string $passphrase): self
+    /**
+     * The registrant address must be the one that signs this transaction.
+     */
+    public function validatorProof(string $passphrase, string $registrantAddress): self
     {
-        $pop = ProofOfPossession::fromMnemonic($passphrase);
+        $pop = ProofOfPossession::fromMnemonic($passphrase, $registrantAddress);
 
         $this->transaction->data['validatorPublicKey'] = $pop['pk'];
         $this->transaction->data['validatorProof']     = $pop['pop'];

@@ -6,14 +6,14 @@ namespace ArkEcosystem\Crypto\BLS;
 
 use ArkEcosystem\Crypto\BLS\Curves\G1;
 use ArkEcosystem\Crypto\BLS\HashToCurve\G2HashToCurve;
+use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
+use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Utils\Address;
 use InvalidArgumentException;
 
-/**
- * DST used for PoP signatures: "BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_".
- */
 final class ProofOfPossession
 {
-    public const POP_DST = 'BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_';
+    public const POP_DST = 'MAINSAIL_BLS_POP_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_';
 
     /**
      * Derives a BLS private key (32 bytes binary) from a BIP-39 mnemonic.
@@ -45,18 +45,19 @@ final class ProofOfPossession
     }
 
     /**
-     * Builds the Proof of Possession for a given private key.
+     * Signs abi.encodePacked(uint256 chainId, address registrant, bytes pk) under POP_DST, with chainId
+     * taken from the configured network. The registrant must be the transaction sender, as the contract
+     * verifies against msg.sender.
      *
-     * PoP = Sign(sk, Hash_G2(pk)) where Hash_G2 hashes the G1 public key bytes
-     * to a G2 point under POP_DST, then the G2 point is "signed" by multiplying
-     * by the private key scalar.
-     *
-     * @param  string $privateKeyBytes  32-byte raw private key
-     * @throws InvalidArgumentException  if the key is not exactly 32 bytes or is the zero scalar
-     * @return array{pk: string, pop: string}  hex-encoded G1 pk (96 chars) and G2 pop (192 chars)
+     * @throws InvalidArgumentException
+     * @return array{pk: string, pop: string}
      */
-    public static function buildProofOfPossession(string $privateKeyBytes): array
+    public static function buildProofOfPossession(string $privateKeyBytes, string $registrantAddress): array
     {
+        if (! self::isValidAddress($registrantAddress)) {
+            throw new InvalidArgumentException('Invalid registrant address: '.$registrantAddress);
+        }
+
         if (strlen($privateKeyBytes) !== 32) {
             throw new InvalidArgumentException(
                 'BLS secret key must be exactly 32 bytes, got '.strlen($privateKeyBytes)
@@ -72,10 +73,14 @@ final class ProofOfPossession
         // G1 public key: [sk] * G1
         $pk = G1::generator()->scalarMul($sk)->toCompressedBytes();
 
-        // Hash pk bytes to G2 under POP_DST
-        $messagePoint = G2HashToCurve::hashToG2($pk, self::POP_DST);
+        $message = ByteBuffer::new(0)
+            ->writeUInt256(Network::get()->chainId())
+            ->writeHex(substr($registrantAddress, 2))
+            ->writeBytes($pk)
+            ->toBinary();
 
-        // Sign: PoP = [sk] * hash(pk)
+        $messagePoint = G2HashToCurve::hashToG2($message, self::POP_DST);
+
         $pop = $messagePoint->scalarMul($sk)->toCompressedBytes();
 
         return [
@@ -89,8 +94,17 @@ final class ProofOfPossession
      *
      * @return array{pk: string, pop: string}
      */
-    public static function fromMnemonic(string $mnemonic): array
+    public static function fromMnemonic(string $mnemonic, string $registrantAddress): array
     {
-        return self::buildProofOfPossession(self::deriveBlsPrivateKey($mnemonic));
+        return self::buildProofOfPossession(self::deriveBlsPrivateKey($mnemonic), $registrantAddress);
+    }
+
+    /**
+     * Mixed-case addresses must carry a valid EIP-55 checksum, so a typo can't bind the proof to another address.
+     */
+    private static function isValidAddress(string $address): bool
+    {
+        return Address::validate($address)
+            && (strtolower($address) === $address || Address::toChecksumAddress($address) === $address);
     }
 }
