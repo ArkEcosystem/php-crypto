@@ -48,9 +48,9 @@ class TransactionEncoder
         );
     }
 
-    public static function validatorRegistration(string $passphrase): string
+    public static function validatorRegistration(string $passphrase, string $registrantAddress): string
     {
-        $pop = ProofOfPossession::fromMnemonic($passphrase);
+        $pop = ProofOfPossession::fromMnemonic($passphrase, $registrantAddress);
 
         return (new AbiEncoder(ContractAbiType::CONSENSUS))->encodeFunctionCall(
             AbiFunction::VALIDATOR_REGISTRATION->value,
@@ -58,9 +58,9 @@ class TransactionEncoder
         );
     }
 
-    public static function validatorUpdate(string $passphrase): string
+    public static function validatorUpdate(string $passphrase, string $registrantAddress): string
     {
-        $pop = ProofOfPossession::fromMnemonic($passphrase);
+        $pop = ProofOfPossession::fromMnemonic($passphrase, $registrantAddress);
 
         return (new AbiEncoder(ContractAbiType::CONSENSUS))->encodeFunctionCall(
             AbiFunction::VALIDATOR_UPDATE->value,
