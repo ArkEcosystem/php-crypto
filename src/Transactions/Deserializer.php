@@ -76,7 +76,9 @@ class Deserializer
             $data['s'] = $this->parseHex($decodedRlp[8]);
         }
 
-        // TODO: second signature handling
+        if (count($decodedRlp) === 10) {
+            $data['legacySecondSignature'] = $this->parseHex($decodedRlp[9]);
+        }
 
         $transaction = $this->guessTransactionFromData($data);
 

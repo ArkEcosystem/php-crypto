@@ -16,9 +16,15 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Signature\CompactSignatureInterface;
 use BitWasp\Buffertools\Buffer;
 use BitWasp\Buffertools\BufferInterface;
+use kornrunner\Keccak;
 
 abstract class AbstractTransaction
 {
+    /**
+     * 0x8f ‖ "MAINSAIL_LSS_V1".
+     */
+    private const LEGACY_SECOND_SIGNATURE_DOMAIN = '8f4d41494e5341494c5f4c53535f5631';
+
     public array $data;
 
     public Buffer $serialized;
@@ -60,9 +66,13 @@ abstract class AbstractTransaction
 
     public function legacySecondSign(PrivateKey $privateKey): static
     {
-        $hash = $this->hash(skipSignature: true);
+        if (! isset($this->data['v'], $this->data['r'], $this->data['s']) || $this->data['v'] === '') {
+            throw new \RuntimeException('Transaction must be signed before adding a legacy second signature');
+        }
 
-        $this->data['legacySecondSignature'] = $privateKey->signToEcdsa($hash);
+        $hash = Keccak::hash(hex2bin(self::LEGACY_SECOND_SIGNATURE_DOMAIN.$this->hash()->getHex()), 256);
+
+        $this->data['legacySecondSignature'] = $privateKey->signToEcdsa(Buffer::hex($hash));
 
         return $this;
     }
