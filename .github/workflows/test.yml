@@ -13,10 +13,17 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.5"
+                  extensions: gmp
+                  coverage: none
 
             - name: Install
-              run: composer update --no-interaction --no-suggest --ignore-platform-reqs
+              run: composer install --no-interaction --no-progress --prefer-dist
 
             - name: Unit tests
               run: composer test
