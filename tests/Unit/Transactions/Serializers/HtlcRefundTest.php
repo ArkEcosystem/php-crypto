@@ -13,22 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-sign'));
+});
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcRefund
- */
-class HtlcRefundTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('htlc_refund', 'htlc-refund-secondSign'));
+});

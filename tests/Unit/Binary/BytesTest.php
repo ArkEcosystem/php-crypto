@@ -14,44 +14,29 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Binary;
 
 use ArkEcosystem\Crypto\Binary\Bytes;
-use ArkEcosystem\Tests\Crypto\TestCase;
 use InvalidArgumentException;
 
-/**
- * @covers \ArkEcosystem\Crypto\Binary\Bytes
- */
-class BytesTest extends TestCase
-{
-    /** @test */
-    public function it_should_expose_the_bytes_as_binary_hex_and_size()
-    {
-        $bytes = new Bytes("\x00\xff");
+it('should expose the bytes as binary hex and size', function () {
+    $bytes = new Bytes("\x00\xff");
 
-        $this->assertSame("\x00\xff", $bytes->getBinary());
-        $this->assertSame('00ff', $bytes->getHex());
-        $this->assertSame(2, $bytes->getSize());
-    }
+    $this->assertSame("\x00\xff", $bytes->getBinary());
+    $this->assertSame('00ff', $bytes->getHex());
+    $this->assertSame(2, $bytes->getSize());
+});
 
-    /** @test */
-    public function it_should_create_bytes_from_hex()
-    {
-        $this->assertSame("\xab\xcd", Bytes::fromHex('ABCD')->getBinary());
-        $this->assertSame('', Bytes::fromHex('')->getBinary());
-    }
+it('should create bytes from hex', function () {
+    $this->assertSame("\xab\xcd", Bytes::fromHex('ABCD')->getBinary());
+    $this->assertSame('', Bytes::fromHex('')->getBinary());
+});
 
-    /** @test */
-    public function it_should_reject_invalid_hex()
-    {
-        $this->expectException(InvalidArgumentException::class);
+it('should reject invalid hex', function () {
+    $this->expectException(InvalidArgumentException::class);
 
-        Bytes::fromHex('abc');
-    }
+    Bytes::fromHex('abc');
+});
 
-    /** @test */
-    public function it_should_reject_non_hex_characters()
-    {
-        $this->expectException(InvalidArgumentException::class);
+it('should reject non hex characters', function () {
+    $this->expectException(InvalidArgumentException::class);
 
-        Bytes::fromHex('zz');
-    }
-}
+    Bytes::fromHex('zz');
+});

@@ -13,39 +13,18 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-sign'));
+});
 
-/**
- * This is the transfer serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transfer
- */
-class TransferTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-sign'));
-    }
+it('should serialize the transaction with a second passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-secondSign'));
+});
 
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-secondSign'));
-    }
+it('should serialize the transaction with a passphrase and vendor field', function () {
+    $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-sign'));
+});
 
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase_and_vendor_field()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase_and_vendor_field()
-    {
-        $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase and vendor field', function () {
+    $this->assertSerialized($this->getTransactionFixture('transfer', 'transfer-with-vendor-field-secondSign'));
+});

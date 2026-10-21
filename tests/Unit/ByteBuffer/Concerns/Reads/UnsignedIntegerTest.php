@@ -14,91 +14,67 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Concerns\Reads;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use PHPUnit\Framework\TestCase;
 
-/**
- * This is the unsigned integer reader test class.
- * @covers \ArkEcosystem\Crypto\ByteBuffer\Concerns\Reads\UnsignedInteger
- */
-class UnsignedIntegerTest extends TestCase
-{
-    /** @test */
-    public function it_should_read_uint8()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt8(8);
-        $buffer->position(0);
+it('should read uint8', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUInt8(8);
+    $buffer->position(0);
 
-        $this->assertSame(8, $buffer->readUInt8());
-    }
+    $this->assertSame(8, $buffer->readUInt8());
+});
 
-    /** @test */
-    public function it_should_read_uint16()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt16(16);
-        $buffer->position(0);
+it('should read uint16', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUInt16(16);
+    $buffer->position(0);
 
-        $this->assertSame(16, $buffer->readUInt16());
-    }
+    $this->assertSame(16, $buffer->readUInt16());
+});
 
-    /** @test */
-    public function it_should_read_uint32()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt32(32);
-        $buffer->position(0);
+it('should read uint32', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUInt32(32);
+    $buffer->position(0);
 
-        $this->assertSame(32, $buffer->readUInt32());
-    }
+    $this->assertSame(32, $buffer->readUInt32());
+});
 
-    /** @test */
-    public function it_should_read_uint64()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt64(64);
-        $buffer->position(0);
+it('should read uint64', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUInt64(64);
+    $buffer->position(0);
 
-        $this->assertSame(64, $buffer->readUInt64());
-    }
+    $this->assertSame(64, $buffer->readUInt64());
+});
 
-    /** @test */
-    public function it_should_read_ubyte()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUByte(8);
-        $buffer->position(0);
+it('should read ubyte', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUByte(8);
+    $buffer->position(0);
 
-        $this->assertSame(8, $buffer->readUByte());
-    }
+    $this->assertSame(8, $buffer->readUByte());
+});
 
-    /** @test */
-    public function it_should_read_ushort()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUShort(15);
-        $buffer->position(0);
+it('should read ushort', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUShort(15);
+    $buffer->position(0);
 
-        $this->assertSame(15, $buffer->readUShort());
-    }
+    $this->assertSame(15, $buffer->readUShort());
+});
 
-    /** @test */
-    public function it_should_read_uint()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeUInt(32);
-        $buffer->position(0);
+it('should read uint', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeUInt(32);
+    $buffer->position(0);
 
-        $this->assertSame(32, $buffer->readUInt());
-    }
+    $this->assertSame(32, $buffer->readUInt());
+});
 
-    /** @test */
-    public function it_should_read_ulong()
-    {
-        $buffer = ByteBuffer::new(1);
-        $buffer->writeULong(64);
-        $buffer->position(0);
+it('should read ulong', function () {
+    $buffer = ByteBuffer::new(1);
+    $buffer->writeULong(64);
+    $buffer->position(0);
 
-        $this->assertSame(64, $buffer->readULong());
-    }
-}
+    $this->assertSame(64, $buffer->readULong());
+});

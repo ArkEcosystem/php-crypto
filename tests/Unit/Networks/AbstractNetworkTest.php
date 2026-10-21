@@ -13,32 +13,32 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
+use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
 use ArkEcosystem\Crypto\Networks\Mainnet;
-use ArkEcosystem\Tests\Crypto\TestCase;
+use ArkEcosystem\Crypto\Networks\Testnet;
 
-/**
- * @covers \ArkEcosystem\Crypto\Networks\AbstractNetwork
- */
-class AbstractNetworkTest extends TestCase
-{
-    /** @test */
-    public function it_should_expose_the_version_bytes()
-    {
-        $network = Mainnet::new();
+it('should expose the version bytes', function () {
+    $network = Mainnet::new();
 
-        $this->assertSame(23, $network->version());
-        $this->assertSame('17', $network->getAddressByte());
-        $this->assertSame('00', $network->getP2shByte());
-        $this->assertSame('aa', $network->getPrivByte());
-        $this->assertSame('46090600', $network->getHDPubByte());
-        $this->assertSame('46089520', $network->getHDPrivByte());
-    }
+    $this->assertSame(23, $network->version());
+    $this->assertSame('17', $network->getAddressByte());
+    $this->assertSame('00', $network->getP2shByte());
+    $this->assertSame('aa', $network->getPrivByte());
+    $this->assertSame('46090600', $network->getHDPubByte());
+    $this->assertSame('46089520', $network->getHDPrivByte());
+});
 
-    /** @test */
-    public function it_should_create_a_new_instance()
-    {
-        $this->assertInstanceOf(Devnet::class, Devnet::new());
-        $this->assertSame(30, Devnet::new()->version());
-    }
-}
+it('should create a new instance', function () {
+    $this->assertInstanceOf(Devnet::class, Devnet::new());
+    $this->assertSame(30, Devnet::new()->version());
+});
+
+it('should define the epoch and public key hash of each network', function (AbstractNetwork $network, string $epoch, int $pubKeyHash) {
+    $this->assertSame($epoch, $network->epoch());
+    $this->assertSame($pubKeyHash, $network->pubKeyHash());
+})->with([
+    'mainnet' => [Mainnet::new(), '2017-03-21T13:00:00.000Z', 23],
+    'devnet'  => [Devnet::new(), '2017-03-21T13:00:00.000Z', 30],
+    'testnet' => [Testnet::new(), '2017-03-21T13:00:00.000Z', 23],
+]);

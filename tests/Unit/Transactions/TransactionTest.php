@@ -17,100 +17,73 @@ use ArkEcosystem\Crypto\Binary\Bytes;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Deserializer;
-use ArkEcosystem\Crypto\Transactions\Types\Transaction;
 use ArkEcosystem\Crypto\Transactions\Types\Transfer;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * This is the transaction test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Transaction
- */
-class TransactionTest extends TestCase
+it('should compute the id of the transaction', function () {
+    $actual = getTransactionForTransaction()->getId();
+
+    $this->assertSame('8fd1cf0490276edb9b3cba40bcbf9a7b0ce04b90e40ffe4704fc776b2bf8aabe', $actual);
+});
+
+it('should sign the transaction using a passphrase', function () {
+    $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
+
+    $transaction                    = getTransactionForTransaction();
+    $transaction->data['signature'] = null;
+
+    $this->assertEmpty($transaction->data['signature']);
+    $transaction->sign($privateKey);
+    $this->assertNotEmpty($transaction->data['signature']);
+});
+
+it('should sign the transaction using a second passphrase', function () {
+    $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
+
+    $transaction                          = getTransactionForTransaction();
+    $transaction->data['secondSignature'] = null;
+
+    $this->assertEmpty($transaction->data['secondSignature']);
+    $transaction->secondSign($privateKey);
+    $this->assertNotEmpty($transaction->data['secondSignature']);
+});
+
+it('should verify the transaction', function () {
+    $actual = getTransactionForTransaction()->verify();
+
+    $this->assertTrue($actual);
+});
+
+it('should verify the transaction using a second public key', function () {
+    $secondPassphrase = 'this is a top secret second passphrase';
+
+    $secondPublicKey = PublicKey::fromPassphrase($secondPassphrase)->getHex();
+
+    $actual = getTransactionForTransaction('transfer-secondSign')->secondVerify($secondPublicKey);
+
+    $this->assertTrue($actual);
+});
+
+it('should turn the transaction to bytes', function () {
+    $actual = getTransactionForTransaction()->getBytes();
+
+    $this->assertInstanceOf(Bytes::class, $actual);
+});
+
+it('should turn the transaction to an array', function () {
+    $actual = getTransactionForTransaction()->toArray();
+
+    $this->assertIsArray($actual);
+});
+
+it('should turn the transaction to json', function () {
+    $actual = getTransactionForTransaction()->toJson();
+
+    $this->assertIsString($actual);
+});
+
+function getTransactionForTransaction($file = 'transfer-sign'): Transfer
 {
-    /** @test */
-    public function should_compute_the_id_of_the_transaction()
-    {
-        $actual = $this->getTransaction()->getId();
+    $fixture = test()->getTransactionFixture('transfer', $file);
 
-        $this->assertSame('8fd1cf0490276edb9b3cba40bcbf9a7b0ce04b90e40ffe4704fc776b2bf8aabe', $actual);
-    }
-
-    /** @test */
-    public function should_sign_the_transaction_using_a_passphrase()
-    {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
-
-        $transaction                    = $this->getTransaction();
-        $transaction->data['signature'] = null;
-
-        $this->assertEmpty($transaction->data['signature']);
-        $transaction->sign($privateKey);
-        $this->assertNotEmpty($transaction->data['signature']);
-    }
-
-    /** @test */
-    public function should_sign_the_transaction_using_a_second_passphrase()
-    {
-        $privateKey = PrivateKey::fromPassphrase('this is a top secret second passphrase');
-
-        $transaction                          = $this->getTransaction();
-        $transaction->data['secondSignature'] = null;
-
-        $this->assertEmpty($transaction->data['secondSignature']);
-        $transaction->secondSign($privateKey);
-        $this->assertNotEmpty($transaction->data['secondSignature']);
-    }
-
-    /** @test */
-    public function should_verify_the_transaction()
-    {
-        $actual = $this->getTransaction()->verify();
-
-        $this->assertTrue($actual);
-    }
-
-    /** @test */
-    public function should_verify_the_transaction_using_a_second_public_key()
-    {
-        $secondPassphrase = 'this is a top secret second passphrase';
-
-        $secondPublicKey = PublicKey::fromPassphrase($secondPassphrase)->getHex();
-
-        $actual = $this->getTransaction('transfer-secondSign')->secondVerify($secondPublicKey);
-
-        $this->assertTrue($actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_bytes()
-    {
-        $actual = $this->getTransaction()->getBytes();
-
-        $this->assertInstanceOf(Bytes::class, $actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_an_array()
-    {
-        $actual = $this->getTransaction()->toArray();
-
-        $this->assertIsArray($actual);
-    }
-
-    /** @test */
-    public function should_turn_the_transaction_to_json()
-    {
-        $actual = $this->getTransaction()->toJson();
-
-        $this->assertIsString($actual);
-    }
-
-    private function getTransaction($file = 'transfer-sign'): Transfer
-    {
-        $fixture = $this->getTransactionFixture('transfer', $file);
-
-        return Deserializer::new($fixture['serialized'])->deserialize();
-    }
+    return Deserializer::new($fixture['serialized'])->deserialize();
 }

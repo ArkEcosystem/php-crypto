@@ -14,49 +14,38 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Types\HtlcClaim;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcClaim
- */
-class HtlcClaimTest extends TestCase
+it('should deserialize the transaction signed with a passphrase', function () {
+    $fixture = $this->getTransactionFixture('htlc_claim', 'htlc-claim-sign');
+
+    assertTransactionForHtlcClaim($fixture);
+});
+
+it('should deserialize the transaction signed with a second passphrase', function () {
+    $fixture = $this->getTransactionFixture('htlc_claim', 'htlc-claim-secondSign');
+
+    $actual = assertTransactionForHtlcClaim($fixture);
+    $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
+});
+
+function assertTransactionForHtlcClaim(array $fixture): HtlcClaim
 {
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('htlc_claim', 'htlc-claim-sign');
+    $actual = test()->assertDeserialized($fixture, [
+        'version',
+        'network',
+        'type',
+        'typeGroup',
+        'nonce',
+        'senderPublicKey',
+        'fee',
+        'asset',
+        'signature',
+        'secondSignature',
+        'amount',
+        'id',
+    ]);
 
-        $this->assertTransaction($fixture);
-    }
+    test()->assertTrue($actual->verify());
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('htlc_claim', 'htlc-claim-secondSign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
-    }
-
-    private function assertTransaction(array $fixture): HtlcClaim
-    {
-        $actual = $this->assertDeserialized($fixture, [
-            'version',
-            'network',
-            'type',
-            'typeGroup',
-            'nonce',
-            'senderPublicKey',
-            'fee',
-            'asset',
-            'signature',
-            'secondSignature',
-            'amount',
-            'id',
-        ]);
-
-        $this->assertTrue($actual->verify());
-
-        return $actual;
-    }
+    return $actual;
 }

@@ -13,20 +13,6 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Tests\Crypto\TestCase;
-
-/**
- * This is the second signature registration serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\SecondSignatureRegistration
- */
-class SecondSignatureRegistrationTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('second_signature_registration', 'second-signature-registration'));
-    }
-}
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('second_signature_registration', 'second-signature-registration'));
+});
