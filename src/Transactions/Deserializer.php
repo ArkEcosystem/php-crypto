@@ -15,7 +15,7 @@ namespace ArkEcosystem\Crypto\Transactions;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
-use BitWasp\Bitcoin\Crypto\Hash;
+use ArkEcosystem\Crypto\Utils\Hash;
 
 /**
  * This is the deserializer class.

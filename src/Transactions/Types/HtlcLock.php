@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Base58;
 
 class HtlcLock extends Transaction
 {
@@ -27,7 +26,7 @@ class HtlcLock extends Transaction
         $buffer->append(ByteBuffer::fromHex($this->data['asset']['lock']['secretHash']));
         $buffer->writeUint8(+$this->data['asset']['lock']['expiration']['type']);
         $buffer->writeUint32(+$this->data['asset']['lock']['expiration']['value']);
-        $buffer->append(Base58::decodeCheck($this->data['recipientId'])->getBinary());
+        $buffer->append(Base58::decodeCheck($this->data['recipientId']));
 
         return $buffer;
     }
@@ -38,7 +37,7 @@ class HtlcLock extends Transaction
         $secretHash      = $buffer->readHex(32 * 2);
         $expirationType  = $buffer->readUint8();
         $expirationValue = $buffer->readUint32();
-        $recipientId     = Base58::encodeCheck(new Buffer($buffer->readHexString(21 * 2)));
+        $recipientId     = Base58::encodeCheck($buffer->readHexString(21 * 2));
 
         $this->data['amount']      = $amount;
         $this->data['recipientId'] = $recipientId;

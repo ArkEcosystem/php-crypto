@@ -17,6 +17,8 @@ use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Identities\Address as TestClass;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Networks\Devnet;
+use ArkEcosystem\Crypto\Networks\Mainnet;
+use ArkEcosystem\Crypto\Utils\Base58;
 use ArkEcosystem\Tests\Crypto\TestCase;
 
 /**
@@ -96,5 +98,27 @@ class AddressTest extends TestCase
         $actual = TestClass::validate('invalid');
 
         $this->assertFalse($actual);
+    }
+
+    /** @test */
+    public function it_should_validate_the_address_for_a_given_network()
+    {
+        $fixture = $this->getFixture('identity');
+
+        $this->assertTrue(TestClass::validate($fixture['data']['address'], Devnet::new()));
+        $this->assertTrue(TestClass::validate($fixture['data']['address'], 30));
+        $this->assertFalse(TestClass::validate($fixture['data']['address'], Mainnet::new()));
+    }
+
+    /** @test */
+    public function it_should_fail_to_validate_an_address_with_an_invalid_checksum()
+    {
+        $this->assertFalse(TestClass::validate('D61mfSggzbvQgTUe6JhYKH2doHaqJ3Dyic'));
+    }
+
+    /** @test */
+    public function it_should_fail_to_validate_an_address_with_an_invalid_length()
+    {
+        $this->assertFalse(TestClass::validate(Base58::encodeCheck("\x1e".str_repeat("\x01", 10))));
     }
 }

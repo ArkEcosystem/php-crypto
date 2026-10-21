@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
+use ArkEcosystem\Crypto\Binary\Bytes;
 use ArkEcosystem\Crypto\Identities\PublicKey as TestClass;
 use ArkEcosystem\Tests\Crypto\TestCase;
+use InvalidArgumentException;
 
 /**
  * This is the address test class.
@@ -59,5 +61,63 @@ class PublicKeyTest extends TestCase
         $actual = TestClass::fromHex($fixture['data']['publicKey']);
 
         $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
+    }
+
+    /** @test */
+    public function it_should_get_the_public_key_from_bytes()
+    {
+        $fixture = $this->getFixture('identity');
+
+        $actual = TestClass::fromHex(Bytes::fromHex($fixture['data']['publicKey']));
+
+        $this->assertSame($fixture['data']['publicKey'], $actual->getHex());
+        $this->assertSame($fixture['data']['publicKey'], $actual->getBuffer()->getHex());
+        $this->assertSame(hex2bin($fixture['data']['publicKey']), $actual->getBinary());
+    }
+
+    /** @test */
+    public function it_should_compress_an_uncompressed_public_key()
+    {
+        $fixture = $this->getFixture('identity');
+
+        $uncompressed = TestClass::fromHex($fixture['data']['publicKey']);
+        $point        = \ArkEcosystem\Crypto\Utils\Secp256k1::curve()->keyFromPublic($fixture['data']['publicKey'], 'hex')->getPublic(false, 'hex');
+
+        $this->assertSame($uncompressed->getHex(), TestClass::fromHex($point)->getHex());
+    }
+
+    /** @test */
+    public function it_should_reject_a_malformed_public_key()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        TestClass::fromHex('not-a-public-key');
+    }
+
+    /** @test */
+    public function it_should_reject_a_public_key_that_is_not_on_the_curve()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        TestClass::fromHex('02'.str_pad('5', 64, '0', STR_PAD_LEFT));
+    }
+
+    /** @test */
+    public function it_should_reject_a_public_key_with_an_invalid_prefix()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        TestClass::fromHex('05'.str_repeat('1', 64));
+    }
+
+    /** @test */
+    public function it_should_not_verify_invalid_signatures()
+    {
+        $publicKey = TestClass::fromHex($this->getFixture('identity')['data']['publicKey']);
+        $hash      = hash('sha256', 'Hello World', true);
+
+        $this->assertFalse($publicKey->verify($hash, 'not-a-signature'));
+        $this->assertFalse($publicKey->verify($hash, 'deadbeef'));
+        $this->assertFalse($publicKey->verify(hash('sha256', 'Other', true), $this->getFixture('message-v2')['data']['signature']));
     }
 }

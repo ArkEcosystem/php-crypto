@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Networks;
 
 use ArkEcosystem\Crypto\Networks\Testnet;
-use BitWasp\Bitcoin\Network\Network;
 
 /**
  * This is the testnet network test class.

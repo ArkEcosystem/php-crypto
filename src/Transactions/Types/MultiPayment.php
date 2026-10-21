@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Base58;
 
 /**
  * This is the serializer class.
@@ -36,7 +35,7 @@ class MultiPayment extends Transaction
 
         foreach ($this->data['asset']['payments'] as $payment) {
             $buffer->writeUInt64(+$payment['amount']);
-            $buffer->append(Base58::decodeCheck($payment['recipientId'])->getBinary());
+            $buffer->append(Base58::decodeCheck($payment['recipientId']));
         }
 
         return $buffer;
@@ -51,7 +50,7 @@ class MultiPayment extends Transaction
         for ($i = 0; $i < $count; $i++) {
             $this->data['asset']['payments'][] = [
                 'amount'      => strval($buffer->readUInt64()),
-                'recipientId' => Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2)))),
+                'recipientId' => Base58::encodeCheck(hex2bin($buffer->readHex(21 * 2))),
             ];
         }
 

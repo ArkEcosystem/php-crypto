@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "protonlabs/bitcoin": "^1.0",
+        "ext-gmp": "*",
         "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {

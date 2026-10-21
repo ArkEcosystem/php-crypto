@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Base58;
 
 /**
  * This is the serializer class.
@@ -30,7 +29,7 @@ class Transfer extends Transaction
 
         $buffer->writeUInt64(+$this->data['amount']);
         $buffer->writeUInt32($this->data['expiration'] ?? 0);
-        $buffer->writeHex(Base58::decodeCheck($this->data['recipientId'])->getHex());
+        $buffer->writeHex(bin2hex(Base58::decodeCheck($this->data['recipientId'])));
 
         return $buffer;
     }
@@ -39,7 +38,7 @@ class Transfer extends Transaction
     {
         $this->data['amount']      = strval($buffer->readUInt64());
         $this->data['expiration']  = $buffer->readUInt32();
-        $this->data['recipientId'] = Base58::encodeCheck(new Buffer(hex2bin($buffer->readHex(21 * 2))));
+        $this->data['recipientId'] = Base58::encodeCheck(hex2bin($buffer->readHex(21 * 2)));
     }
 
     public function hasVendorField(): bool

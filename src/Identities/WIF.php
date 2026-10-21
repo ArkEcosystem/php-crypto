@@ -30,7 +30,7 @@ class WIF
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
+    public static function fromPassphrase(string $passphrase, ?AbstractNetwork $network = null): string
     {
         return PrivateKey::fromPassphrase($passphrase)->toWif($network);
     }
