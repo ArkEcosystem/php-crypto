@@ -127,4 +127,22 @@ class MessageTest extends TestCase
 
         $this->assertIsString($message->__toString());
     }
+
+    /** @test */
+    public function it_should_sign_and_verify_a_message_that_is_not_valid_utf8()
+    {
+        $message = Message::sign("\xff\xfe binary", 'passphrase');
+
+        $this->assertSame("\xff\xfe binary", $message->message);
+        $this->assertTrue($message->verify());
+    }
+
+    /** @test */
+    public function it_should_not_verify_a_tampered_message()
+    {
+        $message = Message::new($this->getFixture('message-v2')['data']);
+        $message->message .= '!';
+
+        $this->assertFalse($message->verify());
+    }
 }
