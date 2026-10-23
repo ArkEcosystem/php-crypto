@@ -18,8 +18,9 @@ class TransactionUtils
      *
      * @param array $transaction The transaction data.
      * @param bool $skipSignature
+     * @param bool $skipLegacySecondSignature
      */
-    public static function toBuffer(array $transaction, bool $skipSignature = false): Buffer
+    public static function toBuffer(array $transaction, bool $skipSignature = false, bool $skipLegacySecondSignature = false): Buffer
     {
         $fields = [
             self::toBeArray(isset($transaction['nonce']) ? $transaction['nonce'] : 0),
@@ -34,10 +35,10 @@ class TransactionUtils
 
         if (! $skipSignature && isset($transaction['v'], $transaction['r'], $transaction['s']) && $transaction['v'] !== '') {
             $fields[] = self::toBeArray($transaction['v'] + Network::get()->chainId() * 2 + 35);
-            $fields[] = '0x'.$transaction['r'];
-            $fields[] = '0x'.$transaction['s'];
+            $fields[] = self::stripLeadingZeroBytes($transaction['r']);
+            $fields[] = self::stripLeadingZeroBytes($transaction['s']);
 
-            if (isset($transaction['legacySecondSignature'])) {
+            if (isset($transaction['legacySecondSignature']) && ! $skipLegacySecondSignature) {
                 $fields[] = '0x'.$transaction['legacySecondSignature'];
             }
         } else {
@@ -46,8 +47,6 @@ class TransactionUtils
             $fields[] = self::toBeArray(0);
             $fields[] = self::toBeArray(0);
         }
-
-        // TODO: second signature handling
 
         $encoded = RlpEncoder::encode($fields);
 
@@ -62,11 +61,20 @@ class TransactionUtils
      */
     public static function toHash(array $transaction, bool $skipSignature = false): BufferInterface
     {
-        $encoding = self::toBuffer($transaction, $skipSignature);
+        // The transaction hash never covers the legacy second signature
+        $encoding = self::toBuffer($transaction, $skipSignature, skipLegacySecondSignature: true);
 
         $keccak = Keccak::hash($encoding->getBinary(), 256);
 
         return Buffer::hex($keccak);
+    }
+
+    /**
+     * Strips the leading zero bytes so `r` and `s` are encoded as minimal integers.
+     */
+    private static function stripLeadingZeroBytes(string $hex): string
+    {
+        return '0x'.preg_replace('/^(00)+/', '', $hex);
     }
 
     /**
