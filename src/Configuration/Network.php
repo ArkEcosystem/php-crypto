@@ -15,7 +15,6 @@ namespace ArkEcosystem\Crypto\Configuration;
 
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
 use ArkEcosystem\Crypto\Networks\Devnet;
-use BitWasp\Bitcoin\Bitcoin;
 
 /**
  * This is the network configuration class.
@@ -62,7 +61,5 @@ class Network
     public static function set(AbstractNetwork $network): void
     {
         static::$network = $network;
-
-        Bitcoin::setNetwork($network);
     }
 }

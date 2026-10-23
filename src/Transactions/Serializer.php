@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions;
 
+use ArkEcosystem\Crypto\Binary\Bytes;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
 use ArkEcosystem\Crypto\Enums\TypeGroup;
 use ArkEcosystem\Crypto\Transactions\Types\Transaction;
-use BitWasp\Buffertools\Buffer;
 
 /**
  * This is the serializer class.
@@ -48,7 +48,7 @@ class Serializer
         return new static($transaction);
     }
 
-    public static function getBytes(Transaction $transaction, array $options = []): Buffer
+    public static function getBytes(Transaction $transaction, array $options = []): Bytes
     {
         return self::new($transaction)->serialize($options);
     }
@@ -56,9 +56,9 @@ class Serializer
     /**
      * Perform AIP11 compliant serialization.
      *
-     * @return Buffer
+     * @return Bytes
      */
-    public function serialize(array $options = []): Buffer
+    public function serialize(array $options = []): Bytes
     {
         $buffer = ByteBuffer::new(1); // initialize with size 1, size will expand as we add bytes
 
@@ -71,7 +71,7 @@ class Serializer
 
         $this->serializeSignatures($buffer, $options);
 
-        return new Buffer($buffer->toString('binary'));
+        return new Bytes($buffer->toString('binary'));
     }
 
     /**

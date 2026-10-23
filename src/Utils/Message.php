@@ -14,10 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Identities\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use InvalidArgumentException;
 
 /**
@@ -93,7 +90,7 @@ class Message
         }
 
         if (is_array($message)) {
-            return new static(json_decode(json_encode($message)));
+            return new static((object) $message);
         }
 
         if (is_string($message)) {
@@ -117,7 +114,7 @@ class Message
 
         return static::new([
             'publickey' => $keys->getPublicKey()->getHex(),
-            'signature' => $keys->sign(Hash::sha256(new Buffer($message)))->getBuffer()->getHex(),
+            'signature' => $keys->sign(Hash::sha256($message))->getHex(),
             'message'   => $message,
         ]);
     }
@@ -129,12 +126,7 @@ class Message
      */
     public function verify(): bool
     {
-        $factory = new PublicKeyFactory();
-
-        return $factory->fromHex($this->publicKey)->verify(
-            new Buffer(hash('sha256', $this->message, true)),
-            SignatureFactory::fromHex($this->signature)
-        );
+        return PublicKey::fromHex($this->publicKey)->verify(Hash::sha256($this->message), $this->signature);
     }
 
     /**
