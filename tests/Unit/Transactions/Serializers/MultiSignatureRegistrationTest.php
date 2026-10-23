@@ -13,28 +13,12 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration'));
+});
 
-/**
- * This is the multi signature registration serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\MultiSignatureRegistration
- */
-class MultiSignatureRegistrationTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        //TODO fixture?
-        $this->markTestIncomplete('This test has not been implemented yet.');
-        //$this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase', function () {
+    //TODO fixture?
+    $this->markTestIncomplete('This test has not been implemented yet.');
+    //$this->assertSerialized($this->getTransactionFixture('multi_signature_registration', 'multi-signature-registration-secondSign'));
+});

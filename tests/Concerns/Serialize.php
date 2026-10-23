@@ -42,7 +42,7 @@ trait Serialize
         HtlcRefund::class,
     ];
 
-    protected function assertSerialized(array $fixture): void
+    public function assertSerialized(array $fixture): void
     {
         $data              = $fixture['data'];
         $transactionClass  = $this->transactionsClasses[$fixture['data']['type']];

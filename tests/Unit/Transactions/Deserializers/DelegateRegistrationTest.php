@@ -13,54 +13,39 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
-use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * This is the delegate registration deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration
- */
-class DelegateRegistrationTest extends TestCase
+it('should deserialize the transaction signed with a passphrase', function () {
+    $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
+
+    assertTransactionForDelegateRegistration($fixture);
+});
+
+it('should deserialize the transaction signed with a second passphrase', function () {
+    $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
+
+    $actual = assertTransactionForDelegateRegistration($fixture);
+    $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
+});
+
+function assertTransactionForDelegateRegistration(array $fixture): DelegateRegistration
 {
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-sign');
+    $actual = test()->assertDeserialized($fixture, [
+        'version',
+        'network',
+        'type',
+        'typeGroup',
+        'nonce',
+        'senderPublicKey',
+        'fee',
+        'asset',
+        'signature',
+        'secondSignature',
+        'amount',
+        'id',
+    ]);
 
-        $this->assertTransaction($fixture);
-    }
+    test()->assertTrue($actual->verify());
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
-    }
-
-    private function assertTransaction(array $fixture): DelegateRegistration
-    {
-        $actual = $this->assertDeserialized($fixture, [
-            'version',
-            'network',
-            'type',
-            'typeGroup',
-            'nonce',
-            'senderPublicKey',
-            'fee',
-            'asset',
-            'signature',
-            'secondSignature',
-            'amount',
-            'id',
-        ]);
-
-        $this->assertTrue($actual->verify());
-
-        return $actual;
-    }
+    return $actual;
 }

@@ -13,41 +13,41 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Networks;
 
-use BitWasp\Bitcoin\Network\Network;
-use BitWasp\Bitcoin\Script\ScriptType;
-
 /**
  * This is the abstract network class.
  *
  * @author Brian Faust <brian@ark.io>
  */
-abstract class AbstractNetwork extends Network
+abstract class AbstractNetwork
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $bip32ScriptTypeMap = [
-        self::BIP32_PREFIX_XPUB => ScriptType::P2PKH,
-        self::BIP32_PREFIX_XPRV => ScriptType::P2PKH,
-    ];
+    public const BASE58_ADDRESS_P2PKH = 'p2pkh';
+
+    public const BASE58_ADDRESS_P2SH = 'p2sh';
+
+    public const BASE58_WIF = 'wif';
+
+    public const BIP32_PREFIX_XPUB = 'xpub';
+
+    public const BIP32_PREFIX_XPRV = 'xprv';
 
     /**
-     * Call a method on the network instance.
+     * The hex encoded version bytes for Base58 encoded data.
      *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return mixed
+     * @var array<string, string>
      */
-    public static function __callStatic(string $method, array $args)
-    {
-        return static::factory()->{$method}(...$args);
-    }
+    protected $base58PrefixMap = [];
+
+    /**
+     * The hex encoded version bytes for BIP32 extended keys.
+     *
+     * @var array<string, string>
+     */
+    protected $bip32PrefixMap = [];
 
     /**
      * Create a new network instance.
      *
-     * @return mixed
+     * @return static
      */
     public static function new()
     {
@@ -61,7 +61,57 @@ abstract class AbstractNetwork extends Network
      */
     public function version(): int
     {
-        return hexdec($this->getAddressByte());
+        return (int) hexdec($this->getAddressByte());
+    }
+
+    /**
+     * Get the hex encoded version byte of pay-to-public-key-hash addresses.
+     *
+     * @return string
+     */
+    public function getAddressByte(): string
+    {
+        return $this->base58PrefixMap[self::BASE58_ADDRESS_P2PKH];
+    }
+
+    /**
+     * Get the hex encoded version byte of pay-to-script-hash addresses.
+     *
+     * @return string
+     */
+    public function getP2shByte(): string
+    {
+        return $this->base58PrefixMap[self::BASE58_ADDRESS_P2SH];
+    }
+
+    /**
+     * Get the hex encoded version byte of WIF private keys.
+     *
+     * @return string
+     */
+    public function getPrivByte(): string
+    {
+        return $this->base58PrefixMap[self::BASE58_WIF];
+    }
+
+    /**
+     * Get the hex encoded BIP32 prefix of extended public keys.
+     *
+     * @return string
+     */
+    public function getHDPubByte(): string
+    {
+        return $this->bip32PrefixMap[self::BIP32_PREFIX_XPUB];
+    }
+
+    /**
+     * Get the hex encoded BIP32 prefix of extended private keys.
+     *
+     * @return string
+     */
+    public function getHDPrivByte(): string
+    {
+        return $this->bip32PrefixMap[self::BIP32_PREFIX_XPRV];
     }
 
     abstract public function pubKeyHash(): int;

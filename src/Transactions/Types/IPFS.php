@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Base58;
 
 /**
  * This is the serializer class.
@@ -26,7 +25,7 @@ class IPFS extends Transaction
 {
     public function serialize(array $options = []): ByteBuffer
     {
-        $buffer = ByteBuffer::fromBinary(Base58::decode($this->data['asset']['ipfs'])->getBinary());
+        $buffer = ByteBuffer::fromBinary(Base58::decode($this->data['asset']['ipfs']));
 
         return $buffer;
     }
@@ -43,7 +42,7 @@ class IPFS extends Transaction
         $buffer->writeHex($ipfsHash);
 
         $this->data['asset'] = [
-            'ipfs' => Base58::encode(new Buffer($buffer->toBinary())),
+            'ipfs' => Base58::encode($buffer->toBinary()),
         ];
     }
 }

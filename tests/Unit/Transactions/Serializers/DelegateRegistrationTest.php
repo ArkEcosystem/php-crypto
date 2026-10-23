@@ -13,26 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-sign'));
+});
 
-/**
- * This is the delegate registration serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateRegistration
- */
-class DelegateRegistrationTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('delegate_registration', 'delegate-registration-secondSign'));
+});

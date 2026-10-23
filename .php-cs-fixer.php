@@ -26,13 +26,20 @@ $rules = [
             'try',
         ],
     ],
-    'braces'                      => true,
+    'braces_position'                         => true,
     'cast_spaces'                 => true,
+    'control_structure_braces'                => true,
+    'control_structure_continuation_position' => true,
+    'declare_parentheses'                     => true,
+    'no_multiple_statements_per_line'         => true,
+    'single_space_around_construct'           => true,
+    'statement_indentation'                   => true,
     'class_attributes_separation' => [
         'elements' => [
             'const'    => 'one',
             'method'   => 'one',
             'property' => 'one',
+            'trait_import' => 'none',
         ],
     ],
     'class_definition'                       => true,
@@ -47,7 +54,7 @@ $rules = [
     'full_opening_tag'                       => true,
     'fully_qualified_strict_types'           => true,
     'function_declaration'                   => true,
-    'function_typehint_space'                => true,
+    'type_declaration_spaces'                => true,
     'heredoc_to_nowdoc'                      => true,
     'include'                                => true,
     'increment_style'                        => ['style' => 'post'],
@@ -62,7 +69,7 @@ $rules = [
     'method_argument_space'                  => true,
     'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     'native_function_casing'                 => true,
-    'new_with_braces'                        => true,
+    'new_with_parentheses'                   => true,
     'no_alias_functions'                     => true,
     'no_blank_lines_after_class_opening'     => true,
     'no_blank_lines_after_phpdoc'            => true,
@@ -74,7 +81,6 @@ $rules = [
             'extra',
             'throw',
             'use',
-            'use_trait',
         ],
     ],
     'no_leading_import_slash'                     => true,
@@ -87,9 +93,8 @@ $rules = [
     'no_spaces_around_offset'                     => [
         'positions' => ['inside'],
     ],
-    'no_spaces_inside_parenthesis'          => true,
-    'no_trailing_comma_in_list_call'        => true,
-    'no_trailing_comma_in_singleline_array' => true,
+    'spaces_inside_parentheses'             => true,
+    'no_trailing_comma_in_singleline'       => true,
     'no_trailing_whitespace'                => true,
     'no_trailing_whitespace_in_comment'     => true,
     'no_unneeded_control_parentheses'       => [
@@ -137,7 +142,7 @@ $rules = [
     'short_scalar_cast'                     => true,
     'simplified_null_return'                => true,
     'single_blank_line_at_eof'              => true,
-    'single_blank_line_before_namespace'    => true,
+    'blank_lines_before_namespace'          => true,
     'single_class_element_per_statement'    => [
         'elements' => [
             'const',
@@ -163,7 +168,7 @@ $rules = [
     ],
     'trim_array_spaces'     => true,
     'unary_operator_spaces' => true,
-    'visibility_required'   => [
+    'modifier_keywords'     => [
         'elements' => [
             'property',
             'method',

@@ -22,7 +22,7 @@ trait Fixtures
      *
      * @return array
      */
-    protected function getFixture(string $file): array
+    public function getFixture(string $file): array
     {
         $path = __DIR__."/../fixtures/{$file}.json";
 
@@ -37,7 +37,7 @@ trait Fixtures
      *
      * @return array|object
      */
-    protected function getTransactionFixture(string $type, string $name): array
+    public function getTransactionFixture(string $type, string $name): array
     {
         return $this->getFixture("transactions/{$type}/{$name}");
     }

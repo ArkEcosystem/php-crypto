@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Transactions\Types;
 
+use ArkEcosystem\Crypto\Binary\Bytes;
 use ArkEcosystem\Crypto\ByteBuffer\ByteBuffer;
 use ArkEcosystem\Crypto\Configuration\Network;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use BitWasp\Bitcoin\Signature\SignatureFactory;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Hash;
 
 /**
  * This is the transaction class.
@@ -44,7 +43,7 @@ abstract class Transaction
         return Hash::sha256(Serializer::getBytes($this))->getHex();
     }
 
-    public function getBytes($options = []): Buffer
+    public function getBytes($options = []): Bytes
     {
         return Serializer::getBytes($this, $options);
     }
@@ -63,7 +62,7 @@ abstract class Transaction
             'skipSecondSignature' => true,
         ];
         $transaction             = Hash::sha256($this->getBytes($options));
-        $this->data['signature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $this->data['signature'] = $keys->sign($transaction)->getHex();
 
         return $this;
     }
@@ -81,7 +80,7 @@ abstract class Transaction
             'skipSecondSignature' => true,
         ];
         $transaction                   = Hash::sha256($this->getBytes($options));
-        $this->data['secondSignature'] = $keys->sign($transaction)->getBuffer()->getHex();
+        $this->data['secondSignature'] = $keys->sign($transaction)->getHex();
 
         return $this;
     }
@@ -111,7 +110,7 @@ abstract class Transaction
         return $this->verifySchnorrOrECDSA($bytes, $secondPublicKey, $signature);
     }
 
-    public function verifySchnorrOrECDSA(Buffer $bytes, string $publicKey, string $signature): bool
+    public function verifySchnorrOrECDSA(Bytes $bytes, string $publicKey, string $signature): bool
     {
         return $this->isSchnorr($signature)
             ? $this->verifySchnorr($bytes, $publicKey, $signature)
@@ -123,18 +122,12 @@ abstract class Transaction
         return ByteBuffer::fromHex($signature)->capacity() === 64;
     }
 
-    public function verifyECDSA(Buffer $bytes, string $publicKey, string $signature): bool
+    public function verifyECDSA(Bytes $bytes, string $publicKey, string $signature): bool
     {
-        $factory   = new PublicKeyFactory();
-        $publicKey = $factory->fromHex($publicKey);
-
-        return $publicKey->verify(
-            Hash::sha256($bytes),
-            SignatureFactory::fromHex($signature)
-        );
+        return PublicKey::fromHex($publicKey)->verify(Hash::sha256($bytes), $signature);
     }
 
-    public function verifySchnorr(Buffer $bytes, string $publicKey, string $signature): bool
+    public function verifySchnorr(Bytes $bytes, string $publicKey, string $signature): bool
     {
         //TODO
         return false;

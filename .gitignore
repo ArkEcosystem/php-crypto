@@ -1,7 +1,7 @@
 phpunit.xml
 vendor
 clover.xml
-.php_cs.cache
-.phpunit.result.cache
 .coverage
 coverage.xml
+.php-cs-fixer.cache
+.phpunit.cache

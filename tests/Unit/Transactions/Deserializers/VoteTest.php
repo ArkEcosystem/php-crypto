@@ -13,54 +13,39 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
-use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Types\Vote;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * This is the vote deserializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\Vote
- */
-class VoteTest extends TestCase
+it('should deserialize the transaction signed with a passphrase', function () {
+    $fixture = $this->getTransactionFixture('vote', 'vote-sign');
+
+    assertTransactionForVote($fixture);
+});
+
+it('should deserialize the transaction signed with a second passphrase', function () {
+    $fixture = $this->getTransactionFixture('vote', 'vote-secondSign');
+
+    $actual = assertTransactionForVote($fixture);
+    $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
+});
+
+function assertTransactionForVote(array $fixture): Vote
 {
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('vote', 'vote-sign');
+    $actual = test()->assertDeserialized($fixture, [
+        'version',
+        'network',
+        'type',
+        'typeGroup',
+        'nonce',
+        'senderPublicKey',
+        'fee',
+        'asset',
+        'signature',
+        'secondSignature',
+        'amount',
+        'id',
+    ]);
 
-        $this->assertTransaction($fixture);
-    }
+    test()->assertTrue($actual->verify());
 
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_second_passphrase()
-    {
-        $fixture = $this->getTransactionFixture('vote', 'vote-secondSign');
-
-        $actual = $this->assertTransaction($fixture);
-        $this->assertSame($fixture['data']['secondSignature'], $actual->data['secondSignature']);
-    }
-
-    private function assertTransaction(array $fixture): Vote
-    {
-        $actual = $this->assertDeserialized($fixture, [
-            'version',
-            'network',
-            'type',
-            'typeGroup',
-            'nonce',
-            'senderPublicKey',
-            'fee',
-            'asset',
-            'signature',
-            'secondSignature',
-            'amount',
-            'id',
-        ]);
-
-        $this->assertTrue($actual->verify());
-
-        return $actual;
-    }
+    return $actual;
 }

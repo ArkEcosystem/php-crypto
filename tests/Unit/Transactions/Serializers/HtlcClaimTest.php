@@ -13,22 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-sign'));
+});
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\HtlcClaim
- */
-class HtlcClaimTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('htlc_claim', 'htlc-claim-secondSign'));
+});

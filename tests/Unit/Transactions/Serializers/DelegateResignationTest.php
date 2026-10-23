@@ -13,26 +13,10 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Serializers;
 
-use ArkEcosystem\Crypto\Transactions\Serializer;
-use ArkEcosystem\Tests\Crypto\TestCase;
+it('should serialize the transaction with a passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign'));
+});
 
-/**
- * This is the delegate resignation serializer test class.
- *
- * @author Brian Faust <brian@ark.io>
- * @covers \ArkEcosystem\Crypto\Transactions\Types\DelegateResignation
- */
-class DelegateResignationTest extends TestCase
-{
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-sign'));
-    }
-
-    /** @test */
-    public function it_should_serialize_the_transaction_with_a_second_passphrase()
-    {
-        $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-secondSign'));
-    }
-}
+it('should serialize the transaction with a second passphrase', function () {
+    $this->assertSerialized($this->getTransactionFixture('delegate_resignation', 'delegate-resignation-secondSign'));
+});

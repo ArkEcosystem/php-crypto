@@ -17,12 +17,9 @@ use ArkEcosystem\Crypto\Binary\UnsignedInteger\Writer;
 use ArkEcosystem\Crypto\Configuration\Network as NetworkConfiguration;
 use ArkEcosystem\Crypto\Helpers;
 use ArkEcosystem\Crypto\Networks\AbstractNetwork;
-use BitWasp\Bitcoin\Address\AddressCreator;
-use BitWasp\Bitcoin\Address\PayToPubKeyHashAddress;
-use BitWasp\Bitcoin\Base58;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PrivateKey as EccPrivateKey;
-use BitWasp\Bitcoin\Crypto\Hash;
-use BitWasp\Buffertools\Buffer;
+use ArkEcosystem\Crypto\Utils\Base58;
+use ArkEcosystem\Crypto\Utils\Hash;
+use InvalidArgumentException;
 
 /**
  * This is the address class.
@@ -39,7 +36,7 @@ class Address
      *
      * @return string
      */
-    public static function fromPassphrase(string $passphrase, AbstractNetwork $network = null): string
+    public static function fromPassphrase(string $passphrase, ?AbstractNetwork $network = null): string
     {
         return static::fromPrivateKey(PrivateKey::fromPassphrase($passphrase), $network);
     }
@@ -69,25 +66,22 @@ class Address
     {
         $network = $network ?? NetworkConfiguration::get();
 
-        $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBuffer());
-        $seed      = Writer::bit8(Helpers::version($network)).$ripemd160->getBinary();
+        $ripemd160 = Hash::ripemd160(PublicKey::fromHex($publicKey)->getBinary());
 
-        return Base58::encodeCheck(new Buffer($seed));
+        return Base58::encodeCheck(Writer::bit8(Helpers::version($network)).$ripemd160->getBinary());
     }
 
     /**
      * Derive the address from the given private key.
      *
-     * @param EccPrivateKey $privateKey
-     * @param AbstractNetwork|null                                         $network
+     * @param PrivateKey           $privateKey
+     * @param AbstractNetwork|null $network
      *
      * @return string
      */
-    public static function fromPrivateKey(EccPrivateKey $privateKey, AbstractNetwork $network = null): string
+    public static function fromPrivateKey(PrivateKey $privateKey, ?AbstractNetwork $network = null): string
     {
-        $digest = Hash::ripemd160($privateKey->getPublicKey()->getBuffer());
-
-        return (new PayToPubKeyHashAddress($digest))->getAddress($network);
+        return static::fromPublicKey($privateKey->getPublicKey()->getHex(), $network);
     }
 
     /**
@@ -100,13 +94,14 @@ class Address
      */
     public static function validate(string $address, $network = null): bool
     {
-        try {
-            $addressCreator = new AddressCreator();
-            $addressCreator->fromString($address, $network);
+        $network = $network ?? NetworkConfiguration::get();
 
-            return true;
-        } catch (\Exception $e) {
+        try {
+            $payload = Base58::decodeCheck($address);
+        } catch (InvalidArgumentException $e) {
             return false;
         }
+
+        return strlen($payload) === 21 && ord($payload[0]) === Helpers::version($network);
     }
 }

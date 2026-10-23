@@ -15,11 +15,10 @@ namespace ArkEcosystem\Tests\Crypto\Concerns;
 
 use ArkEcosystem\Crypto\Transactions\Deserializer;
 use ArkEcosystem\Crypto\Transactions\Serializer;
-use Illuminate\Support\Arr;
 
 trait Deserialize
 {
-    protected function assertDeserialized(array $expected, array $keys, int $network = 30): object
+    public function assertDeserialized(array $expected, array $keys, int $network = 30): object
     {
         $actual = Deserializer::new($expected['serialized'])->deserialize();
         $data   = $actual->data;
@@ -30,19 +29,14 @@ trait Deserialize
         return $actual;
     }
 
-    protected function object_to_array(object $value): array
-    {
-        return json_decode(json_encode($value), true);
-    }
-
-    protected function assertSameTransactions(array $expected, array $actual, array $keys = []): void
+    public function assertSameTransactions(array $expected, array $actual, array $keys = []): void
     {
         if (empty($keys)) {
             $keys = array_keys($expected['data']);
         }
 
-        $expected = Arr::only($expected['data'], $keys);
-        $actual   = Arr::only($actual, $keys);
+        $expected = array_intersect_key($expected['data'], array_flip($keys));
+        $actual   = array_intersect_key($actual, array_flip($keys));
 
         ksort($expected);
         ksort($actual);
@@ -62,17 +56,5 @@ trait Deserialize
         }
 
         $this->assertSame($expected, $actual);
-    }
-
-    private function array_only(array $arr, array $keys): array
-    {
-        $returnArray = [];
-        foreach ($keys as $key) {
-            if (isset($arr[$key])) {
-                $returnArray[$key] = $arr[$key];
-            }
-        }
-
-        return $returnArray;
     }
 }

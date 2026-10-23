@@ -14,40 +14,31 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Transactions\Deserializers;
 
 use ArkEcosystem\Crypto\Transactions\Types\IPFS;
-use ArkEcosystem\Tests\Crypto\TestCase;
 
-/**
- * @covers \ArkEcosystem\Crypto\Transactions\Types\IPFS
- */
-class IPFSTest extends TestCase
+it('should deserialize the transaction signed with a passphrase', function () {
+    $transaction = $this->getTransactionFixture('ipfs', 'ipfs-sign');
+
+    assertTransactionForIPFS($transaction);
+});
+
+function assertTransactionForIPFS(array $fixture): IPFS
 {
-    /** @test */
-    public function it_should_deserialize_the_transaction_signed_with_a_passphrase()
-    {
-        $transaction = $this->getTransactionFixture('ipfs', 'ipfs-sign');
+    $actual = test()->assertDeserialized($fixture, [
+        'version',
+        'network',
+        'type',
+        'typeGroup',
+        'nonce',
+        'senderPublicKey',
+        'fee',
+        'asset',
+        'signature',
+        'secondSignature',
+        'amount',
+        'id',
+    ]);
 
-        $this->assertTransaction($transaction);
-    }
+    test()->assertTrue($actual->verify());
 
-    private function assertTransaction(array $fixture): IPFS
-    {
-        $actual = $this->assertDeserialized($fixture, [
-            'version',
-            'network',
-            'type',
-            'typeGroup',
-            'nonce',
-            'senderPublicKey',
-            'fee',
-            'asset',
-            'signature',
-            'secondSignature',
-            'amount',
-            'id',
-        ]);
-
-        $this->assertTrue($actual->verify());
-
-        return $actual;
-    }
+    return $actual;
 }

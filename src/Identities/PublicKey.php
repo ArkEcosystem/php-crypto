@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace ArkEcosystem\Crypto\Identities;
 
-use BitWasp\Bitcoin\Bitcoin;
-use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
-use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Key\PublicKey as EcPublicKey;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
-use Elliptic\EC;
+use ArkEcosystem\Crypto\Binary\Bytes;
+use ArkEcosystem\Crypto\Utils\Secp256k1;
+use Elliptic\EC\KeyPair;
+use InvalidArgumentException;
+use Throwable;
 
 /**
  * This is the public key class.
@@ -27,13 +27,26 @@ use Elliptic\EC;
 class PublicKey
 {
     /**
+     * @var KeyPair
+     */
+    private $keyPair;
+
+    /**
+     * @param KeyPair $keyPair
+     */
+    private function __construct(KeyPair $keyPair)
+    {
+        $this->keyPair = $keyPair;
+    }
+
+    /**
      * Derive the public from the given passphrase.
      *
      * @param string $passphrase
      *
-     * @return EcPublicKey
+     * @return self
      */
-    public static function fromPassphrase(string $passphrase): EcPublicKey
+    public static function fromPassphrase(string $passphrase): self
     {
         return PrivateKey::fromPassphrase($passphrase)->getPublicKey();
     }
@@ -44,14 +57,14 @@ class PublicKey
      * @param int   $min
      * @param array $publicKeys
      *
-     * @return EcPublicKey
+     * @return self
      */
-    public static function fromMultiSignatureAsset(int $min, array $publicKeys): EcPublicKey
+    public static function fromMultiSignatureAsset(int $min, array $publicKeys): self
     {
         $minKey = static::fromPassphrase('0'.dechex($min));
         $keys   = [$minKey->getHex(), ...$publicKeys];
 
-        $curve = (new EC('secp256k1'))->curve;
+        $curve = Secp256k1::curve()->curve;
         $P     = $curve->jpoint(null, null, null);
 
         foreach ($keys as $publicKey) {
@@ -62,19 +75,97 @@ class PublicKey
     }
 
     /**
-     * Create a public key instance from a hex string.
+     * Create a public key instance from a compressed or uncompressed hex string.
      *
-     * @param \BitWasp\Buffertools\BufferInterface|string $publicKey
+     * @param Bytes|string $publicKey
      *
-     * @return EcPublicKey
+     * @return self
      */
-    public static function fromHex($publicKey): EcPublicKey
+    public static function fromHex($publicKey): self
     {
-        return (new PublicKeyFactory(
-            EcAdapterFactory::getPhpEcc(
-                Bitcoin::getMath(),
-                Bitcoin::getGenerator()
-            )
-        ))->fromHex($publicKey);
+        $publicKey = $publicKey instanceof Bytes ? $publicKey->getHex() : $publicKey;
+
+        if (! ctype_xdigit($publicKey) || ! in_array(strlen($publicKey), [66, 130], true)) {
+            throw new InvalidArgumentException('The given value is not a valid public key.');
+        }
+
+        try {
+            $keyPair = Secp256k1::curve()->keyFromPublic($publicKey, 'hex');
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('The given value is not a valid public key.', 0, $e);
+        }
+
+        // secp256k1 has a cofactor of 1, so any point on the curve is in the prime-order group.
+        if (! $keyPair->getPublic()->validate()) {
+            throw new InvalidArgumentException('The given value is not a valid public key.');
+        }
+
+        return new self($keyPair);
+    }
+
+    /**
+     * Create a public key instance from the public half of the given key pair.
+     *
+     * @param KeyPair $keyPair
+     *
+     * @return self
+     */
+    public static function fromKeyPair(KeyPair $keyPair): self
+    {
+        return static::fromHex($keyPair->getPublic(true, 'hex'));
+    }
+
+    /**
+     * Get the compressed public key as hex.
+     *
+     * @return string
+     */
+    public function getHex(): string
+    {
+        return $this->keyPair->getPublic(true, 'hex');
+    }
+
+    /**
+     * Get the compressed public key as binary.
+     *
+     * @return string
+     */
+    public function getBinary(): string
+    {
+        return (string) hex2bin($this->getHex());
+    }
+
+    /**
+     * Get the compressed public key bytes.
+     *
+     * @return Bytes
+     */
+    public function getBuffer(): Bytes
+    {
+        return new Bytes($this->getBinary());
+    }
+
+    /**
+     * Verify a DER encoded ECDSA signature over the given 32-byte hash.
+     *
+     * @param Bytes|string $hash
+     * @param Bytes|string $signature
+     *
+     * @return bool
+     */
+    public function verify($hash, $signature): bool
+    {
+        $hash      = $hash instanceof Bytes ? $hash->getHex() : bin2hex($hash);
+        $signature = $signature instanceof Bytes ? $signature->getHex() : $signature;
+
+        if (! ctype_xdigit($signature)) {
+            return false;
+        }
+
+        try {
+            return $this->keyPair->verify($hash, $signature);
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 }
