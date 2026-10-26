@@ -49,6 +49,16 @@ it('should verify messages signed by core', function (array $vector) {
     $this->assertFalse(PublicKey::fromHex($vector['publicKey'])->verify(hash('sha256', $vector['message']['message'].' ', true), $vector['message']['signature']));
 })->with('core vectors');
 
+it('should verify schnorr signed messages like the ones ark vault produces', function (array $vector) {
+    $message = Message::new([
+        'signatory' => $vector['publicKey'],
+        'signature' => $vector['message']['schnorrSignature'],
+        'message'   => $vector['message']['message'],
+    ]);
+
+    $this->assertTrue($message->verify());
+})->with('core vectors');
+
 dataset('core vectors', function () {
     $fixture = json_decode(file_get_contents(__DIR__.'/../fixtures/core-vectors.json'), true);
 

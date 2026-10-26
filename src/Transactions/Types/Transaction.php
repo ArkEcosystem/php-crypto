@@ -129,8 +129,7 @@ abstract class Transaction
 
     public function verifySchnorr(Bytes $bytes, string $publicKey, string $signature): bool
     {
-        //TODO
-        return false;
+        return PublicKey::fromHex($publicKey)->verifySchnorr(Hash::sha256($bytes), $signature);
     }
 
     /**
