@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace ArkEcosystem\Tests\Crypto\Unit\Identities;
 
 use ArkEcosystem\Crypto\Binary\Bytes;
+use ArkEcosystem\Crypto\Identities\PrivateKey;
 use ArkEcosystem\Crypto\Identities\PublicKey as TestClass;
+use ArkEcosystem\Crypto\Utils\Secp256k1;
+use BN\BN;
 use InvalidArgumentException;
 
 it('should get the public key from passphrase', function () {
@@ -62,7 +65,7 @@ it('should compress an uncompressed public key', function () {
     $fixture = $this->getFixture('identity');
 
     $uncompressed = TestClass::fromHex($fixture['data']['publicKey']);
-    $point        = \ArkEcosystem\Crypto\Utils\Secp256k1::curve()->keyFromPublic($fixture['data']['publicKey'], 'hex')->getPublic(false, 'hex');
+    $point        = Secp256k1::curve()->keyFromPublic($fixture['data']['publicKey'], 'hex')->getPublic(false, 'hex');
 
     $this->assertSame($uncompressed->getHex(), TestClass::fromHex($point)->getHex());
 });
@@ -92,4 +95,49 @@ it('should not verify invalid signatures', function () {
     $this->assertFalse($publicKey->verify($hash, 'not-a-signature'));
     $this->assertFalse($publicKey->verify($hash, 'deadbeef'));
     $this->assertFalse($publicKey->verify(hash('sha256', 'Other', true), $this->getFixture('message-v2')['data']['signature']));
+});
+
+it('should verify a schnorr signature made by ark core and ark vault', function () {
+    $publicKey = TestClass::fromHex('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192');
+    $signature = '2521d2ebe067546920bec3becc581d4d8186d4d2431980b34834ad3d3945be6ed32d10b6499307ba499b72448c971516a9e2be96c79cbf2ad5948b06c1ab242a';
+
+    $this->assertTrue($publicKey->verifySchnorr(hash('sha256', 'Hello World', true), $signature));
+    $this->assertTrue($publicKey->verifySchnorr(new Bytes(hash('sha256', 'Hello World', true)), Bytes::fromHex($signature)));
+    $this->assertTrue($publicKey->verifySchnorrOrECDSA(hash('sha256', 'Hello World', true), $signature));
+    $this->assertFalse($publicKey->verifySchnorr(hash('sha256', 'Hello World!', true), $signature));
+});
+
+it('should still verify ecdsa signatures when schnorr or ecdsa is accepted', function () {
+    $publicKey = TestClass::fromHex('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192');
+
+    $this->assertTrue($publicKey->verifySchnorrOrECDSA(hash('sha256', 'Hello World', true), $this->getFixture('message-v2')['data']['signature']));
+});
+
+it('should reject malformed schnorr signatures', function (string $signature) {
+    $publicKey = TestClass::fromHex('034151a3ec46b5670a682b0a63394f863587d1bc97483b1b6c70eb58e7f0aed192');
+
+    $this->assertFalse($publicKey->verifySchnorr(hash('sha256', 'Hello World', true), $signature));
+})->with([
+    'too short'          => [str_repeat('ab', 63)],
+    'not hex'            => [str_repeat('zz', 64)],
+    'r outside field'    => [str_repeat('f', 64).str_repeat('1', 64)],
+    's outside order'    => [str_repeat('1', 64).str_repeat('f', 64)],
+    'tampered s'         => ['2521d2ebe067546920bec3becc581d4d8186d4d2431980b34834ad3d3945be6ed32d10b6499307ba499b72448c971516a9e2be96c79cbf2ad5948b06c1ab242c'],
+]);
+
+it('should reject a schnorr signature whose nonce point has the wrong y', function () {
+    $privateKey = PrivateKey::fromPassphrase('this is a top secret passphrase');
+    $publicKey  = $privateKey->getPublicKey();
+    $hash       = hash('sha256', 'Hello World', true);
+    $signature  = '2521d2ebe067546920bec3becc581d4d8186d4d2431980b34834ad3d3945be6ed32d10b6499307ba499b72448c971516a9e2be96c79cbf2ad5948b06c1ab242a';
+
+    // s' = 2ed - s makes s'G - eP the negation of R: same x as r, but a y that is not a quadratic residue.
+    $n  = Secp256k1::curve()->n;
+    $r  = substr($signature, 0, 64);
+    $e  = (new BN(hash('sha256', hex2bin($r).$publicKey->getBinary().$hash), 16))->umod($n);
+    $d  = new BN($privateKey->getHex(), 16);
+    $s  = new BN(substr($signature, 64), 16);
+    $s2 = $e->mul($d)->muln(2)->sub($s)->umod($n);
+
+    $this->assertFalse($publicKey->verifySchnorr($hash, $r.str_pad($s2->toString(16), 64, '0', STR_PAD_LEFT)));
 });

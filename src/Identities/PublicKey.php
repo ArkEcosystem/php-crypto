@@ -15,6 +15,7 @@ namespace ArkEcosystem\Crypto\Identities;
 
 use ArkEcosystem\Crypto\Binary\Bytes;
 use ArkEcosystem\Crypto\Utils\Secp256k1;
+use BN\BN;
 use Elliptic\EC\KeyPair;
 use InvalidArgumentException;
 use Throwable;
@@ -167,5 +168,68 @@ class PublicKey
         } catch (Throwable $e) {
             return false;
         }
+    }
+
+    /**
+     * Verify a 64-byte Schnorr signature (r || s) over the given 32-byte hash.
+     *
+     * This is the pre-BIP340 Schnorr scheme from bcrypto's `secp256k1.schnorrSign`,
+     * which ARK Core uses for transactions and ARK Vault uses for signed messages:
+     * e = sha256(r || compressed public key || hash), and R = sG - eP must have an
+     * x coordinate equal to r and a y coordinate that is a quadratic residue.
+     *
+     * @param Bytes|string $hash
+     * @param Bytes|string $signature
+     *
+     * @return bool
+     */
+    public function verifySchnorr($hash, $signature): bool
+    {
+        $hash      = $hash instanceof Bytes ? $hash->getBinary() : $hash;
+        $signature = $signature instanceof Bytes ? $signature->getHex() : $signature;
+
+        if (strlen($signature) !== 128 || ! ctype_xdigit($signature)) {
+            return false;
+        }
+
+        $curve = Secp256k1::curve();
+        $r     = new BN(substr($signature, 0, 64), 16);
+        $s     = new BN(substr($signature, 64), 16);
+
+        if ($r->cmp($curve->curve->p) >= 0 || $s->cmp($curve->n) >= 0) {
+            return false;
+        }
+
+        $point = $this->keyPair->getPublic();
+        $e     = (new BN(hash('sha256', hex2bin(substr($signature, 0, 64)).$this->getBinary().$hash), 16))->umod($curve->n);
+        $R     = $curve->g->mul($s)->add($point->mul($curve->n->sub($e)));
+
+        if ($R->isInfinity()) {
+            return false;
+        }
+
+        if (gmp_jacobi(gmp_init($R->getY()->toString(16), 16), gmp_init($curve->curve->p->toString(16), 16)) !== 1) {
+            return false;
+        }
+
+        return $R->getX()->cmp($r) === 0;
+    }
+
+    /**
+     * Verify a signature over the given 32-byte hash, as Schnorr when it is 64
+     * bytes long and as DER encoded ECDSA otherwise.
+     *
+     * @param Bytes|string $hash
+     * @param Bytes|string $signature
+     *
+     * @return bool
+     */
+    public function verifySchnorrOrECDSA($hash, $signature): bool
+    {
+        $signature = $signature instanceof Bytes ? $signature->getHex() : $signature;
+
+        return strlen($signature) === 128
+            ? $this->verifySchnorr($hash, $signature)
+            : $this->verify($hash, $signature);
     }
 }
