@@ -126,7 +126,7 @@ class Message
      */
     public function verify(): bool
     {
-        return PublicKey::fromHex($this->publicKey)->verify(Hash::sha256($this->message), $this->signature);
+        return PublicKey::fromHex($this->publicKey)->verifySchnorrOrECDSA(Hash::sha256($this->message), $this->signature);
     }
 
     /**

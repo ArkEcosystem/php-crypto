@@ -87,3 +87,30 @@ function getTransactionForTransaction($file = 'transfer-sign'): Transfer
 
     return Deserializer::new($fixture['serialized'])->deserialize();
 }
+
+it('should verify schnorr signed transactions from ark core', function (string $fixture) {
+    $data        = json_decode(file_get_contents($fixture), true);
+    $transaction = Deserializer::new($data['serialized'])->deserialize();
+
+    $this->assertTrue($transaction->verify());
+
+    if (isset($data['data']['secondSignature'])) {
+        $this->assertTrue($transaction->secondVerify(PublicKey::fromPassphrase('this is a top secret second passphrase')->getHex()));
+    }
+})->with(function () {
+    $fixtures = array_filter(
+        glob(__DIR__.'/../../fixtures/transactions-schnorr/*/*.json'),
+        fn (string $fixture) => ! str_contains($fixture, 'multiSign'),
+    );
+
+    return array_combine(array_map(fn (string $fixture) => basename($fixture, '.json'), $fixtures), $fixtures);
+});
+
+it('should not verify a schnorr signed transaction that was tampered with', function () {
+    $data        = json_decode(file_get_contents(__DIR__.'/../../fixtures/transactions-schnorr/transfer/transfer-sign.json'), true);
+    $transaction = Deserializer::new($data['serialized'])->deserialize();
+
+    $transaction->data['amount'] = '1';
+
+    $this->assertFalse($transaction->verify());
+});

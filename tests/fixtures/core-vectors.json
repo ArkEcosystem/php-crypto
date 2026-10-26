@@ -15,7 +15,8 @@
             },
             "message": {
                 "message": "",
-                "signature": "304402205b285ad467fd032b0ef9e6406f192eb2edc367a7fbe9ff9e33431b9a6f4ee76102203f3bd03796f2578cedb5139783d4e47675f6f90f740572a415d940550f36c9e2"
+                "signature": "304402205b285ad467fd032b0ef9e6406f192eb2edc367a7fbe9ff9e33431b9a6f4ee76102203f3bd03796f2578cedb5139783d4e47675f6f90f740572a415d940550f36c9e2",
+                "schnorrSignature": "ab784987d61aef53ee6e1af8cce96bb049a842f8a197c354cc7f8fc0e1c0bdac41c4d82a9f0c8c1830201b145db0e414b838b93e40ec74b15950c0b4ab683ac9"
             }
         },
         {
@@ -32,7 +33,8 @@
             },
             "message": {
                 "message": "Hello World",
-                "signature": "30450221009a23b27787b23b9308b2ef8e3d5e768c7ff8e8b5de80b20d5289d4f7ad881286022011faf6f400f800fee2e582c30248b469be534dc2dd76feb13215d6d245160095"
+                "signature": "30450221009a23b27787b23b9308b2ef8e3d5e768c7ff8e8b5de80b20d5289d4f7ad881286022011faf6f400f800fee2e582c30248b469be534dc2dd76feb13215d6d245160095",
+                "schnorrSignature": "8211f34d3d11aeaaeb72bd4c5da2d3d0f1b43e42b0653a04848346fc4f59c11b412217f0a7521c0bf27fe481d415e7d4e99782ab34028983f6d41b8c6932dc84"
             }
         },
         {
@@ -49,7 +51,8 @@
             },
             "message": {
                 "message": "ark-claim:boldninja:ARMy9u1XvrZ124JzQq3oeJpjmBEnYkyU7D:1792155604",
-                "signature": "3044022034a3e423587f4c92a3bc4e696f8604c4d89d1feab42907bbd0f16f224b72449202201dcda8786d06a834098c0edff7e608509b81889df3b5064b8629e59089f2f5e9"
+                "signature": "3044022034a3e423587f4c92a3bc4e696f8604c4d89d1feab42907bbd0f16f224b72449202201dcda8786d06a834098c0edff7e608509b81889df3b5064b8629e59089f2f5e9",
+                "schnorrSignature": "b4fb0bd6c3db3fe53c996bb55531feef96f65b8fd38715268050d0d9e21cf750b41c200834625a69cb45da996eeea028cab4c71966e58fc86cc1d1ecc91603e7"
             }
         },
         {
@@ -66,7 +69,8 @@
             },
             "message": {
                 "message": "ünïcödé ✓ 🚀",
-                "signature": "3045022100d95f5a84b9d754293e7de8df07259801bc6872737305be0cff779f4bad318a490220687334e3faf48df2562e860ef3c8dd8034e57544852f9f1bd0d77ab1865f7e5a"
+                "signature": "3045022100d95f5a84b9d754293e7de8df07259801bc6872737305be0cff779f4bad318a490220687334e3faf48df2562e860ef3c8dd8034e57544852f9f1bd0d77ab1865f7e5a",
+                "schnorrSignature": "83e99761e1f0f3e4a8f166473f7119f41fb2c163686532dafd3ab984aef3ab5037940fc6c667c5f15e6a14b6c646f7c38c2ba4be231cabeb027de8f3b49d6f75"
             }
         },
         {
@@ -83,7 +87,8 @@
             },
             "message": {
                 "message": "line\nbreak",
-                "signature": "3044022035e806622839fcc1bd0037a64c125b4f2433ec44de30ae684e7cdfef9509f0ae022013d21f74b649c900946399ed3fd97dd69be53d3351a8ac7a87eb038d75de0167"
+                "signature": "3044022035e806622839fcc1bd0037a64c125b4f2433ec44de30ae684e7cdfef9509f0ae022013d21f74b649c900946399ed3fd97dd69be53d3351a8ac7a87eb038d75de0167",
+                "schnorrSignature": "41414f472416c2517b768e0d7f2054de047414ff571ac52d676d5bea33bcf5abc9a6be9350aea585ee3fa891b72563d0701ee8bdf46b365451f9b9fba2d6d15b"
             }
         },
         {
@@ -100,7 +105,8 @@
             },
             "message": {
                 "message": "",
-                "signature": "30450221008b55d9fb41a5fd0a076ef7c4fbefb36a961cafd8e4be00bcbcfd874e6827642402207d8438db15dbc7da0bda1e82e58434053e946d51a88906e9a9f89484831b93f4"
+                "signature": "30450221008b55d9fb41a5fd0a076ef7c4fbefb36a961cafd8e4be00bcbcfd874e6827642402207d8438db15dbc7da0bda1e82e58434053e946d51a88906e9a9f89484831b93f4",
+                "schnorrSignature": "785f9de9e03cd1156e5c45cea58d8a4411094bd5283395080797447c08495ace1a9cbff303d32d2ac6124f1d626e6d7885dc956a5971b2970fb6154a6ca5f5fb"
             }
         },
         {
@@ -117,7 +123,8 @@
             },
             "message": {
                 "message": "Hello World",
-                "signature": "304402201e6983b40b24f6f9dfc830adae58e2aa914cf5feaf84912196af1432f8ecf4db022064e8dc87204e97bc4b3f6e3f4a57dea143c48d90fbdc89dadd0f25b5d22eda92"
+                "signature": "304402201e6983b40b24f6f9dfc830adae58e2aa914cf5feaf84912196af1432f8ecf4db022064e8dc87204e97bc4b3f6e3f4a57dea143c48d90fbdc89dadd0f25b5d22eda92",
+                "schnorrSignature": "6fef0c292bfb2158a07aaf5663bf12f800ef21765bdfae499edca33dbd96cf873f7e28a0f3e0b2a5810cc997f3f023c701aee74c5caa7c1d700c23cc5dda5c9b"
             }
         },
         {
@@ -134,7 +141,8 @@
             },
             "message": {
                 "message": "ark-claim:boldninja:ARMy9u1XvrZ124JzQq3oeJpjmBEnYkyU7D:1792155604",
-                "signature": "30450221008d67df32ff7dcbf03c516c1ab3013f69b90a87425db3bc20cc562d85c0b745c602207d39e12f24a62d682778d283092eebbea7b42cbfae9fda9e871c16fa4df48ea3"
+                "signature": "30450221008d67df32ff7dcbf03c516c1ab3013f69b90a87425db3bc20cc562d85c0b745c602207d39e12f24a62d682778d283092eebbea7b42cbfae9fda9e871c16fa4df48ea3",
+                "schnorrSignature": "aeccd93b2aeb1772006dbc0f224f2351d9417d50c9f7100a7b239c1a83673ebc720f25cfb4dff6d016e16dd7cb791ef00710454fe4c88eb32339d4023c9636ac"
             }
         },
         {
@@ -151,7 +159,8 @@
             },
             "message": {
                 "message": "ünïcödé ✓ 🚀",
-                "signature": "3045022100c2919b4b4f1a1780bd1afdacad63a610154952ec946049aae5d6d0923d64b32002201517fd512c0e2bc1455ae9e628128fd0e57fa5714264ba4a36aa000c75b94402"
+                "signature": "3045022100c2919b4b4f1a1780bd1afdacad63a610154952ec946049aae5d6d0923d64b32002201517fd512c0e2bc1455ae9e628128fd0e57fa5714264ba4a36aa000c75b94402",
+                "schnorrSignature": "ba6e854206d6ecc3a84aac6661b73bbe3a66963ee750e341ac65c41db02f65e7254533e9b35db82412f2eaec19a143c7689276fd007f25d979613841d162f6dd"
             }
         },
         {
@@ -168,7 +177,8 @@
             },
             "message": {
                 "message": "line\nbreak",
-                "signature": "304402201fc87138473cdd6ca2e738cbd0acd0d7b6bfd21582162672c631c6c062e4e3ee02201968842936cc142f40d9fabf5757e5a9580ad4ea620e38c63e2f04fcde4ad6fa"
+                "signature": "304402201fc87138473cdd6ca2e738cbd0acd0d7b6bfd21582162672c631c6c062e4e3ee02201968842936cc142f40d9fabf5757e5a9580ad4ea620e38c63e2f04fcde4ad6fa",
+                "schnorrSignature": "9702762577b3146e30a82e55c201c3d47d6d14bbd702231e35dbf74959cc6b4bf9cafa2fbdbac68a7423907b8d5a7335cbc754d2848cd80b41ebdaf7c1d62961"
             }
         },
         {
@@ -185,7 +195,8 @@
             },
             "message": {
                 "message": "",
-                "signature": "3045022100a92f4b286875f419fccbecb2a298c344b1c3ad1ae9606c78e2ef8156e8547d8302206f2de0e3515a71b10ba291978ff7bb3a995ba45332362ed6246868e93c0f6649"
+                "signature": "3045022100a92f4b286875f419fccbecb2a298c344b1c3ad1ae9606c78e2ef8156e8547d8302206f2de0e3515a71b10ba291978ff7bb3a995ba45332362ed6246868e93c0f6649",
+                "schnorrSignature": "1d0766d9e5a9c2cb370243799e503175d37262ecd1a15925410b90add3364bde6da23e3b7ca3fc85a1659aea011a08a22dffd8997efbb73f0a601d993999e403"
             }
         },
         {
@@ -202,7 +213,8 @@
             },
             "message": {
                 "message": "Hello World",
-                "signature": "3044022051ce8d97d116e903fbe4df52cd0d3b459468cd91e87d3231774882863afd87e502202e1aa9563dcd2c6fab88155583e6fc2fabfa3a1388b9be1678439e7dc6ce9109"
+                "signature": "3044022051ce8d97d116e903fbe4df52cd0d3b459468cd91e87d3231774882863afd87e502202e1aa9563dcd2c6fab88155583e6fc2fabfa3a1388b9be1678439e7dc6ce9109",
+                "schnorrSignature": "375a6057b5f548b9b5ae9e2f823015f6c48b2705698fd158d4ef9571330fe32ad090721451a4aeb7caeeae08083d0205bcca223b5a1ff9c8d61265e5f4f96d9a"
             }
         }
     ]
