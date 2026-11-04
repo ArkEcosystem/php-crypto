@@ -204,3 +204,9 @@ test('it should turn a message into a string', function () {
 
     expect((string) $message)->toBeString();
 });
+
+test('it should throw when converting a message that is not valid UTF-8 to json', function () {
+    $message = Message::sign("\xff\xfe", 'passphrase');
+
+    expect(fn () => $message->toJson())->toThrow(JsonException::class);
+});

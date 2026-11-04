@@ -14,6 +14,7 @@ use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
 use BitWasp\Buffertools\Buffer;
 use Exception;
 use InvalidArgumentException;
+use JsonException;
 use kornrunner\Keccak;
 use Throwable;
 
@@ -189,11 +190,13 @@ class Message
     /**
      * Convert the message to its JSON representation.
      *
+     * @throws JsonException
+     *
      * @return string
      */
     public function toJson(): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
     /**
