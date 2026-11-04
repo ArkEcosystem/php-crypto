@@ -62,7 +62,7 @@ test('it should throw if a field is not a string', function (string $field, stri
 
 test('it should throw if the string is not a JSON object', function (string $json) {
     expect(fn () => Message::new($json))
-        ->toThrow(InvalidArgumentException::class, 'The given message was neither an object, array nor JSON.');
+        ->toThrow(InvalidArgumentException::class, 'The given message JSON did not decode to an object.');
 })->with([
     'invalid json' => 'not json',
     'json array'   => '["Hello, world!"]',
@@ -175,8 +175,18 @@ test('it should recover the signer address', function () {
         ->toBe(Address::fromPublicKey($fixture['publicKey']));
 });
 
-test('it should return null when recovering from an invalid signature', function () {
-    expect(Message::recoverAddress('Hello, world!', 'abcd'))->toBeNull();
+test('it should return null when recovering from an invalid signature', function (string $signature) {
+    expect(Message::recoverAddress('Hello, world!', $signature))->toBeNull();
+})->with([
+    'malformed'          => 'abcd',
+    'r not on the curve' => str_repeat('0', 128).'1b',
+]);
+
+test('it should verify a message with an uppercase public key', function () {
+    $fixture              = $this->getFixture('message-sign');
+    $fixture['publicKey'] = strtoupper($fixture['publicKey']);
+
+    expect(Message::new($fixture)->verify())->toBeTrue();
 });
 
 test('it should turn a message into an array', function () {

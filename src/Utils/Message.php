@@ -91,7 +91,7 @@ class Message
             $decoded = json_decode($message);
 
             if (! is_object($decoded)) {
-                throw new InvalidArgumentException('The given message was neither an object, array nor JSON.');
+                throw new InvalidArgumentException('The given message JSON did not decode to an object.');
             }
 
             return new static($decoded);
