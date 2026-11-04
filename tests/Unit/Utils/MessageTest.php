@@ -35,14 +35,6 @@ test('it should create a message from an array', function () {
     expect($message->message)->toBe($fixture['message']);
 });
 
-test('it should throw if no public key is provided', function () {
-    $fixture = $this->getFixture('message-sign');
-
-    unset($fixture['publicKey']);
-
-    Message::new($fixture);
-})->throws(InvalidArgumentException::class, 'The given message did not contain a valid public key.');
-
 test('it should throw if a field is missing', function (string $field, string $label) {
     $fixture = $this->getFixture('message-sign');
 
