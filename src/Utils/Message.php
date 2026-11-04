@@ -112,7 +112,7 @@ class Message
     {
         $privateKey = PrivateKey::fromPassphrase($passphrase);
 
-        $signature = $privateKey->sign(static::hash($message));
+        $signature = $privateKey->sign(self::hash($message));
 
         $r = Helpers::gmpToHex($signature->getR());
         $s = Helpers::gmpToHex($signature->getS());
@@ -157,14 +157,14 @@ class Message
      */
     public static function recoverAddress(string $message, string $signature): ?string
     {
-        $compactSignature = static::parseSignature($signature);
+        $compactSignature = self::parseSignature($signature);
 
         if ($compactSignature === null) {
             return null;
         }
 
         try {
-            $publicKey = PublicKey::recover(static::hash($message), $compactSignature);
+            $publicKey = PublicKey::recover(self::hash($message), $compactSignature);
         } catch (Exception) {
             return null;
         }
