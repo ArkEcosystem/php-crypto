@@ -16,7 +16,6 @@ use Exception;
 use InvalidArgumentException;
 use JsonException;
 use kornrunner\Keccak;
-use Throwable;
 
 class Message
 {
@@ -141,7 +140,7 @@ class Message
 
         try {
             $address = Address::fromPublicKey(PublicKey::fromHex($this->publicKey)->publicKey);
-        } catch (Throwable) {
+        } catch (Exception) {
             return false;
         }
 
@@ -166,7 +165,7 @@ class Message
 
         try {
             $publicKey = PublicKey::recover(static::hash($message), $compactSignature);
-        } catch (Throwable) {
+        } catch (Exception) {
             return null;
         }
 
