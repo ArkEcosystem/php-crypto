@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Buffertools\Buffer;
+use Exception;
 use InvalidArgumentException;
 use kornrunner\Keccak;
+use Throwable;
 
 class Message
 {
@@ -20,24 +23,18 @@ class Message
 
     /**
      * The message signer public key.
-     *
-     * @var string
      */
-    public $publicKey;
+    public string $publicKey;
 
     /**
      * The message signature.
-     *
-     * @var string
      */
-    public $signature;
+    public string $signature;
 
     /**
      * The message contents.
-     *
-     * @var string
      */
-    public $message;
+    public string $message;
 
     /**
      * Create a new message instance.
@@ -46,8 +43,16 @@ class Message
      */
     public function __construct(object $message)
     {
-        if (! property_exists($message, 'publicKey')) {
-            throw new InvalidArgumentException('The given message did not contain a valid public key.');
+        $fields = [
+            'publicKey' => 'public key',
+            'signature' => 'signature',
+            'message'   => 'message',
+        ];
+
+        foreach ($fields as $field => $label) {
+            if (! property_exists($message, $field) || ! is_string($message->{$field})) {
+                throw new InvalidArgumentException("The given message did not contain a valid {$label}.");
+            }
         }
 
         $this->publicKey = $message->publicKey;
@@ -79,11 +84,17 @@ class Message
         }
 
         if (is_array($message)) {
-            return new static(json_decode(json_encode($message)));
+            return new static((object) $message);
         }
 
         if (is_string($message)) {
-            return new static(json_decode($message));
+            $decoded = json_decode($message);
+
+            if (! is_object($decoded)) {
+                throw new InvalidArgumentException('The given message was neither an object, array nor JSON.');
+            }
+
+            return new static($decoded);
         }
 
         throw new InvalidArgumentException('The given message was neither an object, array nor JSON.');
@@ -101,9 +112,7 @@ class Message
     {
         $privateKey = PrivateKey::fromPassphrase($passphrase);
 
-        $hash = Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256);
-
-        $signature = $privateKey->sign(Buffer::hex($hash));
+        $signature = $privateKey->sign(static::hash($message));
 
         $r = Helpers::gmpToHex($signature->getR());
         $s = Helpers::gmpToHex($signature->getS());
@@ -123,18 +132,44 @@ class Message
      */
     public function verify(): bool
     {
-        $factory = new PublicKeyFactory();
+        $signerAddress = static::recoverAddress($this->message, $this->signature);
 
-        $signature = $this->getSignature();
+        if ($signerAddress === null) {
+            return false;
+        }
 
-        $message = static::MESSAGE_PREFIX.strlen($this->message).$this->message;
+        try {
+            $address = Address::fromPublicKey(PublicKey::fromHex($this->publicKey)->publicKey);
+        } catch (Throwable) {
+            return false;
+        }
 
-        return $factory
-            ->fromHex($this->publicKey)
-            ->verify(
-                Buffer::hex(Keccak::hash($message, 256)),
-                $signature,
-            );
+        return strcasecmp($signerAddress, $address) === 0;
+    }
+
+    /**
+     * Recover the address that signed the given message, or null if the signature is malformed.
+     *
+     * @param string $message
+     * @param string $signature
+     *
+     * @return string|null
+     */
+    public static function recoverAddress(string $message, string $signature): ?string
+    {
+        $compactSignature = static::parseSignature($signature);
+
+        if ($compactSignature === null) {
+            return null;
+        }
+
+        try {
+            $publicKey = PublicKey::recover(static::hash($message), $compactSignature);
+        } catch (Throwable) {
+            return null;
+        }
+
+        return Address::fromPublicKey($publicKey->publicKey);
     }
 
     /**
@@ -161,26 +196,37 @@ class Message
         return json_encode($this->toArray());
     }
 
-    private function getSignature(): CompactSignature
+    /**
+     * @throws Exception
+     */
+    private static function hash(string $message): Buffer
     {
-        $r = substr($this->signature, 0, 64);
-        $s = substr($this->signature, 64, 64);
-        $v = hexdec(substr($this->signature, 128, 2));
+        return Buffer::hex(Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256));
+    }
 
-        $ecAdapter = EcAdapterFactory::getPhpEcc(
-            Bitcoin::getMath(),
-            Bitcoin::getGenerator()
-        );
+    private static function parseSignature(string $signature): ?CompactSignature
+    {
+        $signature = Helpers::removeLeadingHexZero($signature);
 
-        $recoverId = $v - 27;
-        $r         = gmp_init($r, 16);
-        $s         = gmp_init($s, 16);
+        if (preg_match('/^[0-9a-f]{130}$/i', $signature) !== 1) {
+            return null;
+        }
+
+        $recoveryId = match ((int) hexdec(substr($signature, 128, 2))) {
+            0, 27   => 0,
+            1, 28   => 1,
+            default => null,
+        };
+
+        if ($recoveryId === null) {
+            return null;
+        }
 
         return new CompactSignature(
-            adapter: $ecAdapter,
-            r: $r,
-            s: $s,
-            recid: $recoverId,
+            adapter: EcAdapterFactory::getPhpEcc(Bitcoin::getMath(), Bitcoin::getGenerator()),
+            r: gmp_init(substr($signature, 0, 64), 16),
+            s: gmp_init(substr($signature, 64, 64), 16),
+            recid: $recoveryId,
             compressed: true
         );
     }
