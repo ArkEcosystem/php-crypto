@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace ArkEcosystem\Crypto\Utils;
 
 use ArkEcosystem\Crypto\Helpers;
+use ArkEcosystem\Crypto\Identities\Address;
 use ArkEcosystem\Crypto\Identities\PrivateKey;
+use ArkEcosystem\Crypto\Identities\PublicKey;
 use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcAdapterFactory;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Impl\PhpEcc\Signature\CompactSignature;
-use BitWasp\Bitcoin\Key\Factory\PublicKeyFactory;
 use BitWasp\Buffertools\Buffer;
+use Exception;
 use InvalidArgumentException;
+use JsonException;
 use kornrunner\Keccak;
 
 class Message
@@ -20,24 +23,18 @@ class Message
 
     /**
      * The message signer public key.
-     *
-     * @var string
      */
-    public $publicKey;
+    public string $publicKey;
 
     /**
      * The message signature.
-     *
-     * @var string
      */
-    public $signature;
+    public string $signature;
 
     /**
      * The message contents.
-     *
-     * @var string
      */
-    public $message;
+    public string $message;
 
     /**
      * Create a new message instance.
@@ -46,8 +43,16 @@ class Message
      */
     public function __construct(object $message)
     {
-        if (! property_exists($message, 'publicKey')) {
-            throw new InvalidArgumentException('The given message did not contain a valid public key.');
+        $fields = [
+            'publicKey' => 'public key',
+            'signature' => 'signature',
+            'message'   => 'message',
+        ];
+
+        foreach ($fields as $field => $label) {
+            if (! property_exists($message, $field) || ! is_string($message->{$field})) {
+                throw new InvalidArgumentException("The given message did not contain a valid {$label}.");
+            }
         }
 
         $this->publicKey = $message->publicKey;
@@ -79,11 +84,17 @@ class Message
         }
 
         if (is_array($message)) {
-            return new static(json_decode(json_encode($message)));
+            return new static((object) $message);
         }
 
         if (is_string($message)) {
-            return new static(json_decode($message));
+            $decoded = json_decode($message);
+
+            if (! is_object($decoded)) {
+                throw new InvalidArgumentException('The given message JSON did not decode to an object.');
+            }
+
+            return new static($decoded);
         }
 
         throw new InvalidArgumentException('The given message was neither an object, array nor JSON.');
@@ -101,9 +112,7 @@ class Message
     {
         $privateKey = PrivateKey::fromPassphrase($passphrase);
 
-        $hash = Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256);
-
-        $signature = $privateKey->sign(Buffer::hex($hash));
+        $signature = $privateKey->sign(self::hash($message));
 
         $r = Helpers::gmpToHex($signature->getR());
         $s = Helpers::gmpToHex($signature->getS());
@@ -123,18 +132,55 @@ class Message
      */
     public function verify(): bool
     {
-        $factory = new PublicKeyFactory();
+        $signerAddress = static::recoverAddress($this->message, $this->signature);
 
-        $signature = $this->getSignature();
+        if ($signerAddress === null) {
+            return false;
+        }
 
-        $message = static::MESSAGE_PREFIX.strlen($this->message).$this->message;
+        try {
+            $address = Address::fromPublicKey(PublicKey::fromHex($this->publicKey)->publicKey);
+        } catch (Exception) {
+            return false;
+        }
 
-        return $factory
-            ->fromHex($this->publicKey)
-            ->verify(
-                Buffer::hex(Keccak::hash($message, 256)),
-                $signature,
-            );
+        return strcasecmp($signerAddress, $address) === 0;
+    }
+
+    /**
+     * Recover the address that signed the given message, or null if the signature is malformed.
+     *
+     * @param string $message
+     * @param string $signature
+     *
+     * @return string|null
+     */
+    public static function recoverAddress(string $message, string $signature): ?string
+    {
+        if (preg_match('/^(?:0x)?([0-9a-f]{64})([0-9a-f]{64})(00|01|1b|1c)$/i', $signature, $matches) !== 1) {
+            return null;
+        }
+
+        [, $r, $s, $v] = $matches;
+
+        $compactSignature = new CompactSignature(
+            adapter: EcAdapterFactory::getPhpEcc(Bitcoin::getMath(), Bitcoin::getGenerator()),
+            r: gmp_init($r, 16),
+            s: gmp_init($s, 16),
+            recid: match (strtolower($v)) {
+                '00', '1b' => 0,
+                '01', '1c' => 1,
+            },
+            compressed: true
+        );
+
+        try {
+            $publicKey = PublicKey::recover(self::hash($message), $compactSignature);
+        } catch (Exception) {
+            return null;
+        }
+
+        return Address::fromPublicKey($publicKey->publicKey);
     }
 
     /**
@@ -154,34 +200,17 @@ class Message
     /**
      * Convert the message to its JSON representation.
      *
+     * @throws JsonException
+     *
      * @return string
      */
     public function toJson(): string
     {
-        return json_encode($this->toArray());
+        return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
-    private function getSignature(): CompactSignature
+    private static function hash(string $message): Buffer
     {
-        $r = substr($this->signature, 0, 64);
-        $s = substr($this->signature, 64, 64);
-        $v = hexdec(substr($this->signature, 128, 2));
-
-        $ecAdapter = EcAdapterFactory::getPhpEcc(
-            Bitcoin::getMath(),
-            Bitcoin::getGenerator()
-        );
-
-        $recoverId = $v - 27;
-        $r         = gmp_init($r, 16);
-        $s         = gmp_init($s, 16);
-
-        return new CompactSignature(
-            adapter: $ecAdapter,
-            r: $r,
-            s: $s,
-            recid: $recoverId,
-            compressed: true
-        );
+        return Buffer::hex(Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256));
     }
 }
