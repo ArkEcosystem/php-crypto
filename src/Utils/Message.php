@@ -157,11 +157,22 @@ class Message
      */
     public static function recoverAddress(string $message, string $signature): ?string
     {
-        $compactSignature = self::parseSignature($signature);
-
-        if ($compactSignature === null) {
+        if (preg_match('/^(?:0x)?([0-9a-f]{64})([0-9a-f]{64})(00|01|1b|1c)$/i', $signature, $matches) !== 1) {
             return null;
         }
+
+        [, $r, $s, $v] = $matches;
+
+        $compactSignature = new CompactSignature(
+            adapter: EcAdapterFactory::getPhpEcc(Bitcoin::getMath(), Bitcoin::getGenerator()),
+            r: gmp_init($r, 16),
+            s: gmp_init($s, 16),
+            recid: match (strtolower($v)) {
+                '00', '1b' => 0,
+                '01', '1c' => 1,
+            },
+            compressed: true
+        );
 
         try {
             $publicKey = PublicKey::recover(self::hash($message), $compactSignature);
@@ -198,38 +209,8 @@ class Message
         return json_encode($this->toArray(), JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @throws Exception
-     */
     private static function hash(string $message): Buffer
     {
         return Buffer::hex(Keccak::hash(static::MESSAGE_PREFIX.strlen($message).$message, 256));
-    }
-
-    private static function parseSignature(string $signature): ?CompactSignature
-    {
-        $signature = Helpers::removeLeadingHexZero($signature);
-
-        if (preg_match('/^[0-9a-f]{130}$/i', $signature) !== 1) {
-            return null;
-        }
-
-        $recoveryId = match ((int) hexdec(substr($signature, 128, 2))) {
-            0, 27   => 0,
-            1, 28   => 1,
-            default => null,
-        };
-
-        if ($recoveryId === null) {
-            return null;
-        }
-
-        return new CompactSignature(
-            adapter: EcAdapterFactory::getPhpEcc(Bitcoin::getMath(), Bitcoin::getGenerator()),
-            r: gmp_init(substr($signature, 0, 64), 16),
-            s: gmp_init(substr($signature, 64, 64), 16),
-            recid: $recoveryId,
-            compressed: true
-        );
     }
 }
