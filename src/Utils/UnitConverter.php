@@ -54,15 +54,15 @@ class UnitConverter
         switch (strtolower($unit)) {
             case 'wei':
                 return BigDecimal::of($value)
-                    ->dividedBy(self::WEI_MULTIPLIER, 0, RoundingMode::HALF_UP)
+                    ->dividedBy(self::WEI_MULTIPLIER, 0, RoundingMode::HalfUp)
                     ->strippedOfTrailingZeros();
             case 'gwei':
                 return BigDecimal::of($value)
-                    ->dividedBy(self::GWEI_MULTIPLIER, 9, RoundingMode::HALF_UP)
+                    ->dividedBy(self::GWEI_MULTIPLIER, 9, RoundingMode::HalfUp)
                     ->strippedOfTrailingZeros();
             case 'ark':
                 return BigDecimal::of($value)
-                    ->dividedBy(self::ARK_MULTIPLIER, 18, RoundingMode::HALF_UP)
+                    ->dividedBy(self::ARK_MULTIPLIER, 18, RoundingMode::HalfUp)
                     ->strippedOfTrailingZeros();
             default:
                 throw new InvalidArgumentException("Unsupported unit: {$unit}. Supported units are 'wei', 'gwei', and 'ark'.");
