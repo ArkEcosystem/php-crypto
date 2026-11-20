@@ -11,7 +11,6 @@ function testPrivateMethod(string $methodName, &$object): ReflectionMethod
     $object    = new AbiEncoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod($methodName);
-    $method->setAccessible(true);
 
     return $method;
 }

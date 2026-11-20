@@ -219,7 +219,6 @@ it('should handle boolean param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'isActive',
@@ -247,7 +246,6 @@ it('should handle bytes param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'text',
@@ -267,7 +265,6 @@ it('should handle dynamic byte length param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'text',
@@ -287,7 +284,6 @@ it('should handle signed integer param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'text',
@@ -307,7 +303,6 @@ it('should handle unsigned integer param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'text',
@@ -327,7 +322,6 @@ it('should handle tuple param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name'         => 'text',
@@ -363,7 +357,6 @@ it('should throw an exception for invalid param types', function () {
     $object    = new AbiDecoder();
     $reflector = new ReflectionObject($object);
     $method    = $reflector->getMethod('decodeParameter');
-    $method->setAccessible(true);
 
     $param = [
         'name' => 'text',
@@ -397,8 +390,6 @@ test('should precompute selector maps for custom abi items', function () {
     $reflector = new ReflectionObject($decoder);
     $functions = $reflector->getProperty('functionSelectorMap');
     $errors    = $reflector->getProperty('errorSelectorMap');
-    $functions->setAccessible(true);
-    $errors->setAccessible(true);
 
     $functionSelector = substr(Keccak::hash('transfer(address,uint256)', 256), 0, 8);
     $errorSelector    = substr(Keccak::hash('InsufficientBalance(uint256,uint256)', 256), 0, 8);
