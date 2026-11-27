@@ -68,7 +68,6 @@ it('should handle issue converting hex to binary', function () {
     $decoder = new ArgumentDecoder('invalid');
 
     $reflectionProperty = new \ReflectionProperty(ArgumentDecoder::class, 'bytes');
-    $reflectionProperty->setAccessible(true);
 
     expect($reflectionProperty->getValue($decoder))->toBe('');
 });

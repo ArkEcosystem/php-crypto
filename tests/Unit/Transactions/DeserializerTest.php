@@ -98,8 +98,7 @@ it('should use ByteBuffer::fromHex when there is no null-byte in the string', fu
     // Use reflection to access the private buffer property
     $reflection     = new ReflectionClass($deserializer);
     $bufferProperty = $reflection->getProperty('buffer');
-    $bufferProperty->setAccessible(true);
-    $buffer = $bufferProperty->getValue($deserializer);
+    $buffer         = $bufferProperty->getValue($deserializer);
 
     // The buffer should be an instance of ByteBuffer
     expect($buffer)->toBeInstanceOf(ArkEcosystem\Crypto\ByteBuffer\ByteBuffer::class);
@@ -117,8 +116,7 @@ it('should use ByteBuffer::fromBinary when there is a null-byte in the string', 
     // Use reflection to access the private buffer property
     $reflection     = new ReflectionClass($deserializer);
     $bufferProperty = $reflection->getProperty('buffer');
-    $bufferProperty->setAccessible(true);
-    $buffer = $bufferProperty->getValue($deserializer);
+    $buffer         = $bufferProperty->getValue($deserializer);
 
     // The buffer should be an instance of ByteBuffer
     expect($buffer)->toBeInstanceOf(ArkEcosystem\Crypto\ByteBuffer\ByteBuffer::class);

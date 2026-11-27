@@ -41,7 +41,6 @@ it('should convert to checksum address and cache the result', function () {
 
     $reflector = new ReflectionClass(TestClass::class);
     $cache     = $reflector->getProperty('cache');
-    $cache->setAccessible(true);
     $cache->setValue(null, []);
 
     $actual = TestClass::toChecksumAddress($address);
